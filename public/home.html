@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Comride — Explore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#E2FF3B',
+            'on-primary': '#536000',
+            'surface-container-low': '#131313',
+            'surface-container': '#191919',
+            'surface-container-high': '#1f1f1f',
+            'surface-container-highest': '#262626',
+            'on-surface-variant': '#ababab',
+            'outline-variant': '#484848',
+          },
+          fontFamily: {
+            headline: ['"Space Grotesk"', 'sans-serif'],
+            body: ['"Manrope"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { background: #000; color: #fff; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; }
+    ::selection { background: #E2FF3B; color: #2A3000; }
+  </style>
+</head>
+<body style="background:#000;color:#fff">
+  <!-- ═══════════════════════════════ -->
+  <!-- FIXED TOP HEADER + MENU DRAWER -->
+  <!-- ═══════════════════════════════ -->
+  <header style="position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(0,0,0,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(72,72,72,0.15)">
+    <div style="max-width:390px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between">
+      <a href="home.html"><img src="/comride.svg" style="height:22px;width:auto;object-fit:contain" alt="Comride" /></a>
+      <div style="display:flex;align-items:center;gap:20px">
+        <div style="position:relative;cursor:pointer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <div style="position:absolute;top:-1px;right:-1px;width:8px;height:8px;border-radius:50%;background:#E2FF3B;border:2px solid #000"></div>
+        </div>
+        <div style="cursor:pointer;display:flex;flex-direction:column;gap:5px" onclick="openMenu()">
+          <div style="width:22px;height:2px;background:#fff;border-radius:2px"></div>
+          <div style="width:14px;height:2px;background:#fff;border-radius:2px"></div>
+          <div style="width:22px;height:2px;background:#fff;border-radius:2px"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SLIDE-IN MENU DRAWER -->
+  <div id="menu-drawer" style="position:fixed;top:0;right:0;bottom:0;width:280px;background:#131313;z-index:300;transform:translateX(100%);transition:transform 0.3s ease;border-left:1px solid rgba(72,72,72,0.2);display:flex;flex-direction:column;padding:24px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;padding-top:12px">
+      <img src="/comride.svg" style="height:20px;width:auto" alt="Comride" />
+      <div style="cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center" onclick="closeMenu()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </div>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:4px;overflow-y:auto;max-height:calc(100vh - 220px)">
+      <a href="index.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#E2FF3B;background:rgba(226,255,59,0.05)"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Index</span></a>
+      <a href="discover.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Discover Rides</span></a>
+      <a href="create-ride.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Create Ride</span></a>
+      <a href="tracking.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Live Tracking</span></a>
+      <a href="marketplace.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Gear Shop</span></a>
+      <a href="profile.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Profile</span></a>
+      <a href="rewards.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Rewards</span></a>
+      <a href="notifications.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Notifications</span></a>
+      <a href="insurance.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Compliance</span></a>
+      <a href="payments.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Payments</span></a>
+      <a href="analytics.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Analytics</span></a>
+    </nav>
+    <a href="profile.html" style="margin-top:auto;border-top:1px solid rgba(72,72,72,0.2);padding-top:24px;display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer">
+      <div style="width:40px;height:40px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden;flex-shrink:0">
+        <img src="/images/profile/1.avif" style="width:100%;height:100%;object-fit:cover" alt="" />
+      </div>
+      <div style="flex:1">
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;color:#fff;margin:0">LEX_KINETIC</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:1px;color:#ababab;text-transform:uppercase;margin:0">MASTER SERGEANT</p>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+  <div id="menu-backdrop" onclick="closeMenu()" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:299;display:none"></div>
+  <script>
+    function openMenu() {
+      document.getElementById("menu-drawer").style.transform = "translateX(0)";
+      document.getElementById("menu-backdrop").style.display = "block";
+    }
+    function closeMenu() {
+      document.getElementById("menu-drawer").style.transform = "translateX(100%)";
+      document.getElementById("menu-backdrop").style.display = "none";
+    }
+  </script>
+
+
+
+  <!-- ═══════════════════════════════ -->
+  <!-- PAGE CONTENT                    -->
+  <!-- ═══════════════════════════════ -->
+  <div style="max-width:390px;margin:0 auto;padding:64px 24px 160px">
+
+    <!-- ── SEARCH BAR ── -->
+    <div style="background:#191919;border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:24px">
+      <!-- Search icon -->
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input
+        type="text"
+        placeholder="Search rides, riders, gear..."
+        style="font-family:'Manrope',sans-serif;font-size:14px;color:#ababab;background:transparent;border:none;outline:none;flex:1;min-width:0"
+      />
+      <!-- Filter / sliders icon -->
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+        <line x1="4" y1="6" x2="20" y2="6"/>
+        <line x1="8" y1="12" x2="20" y2="12"/>
+        <line x1="12" y1="18" x2="20" y2="18"/>
+        <circle cx="4" cy="6" r="2" fill="#fff" stroke="none"/>
+        <circle cx="8" cy="12" r="2" fill="#fff" stroke="none"/>
+        <circle cx="12" cy="18" r="2" fill="#fff" stroke="none"/>
+      </svg>
+    </div>
+
+    <!-- ── PINNED STORIES ── -->
+    <div style="display:flex;gap:16px;overflow-x:auto;padding-bottom:8px;margin-bottom:32px;scrollbar-width:none;-ms-overflow-style:none">
+
+      <!-- Story 1: YOUR STORY (with + badge) -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+        <div style="position:relative">
+          <div style="width:56px;height:56px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden">
+            <img src="/images/profile/1.avif" style="width:100%;height:100%;object-fit:cover" alt="Your Story" />
+          </div>
+          <!-- + badge -->
+          <div style="position:absolute;bottom:0;right:0;width:16px;height:16px;border-radius:50%;background:#E2FF3B;border:2px solid #000;display:flex;align-items:center;justify-content:center">
+            <svg width="8" height="8" viewBox="0 0 10 10" fill="none">
+              <line x1="5" y1="1" x2="5" y2="9" stroke="#536000" stroke-width="2" stroke-linecap="round"/>
+              <line x1="1" y1="5" x2="9" y2="5" stroke="#536000" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#ababab;text-transform:uppercase;white-space:nowrap">YOUR STORY</span>
+      </div>
+
+      <!-- Story 2: VOID_RUN -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+        <div style="width:56px;height:56px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden">
+          <img src="/images/profile/2.avif" style="width:100%;height:100%;object-fit:cover" alt="VOID_RUN" />
+        </div>
+        <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#ababab;text-transform:uppercase;white-space:nowrap">VOID_RUN</span>
+      </div>
+
+      <!-- Story 3: STEEL_P -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+        <div style="width:56px;height:56px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden">
+          <img src="/images/profile/3.avif" style="width:100%;height:100%;object-fit:cover" alt="STEEL_P" />
+        </div>
+        <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#ababab;text-transform:uppercase;white-space:nowrap">STEEL_P</span>
+      </div>
+
+      <!-- Story 4: LEX_K -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+        <div style="width:56px;height:56px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden">
+          <img src="/images/profile/4.avif" style="width:100%;height:100%;object-fit:cover" alt="LEX_K" />
+        </div>
+        <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#ababab;text-transform:uppercase;white-space:nowrap">LEX_K</span>
+      </div>
+
+      <!-- Story 5: MOTO_S -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+        <div style="width:56px;height:56px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden">
+          <img src="/images/profile/5.avif" style="width:100%;height:100%;object-fit:cover" alt="MOTO_S" />
+        </div>
+        <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#ababab;text-transform:uppercase;white-space:nowrap">MOTO_S</span>
+      </div>
+
+    </div>
+
+    <!-- ── COMMUNITY FEED ── -->
+
+    <!-- POST 1 -->
+    <div style="background:#191919;border-radius:12px;margin-bottom:16px;overflow:hidden">
+
+      <!-- Post header -->
+      <div style="padding:16px 16px 0;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:40px;height:40px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden;flex-shrink:0">
+            <img src="/images/profile/2.avif" style="width:100%;height:100%;object-fit:cover" alt="VOID_RUNNER" />
+          </div>
+          <div>
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0">VOID_RUNNER</p>
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;margin:0">Baga Beach, Goa · 2h ago</p>
+          </div>
+        </div>
+        <!-- ••• menu -->
+        <div style="display:flex;flex-direction:column;gap:3px;cursor:pointer;padding:4px">
+          <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
+          <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
+          <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
+        </div>
+      </div>
+
+      <!-- Post photo -->
+      <img src="/images/bikes/2.avif" style="width:100%;height:240px;object-fit:cover;display:block;margin-top:12px" alt="" />
+
+      <!-- Post content -->
+      <div style="padding:16px">
+        <p style="font-family:'Manrope',sans-serif;font-size:14px;color:#fff;line-height:1.6;margin:0 0 12px 0">That last stretch on the coastal highway — nothing hits different at 5AM. The fog, the silence, the machine.</p>
+        <!-- Tags -->
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span style="background:#262626;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#ababab">#CoastalRide</span>
+          <span style="background:#262626;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#ababab">#MidnightRun</span>
+        </div>
+      </div>
+
+      <!-- Engagement row -->
+      <div style="display:flex;align-items:center;gap:24px;padding:0 16px 16px">
+        <!-- Heart -->
+        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">47</span>
+        </div>
+        <!-- Comment -->
+        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">12</span>
+        </div>
+        <!-- Share -->
+        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"/>
+            <circle cx="6" cy="12" r="3"/>
+            <circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">8</span>
+        </div>
+        <!-- Bookmark -->
+        <div style="margin-left:auto;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- POST 2: Event post -->
+    <div style="background:#191919;border-radius:12px;margin-bottom:16px;overflow:hidden;border-left:3px solid #E2FF3B">
+
+      <!-- Post header -->
+      <div style="padding:16px 16px 0;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:40px;height:40px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden;flex-shrink:0">
+            <img src="/images/profile/3.avif" style="width:100%;height:100%;object-fit:cover" alt="LEX_KINETIC" />
+          </div>
+          <div>
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0">LEX_KINETIC</p>
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;margin:0">Organiser · 5h ago</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px;cursor:pointer;padding:4px">
+          <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
+          <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
+          <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
+        </div>
+      </div>
+
+      <!-- Post photo -->
+      <img src="/images/places/3.avif" style="width:100%;height:200px;object-fit:cover;display:block;margin-top:12px" alt="" />
+
+      <!-- Post content -->
+      <div style="padding:16px">
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:#E2FF3B;text-transform:uppercase;margin:0 0 8px 0">RIDER MANIA 2026</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:14px;color:#fff;line-height:1.5;margin:0 0 12px 0">India's biggest motorcycle festival. 10,000+ riders. Register now before slots fill.</p>
+        <!-- Pills row -->
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <span style="background:#E2FF3B;border-radius:9999px;padding:4px 12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#536000">OCT 24–27</span>
+          <span style="border:1px solid #484848;border-radius:9999px;padding:4px 12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#ababab">GOA</span>
+        </div>
+        <!-- Register button -->
+        <button style="width:100%;background:#E2FF3B;border:none;border-radius:9999px;padding:12px;cursor:pointer;margin-top:12px">
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#000;text-transform:uppercase;letter-spacing:1px">REGISTER NOW →</span>
+        </button>
+      </div>
+
+      <!-- Engagement row -->
+      <div style="display:flex;align-items:center;gap:24px;padding:0 16px 16px">
+        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">342</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">89</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"/>
+            <circle cx="6" cy="12" r="3"/>
+            <circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">156</span>
+        </div>
+        <div style="margin-left:auto;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- POST 3 -->
+    <div style="background:#191919;border-radius:12px;margin-bottom:16px;overflow:hidden">
+
+      <!-- Post header -->
+      <div style="padding:16px 16px 0;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:40px;height:40px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden;flex-shrink:0">
+            <img src="/images/profile/4.avif" style="width:100%;height:100%;object-fit:cover" alt="STEEL_PACK" />
+          </div>
+          <div>
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0">STEEL_PACK</p>
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;margin:0">Pune · 1d ago</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px;cursor:pointer;padding:4px">
+          <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
+          <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
+          <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
+        </div>
+      </div>
+
+      <!-- Post photo -->
+      <img src="/images/places/5.avif" style="width:100%;height:220px;object-fit:cover;display:block;margin-top:12px" alt="" />
+
+      <!-- Post content -->
+      <div style="padding:16px">
+        <p style="font-family:'Manrope',sans-serif;font-size:14px;color:#fff;line-height:1.6;margin:0 0 12px 0">Route recon done. Valley crossing is going to be epic this weekend. Who's in?</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span style="background:#262626;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#ababab">#ValleyCrossing</span>
+          <span style="background:#262626;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#ababab">#WeekendRide</span>
+        </div>
+      </div>
+
+      <!-- Engagement row -->
+      <div style="display:flex;align-items:center;gap:24px;padding:0 16px 16px">
+        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">28</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">7</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"/>
+            <circle cx="6" cy="12" r="3"/>
+            <circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">4</span>
+        </div>
+        <div style="margin-left:auto;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- POST 4 -->
+    <div style="background:#191919;border-radius:12px;margin-bottom:16px;overflow:hidden">
+
+      <!-- Post header -->
+      <div style="padding:16px 16px 0;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:40px;height:40px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden;flex-shrink:0">
+            <img src="/images/profile/5.avif" style="width:100%;height:100%;object-fit:cover" alt="MOTO_SURGE" />
+          </div>
+          <div>
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0">MOTO_SURGE</p>
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;margin:0">Mumbai · 3d ago</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px;cursor:pointer;padding:4px">
+          <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
+          <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
+          <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
+        </div>
+      </div>
+
+      <!-- Post photo -->
+      <img src="/images/bikes/6.avif" style="width:100%;height:240px;object-fit:cover;display:block;margin-top:12px" alt="" />
+
+      <!-- Post content -->
+      <div style="padding:16px">
+        <p style="font-family:'Manrope',sans-serif;font-size:14px;color:#fff;line-height:1.6;margin:0 0 12px 0">Finally picked up the VOID-1. Carbon shell, AR visor — this thing is a different beast on the highway.</p>
+        <!-- Price tag pill -->
+        <div>
+          <span style="background:#E2FF3B;border-radius:9999px;padding:4px 12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#000">₹24,500</span>
+        </div>
+      </div>
+
+      <!-- Engagement row -->
+      <div style="display:flex;align-items:center;gap:24px;padding:0 16px 16px">
+        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">124</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">31</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"/>
+            <circle cx="6" cy="12" r="3"/>
+            <circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">22</span>
+        </div>
+        <div style="margin-left:auto;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════ -->
+  <!-- BOTTOM NAVIGATION (FIXED)       -->
+  <!-- ═══════════════════════════════ -->
+  <nav style="position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-around;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);height:80px;z-index:100;box-sizing:border-box;padding:0 8px">
+    <a href="home.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(226,255,59,0.1);border-radius:9999px;padding:6px 16px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B;letter-spacing:0.02em">Explore</span></div></a>
+    <a href="ride-tab.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><circle cx="7" cy="17" r="1.5" fill="currentColor" stroke="none"/><circle cx="17" cy="17" r="1.5" fill="currentColor" stroke="none"/><line x1="2" y1="11" x2="22" y2="11"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Ride</span></div></a>
+    <a href="marketplace.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Shop</span></div></a>
+    <a href="profile-setup.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Profile</span></div></a>
+  </nav>
+
+</body>
+</html>

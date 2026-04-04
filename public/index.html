@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comride — Prototype Navigator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { background: #000000; color: #fff; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+    ::selection { background: #E2FF3B; color: #536000; }
+    .nav-card {
+      display: block;
+      background: #191919;
+      border-radius: 12px;
+      padding: 20px;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid rgba(72,72,72,0.2);
+      transition: border-color 0.2s ease, transform 0.15s ease;
+    }
+    .nav-card:hover {
+      border-color: rgba(226,255,59,0.3);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body style="background:#000000">
+
+  <div style="max-width:390px;margin:0 auto;padding:64px 24px 80px">
+
+    <!-- Top logo + subtitle -->
+    <div style="text-align:center;margin-bottom:40px">
+      <img src="/comride.svg" style="height:32px;width:auto;object-fit:contain;display:block;margin:0 auto 12px" alt="Comride" />
+      <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#ababab">PROTOTYPE NAVIGATOR — CLICK THROUGH</p>
+    </div>
+
+    <!-- Big headline -->
+    <div style="margin-bottom:48px">
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:56px;text-transform:uppercase;line-height:0.95;letter-spacing:-3px;color:#fff">COMRIDE</h1>
+      <p style="font-family:'Manrope',sans-serif;font-weight:300;font-size:14px;color:#ababab;margin-top:10px">VOLT NOIR Design System &mdash; All screens</p>
+    </div>
+
+    <!-- =========== SECTION: CORE APP =========== -->
+    <div style="display:flex;align-items:center;gap:12px;margin-top:32px;margin-bottom:16px">
+      <div style="width:3px;height:14px;background:#E2FF3B;border-radius:2px;flex-shrink:0"></div>
+      <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ababab">CORE APP</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+      <!-- Community Feed -->
+      <a href="home.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Community Feed</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">home.html</p>
+      </a>
+
+      <!-- Discover Rides -->
+      <a href="discover.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Discover Rides</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">discover.html</p>
+      </a>
+
+      <!-- Live Tracking -->
+      <a href="tracking.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Live Tracking</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">tracking.html</p>
+      </a>
+
+      <!-- Gear Shop -->
+      <a href="marketplace.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Gear Shop</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">marketplace.html</p>
+      </a>
+
+      <!-- Rider Profile -->
+      <a href="profile.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Rider Profile</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">profile.html</p>
+      </a>
+
+      <!-- Module Gallery -->
+      <a href="modules.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Module Gallery</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">modules.html</p>
+      </a>
+
+    </div>
+
+    <!-- =========== SECTION: RIDE FLOW =========== -->
+    <div style="display:flex;align-items:center;gap:12px;margin-top:32px;margin-bottom:16px">
+      <div style="width:3px;height:14px;background:#E2FF3B;border-radius:2px;flex-shrink:0"></div>
+      <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ababab">RIDE FLOW</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+      <!-- Create Ride -->
+      <a href="create-ride.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Create Ride</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">create-ride.html</p>
+      </a>
+
+      <!-- Ride Details -->
+      <a href="ride-details.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Ride Details</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">ride-details.html</p>
+      </a>
+
+      <!-- My Rides Hub -->
+      <a href="ride-tab.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">My Rides Hub</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">ride-tab.html</p>
+      </a>
+
+      <!-- Invited Ride -->
+      <a href="invited-ride.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Invited Ride</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">invited-ride.html</p>
+      </a>
+
+      <!-- My Ride Detail (Owner) -->
+      <a href="my-ride-detail.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">My Ride Detail</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">my-ride-detail.html</p>
+      </a>
+
+      <!-- Create Ride (Modes) -->
+      <a href="create-ride-modes.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Create Ride Modes</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">create-ride-modes.html</p>
+      </a>
+
+      <!-- Request to Join -->
+      <a href="request-to-join.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="23" y2="8"/><line x1="21" y1="6" x2="21" y2="10"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Request to Join</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">request-to-join.html</p>
+      </a>
+
+      <!-- Trip Day -->
+      <a href="trip-start.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Trip Day</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">trip-start.html</p>
+      </a>
+
+      <!-- End Ride -->
+      <a href="end-ride.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">End Ride</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">end-ride.html</p>
+      </a>
+
+      <!-- AI Ride Planner -->
+      <a href="ai-suggestions.html" class="nav-card" style="border-color:rgba(226,255,59,0.2)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <span style="font-size:14px;color:#E2FF3B;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#E2FF3B;text-transform:uppercase;margin-bottom:4px">AI Ride Planner</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">ai-suggestions.html</p>
+      </a>
+
+    </div>
+
+    <!-- =========== SECTION: ONBOARDING =========== -->
+    <div style="display:flex;align-items:center;gap:12px;margin-top:32px;margin-bottom:16px">
+      <div style="width:3px;height:14px;background:#E2FF3B;border-radius:2px;flex-shrink:0"></div>
+      <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ababab">ONBOARDING</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+      <!-- Sign In -->
+      <a href="login.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Sign In</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">login.html</p>
+      </a>
+
+      <!-- Profile Setup -->
+      <a href="profile-setup.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><line x1="16" y1="11" x2="22" y2="11"/><line x1="19" y1="8" x2="19" y2="14"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Profile Setup</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">profile-setup.html</p>
+      </a>
+
+      <!-- Ride DNA -->
+      <a href="interests.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Ride DNA</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">interests.html</p>
+      </a>
+
+    </div>
+
+    <!-- =========== SECTION: PROFILE & REWARDS =========== -->
+    <div style="display:flex;align-items:center;gap:12px;margin-top:32px;margin-bottom:16px">
+      <div style="width:3px;height:14px;background:#E2FF3B;border-radius:2px;flex-shrink:0"></div>
+      <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ababab">PROFILE &amp; REWARDS</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+      <!-- Rewards & Levels -->
+      <a href="rewards.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Rewards &amp; Levels</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">rewards.html</p>
+      </a>
+
+      <!-- Payments -->
+      <a href="payments.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Payments</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">payments.html</p>
+      </a>
+
+      <!-- Analytics -->
+      <a href="analytics.html" class="nav-card" style="border-color:rgba(226,255,59,0.2)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <span style="font-size:14px;color:#E2FF3B;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#E2FF3B;text-transform:uppercase;margin-bottom:4px">Analytics</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">analytics.html</p>
+      </a>
+
+    </div>
+
+    <!-- =========== SECTION: UTILITY =========== -->
+    <div style="display:flex;align-items:center;gap:12px;margin-top:32px;margin-bottom:16px">
+      <div style="width:3px;height:14px;background:#E2FF3B;border-radius:2px;flex-shrink:0"></div>
+      <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ababab">UTILITY</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+      <!-- Notifications -->
+      <a href="notifications.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Notifications</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">notifications.html</p>
+      </a>
+
+      <!-- Insurance & Compliance -->
+      <a href="insurance.html" class="nav-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <span style="font-size:14px;color:#ababab;line-height:1">&#8594;</span>
+        </div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:4px">Insurance &amp; Compliance</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">insurance.html</p>
+      </a>
+
+    </div>
+
+    <!-- Footer -->
+    <div style="margin-top:64px;padding-top:32px;border-top:1px solid rgba(72,72,72,0.2)">
+      <p style="font-family:'Manrope',sans-serif;font-weight:400;font-size:11px;color:#484848;text-align:center;line-height:1.8">
+        26 screens &middot; VOLT NOIR Design System &middot; Optimised for 390px viewport<br/>
+        Best viewed in Chrome mobile emulation or on device
+      </p>
+    </div>
+
+  </div>
+
+</body>
+</html>

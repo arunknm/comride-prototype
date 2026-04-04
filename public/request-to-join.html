@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comride — Request to Join</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: #000;
+      min-height: 100vh;
+      color: #fff;
+      font-family: 'Manrope', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* Fixed Header */
+    .fixed-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: rgba(0,0,0,0.95);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      z-index: 90;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+    }
+    .header-back {
+      position: absolute;
+      left: 16px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .header-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      letter-spacing: 0.3px;
+    }
+
+    /* Cards */
+    .card {
+      background: #111;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .card-inner {
+      background: #111;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    /* Section label */
+    .section-label {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 10px;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .stat-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+    .stat-val {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      color: #E2FF3B;
+    }
+    .stat-lbl {
+      font-family: 'Manrope', sans-serif;
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+    }
+    .stat-sep {
+      width: 1px;
+      height: 28px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* Fee rows */
+    .fee-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+    }
+    .fee-label {
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+    }
+    .fee-value {
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px;
+      color: #fff;
+      font-weight: 500;
+    }
+    .fee-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+      margin: 4px 0;
+    }
+
+    /* Rule item */
+    .rule-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .rule-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #E2FF3B;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+    .rule-text {
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.5;
+    }
+
+    /* Section header with chevron */
+    .section-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .section-toggle-title {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    /* Avatar stack */
+    .avatar-stack {
+      display: flex;
+      align-items: center;
+    }
+    .avatar-stack .av {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #111;
+      margin-left: -8px;
+    }
+    .avatar-stack .av:first-child { margin-left: 0; }
+    .avatar-more {
+      font-family: 'Manrope', sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      margin-left: 8px;
+    }
+
+    /* Fixed bottom */
+    .fixed-bottom {
+      position: fixed;
+      bottom: 80px;
+      left: 0;
+      right: 0;
+      padding: 12px 16px;
+      background: #000;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      z-index: 90;
+    }
+    .btn-pay {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 52px;
+      background: #E2FF3B;
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+    }
+    .btn-note {
+      font-family: 'Manrope', sans-serif;
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FIXED HEADER -->
+  <header class="fixed-header">
+    <a href="invited-ride.html" class="header-back">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+    </a>
+    <span class="header-title">REQUEST TO JOIN</span>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main style="padding-top:72px; padding-bottom:160px; padding-left:16px; padding-right:16px;">
+
+    <!-- 1. RIDE SUMMARY CARD -->
+    <div class="card">
+      <!-- Hero image -->
+      <div style="position:relative; width:100%; height:140px; overflow:hidden;">
+        <img src="/images/places/1.avif" alt="Asphalt Fix" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%);pointer-events:none;"></div>
+        <div style="position:absolute;bottom:0;left:0;padding:12px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:#fff;line-height:1.1;">Asphalt Fix</span>
+        </div>
+      </div>
+      <!-- Info -->
+      <div style="padding:14px;">
+        <div style="font-family:'Manrope',sans-serif;font-weight:600;font-size:14px;color:#fff;margin-bottom:4px;">Bangalore → Baga Beach, Goa</div>
+        <div style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:10px;">15–21 Feb 2021 · 5:30 AM</div>
+        <div class="stats-row">
+          <div class="stat-chip">
+            <span class="stat-val">350 KM</span>
+            <span class="stat-lbl">Distance</span>
+          </div>
+          <div class="stat-sep"></div>
+          <div class="stat-chip">
+            <span class="stat-val">6 Days</span>
+            <span class="stat-lbl">Duration</span>
+          </div>
+          <div class="stat-sep"></div>
+          <div class="stat-chip">
+            <span class="stat-val">20 Riders</span>
+            <span class="stat-lbl">Group size</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. COUNTDOWN CARD -->
+    <div class="card-inner" style="text-align:center;">
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:28px;color:#E2FF3B;letter-spacing:-0.5px;margin-bottom:12px;">10 DAYS TO GO</div>
+      <!-- Progress bar -->
+      <div style="background:rgba(226,255,59,0.1);height:6px;border-radius:3px;overflow:hidden;margin-bottom:10px;">
+        <div style="width:65%;height:100%;background:#E2FF3B;border-radius:3px;"></div>
+      </div>
+      <div style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.5);">Spot 13 of 20 available</div>
+    </div>
+
+    <!-- 3. RIDE DETAILS -->
+    <div class="card-inner">
+      <div class="section-label">Route</div>
+      <!-- Map placeholder -->
+      <div style="background:#191919;height:120px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+          <line x1="8" y1="2" x2="8" y2="18"/>
+          <line x1="16" y1="6" x2="16" y2="22"/>
+        </svg>
+        <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.3);">Bangalore → Goa</span>
+      </div>
+      <!-- Comrades -->
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="section-label" style="margin-bottom:0;">Comrades</div>
+        <div style="display:flex;align-items:center;">
+          <div class="avatar-stack">
+            <img class="av" src="/images/profile/1.avif" alt="" />
+            <img class="av" src="/images/profile/2.avif" alt="" />
+            <img class="av" src="/images/profile/3.avif" alt="" />
+          </div>
+          <span class="avatar-more">+17 more</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. RULES & SAFETY -->
+    <div class="card-inner">
+      <!-- Rules header with chevron -->
+      <div class="section-toggle" style="margin-bottom:14px;">
+        <span class="section-toggle-title">RULES</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+      <div class="rule-item">
+        <div class="rule-dot"></div>
+        <span class="rule-text">Helmet mandatory at all times</span>
+      </div>
+      <div class="rule-item">
+        <div class="rule-dot"></div>
+        <span class="rule-text">No alcohol during the ride</span>
+      </div>
+      <div class="rule-item" style="margin-bottom:20px;">
+        <div class="rule-dot"></div>
+        <span class="rule-text">Follow the lead rider's pace</span>
+      </div>
+
+      <!-- Things we take care -->
+      <div class="section-toggle" style="margin-bottom:14px;">
+        <span class="section-toggle-title">THINGS WE TAKE CARE</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+      <div class="rule-item">
+        <div class="rule-dot" style="background:rgba(255,255,255,0.3);"></div>
+        <span class="rule-text">First aid kit</span>
+      </div>
+      <div class="rule-item">
+        <div class="rule-dot" style="background:rgba(255,255,255,0.3);"></div>
+        <span class="rule-text">Route support vehicle</span>
+      </div>
+      <div class="rule-item" style="margin-bottom:0;">
+        <div class="rule-dot" style="background:rgba(255,255,255,0.3);"></div>
+        <span class="rule-text">Emergency contacts shared</span>
+      </div>
+    </div>
+
+    <!-- 5. PAYMENT SECTION -->
+    <div class="card-inner">
+      <div class="section-label">Ride Fee</div>
+
+      <!-- Fee breakdown -->
+      <div class="fee-row">
+        <span class="fee-label">Base fee</span>
+        <span class="fee-value">₹350</span>
+      </div>
+      <div class="fee-row">
+        <span class="fee-label">Insurance</span>
+        <span class="fee-value">₹100</span>
+      </div>
+      <div class="fee-divider"></div>
+      <div class="fee-row" style="padding: 10px 0 14px;">
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#fff;">TOTAL</span>
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;color:#E2FF3B;">₹450</span>
+      </div>
+
+      <!-- Payment method -->
+      <div style="display:flex;align-items:center;justify-content:space-between;background:#191919;border-radius:10px;padding:12px 14px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <!-- Visa icon -->
+          <div style="width:36px;height:24px;background:#1a1f71;border-radius:4px;display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:9px;color:#fff;letter-spacing:1px;">VISA</span>
+          </div>
+          <span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.7);">•••• 4242</span>
+        </div>
+        <a href="#" style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:#E2FF3B;">Change</a>
+      </div>
+
+      <div style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin-top:8px;text-align:center;">
+        100% refundable if admin rejects your request
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FIXED BOTTOM CTA -->
+  <div class="fixed-bottom">
+    <button class="btn-pay">PAY ₹450 &amp; REQUEST TO JOIN</button>
+    <div class="btn-note">Admin will review your request within 24 hours</div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav style="position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-around;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);height:80px;z-index:100;box-sizing:border-box;padding:0 8px">
+    <a href="home.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Explore</span></div></a>
+    <a href="ride-tab.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(226,255,59,0.1);border-radius:9999px;padding:6px 16px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><circle cx="7" cy="17" r="1.5" fill="currentColor" stroke="none"/><circle cx="17" cy="17" r="1.5" fill="currentColor" stroke="none"/><line x1="2" y1="11" x2="22" y2="11"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B">Ride</span></div></a>
+    <a href="marketplace.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Shop</span></div></a>
+    <a href="profile-setup.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Profile</span></div></a>
+  </nav>
+
+</body>
+</html>

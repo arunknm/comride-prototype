@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Ride Planner — Comride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Manrope', sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: 56px;
+      background: rgba(0,0,0,0.95);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+    }
+    .header-back {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      text-decoration: none;
+      color: #fff;
+      font-size: 18px;
+      line-height: 1;
+    }
+    .header-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+    .header-sparkle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+    }
+
+    /* ── BODY ── */
+    .page-body {
+      padding-top: 72px;
+      padding-bottom: 100px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    /* ── HERO INTRO CARD ── */
+    .hero-card {
+      background: linear-gradient(135deg, #0a1a00 0%, #111 60%, #000 100%);
+      border: 1px solid rgba(226,255,59,0.2);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .ai-pill {
+      display: inline-block;
+      background: rgba(226,255,59,0.1);
+      border: 1px solid rgba(226,255,59,0.3);
+      color: #E2FF3B;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 2px;
+      border-radius: 9999px;
+      padding: 4px 10px;
+    }
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      color: #fff;
+      margin-top: 8px;
+      line-height: 1.25;
+    }
+    .hero-subtitle {
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+      margin-top: 8px;
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    /* ── PREFERENCE CARDS ── */
+    .pref-card {
+      background: #111;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 10px;
+    }
+
+    .pref-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pref-label {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      color: #fff;
+    }
+    .pref-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: #E2FF3B;
+    }
+
+    /* ── RANGE SLIDER ── */
+    .range-wrap {
+      margin-top: 12px;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.12);
+      outline: none;
+      accent-color: #E2FF3B;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #E2FF3B;
+      cursor: pointer;
+      box-shadow: 0 0 0 3px rgba(226,255,59,0.2);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #E2FF3B;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 0 0 3px rgba(226,255,59,0.2);
+    }
+    .range-ends {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ── CHIPS ── */
+    .chip-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .chip {
+      border-radius: 9999px;
+      padding: 6px 14px;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.5);
+    }
+    .chip.active {
+      background: rgba(226,255,59,0.15);
+      border: 1px solid #E2FF3B;
+      color: #E2FF3B;
+    }
+
+    /* ── MONTH PICKER ── */
+    .month-card {
+      background: #111;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+    .month-circles {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .month-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.5);
+    }
+    .month-circle.selected {
+      background: #E2FF3B;
+      border-color: #E2FF3B;
+      color: #000;
+      font-weight: 700;
+    }
+
+    /* ── SHOW SUGGESTIONS BUTTON ── */
+    .suggest-btn {
+      width: 100%;
+      height: 52px;
+      background: #E2FF3B;
+      color: #000;
+      border-radius: 12px;
+      border: none;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(226,255,59,0.35);
+      margin-bottom: 28px;
+      transition: opacity 0.15s ease, transform 0.1s ease;
+    }
+    .suggest-btn:hover { opacity: 0.92; }
+    .suggest-btn:active { transform: scale(0.98); }
+
+    /* ── RESULTS SECTION ── */
+    #results-section {
+      display: none;
+    }
+    .results-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .results-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ── RIDE CARD ── */
+    .ride-card {
+      background: #111;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .ride-card-photo-wrap {
+      position: relative;
+      height: 160px;
+      overflow: hidden;
+    }
+    .ride-card-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.5) 100%);
+    }
+    .photo-badge-tl {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+    .photo-badge-tr {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      color: #fff;
+      background: rgba(0,0,0,0.5);
+      border-radius: 9999px;
+      padding: 4px 10px;
+      letter-spacing: 0.3px;
+    }
+    .badge-lime {
+      display: inline-block;
+      background: #E2FF3B;
+      color: #000;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 1px;
+      border-radius: 9999px;
+      padding: 4px 10px;
+    }
+    .badge-white {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 1px;
+      border-radius: 9999px;
+      padding: 4px 10px;
+    }
+    .badge-blue {
+      display: inline-block;
+      background: rgba(100,180,255,0.15);
+      border: 1px solid rgba(100,180,255,0.4);
+      color: #64b4ff;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 1px;
+      border-radius: 9999px;
+      padding: 4px 10px;
+    }
+
+    .ride-card-content {
+      padding: 14px;
+    }
+    .ride-card-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    /* Route */
+    .route-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .route-city {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+    }
+    .route-dash-line {
+      flex: 1;
+      height: 1px;
+      background: repeating-linear-gradient(90deg, #E2FF3B 0px, #E2FF3B 4px, transparent 4px, transparent 8px);
+    }
+
+    /* Stats */
+    .stats-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+    }
+    .stat-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      flex-shrink: 0;
+    }
+
+    /* Divider */
+    .card-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+      margin-bottom: 12px;
+    }
+
+    .ride-desc {
+      font-family: 'Manrope', sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    /* Bottom row */
+    .ride-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .avatar-stack {
+      display: flex;
+      align-items: center;
+      gap: -4px;
+    }
+    .avatar-stack-inner {
+      display: flex;
+    }
+    .avatar-dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid #111;
+      margin-right: -6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 9px;
+      color: #000;
+    }
+    .joining-text {
+      font-family: 'Manrope', sans-serif;
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      margin-left: 12px;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+    }
+    .join-btn {
+      background: rgba(226,255,59,0.12);
+      border: 1px solid rgba(226,255,59,0.35);
+      color: #E2FF3B;
+      border-radius: 9999px;
+      padding: 7px 14px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .join-btn:hover {
+      background: rgba(226,255,59,0.2);
+    }
+
+    /* Regenerate */
+    .regen-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: none;
+      border: none;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      cursor: pointer;
+      padding: 12px 0 4px;
+      transition: color 0.15s ease;
+    }
+    .regen-btn:hover { color: rgba(255,255,255,0.65); }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 80px;
+      background: rgba(0,0,0,0.95);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 8px;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      flex: 1;
+    }
+    .nav-icon-wrap {
+      width: 40px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+    }
+    .nav-icon-wrap.active {
+      background: rgba(226,255,59,0.12);
+    }
+    .nav-label {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      font-size: 10px;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.3px;
+    }
+    .nav-label.active {
+      color: #E2FF3B;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="header">
+    <a href="discover.html" class="header-back">←</a>
+    <span class="header-title">AI RIDE PLANNER</span>
+    <div class="header-sparkle">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 2L11.5 8.5L18 10L11.5 11.5L10 18L8.5 11.5L2 10L8.5 8.5L10 2Z" fill="#E2FF3B"/>
+        <circle cx="16" cy="4" r="1.2" fill="#E2FF3B" opacity="0.6"/>
+        <circle cx="4" cy="16" r="0.9" fill="#E2FF3B" opacity="0.4"/>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ── PAGE BODY ── -->
+  <main class="page-body">
+
+    <!-- HERO INTRO CARD -->
+    <div class="hero-card">
+      <span class="ai-pill">AI POWERED</span>
+      <h1 class="hero-title">Let AI plan your<br>next ride</h1>
+      <p class="hero-subtitle">Tell us your preferences — we'll find the perfect route and connect you with riders.</p>
+    </div>
+
+    <!-- INPUTS SECTION -->
+    <div id="inputs-section">
+
+      <div class="section-label">YOUR PREFERENCES</div>
+
+      <!-- MAX DISTANCE -->
+      <div class="pref-card">
+        <div class="pref-row">
+          <span class="pref-label">Max Distance</span>
+          <span class="pref-value" id="distance-val">350 KM</span>
+        </div>
+        <div class="range-wrap">
+          <input
+            type="range"
+            min="50" max="1000" value="350" step="50"
+            id="distance-slider"
+            oninput="document.getElementById('distance-val').textContent = this.value + ' KM'"
+          />
+          <div class="range-ends">
+            <span>50 KM</span>
+            <span>1000 KM</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAX DAYS -->
+      <div class="pref-card">
+        <div class="pref-row">
+          <span class="pref-label">Max Days</span>
+          <span class="pref-value" id="days-val">3 Days</span>
+        </div>
+        <div class="range-wrap">
+          <input
+            type="range"
+            min="1" max="14" value="3" step="1"
+            id="days-slider"
+            oninput="document.getElementById('days-val').textContent = this.value + (this.value == 1 ? ' Day' : ' Days')"
+          />
+          <div class="range-ends">
+            <span>1 Day</span>
+            <span>14 Days</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIDE TYPE CHIPS -->
+      <div class="pref-card">
+        <div class="pref-label">Ride Type</div>
+        <div class="chip-grid">
+          <span class="chip active" onclick="toggleChip(this)">MOUNTAIN</span>
+          <span class="chip active" onclick="toggleChip(this)">COASTAL</span>
+          <span class="chip" onclick="toggleChip(this)">HIGHWAY</span>
+          <span class="chip" onclick="toggleChip(this)">OFF-ROAD</span>
+          <span class="chip" onclick="toggleChip(this)">CITY TOUR</span>
+          <span class="chip" onclick="toggleChip(this)">HERITAGE</span>
+        </div>
+      </div>
+
+      <!-- PREFERRED MONTH -->
+      <div class="month-card">
+        <div class="pref-row">
+          <span class="pref-label">Preferred Month</span>
+          <span class="pref-value" id="month-label">May 2026</span>
+        </div>
+        <div class="month-circles">
+          <div class="month-circle" onclick="selectMonth(this, 'Apr 2026')">Apr</div>
+          <div class="month-circle selected" onclick="selectMonth(this, 'May 2026')">May</div>
+          <div class="month-circle" onclick="selectMonth(this, 'Jun 2026')">Jun</div>
+        </div>
+      </div>
+
+      <!-- SHOW SUGGESTIONS BUTTON -->
+      <button class="suggest-btn" onclick="showResults()">✦ SHOW SUGGESTIONS</button>
+
+    </div><!-- /inputs-section -->
+
+    <!-- RESULTS SECTION -->
+    <div id="results-section">
+
+      <div class="results-header">
+        <span class="results-title">AI SUGGESTIONS FOR YOU</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 1L8.05 5.95L13 7L8.05 8.05L7 13L5.95 8.05L1 7L5.95 5.95L7 1Z" fill="#E2FF3B"/>
+        </svg>
+      </div>
+
+      <!-- CARD 1 — Western Ghats -->
+      <div class="ride-card">
+        <div class="ride-card-photo-wrap">
+          <img src="/images/places/1.avif" alt="Western Ghats Monsoon Run" />
+          <div class="photo-gradient"></div>
+          <div class="photo-badge-tl"><span class="badge-lime">BEST MATCH</span></div>
+          <div class="photo-badge-tr">98% match</div>
+        </div>
+        <div class="ride-card-content">
+          <div class="ride-card-name">Western Ghats Monsoon Run</div>
+          <div class="route-row">
+            <span class="route-city">Bangalore</span>
+            <div class="route-dash-line"></div>
+            <span class="route-city">Goa</span>
+          </div>
+          <div class="stats-row">
+            <span class="stat-item">320 KM</span>
+            <div class="stat-dot"></div>
+            <span class="stat-item">3 Days</span>
+            <div class="stat-dot"></div>
+            <span class="stat-item">12 Riders</span>
+            <div class="stat-dot"></div>
+            <span class="stat-item">₹Free</span>
+          </div>
+          <div class="card-divider"></div>
+          <p class="ride-desc">Perfect mountain + coastal mix. Scenic ghats roads with ocean views.</p>
+          <div class="ride-card-footer">
+            <div class="footer-left">
+              <div class="avatar-stack-inner">
+                <div class="avatar-dot" style="background:#E2FF3B;">R</div>
+                <div class="avatar-dot" style="background:#a8e063;">K</div>
+                <div class="avatar-dot" style="background:#c8ff6b;">S</div>
+              </div>
+              <span class="joining-text">12 joining</span>
+            </div>
+            <button class="join-btn">JOIN RIDE →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2 — Coastal Karnataka -->
+      <div class="ride-card">
+        <div class="ride-card-photo-wrap">
+          <img src="/images/places/3.avif" alt="Coastal Karnataka Loop" />
+          <div class="photo-gradient"></div>
+          <div class="photo-badge-tl"><span class="badge-white">POPULAR</span></div>
+          <div class="photo-badge-tr">87% match</div>
+        </div>
+        <div class="ride-card-content">
+          <div class="ride-card-name">Coastal Karnataka Loop</div>
+          <div class="route-row">
+            <span class="route-city">Mangalore</span>
+            <div class="route-dash-line"></div>
+            <span class="route-city">Udupi → Gokarna</span>
+          </div>
+          <div class="stats-row">
+            <span class="stat-item">280 KM</span>
+            <div class="stat-dot"></div>
+            <span class="stat-item">2 Days</span>
+            <div class="stat-dot"></div>
+            <span class="stat-item">8 Riders</span>
+            <div class="stat-dot"></div>
+            <span class="stat-item">₹1200</span>
+          </div>
+          <div class="card-divider"></div>
+          <p class="ride-desc">Stunning coastline roads through Karnataka's hidden beach towns and fishing villages.</p>
+          <div class="ride-card-footer">
+            <div class="footer-left">
+              <div class="avatar-stack-inner">
+                <div class="avatar-dot" style="background:#ffd166;">A</div>
+                <div class="avatar-dot" style="background:#E2FF3B;">V</div>
+                <div class="avatar-dot" style="background:#b8ff4a;">M</div>
+              </div>
+              <span class="joining-text">8 joining</span>
+            </div>
+            <button class="join-btn">JOIN RIDE →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3 — Hampi Heritage -->
+      <div class="ride-card">
+        <div class="ride-card-photo-wrap">
+          <img src="/images/places/5.avif" alt="Hampi Heritage Ride" />
+          <div class="photo-gradient"></div>
+          <div class="photo-badge-tl"><span class="badge-blue">NEW ROUTE</span></div>
+          <div class="photo-badge-tr">79% match</div>
+        </div>
+        <div class="ride-card-content">
+          <div class="ride-card-name">Hampi Heritage Ride</div>
+          <div class="route-row">
+            <span class="route-city">Bangalore</span>
+            <div class="route-dash-line"></div>
+            <span class="route-city">Hampi</span>
+          </div>
+          <div class="stats-row">
+            <span class="stat-item">340 KM</span>
+            <div class="stat-dot"></div>
+            <span class="stat-item">2 Days</span>
+            <div class="stat-dot"></div>
+            <span class="stat-item">5 Riders</span>
+            <div class="stat-dot"></div>
+            <span class="stat-item">₹800</span>
+          </div>
+          <div class="card-divider"></div>
+          <p class="ride-desc">Ride through history — boulder-strewn landscapes and UNESCO World Heritage ruins await.</p>
+          <div class="ride-card-footer">
+            <div class="footer-left">
+              <div class="avatar-stack-inner">
+                <div class="avatar-dot" style="background:#64b4ff;">D</div>
+                <div class="avatar-dot" style="background:#a0c8ff;">P</div>
+                <div class="avatar-dot" style="background:#E2FF3B;">N</div>
+              </div>
+              <span class="joining-text">5 joining</span>
+            </div>
+            <button class="join-btn">JOIN RIDE →</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="regen-btn" onclick="showInputs()">Regenerate Suggestions ↺</button>
+
+    </div><!-- /results-section -->
+
+  </main>
+
+  <!-- ── BOTTOM NAV ── -->
+  <nav class="bottom-nav">
+    <!-- Explore -->
+    <a href="home.html" class="nav-item">
+      <div class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 9.5L11 3L19 9.5V19a1 1 0 01-1 1H14v-5H8v5H4a1 1 0 01-1-1V9.5z" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+      <span class="nav-label">Explore</span>
+    </a>
+    <!-- Ride — ACTIVE -->
+    <a href="ride-tab.html" class="nav-item">
+      <div class="nav-icon-wrap active">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="6" width="18" height="10" rx="3" stroke="#E2FF3B" stroke-width="1.5" fill="none"/>
+          <circle cx="6" cy="16" r="2.5" fill="#E2FF3B"/>
+          <circle cx="16" cy="16" r="2.5" fill="#E2FF3B"/>
+          <path d="M2 10h18" stroke="#E2FF3B" stroke-width="1.2"/>
+          <path d="M8 6V4M14 6V4" stroke="#E2FF3B" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="nav-label active">Ride</span>
+    </a>
+    <!-- Shop -->
+    <a href="marketplace.html" class="nav-item">
+      <div class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 2L4 8h14l-2-6H6z" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+          <path d="M4 8v10a2 2 0 002 2h10a2 2 0 002-2V8" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" fill="none"/>
+          <path d="M8 12h6" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="nav-label">Shop</span>
+    </a>
+    <!-- Profile -->
+    <a href="profile.html" class="nav-item">
+      <div class="nav-icon-wrap">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="7.5" r="3.5" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" fill="none"/>
+          <path d="M3 19c0-4 3.582-7 8-7s8 3 8 7" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <span class="nav-label">Profile</span>
+    </a>
+  </nav>
+
+  <script>
+    function toggleChip(el) {
+      el.classList.toggle('active');
+    }
+
+    function selectMonth(el, label) {
+      document.querySelectorAll('.month-circle').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('month-label').textContent = label;
+    }
+
+    function showResults() {
+      document.getElementById('inputs-section').style.display = 'none';
+      document.getElementById('results-section').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showInputs() {
+      document.getElementById('results-section').style.display = 'none';
+      document.getElementById('inputs-section').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+
+</body>
+</html>

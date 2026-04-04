@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    html, body { background: #000; color: #fff; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; margin: 0; padding: 0; }
+    ::selection { background: #E2FF3B; color: #2A3000; }
+    .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════ -->
+  <!-- FIXED TOP HEADER + MENU DRAWER -->
+  <!-- ═══════════════════════════════ -->
+  <header style="position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(0,0,0,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(72,72,72,0.15)">
+    <div style="max-width:390px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between">
+      <a href="home.html"><img src="/comride.svg" style="height:22px;width:auto;object-fit:contain" alt="Comride" /></a>
+      <div style="display:flex;align-items:center;gap:20px">
+        <div style="position:relative;cursor:pointer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <div style="position:absolute;top:-1px;right:-1px;width:8px;height:8px;border-radius:50%;background:#E2FF3B;border:2px solid #000"></div>
+        </div>
+        <div style="cursor:pointer;display:flex;flex-direction:column;gap:5px" onclick="openMenu()">
+          <div style="width:22px;height:2px;background:#fff;border-radius:2px"></div>
+          <div style="width:14px;height:2px;background:#fff;border-radius:2px"></div>
+          <div style="width:22px;height:2px;background:#fff;border-radius:2px"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SLIDE-IN MENU DRAWER -->
+  <div id="menu-drawer" style="position:fixed;top:0;right:0;bottom:0;width:280px;background:#131313;z-index:300;transform:translateX(100%);transition:transform 0.3s ease;border-left:1px solid rgba(72,72,72,0.2);display:flex;flex-direction:column;padding:24px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;padding-top:12px">
+      <img src="/comride.svg" style="height:20px;width:auto" alt="Comride" />
+      <div style="cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center" onclick="closeMenu()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </div>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:4px;overflow-y:auto;max-height:calc(100vh - 220px)">
+      <a href="index.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff;background:rgba(255,255,255,0.03)"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Index</span></a>
+      <a href="discover.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Discover Rides</span></a>
+      <a href="create-ride.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Create Ride</span></a>
+      <a href="tracking.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Live Tracking</span></a>
+      <a href="marketplace.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#E2FF3B"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Gear Shop</span></a>
+      <a href="profile.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Profile</span></a>
+      <a href="rewards.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Rewards</span></a>
+      <a href="notifications.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Notifications</span></a>
+      <a href="insurance.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Compliance</span></a>
+      <a href="payments.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Payments</span></a>
+      <a href="analytics.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Analytics</span></a>
+    </nav>
+    <a href="profile.html" style="margin-top:auto;border-top:1px solid rgba(72,72,72,0.2);padding-top:24px;display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer">
+      <div style="width:40px;height:40px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden;flex-shrink:0">
+        <img src="/images/profile/1.avif" style="width:100%;height:100%;object-fit:cover" alt="" />
+      </div>
+      <div style="flex:1">
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;color:#fff;margin:0">LEX_KINETIC</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:1px;color:#ababab;text-transform:uppercase;margin:0">MASTER SERGEANT</p>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+  <div id="menu-backdrop" onclick="closeMenu()" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:299;display:none"></div>
+  <script>
+    function openMenu() {
+      document.getElementById("menu-drawer").style.transform = "translateX(0)";
+      document.getElementById("menu-backdrop").style.display = "block";
+    }
+    function closeMenu() {
+      document.getElementById("menu-drawer").style.transform = "translateX(100%)";
+      document.getElementById("menu-backdrop").style.display = "none";
+    }
+  </script>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- CONTENT WRAPPER                         -->
+  <!-- ═══════════════════════════════════════ -->
+  <div style="max-width:390px;margin:0 auto;padding:64px 24px 160px">
+
+    <!-- PAGE TITLE -->
+    <div style="margin-bottom:24px;padding-top:20px">
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:32px;line-height:38px;letter-spacing:-1.5px;text-transform:uppercase;color:#fff;margin:0 0 6px">
+        SHOP
+      </h1>
+      <p style="font-family:'Manrope',sans-serif;font-weight:400;font-size:14px;line-height:22px;color:#ababab;margin:0">Parts, gear &amp; accessories for riders</p>
+    </div>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- SEARCH BAR                          -->
+    <!-- ═══════════════════════════════════ -->
+    <div style="background:#191919;border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:20px">
+      <!-- Search icon -->
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input
+        type="text"
+        placeholder="Search parts, gear, accessories..."
+        style="flex:1;background:transparent;border:none;outline:none;font-family:'Manrope',sans-serif;font-size:14px;color:#ababab;caret-color:#E2FF3B;"
+      />
+      <!-- Filter icon -->
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;cursor:pointer">
+        <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/>
+      </svg>
+    </div>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- TAB SWITCHER                        -->
+    <!-- ═══════════════════════════════════ -->
+    <div style="display:flex;gap:0;background:#191919;border-radius:12px;padding:6px;margin-bottom:32px">
+      <button class="shop-tab" style="flex:1;background:#E2FF3B;border-radius:10px;padding:12px;text-align:center;border:none;cursor:pointer;outline:none">
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;color:#000">Spare Parts</span>
+      </button>
+      <button class="shop-tab" style="flex:1;background:transparent;border-radius:10px;padding:12px;text-align:center;border:none;cursor:pointer;outline:none">
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;color:#ababab">Accessories</span>
+      </button>
+    </div>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- SPARE PARTS SECTION                 -->
+    <!-- ═══════════════════════════════════ -->
+    <div id="spare-parts" class="shop-section" style="display:block">
+
+      <!-- Most Rated Dealers -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff">Most rated dealers</span>
+        <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#E2FF3B;cursor:pointer">View All →</span>
+      </div>
+
+      <!-- Dealer horizontal scroll -->
+      <div class="no-scrollbar" style="display:flex;gap:12px;overflow-x:auto;margin-bottom:32px;padding-bottom:4px;-webkit-overflow-scrolling:touch">
+
+        <!-- Dealer 1: Ashok Yamaha -->
+        <div style="width:100px;flex-shrink:0;background:#191919;border-radius:12px;padding:16px;text-align:center;cursor:pointer">
+          <div style="width:48px;height:48px;background:#262626;border-radius:12px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:#E2FF3B">AY</span>
+          </div>
+          <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#fff;margin:0 0 4px;text-align:center">Ashok Yamaha</p>
+          <span style="font-size:10px;color:#E2FF3B">★★★★☆</span>
+        </div>
+
+        <!-- Dealer 2: RE Spare Mart -->
+        <div style="width:100px;flex-shrink:0;background:#191919;border-radius:12px;padding:16px;text-align:center;cursor:pointer">
+          <div style="width:48px;height:48px;background:#262626;border-radius:12px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:#E2FF3B">RE</span>
+          </div>
+          <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#fff;margin:0 0 4px;text-align:center">RE Spare Mart</p>
+          <span style="font-size:10px;color:#E2FF3B">★★★★☆</span>
+        </div>
+
+        <!-- Dealer 3: Moto Xpress -->
+        <div style="width:100px;flex-shrink:0;background:#191919;border-radius:12px;padding:16px;text-align:center;cursor:pointer">
+          <div style="width:48px;height:48px;background:#262626;border-radius:12px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:#E2FF3B">MX</span>
+          </div>
+          <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#fff;margin:0 0 4px;text-align:center">Moto Xpress</p>
+          <span style="font-size:10px;color:#E2FF3B">★★★★★</span>
+        </div>
+
+      </div>
+
+      <!-- ─────────────────────────────── -->
+      <!-- LISTING CARD 1                  -->
+      <!-- ─────────────────────────────── -->
+      <div style="background:#191919;border-radius:12px;overflow:hidden;margin-bottom:16px">
+
+        <!-- Header -->
+        <div style="padding:14px 14px 0;display:flex;align-items:center;gap:10px;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
+            <img src="/images/profile/2.avif" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0" alt="" />
+            <div style="min-width:0">
+              <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;color:#fff;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Arjun VT</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab;margin:0">Baga Beach, Goa · 2 hrs ago</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" style="cursor:pointer">
+              <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
+            </svg>
+            <span style="background:#262626;padding:3px 7px;border-radius:9999px;font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#ababab">Sponsored</span>
+          </div>
+        </div>
+
+        <!-- Product photo -->
+        <img src="/images/bikes/7.avif" style="width:100%;height:200px;object-fit:cover;display:block;margin-top:12px" alt="" />
+
+        <!-- Info bar -->
+        <div style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;background:#131313">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:#E2FF3B">&#8377; 1500</span>
+          <button style="background:#E2FF3B;border-radius:9999px;padding:8px 16px;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#000;text-transform:uppercase;border:none;cursor:pointer">Contact Seller →</button>
+        </div>
+
+        <!-- Caption -->
+        <div style="padding:10px 14px 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="background:rgba(226,255,59,0.1);color:#E2FF3B;font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;border-radius:9999px;padding:3px 8px">Monsoon Ride</span>
+          <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">Riders are the supplementary benefits added in...</span>
+        </div>
+
+        <!-- Engagement -->
+        <div style="padding:8px 14px 14px;display:flex;gap:20px;align-items:center">
+          <div style="display:flex;align-items:center;gap:6px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#fff">23</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#fff">3</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#fff">13</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ─────────────────────────────── -->
+      <!-- LISTING CARD 2                  -->
+      <!-- ─────────────────────────────── -->
+      <div style="background:#191919;border-radius:12px;overflow:hidden;margin-bottom:16px">
+
+        <!-- Header -->
+        <div style="padding:14px 14px 0;display:flex;align-items:center;gap:10px;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
+            <img src="/images/profile/3.avif" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0" alt="" />
+            <div style="min-width:0">
+              <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;color:#fff;margin:0">Bootmo Spares</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab;margin:0">2 hrs ago · Sponsored</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" style="cursor:pointer">
+              <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
+            </svg>
+            <span style="background:#262626;padding:3px 7px;border-radius:9999px;font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#ababab">Sponsored</span>
+          </div>
+        </div>
+
+        <!-- Product photo -->
+        <img src="/images/bikes/8.avif" style="width:100%;height:200px;object-fit:cover;display:block;margin-top:12px" alt="" />
+
+        <!-- Info bar -->
+        <div style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;background:#131313">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:#E2FF3B">&#8377; 2,200</span>
+          <button style="background:#E2FF3B;border-radius:9999px;padding:8px 16px;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#000;text-transform:uppercase;border:none;cursor:pointer">Contact Seller →</button>
+        </div>
+
+        <!-- Caption -->
+        <div style="padding:10px 14px 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="background:rgba(226,255,59,0.1);color:#E2FF3B;font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;border-radius:9999px;padding:3px 8px">Ashok Spare Parts</span>
+          <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">Riders are the supplementary benefits added in...</span>
+        </div>
+
+        <!-- Engagement -->
+        <div style="padding:8px 14px 14px;display:flex;gap:20px;align-items:center">
+          <div style="display:flex;align-items:center;gap:6px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#fff">23</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#fff">3</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#fff">13</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ─────────────────────────────── -->
+      <!-- LISTING CARD 3                  -->
+      <!-- ─────────────────────────────── -->
+      <div style="background:#191919;border-radius:12px;overflow:hidden;margin-bottom:16px">
+
+        <!-- Header -->
+        <div style="padding:14px 14px 0;display:flex;align-items:center;gap:10px;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
+            <img src="/images/profile/4.avif" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0" alt="" />
+            <div style="min-width:0">
+              <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;color:#fff;margin:0">MotoHub Delhi</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab;margin:0">Karol Bagh, Delhi · 5 hrs ago</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" style="cursor:pointer">
+              <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Product photo -->
+        <img src="/images/bikes/9.avif" style="width:100%;height:200px;object-fit:cover;display:block;margin-top:12px" alt="" />
+
+        <!-- Info bar -->
+        <div style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;background:#131313">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:#E2FF3B">&#8377; 850</span>
+          <button style="background:#E2FF3B;border-radius:9999px;padding:8px 16px;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#000;text-transform:uppercase;border:none;cursor:pointer">Contact Seller →</button>
+        </div>
+
+        <!-- Caption -->
+        <div style="padding:10px 14px 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="background:rgba(226,255,59,0.1);color:#E2FF3B;font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;border-radius:9999px;padding:3px 8px">KTM Duke 390</span>
+          <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">OEM parts — Available for pickup at Karol Bagh</span>
+        </div>
+
+        <!-- Engagement -->
+        <div style="padding:8px 14px 14px;display:flex;gap:20px;align-items:center">
+          <div style="display:flex;align-items:center;gap:6px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#fff">41</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#fff">8</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#fff">5</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- END SPARE PARTS -->
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- ACCESSORIES SECTION                 -->
+    <!-- ═══════════════════════════════════ -->
+    <div id="accessories" class="shop-section" style="display:none">
+
+      <!-- Section header -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:#fff">Accessories</span>
+        <button style="background:#191919;border-radius:9999px;padding:8px 16px;font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#ababab;border:none;cursor:pointer">Filter &#9881;</button>
+      </div>
+
+      <!-- Category list -->
+      <div style="display:flex;flex-direction:column;gap:2px">
+
+        <!-- Headlights -->
+        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <img src="/images/bikes/1.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Headlights</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+
+        <!-- Helmets -->
+        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <img src="/images/bikes/4.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Helmets</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+
+        <!-- Seats -->
+        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <img src="/images/bikes/2.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Seats</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+
+        <!-- Mudguards -->
+        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <img src="/images/bikes/3.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Mudguards</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+
+        <!-- Crash Guards -->
+        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <img src="/images/bikes/5.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Crash Guards</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+
+        <!-- Tail Lamps -->
+        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <img src="/images/bikes/6.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Tail Lamps</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+
+        <!-- Phone Stands -->
+        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <img src="/images/bikes/7.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Phone Stands</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+
+        <!-- Air Filters -->
+        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <img src="/images/bikes/8.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Air Filters</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+
+        <!-- Leather Jackets -->
+        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <img src="/images/bikes/9.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Leather Jackets</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+
+        <!-- Intercoms -->
+        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <img src="/images/bikes/10.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Intercoms</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- END ACCESSORIES -->
+
+  </div>
+  <!-- END CONTENT WRAPPER -->
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- TAB SWITCHING JS                    -->
+  <!-- ═══════════════════════════════════ -->
+  <script>
+    document.querySelectorAll('.shop-tab').forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.shop-tab').forEach(t => {
+          t.style.background = 'transparent';
+          t.querySelector('span').style.color = '#ababab';
+        });
+        tab.style.background = '#E2FF3B';
+        tab.querySelector('span').style.color = '#000';
+        document.querySelectorAll('.shop-section').forEach(s => s.style.display = 'none');
+        document.getElementById(i === 0 ? 'spare-parts' : 'accessories').style.display = 'block';
+      });
+    });
+  </script>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- BOTTOM NAVIGATION (FIXED)          -->
+  <!-- ═══════════════════════════════════ -->
+  <nav style="position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-around;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);height:80px;z-index:100;box-sizing:border-box;padding:0 8px">
+    <a href="home.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Explore</span></div></a>
+    <a href="ride-tab.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><circle cx="7" cy="17" r="1.5" fill="currentColor" stroke="none"/><circle cx="17" cy="17" r="1.5" fill="currentColor" stroke="none"/><line x1="2" y1="11" x2="22" y2="11"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Ride</span></div></a>
+    <a href="marketplace.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(226,255,59,0.1);border-radius:9999px;padding:6px 16px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B;letter-spacing:0.02em">Shop</span></div></a>
+    <a href="profile-setup.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Profile</span></div></a>
+  </nav>
+
+</body>
+</html>
