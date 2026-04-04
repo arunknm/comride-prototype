@@ -8,6 +8,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    a, button, [onclick] { cursor: pointer; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes likeBlip { 0%,100%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(0.88)} }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,12px)} to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .page-body { animation: slideUp 0.35s ease both; }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -18,7 +27,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── HEADER ── */
     .header {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -60,7 +68,6 @@
       height: 36px;
     }
 
-    /* ── BODY ── */
     .page-body {
       padding-top: 72px;
       padding-bottom: 100px;
@@ -68,7 +75,6 @@
       padding-right: 16px;
     }
 
-    /* ── HERO INTRO CARD ── */
     .hero-card {
       background: linear-gradient(135deg, #0a1a00 0%, #111 60%, #000 100%);
       border: 1px solid rgba(226,255,59,0.2);
@@ -104,7 +110,6 @@
       margin-top: 8px;
     }
 
-    /* ── SECTION LABEL ── */
     .section-label {
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
@@ -115,7 +120,6 @@
       margin-bottom: 12px;
     }
 
-    /* ── PREFERENCE CARDS ── */
     .pref-card {
       background: #111;
       border-radius: 12px;
@@ -141,7 +145,6 @@
       color: #E2FF3B;
     }
 
-    /* ── RANGE SLIDER ── */
     .range-wrap {
       margin-top: 12px;
     }
@@ -184,7 +187,6 @@
       color: rgba(255,255,255,0.3);
     }
 
-    /* ── CHIPS ── */
     .chip-grid {
       display: flex;
       flex-wrap: wrap;
@@ -201,17 +203,16 @@
       cursor: pointer;
       transition: all 0.15s ease;
       user-select: none;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.05);
-      color: rgba(255,255,255,0.5);
+      border: 1px solid rgba(255,255,255,0.15);
+      background: transparent;
+      color: #ababab;
     }
-    .chip.active {
-      background: rgba(226,255,59,0.15);
-      border: 1px solid #E2FF3B;
-      color: #E2FF3B;
+    .chip[data-on="1"] {
+      background: #E2FF3B;
+      border-color: #E2FF3B;
+      color: #000;
     }
 
-    /* ── MONTH PICKER ── */
     .month-card {
       background: #111;
       border-radius: 12px;
@@ -246,7 +247,6 @@
       font-weight: 700;
     }
 
-    /* ── SHOW SUGGESTIONS BUTTON ── */
     .suggest-btn {
       width: 100%;
       height: 52px;
@@ -266,8 +266,7 @@
     .suggest-btn:hover { opacity: 0.92; }
     .suggest-btn:active { transform: scale(0.98); }
 
-    /* ── RESULTS SECTION ── */
-    #results-section {
+    #ai-results {
       display: none;
     }
     .results-header {
@@ -285,14 +284,17 @@
       text-transform: uppercase;
     }
 
-    /* ── RIDE CARD ── */
     .ride-card {
       background: #111;
       border-radius: 16px;
       overflow: hidden;
       margin-bottom: 14px;
       border: 1px solid rgba(255,255,255,0.06);
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease;
     }
+    .ride-card:active { transform: scale(0.98); }
+    .ride-card:hover { border-color: rgba(226,255,59,0.2); }
     .ride-card-photo-wrap {
       position: relative;
       height: 160px;
@@ -374,7 +376,6 @@
       margin-bottom: 8px;
     }
 
-    /* Route */
     .route-row {
       display: flex;
       align-items: center;
@@ -393,7 +394,6 @@
       background: repeating-linear-gradient(90deg, #E2FF3B 0px, #E2FF3B 4px, transparent 4px, transparent 8px);
     }
 
-    /* Stats */
     .stats-row {
       display: flex;
       align-items: center;
@@ -415,7 +415,6 @@
       flex-shrink: 0;
     }
 
-    /* Divider */
     .card-divider {
       height: 1px;
       background: rgba(255,255,255,0.07);
@@ -430,16 +429,10 @@
       margin-bottom: 12px;
     }
 
-    /* Bottom row */
     .ride-card-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-    }
-    .avatar-stack {
-      display: flex;
-      align-items: center;
-      gap: -4px;
     }
     .avatar-stack-inner {
       display: flex;
@@ -486,7 +479,26 @@
       background: rgba(226,255,59,0.2);
     }
 
-    /* Regenerate */
+    .plan-route-btn {
+      display: block;
+      width: 100%;
+      background: rgba(226,255,59,0.08);
+      border: 1px solid rgba(226,255,59,0.25);
+      color: #E2FF3B;
+      border-radius: 12px;
+      padding: 14px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      text-align: center;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      transition: background 0.15s ease;
+    }
+    .plan-route-btn:hover { background: rgba(226,255,59,0.14); }
+
     .regen-btn {
       display: block;
       width: 100%;
@@ -503,7 +515,6 @@
     }
     .regen-btn:hover { color: rgba(255,255,255,0.65); }
 
-    /* ── BOTTOM NAV ── */
     .bottom-nav {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -550,12 +561,11 @@
 </head>
 <body>
 
-  <!-- ── HEADER ── -->
   <header class="header">
     <a href="discover.html" class="header-back">←</a>
     <span class="header-title">AI RIDE PLANNER</span>
     <div class="header-sparkle">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <path d="M10 2L11.5 8.5L18 10L11.5 11.5L10 18L8.5 11.5L2 10L8.5 8.5L10 2Z" fill="#E2FF3B"/>
         <circle cx="16" cy="4" r="1.2" fill="#E2FF3B" opacity="0.6"/>
         <circle cx="4" cy="16" r="0.9" fill="#E2FF3B" opacity="0.4"/>
@@ -563,17 +573,14 @@
     </div>
   </header>
 
-  <!-- ── PAGE BODY ── -->
   <main class="page-body">
 
-    <!-- HERO INTRO CARD -->
     <div class="hero-card">
       <span class="ai-pill">AI POWERED</span>
       <h1 class="hero-title">Let AI plan your<br>next ride</h1>
       <p class="hero-subtitle">Tell us your preferences — we'll find the perfect route and connect you with riders.</p>
     </div>
 
-    <!-- INPUTS SECTION -->
     <div id="inputs-section">
 
       <div class="section-label">YOUR PREFERENCES</div>
@@ -582,14 +589,15 @@
       <div class="pref-card">
         <div class="pref-row">
           <span class="pref-label">Max Distance</span>
-          <span class="pref-value" id="distance-val">350 KM</span>
+          <span class="pref-value" id="dist-val">350 KM</span>
         </div>
         <div class="range-wrap">
           <input
             type="range"
             min="50" max="1000" value="350" step="50"
             id="distance-slider"
-            oninput="document.getElementById('distance-val').textContent = this.value + ' KM'"
+            oninput="updateSlider(this,'dist-val','KM')"
+            style="background:linear-gradient(to right,#E2FF3B 32%,rgba(255,255,255,0.12) 32%)"
           />
           <div class="range-ends">
             <span>50 KM</span>
@@ -609,7 +617,8 @@
             type="range"
             min="1" max="14" value="3" step="1"
             id="days-slider"
-            oninput="document.getElementById('days-val').textContent = this.value + (this.value == 1 ? ' Day' : ' Days')"
+            oninput="updateDays(this)"
+            style="background:linear-gradient(to right,#E2FF3B 15%,rgba(255,255,255,0.12) 15%)"
           />
           <div class="range-ends">
             <span>1 Day</span>
@@ -620,14 +629,14 @@
 
       <!-- RIDE TYPE CHIPS -->
       <div class="pref-card">
-        <div class="pref-label">Ride Type</div>
+        <div class="pref-label" style="margin-bottom:0">Ride Type</div>
         <div class="chip-grid">
-          <span class="chip active" onclick="toggleChip(this)">MOUNTAIN</span>
-          <span class="chip active" onclick="toggleChip(this)">COASTAL</span>
-          <span class="chip" onclick="toggleChip(this)">HIGHWAY</span>
-          <span class="chip" onclick="toggleChip(this)">OFF-ROAD</span>
-          <span class="chip" onclick="toggleChip(this)">CITY TOUR</span>
-          <span class="chip" onclick="toggleChip(this)">HERITAGE</span>
+          <span class="chip" data-on="1" onclick="toggleChip(this)">MOUNTAIN</span>
+          <span class="chip" data-on="1" onclick="toggleChip(this)">COASTAL</span>
+          <span class="chip" data-on="0" onclick="toggleChip(this)">HIGHWAY</span>
+          <span class="chip" data-on="0" onclick="toggleChip(this)">OFF-ROAD</span>
+          <span class="chip" data-on="0" onclick="toggleChip(this)">CITY TOUR</span>
+          <span class="chip" data-on="0" onclick="toggleChip(this)">HERITAGE</span>
         </div>
       </div>
 
@@ -644,23 +653,22 @@
         </div>
       </div>
 
-      <!-- SHOW SUGGESTIONS BUTTON -->
-      <button class="suggest-btn" onclick="showResults()">✦ SHOW SUGGESTIONS</button>
+      <button class="suggest-btn" onclick="generateRides(this)">✦ SHOW SUGGESTIONS</button>
 
-    </div><!-- /inputs-section -->
+    </div>
 
     <!-- RESULTS SECTION -->
-    <div id="results-section">
+    <div id="ai-results">
 
       <div class="results-header">
         <span class="results-title">AI SUGGESTIONS FOR YOU</span>
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
           <path d="M7 1L8.05 5.95L13 7L8.05 8.05L7 13L5.95 8.05L1 7L5.95 5.95L7 1Z" fill="#E2FF3B"/>
         </svg>
       </div>
 
-      <!-- CARD 1 — Western Ghats -->
-      <div class="ride-card">
+      <!-- CARD 1 -->
+      <div class="ride-card" onclick="location.href='create-ride-modes.html'">
         <div class="ride-card-photo-wrap">
           <img src="/images/places/1.avif" alt="Western Ghats Monsoon Run" />
           <div class="photo-gradient"></div>
@@ -694,13 +702,13 @@
               </div>
               <span class="joining-text">12 joining</span>
             </div>
-            <button class="join-btn">JOIN RIDE →</button>
+            <button class="join-btn" onclick="event.stopPropagation();location.href='ride-details.html'">JOIN RIDE →</button>
           </div>
         </div>
       </div>
 
-      <!-- CARD 2 — Coastal Karnataka -->
-      <div class="ride-card">
+      <!-- CARD 2 -->
+      <div class="ride-card" onclick="location.href='create-ride-modes.html'">
         <div class="ride-card-photo-wrap">
           <img src="/images/places/3.avif" alt="Coastal Karnataka Loop" />
           <div class="photo-gradient"></div>
@@ -734,13 +742,13 @@
               </div>
               <span class="joining-text">8 joining</span>
             </div>
-            <button class="join-btn">JOIN RIDE →</button>
+            <button class="join-btn" onclick="event.stopPropagation();location.href='ride-details.html'">JOIN RIDE →</button>
           </div>
         </div>
       </div>
 
-      <!-- CARD 3 — Hampi Heritage -->
-      <div class="ride-card">
+      <!-- CARD 3 -->
+      <div class="ride-card" onclick="location.href='create-ride-modes.html'">
         <div class="ride-card-photo-wrap">
           <img src="/images/places/5.avif" alt="Hampi Heritage Ride" />
           <div class="photo-gradient"></div>
@@ -774,32 +782,30 @@
               </div>
               <span class="joining-text">5 joining</span>
             </div>
-            <button class="join-btn">JOIN RIDE →</button>
+            <button class="join-btn" onclick="event.stopPropagation();location.href='ride-details.html'">JOIN RIDE →</button>
           </div>
         </div>
       </div>
 
+      <button class="plan-route-btn" onclick="location.href='route-builder.html'">✦ PLAN THIS ROUTE IN BUILDER</button>
       <button class="regen-btn" onclick="showInputs()">Regenerate Suggestions ↺</button>
 
-    </div><!-- /results-section -->
+    </div>
 
   </main>
 
-  <!-- ── BOTTOM NAV ── -->
   <nav class="bottom-nav">
-    <!-- Explore -->
     <a href="home.html" class="nav-item">
       <div class="nav-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
           <path d="M3 9.5L11 3L19 9.5V19a1 1 0 01-1 1H14v-5H8v5H4a1 1 0 01-1-1V9.5z" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
         </svg>
       </div>
       <span class="nav-label">Explore</span>
     </a>
-    <!-- Ride — ACTIVE -->
     <a href="ride-tab.html" class="nav-item">
       <div class="nav-icon-wrap active">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
           <rect x="2" y="6" width="18" height="10" rx="3" stroke="#E2FF3B" stroke-width="1.5" fill="none"/>
           <circle cx="6" cy="16" r="2.5" fill="#E2FF3B"/>
           <circle cx="16" cy="16" r="2.5" fill="#E2FF3B"/>
@@ -809,10 +815,9 @@
       </div>
       <span class="nav-label active">Ride</span>
     </a>
-    <!-- Shop -->
     <a href="marketplace.html" class="nav-item">
       <div class="nav-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
           <path d="M6 2L4 8h14l-2-6H6z" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
           <path d="M4 8v10a2 2 0 002 2h10a2 2 0 002-2V8" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" fill="none"/>
           <path d="M8 12h6" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-linecap="round"/>
@@ -820,10 +825,9 @@
       </div>
       <span class="nav-label">Shop</span>
     </a>
-    <!-- Profile -->
     <a href="profile.html" class="nav-item">
       <div class="nav-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
           <circle cx="11" cy="7.5" r="3.5" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" fill="none"/>
           <path d="M3 19c0-4 3.582-7 8-7s8 3 8 7" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
         </svg>
@@ -833,28 +837,82 @@
   </nav>
 
   <script>
-    function toggleChip(el) {
-      el.classList.toggle('active');
+    /* ── slider helper ── */
+    function updateSlider(input, displayId, suffix) {
+      document.getElementById(displayId).textContent = input.value + ' ' + suffix;
+      const pct = (input.value - input.min) / (input.max - input.min) * 100;
+      input.style.background = `linear-gradient(to right, #E2FF3B ${pct}%, rgba(255,255,255,0.12) ${pct}%)`;
+    }
+    function updateDays(input) {
+      const v = parseInt(input.value);
+      document.getElementById('days-val').textContent = v + (v===1?' Day':' Days');
+      const pct = (v - 1) / (14 - 1) * 100;
+      input.style.background = `linear-gradient(to right, #E2FF3B ${pct}%, rgba(255,255,255,0.12) ${pct}%)`;
     }
 
+    /* ── chip toggle ── */
+    function toggleChip(el) {
+      const isOn = el.getAttribute('data-on')==='1';
+      el.setAttribute('data-on', isOn?'0':'1');
+      el.style.background = isOn ? 'transparent' : '#E2FF3B';
+      el.style.color = isOn ? '#ababab' : '#000';
+      el.style.borderColor = isOn ? 'rgba(255,255,255,0.15)' : '#E2FF3B';
+    }
+
+    /* ── set initial chip styles ── */
+    document.querySelectorAll('.chip[data-on="1"]').forEach(c=>{
+      c.style.background='#E2FF3B'; c.style.color='#000'; c.style.borderColor='#E2FF3B';
+    });
+
+    /* ── month selector ── */
     function selectMonth(el, label) {
       document.querySelectorAll('.month-circle').forEach(c => c.classList.remove('selected'));
       el.classList.add('selected');
       document.getElementById('month-label').textContent = label;
     }
 
-    function showResults() {
-      document.getElementById('inputs-section').style.display = 'none';
-      document.getElementById('results-section').style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    /* ── generate / show results ── */
+    function generateRides(btn) {
+      btn.textContent = 'AI THINKING...';
+      btn.style.opacity = '0.7';
+      btn.disabled = true;
+      setTimeout(()=>{
+        btn.textContent = 'SHOW SUGGESTIONS';
+        btn.style.opacity = '';
+        btn.disabled = false;
+        document.getElementById('inputs-section').style.display = 'none';
+        const results = document.getElementById('ai-results');
+        results.style.display = 'block';
+        results.style.animation = 'slideUp 0.35s ease';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        showToast('3 routes found!');
+      }, 1800);
     }
 
     function showInputs() {
-      document.getElementById('results-section').style.display = 'none';
+      document.getElementById('ai-results').style.display = 'none';
       document.getElementById('inputs-section').style.display = 'block';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   </script>
 
+  <script>
+    document.querySelectorAll('a,button,[onclick]').forEach(function(el){
+      el.addEventListener('mousedown',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+      el.addEventListener('mouseup',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('mouseleave',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('touchstart',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+      el.addEventListener('touchend',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('touchcancel',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    });
+    window.showToast=function(msg,isError){
+      document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
+      const t=document.createElement('div');
+      t.className='toast-msg';t.textContent=msg;
+      t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(),2200);
+    };
+  </script>
 </body>
 </html>

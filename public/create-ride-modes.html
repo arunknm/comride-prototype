@@ -131,6 +131,51 @@
       flex: 1;
     }
 
+    /* ── Global animations ── */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(16px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    @keyframes sheetUp {
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    /* Tap highlight suppression */
+    * { -webkit-tap-highlight-color: transparent; }
+    button, [onclick], a { cursor: pointer; }
+    /* Page entry */
+    .page-body { animation: slideUp 0.3s ease both; }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 160px;
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      background: #E2FF3B;
+      color: #000;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 10px 22px;
+      border-radius: 9999px;
+      z-index: 9999;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    #toast.error { background: #ff4d4d; color: #fff; }
+    #toast.show { opacity: 1; animation: toastIn 0.3s ease; }
+
     /* Section animation */
     .form-section {
       transition: opacity 0.2s;
@@ -189,7 +234,10 @@
   </header>
 
   <!-- BODY -->
-  <main style="max-width:390px;margin:0 auto;padding:72px 16px 120px;">
+  <!-- Toast -->
+  <div id="toast"></div>
+
+  <main class="page-body" style="max-width:390px;margin:0 auto;padding:72px 16px 120px;">
 
     <!-- 1. MODE SELECTOR -->
     <div style="position:relative;margin-bottom:20px;">
@@ -378,7 +426,7 @@
 
     <!-- 8. CREATE ROUTE (Solo + Public) -->
     <div class="form-section" id="route-section" style="margin-bottom:12px;">
-      <div style="background:#191919;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.15s;" onmouseenter="this.style.background='#222'" onmouseleave="this.style.background='#191919'">
+      <div onclick="location.href='route-builder.html'" style="background:#191919;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.15s;" onmouseenter="this.style.background='#222'" onmouseleave="this.style.background='#191919'">
         <span style="font-family:'Manrope',sans-serif;font-size:14px;color:#fff;font-weight:500;">Create route</span>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -444,7 +492,7 @@
 
   <!-- CREATE BUTTON (fixed) -->
   <div style="position:fixed;bottom:80px;left:16px;right:16px;max-width:358px;margin:0 auto;z-index:150;">
-    <button onclick="handleCreate()" style="width:100%;height:54px;background:#E2FF3B;color:#000;border-radius:14px;border:none;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;letter-spacing:0.06em;cursor:pointer;box-shadow:0 4px 20px rgba(226,255,59,0.3);transition:opacity 0.15s;" onmouseenter="this.style.opacity='0.9'" onmouseleave="this.style.opacity='1'">
+    <button id="create-btn" onclick="submitRide(this)" style="width:100%;height:54px;background:#E2FF3B;color:#000;border-radius:14px;border:none;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;letter-spacing:0.06em;cursor:pointer;box-shadow:0 4px 20px rgba(226,255,59,0.3);transition:opacity 0.15s;" onmouseenter="this.style.opacity='0.9'" onmouseleave="this.style.opacity='1'">
       CREATE
     </button>
   </div>
@@ -618,26 +666,48 @@
     }
 
     // ---- CREATE HANDLER ----
-    function handleCreate() {
+    function submitRide(btn) {
       var rideName = document.querySelector('#ride-name-section input');
       if (rideName && !rideName.value.trim()) {
         rideName.style.borderColor = 'rgba(226,255,59,0.6)';
         rideName.focus();
         rideName.placeholder = 'Please enter a ride name';
+        showToast('Enter a ride name first', true);
         setTimeout(function() {
           rideName.style.borderColor = 'rgba(255,255,255,0.08)';
           rideName.placeholder = 'Ride name';
         }, 2000);
         return;
       }
-      // Success flash
-      var btn = event.target;
-      btn.textContent = 'RIDE CREATED!';
-      btn.style.background = '#fff';
+      btn.textContent = 'CREATING...';
+      btn.style.opacity = '0.75';
+      btn.disabled = true;
       setTimeout(function() {
-        btn.textContent = 'CREATE';
-        btn.style.background = '#E2FF3B';
-      }, 2000);
+        location.href = 'my-ride-detail.html';
+      }, 1200);
+    }
+
+    // ---- TOAST ----
+    var _toastTimer;
+    window.showToast = function(msg, isError) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = isError ? 'error show' : 'show';
+      clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(function() { t.className = ''; }, 2600);
+    };
+
+    // ---- PRESS FEEDBACK ----
+    document.addEventListener('mousedown', _fbDown);
+    document.addEventListener('touchstart', _fbDown, { passive: true });
+    document.addEventListener('mouseup', _fbUp);
+    document.addEventListener('touchend', _fbUp);
+    function _fbDown(e) {
+      var el = e.target.closest('button,[onclick],a,.mode-option,.accordion-row,.pay-pill');
+      if (el) { el.style.transition = 'transform 0.08s,opacity 0.08s'; el.style.transform = 'scale(0.94)'; el.style.opacity = '0.78'; }
+    }
+    function _fbUp() {
+      document.querySelectorAll('[style*="scale(0.94)"]').forEach(function(el) { el.style.transform = ''; el.style.opacity = ''; });
     }
 
     // ---- INIT ----

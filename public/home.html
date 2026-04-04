@@ -31,6 +31,16 @@
     }
   </script>
   <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    a, button, [onclick] { cursor: pointer; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes likeBlip { 0%,100%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(0.88)} }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,12px)} to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes ripple { 0%{transform:scale(0);opacity:0.5} 100%{transform:scale(4);opacity:0} }
+    .page-body { animation: slideUp 0.35s ease both; }
+
     * { box-sizing: border-box; }
     html, body { background: #000; color: #fff; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; }
     ::selection { background: #E2FF3B; color: #2A3000; }
@@ -44,13 +54,13 @@
     <div style="max-width:390px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between">
       <a href="home.html"><img src="/comride.svg" style="height:22px;width:auto;object-fit:contain" alt="Comride" /></a>
       <div style="display:flex;align-items:center;gap:20px">
-        <div style="position:relative;cursor:pointer">
+        <a href="notifications.html" style="position:relative;cursor:pointer;text-decoration:none">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
             <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
           </svg>
           <div style="position:absolute;top:-1px;right:-1px;width:8px;height:8px;border-radius:50%;background:#E2FF3B;border:2px solid #000"></div>
-        </div>
+        </a>
         <div style="cursor:pointer;display:flex;flex-direction:column;gap:5px" onclick="openMenu()">
           <div style="width:22px;height:2px;background:#fff;border-radius:2px"></div>
           <div style="width:14px;height:2px;background:#fff;border-radius:2px"></div>
@@ -109,20 +119,16 @@
   <!-- ═══════════════════════════════ -->
   <!-- PAGE CONTENT                    -->
   <!-- ═══════════════════════════════ -->
-  <div style="max-width:390px;margin:0 auto;padding:64px 24px 160px">
+  <div class="page-body" style="max-width:390px;margin:0 auto;padding:64px 24px 160px">
 
     <!-- ── SEARCH BAR ── -->
-    <div style="background:#191919;border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:24px">
+    <div onclick="location.href='search-results.html'" style="background:#191919;border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:24px;cursor:pointer">
       <!-- Search icon -->
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
         <circle cx="11" cy="11" r="8"/>
         <line x1="21" y1="21" x2="16.65" y2="16.65"/>
       </svg>
-      <input
-        type="text"
-        placeholder="Search rides, riders, gear..."
-        style="font-family:'Manrope',sans-serif;font-size:14px;color:#ababab;background:transparent;border:none;outline:none;flex:1;min-width:0"
-      />
+      <span style="font-family:'Manrope',sans-serif;font-size:14px;color:#ababab;flex:1;min-width:0">Search rides, riders, gear...</span>
       <!-- Filter / sliders icon -->
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
         <line x1="4" y1="6" x2="20" y2="6"/>
@@ -138,7 +144,7 @@
     <div style="display:flex;gap:16px;overflow-x:auto;padding-bottom:8px;margin-bottom:32px;scrollbar-width:none;-ms-overflow-style:none">
 
       <!-- Story 1: YOUR STORY (with + badge) -->
-      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+      <div onclick="showToast('Opening your story...')" style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;cursor:pointer">
         <div style="position:relative">
           <div style="width:56px;height:56px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden">
             <img src="/images/profile/1.avif" style="width:100%;height:100%;object-fit:cover" alt="Your Story" />
@@ -155,36 +161,36 @@
       </div>
 
       <!-- Story 2: VOID_RUN -->
-      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+      <a href="comrade-profile.html" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
         <div style="width:56px;height:56px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden">
           <img src="/images/profile/2.avif" style="width:100%;height:100%;object-fit:cover" alt="VOID_RUN" />
         </div>
         <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#ababab;text-transform:uppercase;white-space:nowrap">VOID_RUN</span>
-      </div>
+      </a>
 
       <!-- Story 3: STEEL_P -->
-      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+      <a href="comrade-profile.html" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
         <div style="width:56px;height:56px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden">
           <img src="/images/profile/3.avif" style="width:100%;height:100%;object-fit:cover" alt="STEEL_P" />
         </div>
         <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#ababab;text-transform:uppercase;white-space:nowrap">STEEL_P</span>
-      </div>
+      </a>
 
       <!-- Story 4: LEX_K -->
-      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+      <a href="comrade-profile.html" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
         <div style="width:56px;height:56px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden">
           <img src="/images/profile/4.avif" style="width:100%;height:100%;object-fit:cover" alt="LEX_K" />
         </div>
         <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#ababab;text-transform:uppercase;white-space:nowrap">LEX_K</span>
-      </div>
+      </a>
 
       <!-- Story 5: MOTO_S -->
-      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+      <a href="comrade-profile.html" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
         <div style="width:56px;height:56px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden">
           <img src="/images/profile/5.avif" style="width:100%;height:100%;object-fit:cover" alt="MOTO_S" />
         </div>
         <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#ababab;text-transform:uppercase;white-space:nowrap">MOTO_S</span>
-      </div>
+      </a>
 
     </div>
 
@@ -195,7 +201,7 @@
 
       <!-- Post header -->
       <div style="padding:16px 16px 0;display:flex;align-items:center;justify-content:space-between">
-        <div style="display:flex;align-items:center;gap:10px">
+        <a href="comrade-profile.html" style="display:flex;align-items:center;gap:10px;text-decoration:none">
           <div style="width:40px;height:40px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden;flex-shrink:0">
             <img src="/images/profile/2.avif" style="width:100%;height:100%;object-fit:cover" alt="VOID_RUNNER" />
           </div>
@@ -203,9 +209,9 @@
             <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0">VOID_RUNNER</p>
             <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;margin:0">Baga Beach, Goa · 2h ago</p>
           </div>
-        </div>
+        </a>
         <!-- ••• menu -->
-        <div style="display:flex;flex-direction:column;gap:3px;cursor:pointer;padding:4px">
+        <div style="display:flex;flex-direction:column;gap:3px;cursor:pointer;padding:4px" onclick="showToast('Options coming soon')">
           <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
           <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
           <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
@@ -228,21 +234,21 @@
       <!-- Engagement row -->
       <div style="display:flex;align-items:center;gap:24px;padding:0 16px 16px">
         <!-- Heart -->
-        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div id="like-btn-1" data-liked="0" onclick="toggleLike(this)" style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
           </svg>
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">47</span>
         </div>
         <!-- Comment -->
-        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+        <div onclick="toggleComments(this)" style="display:flex;align-items:center;gap:6px;cursor:pointer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
           </svg>
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">12</span>
         </div>
         <!-- Share -->
-        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+        <div onclick="showShareSheet()" style="display:flex;align-items:center;gap:6px;cursor:pointer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="18" cy="5" r="3"/>
             <circle cx="6" cy="12" r="3"/>
@@ -253,10 +259,33 @@
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">8</span>
         </div>
         <!-- Bookmark -->
-        <div style="margin-left:auto;cursor:pointer">
+        <div style="margin-left:auto;cursor:pointer" onclick="showToast('Saved to bookmarks!')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
           </svg>
+        </div>
+      </div>
+      <!-- Comments section -->
+      <div class="comments-section" style="display:none;margin-top:0;padding:0 16px 16px;border-top:1px solid rgba(255,255,255,0.06);animation:slideUp 0.25s ease">
+        <div style="padding-top:12px">
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:10px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;overflow:hidden;flex-shrink:0"><img src="images/profile/2.avif" style="width:100%;height:100%;object-fit:cover"/></div>
+            <div style="flex:1;background:#111;border-radius:10px;padding:8px 10px">
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#fff;margin:0 0 3px">RAZE_THROTTLE</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ccc;margin:0">Epic ride, the mountain section was insane!</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:10px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;overflow:hidden;flex-shrink:0"><img src="images/profile/3.avif" style="width:100%;height:100%;object-fit:cover"/></div>
+            <div style="flex:1;background:#111;border-radius:10px;padding:8px 10px">
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#fff;margin:0 0 3px">NEON_VELOCITY</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ccc;margin:0">Joining next time for sure! 🔥</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;overflow:hidden;flex-shrink:0"><img src="images/profile/1.avif" style="width:100%;height:100%;object-fit:cover"/></div>
+            <input onclick="this.focus()" placeholder="Add a comment..." style="flex:1;background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:7px 14px;color:#fff;font-family:'Manrope',sans-serif;font-size:12px;outline:none" onfocus="this.style.borderColor='#E2FF3B'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'" onkeydown="if(event.key==='Enter'&&this.value.trim()){postComment(this)}"/>
+          </div>
         </div>
       </div>
 
@@ -267,7 +296,7 @@
 
       <!-- Post header -->
       <div style="padding:16px 16px 0;display:flex;align-items:center;justify-content:space-between">
-        <div style="display:flex;align-items:center;gap:10px">
+        <a href="comrade-profile.html" style="display:flex;align-items:center;gap:10px;text-decoration:none">
           <div style="width:40px;height:40px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden;flex-shrink:0">
             <img src="/images/profile/3.avif" style="width:100%;height:100%;object-fit:cover" alt="LEX_KINETIC" />
           </div>
@@ -275,8 +304,8 @@
             <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0">LEX_KINETIC</p>
             <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;margin:0">Organiser · 5h ago</p>
           </div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:3px;cursor:pointer;padding:4px">
+        </a>
+        <div style="display:flex;flex-direction:column;gap:3px;cursor:pointer;padding:4px" onclick="showToast('Options coming soon')">
           <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
           <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
           <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
@@ -296,26 +325,26 @@
           <span style="border:1px solid #484848;border-radius:9999px;padding:4px 12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#ababab">GOA</span>
         </div>
         <!-- Register button -->
-        <button style="width:100%;background:#E2FF3B;border:none;border-radius:9999px;padding:12px;cursor:pointer;margin-top:12px">
+        <button onclick="showToast('Registration opened!');this.textContent='REGISTERED ✓';this.style.background='rgba(226,255,59,0.15)';this.style.color='#E2FF3B'" style="width:100%;background:#E2FF3B;border:none;border-radius:9999px;padding:12px;cursor:pointer;margin-top:12px">
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#000;text-transform:uppercase;letter-spacing:1px">REGISTER NOW →</span>
         </button>
       </div>
 
       <!-- Engagement row -->
       <div style="display:flex;align-items:center;gap:24px;padding:0 16px 16px">
-        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div id="like-btn-2" data-liked="0" onclick="toggleLike(this)" style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
           </svg>
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">342</span>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+        <div onclick="toggleComments(this)" style="display:flex;align-items:center;gap:6px;cursor:pointer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
           </svg>
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">89</span>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+        <div onclick="showShareSheet()" style="display:flex;align-items:center;gap:6px;cursor:pointer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="18" cy="5" r="3"/>
             <circle cx="6" cy="12" r="3"/>
@@ -325,10 +354,33 @@
           </svg>
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">156</span>
         </div>
-        <div style="margin-left:auto;cursor:pointer">
+        <div style="margin-left:auto;cursor:pointer" onclick="showToast('Saved to bookmarks!')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
           </svg>
+        </div>
+      </div>
+      <!-- Comments section -->
+      <div class="comments-section" style="display:none;margin-top:0;padding:0 16px 16px;border-top:1px solid rgba(255,255,255,0.06);animation:slideUp 0.25s ease">
+        <div style="padding-top:12px">
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:10px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;overflow:hidden;flex-shrink:0"><img src="images/profile/2.avif" style="width:100%;height:100%;object-fit:cover"/></div>
+            <div style="flex:1;background:#111;border-radius:10px;padding:8px 10px">
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#fff;margin:0 0 3px">RAZE_THROTTLE</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ccc;margin:0">Epic ride, the mountain section was insane!</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:10px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;overflow:hidden;flex-shrink:0"><img src="images/profile/3.avif" style="width:100%;height:100%;object-fit:cover"/></div>
+            <div style="flex:1;background:#111;border-radius:10px;padding:8px 10px">
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#fff;margin:0 0 3px">NEON_VELOCITY</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ccc;margin:0">Joining next time for sure! 🔥</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;overflow:hidden;flex-shrink:0"><img src="images/profile/1.avif" style="width:100%;height:100%;object-fit:cover"/></div>
+            <input onclick="this.focus()" placeholder="Add a comment..." style="flex:1;background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:7px 14px;color:#fff;font-family:'Manrope',sans-serif;font-size:12px;outline:none" onfocus="this.style.borderColor='#E2FF3B'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'" onkeydown="if(event.key==='Enter'&&this.value.trim()){postComment(this)}"/>
+          </div>
         </div>
       </div>
 
@@ -339,7 +391,7 @@
 
       <!-- Post header -->
       <div style="padding:16px 16px 0;display:flex;align-items:center;justify-content:space-between">
-        <div style="display:flex;align-items:center;gap:10px">
+        <a href="comrade-profile.html" style="display:flex;align-items:center;gap:10px;text-decoration:none">
           <div style="width:40px;height:40px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden;flex-shrink:0">
             <img src="/images/profile/4.avif" style="width:100%;height:100%;object-fit:cover" alt="STEEL_PACK" />
           </div>
@@ -347,8 +399,8 @@
             <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0">STEEL_PACK</p>
             <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;margin:0">Pune · 1d ago</p>
           </div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:3px;cursor:pointer;padding:4px">
+        </a>
+        <div style="display:flex;flex-direction:column;gap:3px;cursor:pointer;padding:4px" onclick="showToast('Options coming soon')">
           <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
           <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
           <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
@@ -369,19 +421,19 @@
 
       <!-- Engagement row -->
       <div style="display:flex;align-items:center;gap:24px;padding:0 16px 16px">
-        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div id="like-btn-3" data-liked="0" onclick="toggleLike(this)" style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
           </svg>
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">28</span>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+        <div onclick="toggleComments(this)" style="display:flex;align-items:center;gap:6px;cursor:pointer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
           </svg>
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">7</span>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+        <div onclick="showShareSheet()" style="display:flex;align-items:center;gap:6px;cursor:pointer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="18" cy="5" r="3"/>
             <circle cx="6" cy="12" r="3"/>
@@ -391,10 +443,33 @@
           </svg>
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">4</span>
         </div>
-        <div style="margin-left:auto;cursor:pointer">
+        <div style="margin-left:auto;cursor:pointer" onclick="showToast('Saved to bookmarks!')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
           </svg>
+        </div>
+      </div>
+      <!-- Comments section -->
+      <div class="comments-section" style="display:none;margin-top:0;padding:0 16px 16px;border-top:1px solid rgba(255,255,255,0.06);animation:slideUp 0.25s ease">
+        <div style="padding-top:12px">
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:10px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;overflow:hidden;flex-shrink:0"><img src="images/profile/2.avif" style="width:100%;height:100%;object-fit:cover"/></div>
+            <div style="flex:1;background:#111;border-radius:10px;padding:8px 10px">
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#fff;margin:0 0 3px">RAZE_THROTTLE</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ccc;margin:0">Epic ride, the mountain section was insane!</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:10px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;overflow:hidden;flex-shrink:0"><img src="images/profile/3.avif" style="width:100%;height:100%;object-fit:cover"/></div>
+            <div style="flex:1;background:#111;border-radius:10px;padding:8px 10px">
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#fff;margin:0 0 3px">NEON_VELOCITY</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ccc;margin:0">Joining next time for sure! 🔥</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;overflow:hidden;flex-shrink:0"><img src="images/profile/1.avif" style="width:100%;height:100%;object-fit:cover"/></div>
+            <input onclick="this.focus()" placeholder="Add a comment..." style="flex:1;background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:7px 14px;color:#fff;font-family:'Manrope',sans-serif;font-size:12px;outline:none" onfocus="this.style.borderColor='#E2FF3B'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'" onkeydown="if(event.key==='Enter'&&this.value.trim()){postComment(this)}"/>
+          </div>
         </div>
       </div>
 
@@ -405,7 +480,7 @@
 
       <!-- Post header -->
       <div style="padding:16px 16px 0;display:flex;align-items:center;justify-content:space-between">
-        <div style="display:flex;align-items:center;gap:10px">
+        <a href="comrade-profile.html" style="display:flex;align-items:center;gap:10px;text-decoration:none">
           <div style="width:40px;height:40px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden;flex-shrink:0">
             <img src="/images/profile/5.avif" style="width:100%;height:100%;object-fit:cover" alt="MOTO_SURGE" />
           </div>
@@ -413,8 +488,8 @@
             <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0">MOTO_SURGE</p>
             <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;margin:0">Mumbai · 3d ago</p>
           </div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:3px;cursor:pointer;padding:4px">
+        </a>
+        <div style="display:flex;flex-direction:column;gap:3px;cursor:pointer;padding:4px" onclick="showToast('Options coming soon')">
           <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
           <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
           <div style="width:3px;height:3px;border-radius:50%;background:#ababab"></div>
@@ -429,25 +504,25 @@
         <p style="font-family:'Manrope',sans-serif;font-size:14px;color:#fff;line-height:1.6;margin:0 0 12px 0">Finally picked up the VOID-1. Carbon shell, AR visor — this thing is a different beast on the highway.</p>
         <!-- Price tag pill -->
         <div>
-          <span style="background:#E2FF3B;border-radius:9999px;padding:4px 12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#000">₹24,500</span>
+          <span onclick="location.href='product-detail.html'" style="background:#E2FF3B;border-radius:9999px;padding:4px 12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#000;cursor:pointer">₹24,500</span>
         </div>
       </div>
 
       <!-- Engagement row -->
       <div style="display:flex;align-items:center;gap:24px;padding:0 16px 16px">
-        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div id="like-btn-4" data-liked="0" onclick="toggleLike(this)" style="display:flex;align-items:center;gap:6px;cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
           </svg>
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">124</span>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+        <div onclick="toggleComments(this)" style="display:flex;align-items:center;gap:6px;cursor:pointer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
           </svg>
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">31</span>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;cursor:pointer">
+        <div onclick="showShareSheet()" style="display:flex;align-items:center;gap:6px;cursor:pointer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="18" cy="5" r="3"/>
             <circle cx="6" cy="12" r="3"/>
@@ -457,10 +532,33 @@
           </svg>
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff">22</span>
         </div>
-        <div style="margin-left:auto;cursor:pointer">
+        <div style="margin-left:auto;cursor:pointer" onclick="showToast('Saved to bookmarks!')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
           </svg>
+        </div>
+      </div>
+      <!-- Comments section -->
+      <div class="comments-section" style="display:none;margin-top:0;padding:0 16px 16px;border-top:1px solid rgba(255,255,255,0.06);animation:slideUp 0.25s ease">
+        <div style="padding-top:12px">
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:10px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;overflow:hidden;flex-shrink:0"><img src="images/profile/2.avif" style="width:100%;height:100%;object-fit:cover"/></div>
+            <div style="flex:1;background:#111;border-radius:10px;padding:8px 10px">
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#fff;margin:0 0 3px">RAZE_THROTTLE</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ccc;margin:0">That helmet is fire! 🔥</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:10px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;overflow:hidden;flex-shrink:0"><img src="images/profile/3.avif" style="width:100%;height:100%;object-fit:cover"/></div>
+            <div style="flex:1;background:#111;border-radius:10px;padding:8px 10px">
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#fff;margin:0 0 3px">NEON_VELOCITY</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ccc;margin:0">Worth every rupee bro!</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;overflow:hidden;flex-shrink:0"><img src="images/profile/1.avif" style="width:100%;height:100%;object-fit:cover"/></div>
+            <input onclick="this.focus()" placeholder="Add a comment..." style="flex:1;background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:7px 14px;color:#fff;font-family:'Manrope',sans-serif;font-size:12px;outline:none" onfocus="this.style.borderColor='#E2FF3B'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'" onkeydown="if(event.key==='Enter'&&this.value.trim()){postComment(this)}"/>
+          </div>
         </div>
       </div>
 
@@ -470,7 +568,7 @@
     <div style="margin-bottom:24px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff">Recent Rides</span>
-        <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;cursor:pointer">View All →</span>
+        <span onclick="location.href='discover.html'" style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;cursor:pointer">View All →</span>
       </div>
 
       <!-- Ride card 1 -->
@@ -528,22 +626,22 @@
     <div style="margin-bottom:24px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff">Upcoming Rides</span>
-        <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;cursor:pointer">View All →</span>
+        <span onclick="location.href='discover.html'" style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;cursor:pointer">View All →</span>
       </div>
       <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none">
-        <div style="min-width:160px;background:#111;border-radius:14px;padding:14px;flex-shrink:0">
+        <div onclick="location.href='invited-ride.html'" style="min-width:160px;background:#111;border-radius:14px;padding:14px;flex-shrink:0;cursor:pointer">
           <span style="background:rgba(226,255,59,0.15);color:#E2FF3B;border-radius:9999px;padding:3px 10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px">3 Days to Go!</span>
           <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;margin:8px 0 2px">Freedom Ride to Ooty</p>
           <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);margin:0 0 2px">Kottayam → Ooty</p>
           <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.3);margin:0">25 July · 08:00 AM</p>
         </div>
-        <div style="min-width:160px;background:#111;border-radius:14px;padding:14px;flex-shrink:0">
+        <div onclick="location.href='invited-ride.html'" style="min-width:160px;background:#111;border-radius:14px;padding:14px;flex-shrink:0;cursor:pointer">
           <span style="background:rgba(226,255,59,0.15);color:#E2FF3B;border-radius:9999px;padding:3px 10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px">7 Days to Go!</span>
           <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;margin:8px 0 2px">Monsoon Coastal Blast</p>
           <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);margin:0 0 2px">Bangalore → Mangalore</p>
           <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.3);margin:0">01 Aug · 06:30 AM</p>
         </div>
-        <div style="min-width:160px;background:#111;border-radius:14px;padding:14px;flex-shrink:0">
+        <div onclick="location.href='invited-ride.html'" style="min-width:160px;background:#111;border-radius:14px;padding:14px;flex-shrink:0;cursor:pointer">
           <span style="background:rgba(226,255,59,0.15);color:#E2FF3B;border-radius:9999px;padding:3px 10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px">12 Days to Go!</span>
           <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;margin:8px 0 2px">Himalayan Rush</p>
           <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);margin:0 0 2px">Delhi → Leh</p>
@@ -556,23 +654,23 @@
     <div style="margin-bottom:24px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff">Nearby Riders</span>
-        <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;cursor:pointer">View All →</span>
+        <span onclick="location.href='discover.html'" style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;cursor:pointer">View All →</span>
       </div>
       <div style="background:#111;border-radius:14px;overflow:hidden">
         <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.06)">
-          <div style="position:relative"><img src="/images/profile/2.avif" style="width:44px;height:44px;border-radius:50%;object-fit:cover" alt=""/><div style="position:absolute;bottom:1px;right:1px;width:10px;height:10px;background:#E2FF3B;border-radius:50%;border:2px solid #111"></div></div>
-          <div style="flex:1"><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0">VOID_RUNNER</p><p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin:0">1.2 km away · KTM Duke 390</p></div>
-          <span style="font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;background:rgba(226,255,59,0.1);border-radius:9999px;padding:4px 10px">Follow</span>
+          <a href="comrade-profile.html" style="position:relative;text-decoration:none"><img src="/images/profile/2.avif" style="width:44px;height:44px;border-radius:50%;object-fit:cover" alt=""/><div style="position:absolute;bottom:1px;right:1px;width:10px;height:10px;background:#E2FF3B;border-radius:50%;border:2px solid #111"></div></a>
+          <a href="comrade-profile.html" style="flex:1;text-decoration:none"><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0">VOID_RUNNER</p><p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin:0">1.2 km away · KTM Duke 390</p></a>
+          <span data-following="0" onclick="toggleFollow(this)" style="font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;background:rgba(226,255,59,0.1);border-radius:9999px;padding:4px 10px;cursor:pointer;border:1px solid rgba(226,255,59,0.3)">FOLLOW</span>
         </div>
         <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.06)">
-          <div style="position:relative"><img src="/images/profile/3.avif" style="width:44px;height:44px;border-radius:50%;object-fit:cover" alt=""/><div style="position:absolute;bottom:1px;right:1px;width:10px;height:10px;background:#E2FF3B;border-radius:50%;border:2px solid #111"></div></div>
-          <div style="flex:1"><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0">LEX_KINETIC</p><p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin:0">2.8 km away · Royal Enfield 650</p></div>
-          <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.05);border-radius:9999px;padding:4px 10px">Following</span>
+          <a href="comrade-profile.html" style="position:relative;text-decoration:none"><img src="/images/profile/3.avif" style="width:44px;height:44px;border-radius:50%;object-fit:cover" alt=""/><div style="position:absolute;bottom:1px;right:1px;width:10px;height:10px;background:#E2FF3B;border-radius:50%;border:2px solid #111"></div></a>
+          <a href="comrade-profile.html" style="flex:1;text-decoration:none"><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0">LEX_KINETIC</p><p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin:0">2.8 km away · Royal Enfield 650</p></a>
+          <span data-following="1" onclick="toggleFollow(this)" style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.05);border-radius:9999px;padding:4px 10px;cursor:pointer;border:1px solid rgba(255,255,255,0.15)">FOLLOWING</span>
         </div>
         <div style="display:flex;align-items:center;gap:12px;padding:14px 16px">
-          <div style="position:relative"><img src="/images/profile/4.avif" style="width:44px;height:44px;border-radius:50%;object-fit:cover" alt=""/><div style="position:absolute;bottom:1px;right:1px;width:10px;height:10px;background:#33cc66;border-radius:50%;border:2px solid #111"></div></div>
-          <div style="flex:1"><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0">STEEL_PACK</p><p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin:0">4.1 km away · Yamaha R15</p></div>
-          <span style="font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;background:rgba(226,255,59,0.1);border-radius:9999px;padding:4px 10px">Follow</span>
+          <a href="comrade-profile.html" style="position:relative;text-decoration:none"><img src="/images/profile/4.avif" style="width:44px;height:44px;border-radius:50%;object-fit:cover" alt=""/><div style="position:absolute;bottom:1px;right:1px;width:10px;height:10px;background:#33cc66;border-radius:50%;border:2px solid #111"></div></a>
+          <a href="comrade-profile.html" style="flex:1;text-decoration:none"><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0">STEEL_PACK</p><p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin:0">4.1 km away · Yamaha R15</p></a>
+          <span data-following="0" onclick="toggleFollow(this)" style="font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;background:rgba(226,255,59,0.1);border-radius:9999px;padding:4px 10px;cursor:pointer;border:1px solid rgba(226,255,59,0.3)">FOLLOW</span>
         </div>
       </div>
     </div>
@@ -619,6 +717,104 @@
     <a href="marketplace.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Shop</span></div></a>
     <a href="profile-setup.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Profile</span></div></a>
   </nav>
+
+  <!-- ── SHARE SHEET ── -->
+  <div id="share-overlay" onclick="closeShareSheet()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:400;animation:fadeIn 0.2s ease"></div>
+  <div id="share-sheet" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#111;border-radius:20px 20px 0 0;padding:20px 24px 40px;z-index:401;animation:sheetUp 0.3s ease">
+    <div style="width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 20px"></div>
+    <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0 0 20px">SHARE RIDE</p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+      <div onclick="showToast('Copied link!');closeShareSheet()" style="display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer">
+        <div style="width:48px;height:48px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+        <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">Copy Link</span>
+      </div>
+      <div onclick="showToast('Opening WhatsApp…');closeShareSheet()" style="display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer">
+        <div style="width:48px;height:48px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366"><path d="M17.47 14.38c-.28-.14-1.65-.82-1.91-.91-.25-.09-.44-.14-.62.14-.18.28-.71.91-.87 1.1-.16.18-.32.21-.6.07-.28-.14-1.18-.44-2.25-1.39-.83-.74-1.39-1.65-1.55-1.93-.16-.28-.02-.43.12-.57.13-.13.28-.32.42-.49.14-.16.18-.28.28-.47.09-.18.05-.35-.02-.49-.07-.14-.62-1.5-.85-2.05-.22-.54-.45-.46-.62-.47h-.53c-.18 0-.46.07-.71.35-.25.28-.95.93-.95 2.27s.97 2.63 1.1 2.81c.14.18 1.91 2.91 4.63 4.08.65.28 1.15.44 1.55.57.65.2 1.24.17 1.71.1.52-.08 1.65-.67 1.88-1.32.23-.65.23-1.2.16-1.32-.07-.12-.25-.18-.53-.32z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.07L2 22l5.07-1.35A9.96 9.96 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+        <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">WhatsApp</span>
+      </div>
+      <div onclick="showToast('Opening Instagram…');closeShareSheet()" style="display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer">
+        <div style="width:48px;height:48px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="url(#ig)" stroke-width="1.8"><defs><linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#f09433"/><stop offset="50%" stop-color="#e6683c"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.5" fill="#e6683c" stroke="none"/></svg></div>
+        <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">Instagram</span>
+      </div>
+      <div onclick="showToast('More options…');closeShareSheet()" style="display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer">
+        <div style="width:48px;height:48px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="5" cy="12" r="1.5" fill="#fff"/><circle cx="12" cy="12" r="1.5" fill="#fff"/><circle cx="19" cy="12" r="1.5" fill="#fff"/></svg></div>
+        <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">More</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  function showShareSheet(){document.getElementById('share-overlay').style.display='block';document.getElementById('share-sheet').style.display='block';}
+  function closeShareSheet(){document.getElementById('share-overlay').style.display='none';document.getElementById('share-sheet').style.display='none';}
+  </script>
+
+  <script>
+  // Press effect on all tappable elements
+  function applyPressEffect(el) {
+    el.addEventListener('mousedown', function(){this.style.cssText+=';transform:scale(0.94);opacity:0.78;transition:transform 0.1s ease,opacity 0.1s ease'}, {passive:true});
+    el.addEventListener('mouseup', function(){this.style.transform='';this.style.opacity='';}, {passive:true});
+    el.addEventListener('mouseleave', function(){this.style.transform='';this.style.opacity='';}, {passive:true});
+    el.addEventListener('touchstart', function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';}, {passive:true});
+    el.addEventListener('touchend', function(){this.style.transform='';this.style.opacity='';}, {passive:true});
+    el.addEventListener('touchcancel', function(){this.style.transform='';this.style.opacity='';}, {passive:true});
+  }
+  document.querySelectorAll('a,button,[onclick]').forEach(applyPressEffect);
+
+  // Toast
+  window.showToast = function(msg, isError) {
+    document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
+    const t=document.createElement('div');
+    t.className='toast-msg';
+    t.textContent=msg;
+    t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),2200);
+  };
+
+  // Like toggle
+  function toggleLike(btn) {
+    const isLiked = btn.getAttribute('data-liked') === '1';
+    btn.setAttribute('data-liked', isLiked ? '0' : '1');
+    const svg = btn.querySelector('svg');
+    if (!isLiked) {
+      svg.style.fill = '#E2FF3B'; svg.style.stroke = '#E2FF3B';
+      btn.style.animation = 'likeBlip 0.35s ease';
+      const countEl = btn.querySelector('span');
+      if(countEl) countEl.textContent = (parseInt(countEl.textContent||0)+1);
+    } else {
+      svg.style.fill = 'none'; svg.style.stroke = 'rgba(255,255,255,0.5)';
+      btn.style.animation = '';
+    }
+  }
+
+  // Comment toggle
+  function toggleComments(btn) {
+    const card = btn.closest('[style*="border-radius:12px"]') || btn.parentElement.parentElement;
+    const cs = card.querySelector('.comments-section');
+    if(cs) { cs.style.display = cs.style.display==='none' ? 'block' : 'none'; }
+  }
+  function postComment(input) {
+    const val = input.value.trim();
+    if(!val) return;
+    const div = document.createElement('div');
+    div.style.cssText='display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;animation:slideUp 0.2s ease';
+    div.innerHTML=`<div style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;overflow:hidden;flex-shrink:0"><img src="images/profile/1.avif" style="width:100%;height:100%;object-fit:cover"/></div><div style="flex:1;background:#1a1a1a;border-radius:10px;padding:8px 10px"><p style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#E2FF3B;margin:0 0 3px">LEX_KINETIC</p><p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ccc;margin:0">${val}</p></div>`;
+    input.parentElement.before(div);
+    input.value='';
+    showToast('Comment posted!');
+  }
+
+  // Follow toggle
+  function toggleFollow(btn) {
+    const isFollowing = btn.getAttribute('data-following') === '1';
+    btn.setAttribute('data-following', isFollowing ? '0' : '1');
+    btn.textContent = isFollowing ? 'FOLLOW' : 'FOLLOWING';
+    btn.style.background = isFollowing ? 'rgba(226,255,59,0.1)' : 'rgba(226,255,59,0.15)';
+    btn.style.color = isFollowing ? '#E2FF3B' : '#E2FF3B';
+    btn.style.borderColor = isFollowing ? 'rgba(226,255,59,0.3)' : '#E2FF3B';
+    showToast(isFollowing ? 'Unfollowed' : 'Now following!');
+  }
+  </script>
 
 </body>
 </html>

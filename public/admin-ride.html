@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Ride — Comride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; margin: 0; padding: 0; }
+    a, button, [onclick] { cursor: pointer; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes likeBlip { 0%,100%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(0.88)} }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,12px)} to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .page-body { animation: slideUp 0.35s ease both; }
+    body { background: #000; color: #fff; font-family: 'Manrope', sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 56px; background: rgba(0,0,0,0.95);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 16px;
+    }
+    .header-back {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 10px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+      text-decoration: none; color: #fff; font-size: 18px;
+    }
+    .header-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; color: #fff; }
+    .header-action {
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 12px;
+      color: #E2FF3B; letter-spacing: 1px; text-decoration: none; text-transform: uppercase;
+    }
+
+    .page-body { padding-top: 72px; padding-bottom: 100px; padding-left: 16px; padding-right: 16px; }
+
+    .section-label {
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 11px;
+      color: rgba(255,255,255,0.35); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
+    }
+
+    /* Ride summary card */
+    .ride-summary {
+      background: linear-gradient(135deg, #0d1a00, #111);
+      border: 1px solid rgba(226,255,59,0.2);
+      border-radius: 16px; padding: 20px; margin-bottom: 24px;
+      cursor: pointer;
+    }
+    .ride-summary:hover { border-color: rgba(226,255,59,0.4); }
+
+    /* Stats strip */
+    .stats-strip { display: flex; gap: 8px; margin-bottom: 20px; }
+    .stat-pill {
+      flex: 1; background: #111; border-radius: 12px; padding: 12px 10px; text-align: center;
+    }
+    .stat-pill-val { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; color: #E2FF3B; }
+    .stat-pill-label { font-family: 'Manrope', sans-serif; font-size: 10px; color: #ababab; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+
+    /* Participant card */
+    .participant-card {
+      background: #111; border-radius: 14px; padding: 16px; margin-bottom: 10px;
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.4s ease; overflow: hidden;
+    }
+    .participant-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .participant-avatar {
+      width: 44px; height: 44px; border-radius: 50%; overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.1); flex-shrink: 0; cursor: pointer;
+    }
+    .participant-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .participant-info { flex: 1; }
+    .participant-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: #fff; text-transform: uppercase; }
+    .participant-sub { font-family: 'Manrope', sans-serif; font-size: 11px; color: #ababab; margin-top: 2px; }
+    .participant-status {
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 10px;
+      letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 9999px;
+    }
+    .status-pending { background: rgba(255,150,50,0.15); color: #FF9632; border: 1px solid rgba(255,150,50,0.3); }
+    .status-accepted { background: rgba(226,255,59,0.1); color: #E2FF3B; border: 1px solid rgba(226,255,59,0.2); }
+
+    .participant-actions { display: flex; gap: 8px; }
+    .btn-accept {
+      flex: 1; background: rgba(226,255,59,0.1); border: 1px solid rgba(226,255,59,0.35);
+      border-radius: 9999px; padding: 9px; font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 11px; color: #E2FF3B; letter-spacing: 1px; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-accept:hover { background: rgba(226,255,59,0.2); }
+    .btn-reject {
+      flex: 1; background: rgba(255,59,59,0.08); border: 1px solid rgba(255,59,59,0.2);
+      border-radius: 9999px; padding: 9px; font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 11px; color: #ff4444; letter-spacing: 1px; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-reject:hover { background: rgba(255,59,59,0.15); }
+
+    .big-btn {
+      width: 100%; height: 52px; border-radius: 12px; border: none; cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px;
+      letter-spacing: 0.06em; margin-bottom: 10px; transition: opacity 0.15s, transform 0.1s;
+    }
+    .big-btn:active { transform: scale(0.98); }
+    .big-btn-primary { background: #E2FF3B; color: #000; box-shadow: 0 4px 20px rgba(226,255,59,0.3); }
+    .big-btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.15) !important; color: #ababab; }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; height: 80px;
+      background: rgba(0,0,0,0.95); border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: space-around; padding: 0 8px;
+    }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; flex: 1; }
+    .nav-icon-wrap { width: 40px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 10px; }
+    .nav-icon-wrap.active { background: rgba(226,255,59,0.12); }
+    .nav-label { font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 10px; color: rgba(255,255,255,0.35); }
+    .nav-label.active { color: #E2FF3B; }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a class="header-back" onclick="location.href='my-ride-detail.html'">←</a>
+    <span class="header-title">MANAGE RIDE</span>
+    <a class="header-action" onclick="location.href='my-ride-detail.html'">VIEW</a>
+  </header>
+
+  <main class="page-body">
+
+    <!-- RIDE SUMMARY -->
+    <div class="ride-summary" onclick="location.href='my-ride-detail.html'">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <span style="background:#E2FF3B;color:#000;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1.5px;padding:4px 10px;border-radius:9999px">ACTIVE RIDE</span>
+        <span style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">May 18 — 20, 2026</span>
+      </div>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;color:#fff;text-transform:uppercase;letter-spacing:-0.5px;margin-bottom:4px">COASTAL HIGHWAY SPRINT</h2>
+      <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.5)">Mangalore → Gokarna · 280 KM</p>
+    </div>
+
+    <!-- STATS STRIP -->
+    <div class="stats-strip">
+      <div class="stat-pill">
+        <div class="stat-pill-val">12</div>
+        <div class="stat-pill-label">JOINED</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-val">4</div>
+        <div class="stat-pill-label">PENDING</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-val">2</div>
+        <div class="stat-pill-label">DECLINED</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-val">20</div>
+        <div class="stat-pill-label">CAPACITY</div>
+      </div>
+    </div>
+
+    <!-- PENDING REQUESTS -->
+    <div class="section-label">PENDING REQUESTS</div>
+
+    <div class="participant-card" id="card-ravi">
+      <div class="participant-top">
+        <div class="participant-avatar" onclick="location.href='comrade-profile.html'">
+          <img src="/images/profile/2.avif" alt="Ravi K" />
+        </div>
+        <div class="participant-info">
+          <div class="participant-name">RAVI_KINETIC</div>
+          <div class="participant-sub">Bangalore · 2,400 km ridden · ⭐ 4.8</div>
+        </div>
+        <span class="participant-status status-pending">PENDING</span>
+      </div>
+      <div class="participant-actions">
+        <button class="btn-accept" onclick="acceptRider(this)">✓ ACCEPT</button>
+        <button class="btn-reject" onclick="rejectRider(this)">✕ REJECT</button>
+      </div>
+    </div>
+
+    <div class="participant-card" id="card-sara">
+      <div class="participant-top">
+        <div class="participant-avatar" onclick="location.href='comrade-profile.html'">
+          <img src="/images/profile/3.avif" alt="Sara V" />
+        </div>
+        <div class="participant-info">
+          <div class="participant-name">SARA_VOLT</div>
+          <div class="participant-sub">Mumbai · 1,800 km ridden · ⭐ 4.6</div>
+        </div>
+        <span class="participant-status status-pending">PENDING</span>
+      </div>
+      <div class="participant-actions">
+        <button class="btn-accept" onclick="acceptRider(this)">✓ ACCEPT</button>
+        <button class="btn-reject" onclick="rejectRider(this)">✕ REJECT</button>
+      </div>
+    </div>
+
+    <div class="participant-card" id="card-alex">
+      <div class="participant-top">
+        <div class="participant-avatar" onclick="location.href='comrade-profile.html'">
+          <img src="/images/profile/1.avif" alt="Alex R" />
+        </div>
+        <div class="participant-info">
+          <div class="participant-name">ALEX_RUSH</div>
+          <div class="participant-sub">Pune · 3,100 km ridden · ⭐ 4.9</div>
+        </div>
+        <span class="participant-status status-pending">PENDING</span>
+      </div>
+      <div class="participant-actions">
+        <button class="btn-accept" onclick="acceptRider(this)">✓ ACCEPT</button>
+        <button class="btn-reject" onclick="rejectRider(this)">✕ REJECT</button>
+      </div>
+    </div>
+
+    <!-- CONFIRMED RIDERS -->
+    <div class="section-label" style="margin-top:24px">CONFIRMED RIDERS</div>
+
+    <div class="participant-card">
+      <div class="participant-top" style="margin-bottom:0">
+        <div class="participant-avatar" onclick="location.href='comrade-profile.html'">
+          <img src="/images/profile/1.avif" alt="You" />
+        </div>
+        <div class="participant-info">
+          <div class="participant-name">LEX_KINETIC (YOU)</div>
+          <div class="participant-sub">Organiser · Master Sergeant</div>
+        </div>
+        <span class="participant-status status-accepted">ORGANISER</span>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;margin-bottom:10px;overflow-x:auto;padding-bottom:4px">
+      <div style="text-align:center;flex-shrink:0" onclick="location.href='comrade-profile.html'">
+        <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid #E2FF3B;margin:0 auto 6px">
+          <img src="/images/profile/2.avif" style="width:100%;height:100%;object-fit:cover"/>
+        </div>
+        <div style="font-family:'Manrope',sans-serif;font-size:9px;color:#ababab;text-transform:uppercase;letter-spacing:0.5px">VOID_RUN</div>
+      </div>
+      <div style="text-align:center;flex-shrink:0" onclick="location.href='comrade-profile.html'">
+        <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.15);margin:0 auto 6px">
+          <img src="/images/profile/3.avif" style="width:100%;height:100%;object-fit:cover"/>
+        </div>
+        <div style="font-family:'Manrope',sans-serif;font-size:9px;color:#ababab;text-transform:uppercase;letter-spacing:0.5px">STEEL_P</div>
+      </div>
+      <div style="text-align:center;flex-shrink:0" onclick="location.href='comrade-profile.html'">
+        <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.15);margin:0 auto 6px;background:#191919;display:flex;align-items:center;justify-content:center">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B">+9</span>
+        </div>
+        <div style="font-family:'Manrope',sans-serif;font-size:9px;color:#ababab;text-transform:uppercase;letter-spacing:0.5px">MORE</div>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div style="margin-top:24px">
+      <button class="big-btn big-btn-primary" onclick="location.href='chat.html'">💬 SEND MESSAGE TO GROUP</button>
+      <button class="big-btn big-btn-outline" onclick="location.href='my-ride-detail.html'">VIEW RIDE DETAILS</button>
+    </div>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="nav-item"><div class="nav-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"><path d="M3 9.5L12 3L21 9.5V19a1 1 0 01-1 1H15v-5H9v5H4a1 1 0 01-1-1V9.5z"/></svg></div><span class="nav-label">Explore</span></a>
+    <a href="ride-tab.html" class="nav-item"><div class="nav-icon-wrap active"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="6" width="18" height="10" rx="3" stroke="#E2FF3B" stroke-width="1.5" fill="none"/><circle cx="6" cy="16" r="2.5" fill="#E2FF3B"/><circle cx="16" cy="16" r="2.5" fill="#E2FF3B"/></svg></div><span class="nav-label active">Ride</span></a>
+    <a href="marketplace.html" class="nav-item"><div class="nav-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><span class="nav-label">Shop</span></a>
+    <a href="profile.html" class="nav-item"><div class="nav-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"><circle cx="12" cy="7" r="4"/><path d="M3 21c0-4 4-7 9-7s9 3 9 7"/></svg></div><span class="nav-label">Profile</span></a>
+  </nav>
+
+  <script>
+    function acceptRider(btn) {
+      const card = btn.closest('.participant-card');
+      btn.textContent = '✓ ACCEPTED';
+      btn.style.background = 'rgba(226,255,59,0.15)';
+      btn.style.color = '#E2FF3B';
+      btn.disabled = true;
+      const rejectBtn = card.querySelector('.btn-reject');
+      if (rejectBtn) rejectBtn.style.display = 'none';
+      // update status badge
+      const badge = card.querySelector('.participant-status');
+      if (badge) { badge.textContent = 'ACCEPTED'; badge.className = 'participant-status status-accepted'; }
+      card.style.opacity = '0.7';
+      setTimeout(() => {
+        card.style.transition = 'all 0.4s ease';
+        card.style.maxHeight = '0px';
+        card.style.overflow = 'hidden';
+        card.style.marginBottom = '0';
+        card.style.padding = '0';
+      }, 900);
+      showToast('Rider accepted!');
+    }
+
+    function rejectRider(btn) {
+      const card = btn.closest('.participant-card');
+      card.style.transition = 'all 0.4s ease';
+      card.style.opacity = '0';
+      card.style.transform = 'translateX(20px)';
+      setTimeout(() => {
+        card.style.maxHeight = '0px';
+        card.style.overflow = 'hidden';
+        card.style.marginBottom = '0';
+        card.style.padding = '0';
+      }, 400);
+      showToast('Rider rejected', true);
+    }
+  </script>
+
+  <script>
+    document.querySelectorAll('a,button,[onclick]').forEach(function(el){
+      el.addEventListener('mousedown',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+      el.addEventListener('mouseup',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('mouseleave',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('touchstart',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+      el.addEventListener('touchend',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('touchcancel',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    });
+    window.showToast=function(msg,isError){
+      document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
+      const t=document.createElement('div');
+      t.className='toast-msg';t.textContent=msg;
+      t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(),2200);
+    };
+  </script>
+</body>
+</html>

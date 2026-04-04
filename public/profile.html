@@ -8,6 +8,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    a, button, [onclick] { cursor: pointer; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes likeBlip { 0%,100%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(0.88)} }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,12px)} to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .page-body { animation: slideUp 0.35s ease both; }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
       background: #000;
@@ -19,49 +28,39 @@
     ::selection { background: #E2FF3B; color: #000; }
     a { text-decoration: none; color: inherit; }
     img { display: block; }
-    /* hide scrollbar for comrades horizontal scroll */
     .comrades-scroll::-webkit-scrollbar { display: none; }
     .comrades-scroll { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body style="background:#000;color:#fff;margin:0;">
 
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- MAIN SCROLL CONTAINER                       -->
-  <!-- ═══════════════════════════════════════════ -->
-  <div style="max-width:390px;margin:0 auto;position:relative;padding-bottom:100px;">
+  <div class="page-body" style="max-width:390px;margin:0 auto;position:relative;padding-bottom:100px;">
 
-    <!-- ─────────────────────────────────────────── -->
-    <!-- 1. COVER + AVATAR HERO                      -->
-    <!-- ─────────────────────────────────────────── -->
+    <!-- COVER + AVATAR HERO -->
     <div style="position:relative;">
 
-      <!-- Cover Photo -->
       <div style="position:relative;width:100%;height:220px;overflow:hidden;">
         <img src="/images/places/2.avif" alt="Cover" style="width:100%;height:100%;object-fit:cover;display:block;" />
-        <!-- Gradient Overlay -->
         <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);"></div>
       </div>
 
-      <!-- OVERLAY HEADER (position:absolute over cover) -->
+      <!-- OVERLAY HEADER -->
       <div style="position:absolute;top:0;left:0;right:0;z-index:10;padding:16px;display:flex;align-items:center;justify-content:space-between;">
-        <!-- Back Arrow -->
         <button onclick="window.location.href='home.html'" style="background:rgba(0,0,0,0.4);border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 12H5M12 5l-7 7 7 7"/>
           </svg>
         </button>
-        <!-- Right Actions -->
         <div style="display:flex;align-items:center;gap:10px;">
-          <!-- Edit Pencil -->
-          <button style="background:rgba(0,0,0,0.4);border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
+          <!-- Edit Pencil → settings.html -->
+          <button onclick="location.href='settings.html'" style="background:rgba(0,0,0,0.4);border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
             </svg>
           </button>
-          <!-- 3-Dots Menu -->
-          <button style="background:rgba(0,0,0,0.4);border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
+          <!-- 3-Dots → notifications -->
+          <button onclick="location.href='notifications.html'" style="background:rgba(0,0,0,0.4);border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" stroke="none">
               <circle cx="12" cy="5" r="1.5"/>
               <circle cx="12" cy="12" r="1.5"/>
@@ -71,42 +70,35 @@
         </div>
       </div>
 
-      <!-- Avatar (anchored to bottom of cover, overflows below) -->
+      <!-- Avatar -->
       <div style="position:absolute;bottom:-42px;left:20px;z-index:5;">
         <div style="width:84px;height:84px;border-radius:50%;border:3px solid #E2FF3B;overflow:hidden;">
           <img src="/images/profile/1.avif" alt="Avatar" style="width:100%;height:100%;object-fit:cover;" />
         </div>
-        <!-- Level Badge overlaid on avatar bottom -->
         <div style="position:absolute;bottom:-12px;left:0;background:#E2FF3B;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9px;border-radius:9999px;padding:2px 7px;white-space:nowrap;z-index:6;">
           LV.42
         </div>
       </div>
 
-    </div><!-- end cover hero -->
+    </div>
 
-    <!-- ─────────────────────────────────────────── -->
-    <!-- 2. PROFILE INFO SECTION                     -->
-    <!-- ─────────────────────────────────────────── -->
+    <!-- PROFILE INFO SECTION -->
     <div style="background:#000;padding:56px 16px 20px;">
 
-      <!-- Handle -->
       <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;color:#fff;margin-bottom:2px;letter-spacing:-0.3px;">
         LEX_KINETIC
       </h1>
 
-      <!-- Real Name -->
       <p style="font-family:'Manrope',sans-serif;font-size:14px;color:rgba(255,255,255,0.55);margin-bottom:10px;">
         Arun NM
       </p>
 
-      <!-- Rank Badge Row -->
       <div style="display:flex;align-items:center;margin-bottom:0;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;color:#E2FF3B;background:rgba(226,255,59,0.1);border-radius:9999px;padding:4px 10px;letter-spacing:0.5px;display:inline-block;">
           ★ MASTER SERGEANT
         </span>
       </div>
 
-      <!-- Location -->
       <div style="display:flex;align-items:center;gap:5px;margin-top:8px;">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
@@ -115,41 +107,34 @@
         <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.45);">Bangalore, Karnataka</span>
       </div>
 
-      <!-- Bio -->
       <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.65);line-height:1.5;margin-top:12px;">
         Riding since 2018. KTM Duke 390 owner. Ghats, backroads, and midnight runs. Always chasing the next horizon.
       </p>
 
-      <!-- ─────────────────────────────────────── -->
-      <!-- 3. STATS ROW                            -->
-      <!-- ─────────────────────────────────────── -->
+      <!-- STATS ROW -->
       <div style="background:#111;border-radius:14px;padding:16px;margin-top:20px;margin-bottom:20px;display:flex;align-items:stretch;">
 
-        <!-- Rides -->
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;">
+        <div onclick="location.href='ride-tab.html'" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;cursor:pointer;">
           <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;color:#fff;line-height:1;">142</span>
           <span style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.45);">Rides</span>
         </div>
 
         <div style="width:1px;background:rgba(255,255,255,0.08);flex-shrink:0;"></div>
 
-        <!-- KM -->
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;">
+        <div onclick="location.href='analytics.html'" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;cursor:pointer;">
           <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;color:#fff;line-height:1;">18,420</span>
           <span style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.45);">KM</span>
         </div>
 
         <div style="width:1px;background:rgba(255,255,255,0.08);flex-shrink:0;"></div>
 
-        <!-- Comrades -->
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;">
+        <div onclick="location.href='comrade-profile.html'" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;cursor:pointer;">
           <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;color:#fff;line-height:1;">89</span>
           <span style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.45);">Comrades</span>
         </div>
 
         <div style="width:1px;background:rgba(255,255,255,0.08);flex-shrink:0;"></div>
 
-        <!-- Rating -->
         <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;">
           <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;color:#fff;line-height:1;">4.9★</span>
           <span style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.45);">Rating</span>
@@ -157,25 +142,21 @@
 
       </div>
 
-      <!-- ─────────────────────────────────────── -->
-      <!-- 4. ACTION ROW                           -->
-      <!-- ─────────────────────────────────────── -->
+      <!-- ACTION ROW -->
       <div style="display:flex;gap:8px;margin-bottom:24px;">
-        <button style="flex:1;height:42px;background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:10px;cursor:pointer;font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:#fff;letter-spacing:0.3px;">
+        <button onclick="location.href='settings.html'" style="flex:1;height:42px;background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:10px;cursor:pointer;font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:#fff;letter-spacing:0.3px;">
           EDIT PROFILE
         </button>
-        <button style="flex:1;height:42px;background:transparent;border:1px solid rgba(226,255,59,0.3);border-radius:10px;cursor:pointer;font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:#E2FF3B;letter-spacing:0.3px;">
+        <button onclick="showShareSheet()" style="flex:1;height:42px;background:transparent;border:1px solid rgba(226,255,59,0.3);border-radius:10px;cursor:pointer;font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:#E2FF3B;letter-spacing:0.3px;">
           SHARE PROFILE
         </button>
       </div>
 
-      <!-- ─────────────────────────────────────── -->
-      <!-- 5. MY BIKE SECTION                      -->
-      <!-- ─────────────────────────────────────── -->
+      <!-- MY BIKE SECTION -->
       <div style="margin-bottom:24px;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;">MY BIKE</span>
 
-        <div style="background:#111;border-radius:14px;padding:16px;margin-top:10px;display:flex;align-items:center;gap:14px;">
+        <div onclick="location.href='brand-profile.html'" style="background:#111;border-radius:14px;padding:16px;margin-top:10px;display:flex;align-items:center;gap:14px;cursor:pointer;">
           <img src="/images/bikes/1.avif" alt="KTM Duke 390" style="width:90px;height:60px;border-radius:8px;object-fit:cover;flex-shrink:0;" />
           <div style="flex:1;min-width:0;">
             <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;margin-bottom:2px;">KTM Duke 390</h3>
@@ -189,9 +170,7 @@
         </div>
       </div>
 
-      <!-- ─────────────────────────────────────── -->
-      <!-- 6. RIDE DNA SECTION                     -->
-      <!-- ─────────────────────────────────────── -->
+      <!-- RIDE DNA SECTION -->
       <div style="margin-bottom:24px;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;">RIDE DNA</span>
 
@@ -205,13 +184,20 @@
         </div>
       </div>
 
-      <!-- ─────────────────────────────────────── -->
-      <!-- 7. QUICK LINKS ROW                      -->
-      <!-- ─────────────────────────────────────── -->
+      <!-- QUICK LINKS ROW -->
       <div style="margin-bottom:24px;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;">
 
-          <!-- Rewards -->
+          <a href="ride-tab.html" style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;text-decoration:none;">
+            <div style="width:52px;height:52px;border-radius:50%;background:#111;border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="7" width="20" height="13" rx="2"/>
+                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+              </svg>
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.5);text-align:center;">Rides</span>
+          </a>
+
           <a href="rewards.html" style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;text-decoration:none;">
             <div style="width:52px;height:52px;border-radius:50%;background:#111;border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -222,28 +208,6 @@
             <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.5);text-align:center;">Rewards</span>
           </a>
 
-          <!-- Payments -->
-          <a href="payments.html" style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;text-decoration:none;">
-            <div style="width:52px;height:52px;border-radius:50%;background:#111;border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="5" width="20" height="14" rx="2"/>
-                <line x1="2" y1="10" x2="22" y2="10"/>
-              </svg>
-            </div>
-            <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.5);text-align:center;">Payments</span>
-          </a>
-
-          <!-- Insurance -->
-          <a href="insurance.html" style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;text-decoration:none;">
-            <div style="width:52px;height:52px;border-radius:50%;background:#111;border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              </svg>
-            </div>
-            <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.5);text-align:center;">Insurance</span>
-          </a>
-
-          <!-- Analytics -->
           <a href="analytics.html" style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;text-decoration:none;">
             <div style="width:52px;height:52px;border-radius:50%;background:#111;border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -255,21 +219,29 @@
             <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.5);text-align:center;">Analytics</span>
           </a>
 
+          <a href="settings.html" style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;text-decoration:none;">
+            <div style="width:52px;height:52px;border-radius:50%;background:#111;border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.5);text-align:center;">Settings</span>
+          </a>
+
         </div>
       </div>
 
-      <!-- ─────────────────────────────────────── -->
-      <!-- 8. RECENT RIDES SECTION                 -->
-      <!-- ─────────────────────────────────────── -->
+      <!-- RECENT RIDES SECTION -->
       <div style="margin-bottom:24px;">
 
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
           <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;">RECENT RIDES</span>
-          <a href="#" style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;font-weight:600;text-decoration:none;">View All →</a>
+          <a href="ride-tab.html" style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;font-weight:600;text-decoration:none;">View All →</a>
         </div>
 
         <!-- Ride Card 1 -->
-        <div style="background:#111;border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+        <div onclick="location.href='my-ride-detail.html'" style="background:#111;border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;">
           <div style="flex:1;min-width:0;">
             <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B;display:block;margin-bottom:4px;letter-spacing:0.5px;text-transform:uppercase;">Monsoon Ride</span>
             <p style="font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:#fff;margin-bottom:3px;">Bangalore ─────── Goa</p>
@@ -288,7 +260,7 @@
         </div>
 
         <!-- Ride Card 2 -->
-        <div style="background:#111;border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;">
+        <div onclick="location.href='my-ride-detail.html'" style="background:#111;border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;">
           <div style="flex:1;min-width:0;">
             <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B;display:block;margin-bottom:4px;letter-spacing:0.5px;text-transform:uppercase;">Weekend Escape</span>
             <p style="font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:#fff;margin-bottom:3px;">Bangalore ─────── Coorg</p>
@@ -308,9 +280,7 @@
 
       </div>
 
-      <!-- ─────────────────────────────────────── -->
-      <!-- 9. PHOTOS SECTION                       -->
-      <!-- ─────────────────────────────────────── -->
+      <!-- PHOTOS SECTION -->
       <div style="margin-bottom:24px;">
 
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
@@ -320,33 +290,29 @@
 
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;">
           <div style="aspect-ratio:1/1;border-radius:8px;overflow:hidden;">
-            <img src="/images/bikes/2.avif" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" />
+            <img src="/images/bikes/2.avif" alt="" onclick="openPhoto(this.src)" style="width:100%;height:100%;object-fit:cover;display:block;cursor:pointer;" />
           </div>
           <div style="aspect-ratio:1/1;border-radius:8px;overflow:hidden;">
-            <img src="/images/places/4.avif" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" />
+            <img src="/images/places/4.avif" alt="" onclick="openPhoto(this.src)" style="width:100%;height:100%;object-fit:cover;display:block;cursor:pointer;" />
           </div>
           <div style="aspect-ratio:1/1;border-radius:8px;overflow:hidden;">
-            <img src="/images/bikes/3.avif" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" />
+            <img src="/images/bikes/3.avif" alt="" onclick="openPhoto(this.src)" style="width:100%;height:100%;object-fit:cover;display:block;cursor:pointer;" />
           </div>
         </div>
 
       </div>
 
-      <!-- ─────────────────────────────────────── -->
-      <!-- 10. COMRADES SECTION                    -->
-      <!-- ─────────────────────────────────────── -->
+      <!-- COMRADES SECTION -->
       <div style="margin-bottom:24px;">
 
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
           <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;">COMRADES</span>
-          <a href="#" style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;font-weight:600;text-decoration:none;">View All →</a>
+          <a href="comrade-profile.html" style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;font-weight:600;text-decoration:none;">View All →</a>
         </div>
 
-        <!-- Horizontal Scroll Row -->
         <div class="comrades-scroll" style="display:flex;gap:16px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;">
 
-          <!-- Comrade 1 -->
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;width:68px;">
+          <div onclick="location.href='comrade-profile.html'" style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;width:68px;cursor:pointer;">
             <div style="width:56px;height:56px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.08);">
               <img src="/images/profile/2.avif" alt="" style="width:100%;height:100%;object-fit:cover;" />
             </div>
@@ -354,8 +320,7 @@
             <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#E2FF3B;text-align:center;">★ 4.8</span>
           </div>
 
-          <!-- Comrade 2 -->
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;width:68px;">
+          <div onclick="location.href='comrade-profile.html'" style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;width:68px;cursor:pointer;">
             <div style="width:56px;height:56px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.08);">
               <img src="/images/profile/3.avif" alt="" style="width:100%;height:100%;object-fit:cover;" />
             </div>
@@ -363,8 +328,7 @@
             <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#E2FF3B;text-align:center;">★ 4.9</span>
           </div>
 
-          <!-- Comrade 3 -->
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;width:68px;">
+          <div onclick="location.href='comrade-profile.html'" style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;width:68px;cursor:pointer;">
             <div style="width:56px;height:56px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.08);">
               <img src="/images/profile/4.avif" alt="" style="width:100%;height:100%;object-fit:cover;" />
             </div>
@@ -372,8 +336,7 @@
             <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#E2FF3B;text-align:center;">★ 4.7</span>
           </div>
 
-          <!-- Comrade 4 -->
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;width:68px;">
+          <div onclick="location.href='comrade-profile.html'" style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;width:68px;cursor:pointer;">
             <div style="width:56px;height:56px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.08);">
               <img src="/images/profile/5.avif" alt="" style="width:100%;height:100%;object-fit:cover;" />
             </div>
@@ -384,16 +347,13 @@
         </div>
       </div>
 
-    </div><!-- end profile info section -->
+    </div>
 
-  </div><!-- end max-width container -->
+  </div>
 
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- BOTTOM NAVIGATION (fixed)                   -->
-  <!-- ═══════════════════════════════════════════ -->
+  <!-- BOTTOM NAVIGATION -->
   <nav style="position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(0,0,0,0.95);border-top:1px solid rgba(255,255,255,0.08);height:80px;display:flex;align-items:center;justify-content:space-around;padding:0 8px;">
 
-    <!-- Explore -->
     <a href="home.html" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 12px;text-decoration:none;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -402,7 +362,6 @@
       <span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45);">Explore</span>
     </a>
 
-    <!-- Ride -->
     <a href="ride-tab.html" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 12px;text-decoration:none;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="2" y="7" width="20" height="13" rx="2"/>
@@ -414,7 +373,6 @@
       <span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45);">Ride</span>
     </a>
 
-    <!-- Shop -->
     <a href="marketplace.html" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 12px;text-decoration:none;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
@@ -424,7 +382,6 @@
       <span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45);">Shop</span>
     </a>
 
-    <!-- Profile (ACTIVE) -->
     <a href="profile.html" style="display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(226,255,59,0.1);border-radius:9999px;padding:6px 16px;text-decoration:none;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -435,5 +392,51 @@
 
   </nav>
 
+  <!-- SHARE SHEET -->
+  <div id="share-overlay" onclick="closeShareSheet()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:400;animation:fadeIn 0.2s ease"></div>
+  <div id="share-sheet" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#111;border-radius:20px 20px 0 0;padding:20px 24px 40px;z-index:401;animation:sheetUp 0.3s ease">
+    <div style="width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 20px"></div>
+    <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0 0 20px">SHARE PROFILE</p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+      <div onclick="showToast('Link copied!');closeShareSheet()" style="display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer"><div style="width:48px;height:48px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div><span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">Copy Link</span></div>
+      <div onclick="showToast('Opening WhatsApp…');closeShareSheet()" style="display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer"><div style="width:48px;height:48px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.07L2 22l5.07-1.35A9.96 9.96 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></div><span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">WhatsApp</span></div>
+      <div onclick="showToast('Opening Instagram…');closeShareSheet()" style="display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer"><div style="width:48px;height:48px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#bc1888" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/></svg></div><span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">Instagram</span></div>
+      <div onclick="showToast('More options…');closeShareSheet()" style="display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer"><div style="width:48px;height:48px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="5" cy="12" r="1.5" fill="#fff"/><circle cx="12" cy="12" r="1.5" fill="#fff"/><circle cx="19" cy="12" r="1.5" fill="#fff"/></svg></div><span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">More</span></div>
+    </div>
+  </div>
+
+  <script>
+  function showShareSheet(){document.getElementById('share-overlay').style.display='block';document.getElementById('share-sheet').style.display='block';}
+  function closeShareSheet(){document.getElementById('share-overlay').style.display='none';document.getElementById('share-sheet').style.display='none';}
+
+  function openPhoto(src) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:600;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.2s ease;cursor:pointer';
+    overlay.onclick = ()=>overlay.remove();
+    const img = document.createElement('img');
+    img.src=src; img.style.cssText='max-width:100%;max-height:90vh;border-radius:8px;object-fit:contain';
+    overlay.appendChild(img);
+    document.body.appendChild(overlay);
+  }
+  </script>
+
+  <script>
+  document.querySelectorAll('a,button,[onclick]').forEach(function(el){
+    el.addEventListener('mousedown',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+    el.addEventListener('mouseup',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    el.addEventListener('mouseleave',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    el.addEventListener('touchstart',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+    el.addEventListener('touchend',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    el.addEventListener('touchcancel',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+  });
+  window.showToast=function(msg,isError){
+    document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
+    const t=document.createElement('div');
+    t.className='toast-msg';t.textContent=msg;
+    t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),2200);
+  };
+  </script>
 </body>
 </html>

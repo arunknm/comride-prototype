@@ -8,9 +8,47 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; margin: 0; padding: 0; }
+    a, button, [onclick] { cursor: pointer; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes likeBlip { 0%,100%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(0.88)} }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,12px)} to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes barGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+    .page-body { animation: slideUp 0.35s ease both; }
     html, body { background: #000000; color: #fff; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh; }
     ::selection { background: #E2FF3B; color: #536000; }
+
+    .period-btn {
+      padding: 8px 16px; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.1);
+      background: transparent; font-family: 'Manrope', sans-serif; font-weight: 700;
+      font-size: 11px; color: #ababab; letter-spacing: 1px; text-transform: uppercase;
+      cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    }
+    .period-btn.active { background: #E2FF3B; color: #000; border-color: #E2FF3B; }
+
+    .stat-card {
+      background: #191919; border-radius: 12px; padding: 20px;
+      cursor: pointer; transition: border-color 0.15s, transform 0.15s;
+      border: 1px solid transparent;
+    }
+    .stat-card:hover { border-color: rgba(226,255,59,0.3); transform: translateY(-2px); }
+
+    .chart-bar {
+      border-radius: 3px 3px 0 0; flex-shrink: 0; cursor: pointer;
+      transform-origin: bottom; animation: barGrow 0.6s cubic-bezier(0.34,1,0.56,1) both;
+      transition: opacity 0.15s;
+    }
+    .chart-bar:hover { opacity: 0.75; }
+
+    .ride-history-item {
+      background: #191919; border-radius: 12px; padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px; cursor: pointer; transition: opacity 0.15s;
+      border: 1px solid transparent;
+    }
+    .ride-history-item:hover { opacity: 0.8; border-color: rgba(255,255,255,0.06); }
   </style>
 </head>
 <body style="background:#000000">
@@ -42,17 +80,14 @@
       </div>
     </div>
     <nav style="display:flex;flex-direction:column;gap:4px">
-      <a href="index.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Index</span></a>
-      <a href="discover.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Discover Rides</span></a>
-      <a href="create-ride.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Create Ride</span></a>
+      <a href="home.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Explore</span></a>
+      <a href="ride-tab.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">My Rides</span></a>
       <a href="tracking.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Live Tracking</span></a>
-      <a href="marketplace.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Gear Shop</span></a>
-      <a href="profile.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Profile</span></a>
       <a href="rewards.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Rewards</span></a>
       <a href="notifications.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Notifications</span></a>
-      <a href="insurance.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Compliance</span></a>
-      <a href="payments.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Payments</span></a>
       <a href="analytics.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#E2FF3B;background:rgba(226,255,59,0.05)"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Analytics</span></a>
+      <a href="payments.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Payments</span></a>
+      <a href="settings.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Settings</span></a>
     </nav>
     <a href="profile.html" style="margin-top:auto;border-top:1px solid rgba(72,72,72,0.2);padding-top:24px;display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer">
       <div style="width:40px;height:40px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden;flex-shrink:0">
@@ -72,12 +107,23 @@
   </script>
 
   <!-- PAGE CONTENT -->
-  <div style="max-width:390px;margin:0 auto;padding:64px 24px 160px">
+  <div style="max-width:390px;margin:0 auto;padding:64px 24px 160px" class="page-body">
 
     <!-- Page Header -->
-    <div style="margin-bottom:40px;padding-top:32px">
-      <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">PERFORMANCE METRICS 3.0.1</p>
-      <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:48px;color:#E2FF3B;text-transform:uppercase;line-height:1;letter-spacing:-2px">ANALYTICS</h1>
+    <div style="margin-bottom:32px;padding-top:32px;display:flex;align-items:flex-end;justify-content:space-between">
+      <div>
+        <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">PERFORMANCE METRICS</p>
+        <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:48px;color:#E2FF3B;text-transform:uppercase;line-height:1;letter-spacing:-2px">ANALYTICS</h1>
+      </div>
+      <button onclick="showToast('Export coming soon')" style="background:rgba(226,255,59,0.08);border:1px solid rgba(226,255,59,0.25);border-radius:9999px;padding:8px 16px;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#E2FF3B;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap">EXPORT ↗</button>
+    </div>
+
+    <!-- TIME PERIOD SWITCHER -->
+    <div style="display:flex;gap:8px;margin-bottom:28px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px">
+      <button class="period-btn active" onclick="switchPeriod(this,'Week')">WEEK</button>
+      <button class="period-btn" onclick="switchPeriod(this,'Month')">MONTH</button>
+      <button class="period-btn" onclick="switchPeriod(this,'Year')">YEAR</button>
+      <button class="period-btn" onclick="switchPeriod(this,'All Time')">ALL TIME</button>
     </div>
 
     <!-- SECTION DIVIDER: Ride Analytics -->
@@ -86,62 +132,73 @@
       <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#ababab">Ride Analytics</span>
     </div>
 
-    <!-- Stats Card -->
-    <div style="background:#191919;border-radius:12px;padding:28px;margin-bottom:24px">
-      <!-- Row of 3 stats -->
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px">
-        <div style="text-align:left">
-          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:28px;color:#fff;line-height:1;margin-bottom:4px">2.4K</p>
-          <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;letter-spacing:1px;text-transform:uppercase">VIEWS</p>
-        </div>
-        <div style="text-align:center">
-          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:28px;color:#E2FF3B;line-height:1;margin-bottom:4px">42%</p>
-          <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;letter-spacing:1px;text-transform:uppercase">JOIN RATE</p>
-        </div>
-        <div style="text-align:right">
-          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:28px;color:#fff;line-height:1;margin-bottom:4px">NEON-85</p>
-          <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;letter-spacing:1px;text-transform:uppercase">RIDE CODE</p>
-        </div>
+    <!-- STAT CARDS ROW -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+      <div class="stat-card" onclick="showToast('2,400 total views this week')">
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:32px;color:#fff;line-height:1;margin-bottom:4px">2.4K</p>
+        <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;letter-spacing:1px;text-transform:uppercase">VIEWS</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;margin-top:6px">↑ 12% vs last week</p>
       </div>
-
-      <!-- Mini bar chart -->
-      <div style="display:flex;align-items:flex-end;gap:6px;height:60px">
-        <div style="width:12px;height:20px;background:#262626;border-radius:3px 3px 0 0;flex-shrink:0"></div>
-        <div style="width:12px;height:35px;background:#262626;border-radius:3px 3px 0 0;flex-shrink:0"></div>
-        <div style="width:12px;height:45px;background:#262626;border-radius:3px 3px 0 0;flex-shrink:0"></div>
-        <div style="width:12px;height:30px;background:#262626;border-radius:3px 3px 0 0;flex-shrink:0"></div>
-        <div style="width:12px;height:60px;background:#E2FF3B;border-radius:3px 3px 0 0;flex-shrink:0"></div>
-        <div style="width:12px;height:40px;background:#E2FF3B;border-radius:3px 3px 0 0;flex-shrink:0"></div>
-        <div style="width:12px;height:55px;background:#E2FF3B;border-radius:3px 3px 0 0;flex-shrink:0"></div>
+      <div class="stat-card" onclick="showToast('42% of viewers joined a ride')">
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:32px;color:#E2FF3B;line-height:1;margin-bottom:4px">42%</p>
+        <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;letter-spacing:1px;text-transform:uppercase">JOIN RATE</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;margin-top:6px">↑ 5% vs last week</p>
+      </div>
+      <div class="stat-card" onclick="showToast('24 rides created total')">
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:32px;color:#fff;line-height:1;margin-bottom:4px">24</p>
+        <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;letter-spacing:1px;text-transform:uppercase">RIDES CREATED</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;margin-top:6px">This quarter</p>
+      </div>
+      <div class="stat-card" onclick="showToast('4.8 average rating across all rides')">
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:32px;color:#fff;line-height:1;margin-bottom:4px">4.8★</p>
+        <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;letter-spacing:1px;text-transform:uppercase">AVG RATING</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;margin-top:6px">Top 5% organiser</p>
       </div>
     </div>
 
-    <!-- SECTION DIVIDER: Earnings Protocol -->
+    <!-- BAR CHART CARD -->
+    <div style="background:#191919;border-radius:12px;padding:24px;margin-bottom:24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#ababab;letter-spacing:1px;text-transform:uppercase">WEEKLY RIDE VIEWS</p>
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#E2FF3B" id="period-label">This Week</span>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:6px;height:80px">
+        <div class="chart-bar" data-label="Mon: 180 views" style="width:12px;height:27px;background:#262626;animation-delay:0s"></div>
+        <div class="chart-bar" data-label="Tue: 320 views" style="width:12px;height:48px;background:#262626;animation-delay:0.05s"></div>
+        <div class="chart-bar" data-label="Wed: 420 views" style="width:12px;height:63px;background:#262626;animation-delay:0.1s"></div>
+        <div class="chart-bar" data-label="Thu: 280 views" style="width:12px;height:42px;background:#262626;animation-delay:0.15s"></div>
+        <div class="chart-bar" data-label="Fri: 800 views" style="width:12px;height:80px;background:#E2FF3B;animation-delay:0.2s"></div>
+        <div class="chart-bar" data-label="Sat: 620 views" style="width:12px;height:60px;background:#E2FF3B;animation-delay:0.25s"></div>
+        <div class="chart-bar" data-label="Sun: 720 views" style="width:12px;height:72px;background:#E2FF3B;animation-delay:0.3s"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px">
+        <span style="font-family:'Manrope',sans-serif;font-size:9px;color:#484848">MON</span>
+        <span style="font-family:'Manrope',sans-serif;font-size:9px;color:#484848">TUE</span>
+        <span style="font-family:'Manrope',sans-serif;font-size:9px;color:#484848">WED</span>
+        <span style="font-family:'Manrope',sans-serif;font-size:9px;color:#484848">THU</span>
+        <span style="font-family:'Manrope',sans-serif;font-size:9px;color:#E2FF3B">FRI</span>
+        <span style="font-family:'Manrope',sans-serif;font-size:9px;color:#E2FF3B">SAT</span>
+        <span style="font-family:'Manrope',sans-serif;font-size:9px;color:#E2FF3B">SUN</span>
+      </div>
+    </div>
+
+    <!-- SECTION DIVIDER: Earnings -->
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
       <div style="width:3px;height:16px;background:#E2FF3B;border-radius:2px;flex-shrink:0"></div>
       <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#ababab">Earnings Protocol</span>
     </div>
 
-    <!-- Large Earnings Card -->
-    <div style="background:#191919;border-radius:12px;padding:28px;border-left:4px solid #E2FF3B;margin-bottom:24px">
+    <div onclick="location.href='payments.html'" style="background:#191919;border-radius:12px;padding:28px;border-left:4px solid #E2FF3B;margin-bottom:24px;cursor:pointer;transition:opacity 0.15s" onmouseenter="this.style.opacity='0.85'" onmouseleave="this.style.opacity=''">
       <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">EARNINGS PROTOCOL</p>
       <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:40px;color:#fff;line-height:1;letter-spacing:-2px;margin-bottom:6px">&#8377;14,280.00</p>
       <p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab;margin-bottom:20px">This quarter &middot; 24 rides created</p>
-
-      <!-- Divider -->
       <div style="border-top:1px solid rgba(72,72,72,0.3);padding-top:20px">
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff;margin-bottom:2px">&#8377;340 avg/ride</p>
-          </div>
+          <div><p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff;margin-bottom:2px">&#8377;340 avg/ride</p></div>
           <div style="width:1px;height:24px;background:rgba(72,72,72,0.4)"></div>
-          <div>
-            <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff;margin-bottom:2px">68% repeat riders</p>
-          </div>
+          <div><p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff;margin-bottom:2px">68% repeat riders</p></div>
           <div style="width:1px;height:24px;background:rgba(72,72,72,0.4)"></div>
-          <div>
-            <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff;margin-bottom:2px">4.8 &#9733; rating</p>
-          </div>
+          <div><p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#fff;margin-bottom:2px">4.8 &#9733; rating</p></div>
         </div>
       </div>
     </div>
@@ -152,80 +209,66 @@
       <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#ababab">Partnership Results</span>
     </div>
 
-    <!-- Partner Row 1 - VOID_RIDE -->
-    <div style="background:#191919;border-radius:12px;padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:8px">
-      <div style="width:32px;height:32px;border-radius:50%;background:#E2FF3B;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#536000">#1</span>
-      </div>
-      <div style="flex:1;min-width:0">
-        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin-bottom:2px;text-transform:uppercase">VOID_RIDE</p>
-        <p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab;margin:0">Partnership active &middot; 124 referrals</p>
-      </div>
+    <div onclick="showToast('VOID_RIDE — top partner, 124 referrals!')" style="background:#191919;border-radius:12px;padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:8px;cursor:pointer;transition:opacity 0.15s;border:1px solid rgba(226,255,59,0.1)" onmouseenter="this.style.opacity='0.8'" onmouseleave="this.style.opacity=''">
+      <div style="width:32px;height:32px;border-radius:50%;background:#E2FF3B;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#536000">#1</span></div>
+      <div style="flex:1;min-width:0"><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin-bottom:2px;text-transform:uppercase">VOID_RIDE</p><p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab;margin:0">Partnership active &middot; 124 referrals</p></div>
       <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B;flex-shrink:0;margin:0">&#8377;4.2K</p>
     </div>
-
-    <!-- Partner Row 2 - KINETIC_MO -->
-    <div style="background:#191919;border-radius:12px;padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:8px">
-      <div style="width:32px;height:32px;border-radius:50%;background:#262626;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#ababab">#2</span>
-      </div>
-      <div style="flex:1;min-width:0">
-        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin-bottom:2px;text-transform:uppercase">KINETIC_MO</p>
-        <p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab;margin:0">89 referrals</p>
-      </div>
+    <div onclick="showToast('KINETIC_MO — 89 referrals this quarter')" style="background:#191919;border-radius:12px;padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:8px;cursor:pointer;transition:opacity 0.15s" onmouseenter="this.style.opacity='0.8'" onmouseleave="this.style.opacity=''">
+      <div style="width:32px;height:32px;border-radius:50%;background:#262626;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#ababab">#2</span></div>
+      <div style="flex:1;min-width:0"><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin-bottom:2px;text-transform:uppercase">KINETIC_MO</p><p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab;margin:0">89 referrals</p></div>
       <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B;flex-shrink:0;margin:0">&#8377;2.8K</p>
     </div>
-
-    <!-- Partner Row 3 - CIRCUIT_V -->
-    <div style="background:#191919;border-radius:12px;padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:24px">
-      <div style="width:32px;height:32px;border-radius:50%;background:#262626;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#ababab">#3</span>
-      </div>
-      <div style="flex:1;min-width:0">
-        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin-bottom:2px;text-transform:uppercase">CIRCUIT_V</p>
-        <p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab;margin:0">67 referrals</p>
-      </div>
+    <div onclick="showToast('CIRCUIT_V — 67 referrals this quarter')" style="background:#191919;border-radius:12px;padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:24px;cursor:pointer;transition:opacity 0.15s" onmouseenter="this.style.opacity='0.8'" onmouseleave="this.style.opacity=''">
+      <div style="width:32px;height:32px;border-radius:50%;background:#262626;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#ababab">#3</span></div>
+      <div style="flex:1;min-width:0"><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin-bottom:2px;text-transform:uppercase">CIRCUIT_V</p><p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab;margin:0">67 referrals</p></div>
       <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B;flex-shrink:0;margin:0">&#8377;1.9K</p>
     </div>
 
-    <!-- SECTION DIVIDER: Global Reach -->
+    <!-- RECENT RIDES -->
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div style="width:3px;height:16px;background:#E2FF3B;border-radius:2px;flex-shrink:0"></div>
+      <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#ababab">Ride History</span>
+    </div>
+
+    <div class="ride-history-item" onclick="location.href='my-ride-detail.html'">
+      <div><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:2px">Coastal Highway Sprint</p><p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">280 km · 12 riders · May 14</p></div>
+      <div style="text-align:right"><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B">₹4,200</p><p style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">4.9 ★</p></div>
+    </div>
+    <div class="ride-history-item" onclick="location.href='my-ride-detail.html'">
+      <div><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:2px">Western Ghats Run</p><p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">320 km · 8 riders · May 4</p></div>
+      <div style="text-align:right"><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B">₹2,800</p><p style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">4.8 ★</p></div>
+    </div>
+    <div class="ride-history-item" onclick="location.href='my-ride-detail.html'">
+      <div><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:2px">Midnight Highway Run</p><p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">142 km · 6 riders · Apr 28</p></div>
+      <div style="text-align:right"><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B">₹1,800</p><p style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">4.7 ★</p></div>
+    </div>
+
+    <!-- GLOBAL REACH -->
+    <div style="display:flex;align-items:center;gap:12px;margin-top:24px;margin-bottom:16px">
       <div style="width:3px;height:16px;background:#E2FF3B;border-radius:2px;flex-shrink:0"></div>
       <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#ababab">Global Reach</span>
     </div>
 
-    <!-- Global Reach Card -->
     <div style="background:#191919;border-radius:12px;padding:28px;margin-bottom:24px">
       <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:64px;color:#E2FF3B;line-height:1;letter-spacing:-3px;margin-bottom:4px">128</p>
       <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;letter-spacing:3px;text-transform:uppercase;margin-bottom:20px">COMRADES</p>
-
-      <!-- World map placeholder -->
       <div style="width:100%;height:120px;background:#131313;border-radius:12px;position:relative;overflow:hidden;margin-bottom:16px">
-        <!-- Subtle grid lines for map feel -->
         <div style="position:absolute;inset:0;opacity:0.12;background-image:linear-gradient(rgba(226,255,59,0.4) 1px,transparent 1px),linear-gradient(90deg,rgba(226,255,59,0.4) 1px,transparent 1px);background-size:20px 20px"></div>
-        <!-- City dots — representative Indian cities + global -->
-        <!-- Mumbai -->
-        <div style="position:absolute;left:52%;top:55%;width:7px;height:7px;border-radius:50%;background:#E2FF3B;box-shadow:0 0 8px #E2FF3B;transform:translate(-50%,-50%)"></div>
-        <!-- Delhi -->
-        <div style="position:absolute;left:54%;top:38%;width:6px;height:6px;border-radius:50%;background:#E2FF3B;box-shadow:0 0 6px #E2FF3B;transform:translate(-50%,-50%)"></div>
-        <!-- Bangalore -->
-        <div style="position:absolute;left:53%;top:63%;width:5px;height:5px;border-radius:50%;background:#E2FF3B;box-shadow:0 0 5px #E2FF3B;transform:translate(-50%,-50%)"></div>
-        <!-- Pune -->
-        <div style="position:absolute;left:52%;top:58%;width:5px;height:5px;border-radius:50%;background:#E2FF3B;opacity:0.7;box-shadow:0 0 5px #E2FF3B;transform:translate(-50%,-50%)"></div>
-        <!-- London (global) -->
-        <div style="position:absolute;left:44%;top:25%;width:5px;height:5px;border-radius:50%;background:#ababab;opacity:0.6;transform:translate(-50%,-50%)"></div>
-        <!-- Singapore -->
-        <div style="position:absolute;left:70%;top:62%;width:5px;height:5px;border-radius:50%;background:#ababab;opacity:0.5;transform:translate(-50%,-50%)"></div>
-        <!-- Dubai -->
-        <div style="position:absolute;left:57%;top:42%;width:5px;height:5px;border-radius:50%;background:#ababab;opacity:0.5;transform:translate(-50%,-50%)"></div>
+        <div style="position:absolute;left:52%;top:55%;width:7px;height:7px;border-radius:50%;background:#E2FF3B;box-shadow:0 0 8px #E2FF3B;transform:translate(-50%,-50%)" onclick="showToast('Mumbai — 34 riders')"></div>
+        <div style="position:absolute;left:54%;top:38%;width:6px;height:6px;border-radius:50%;background:#E2FF3B;box-shadow:0 0 6px #E2FF3B;transform:translate(-50%,-50%)" onclick="showToast('Delhi — 28 riders')"></div>
+        <div style="position:absolute;left:53%;top:63%;width:5px;height:5px;border-radius:50%;background:#E2FF3B;box-shadow:0 0 5px #E2FF3B;transform:translate(-50%,-50%)" onclick="showToast('Bangalore — 22 riders')"></div>
+        <div style="position:absolute;left:52%;top:58%;width:5px;height:5px;border-radius:50%;background:#E2FF3B;opacity:0.7;box-shadow:0 0 5px #E2FF3B;transform:translate(-50%,-50%)" onclick="showToast('Pune — 18 riders')"></div>
+        <div style="position:absolute;left:44%;top:25%;width:5px;height:5px;border-radius:50%;background:#ababab;opacity:0.6;transform:translate(-50%,-50%)" onclick="showToast('London — 8 riders')"></div>
+        <div style="position:absolute;left:70%;top:62%;width:5px;height:5px;border-radius:50%;background:#ababab;opacity:0.5;transform:translate(-50%,-50%)" onclick="showToast('Singapore — 6 riders')"></div>
+        <div style="position:absolute;left:57%;top:42%;width:5px;height:5px;border-radius:50%;background:#ababab;opacity:0.5;transform:translate(-50%,-50%)" onclick="showToast('Dubai — 12 riders')"></div>
+        <div style="position:absolute;bottom:8px;left:12px;font-family:'Manrope',sans-serif;font-size:9px;color:rgba(226,255,59,0.4);letter-spacing:1px;text-transform:uppercase">TAP DOTS FOR DETAILS</div>
       </div>
-
-      <!-- City tags -->
       <div style="display:flex;flex-wrap:wrap;gap:8px">
-        <span style="background:#262626;border-radius:9999px;padding:4px 12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;text-transform:uppercase;letter-spacing:1px">MUMBAI</span>
-        <span style="background:#262626;border-radius:9999px;padding:4px 12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;text-transform:uppercase;letter-spacing:1px">DELHI</span>
-        <span style="background:#262626;border-radius:9999px;padding:4px 12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;text-transform:uppercase;letter-spacing:1px">BANGALORE</span>
-        <span style="background:#262626;border-radius:9999px;padding:4px 12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;text-transform:uppercase;letter-spacing:1px">PUNE</span>
+        <span onclick="showToast('Mumbai — 34 riders')" style="background:#262626;border-radius:9999px;padding:4px 12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;text-transform:uppercase;letter-spacing:1px;cursor:pointer">MUMBAI</span>
+        <span onclick="showToast('Delhi — 28 riders')" style="background:#262626;border-radius:9999px;padding:4px 12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;text-transform:uppercase;letter-spacing:1px;cursor:pointer">DELHI</span>
+        <span onclick="showToast('Bangalore — 22 riders')" style="background:#262626;border-radius:9999px;padding:4px 12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;text-transform:uppercase;letter-spacing:1px;cursor:pointer">BANGALORE</span>
+        <span onclick="showToast('Pune — 18 riders')" style="background:#262626;border-radius:9999px;padding:4px 12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;text-transform:uppercase;letter-spacing:1px;cursor:pointer">PUNE</span>
       </div>
     </div>
 
@@ -239,5 +282,48 @@
     <a href="profile-setup.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(226,255,59,0.1);border-radius:9999px;padding:6px 16px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B;letter-spacing:0.02em">Profile</span></div></a>
   </nav>
 
+  <script>
+    function switchPeriod(btn, label) {
+      document.querySelectorAll('.period-btn').forEach(b => {
+        b.classList.remove('active');
+        b.style.background = 'transparent'; b.style.color = '#ababab'; b.style.borderColor = 'rgba(255,255,255,0.1)';
+      });
+      btn.classList.add('active');
+      btn.style.background = '#E2FF3B'; btn.style.color = '#000'; btn.style.borderColor = '#E2FF3B';
+      document.getElementById('period-label').textContent = label;
+      // Re-animate bars
+      document.querySelectorAll('.chart-bar').forEach((bar, i) => {
+        bar.style.animation = 'none';
+        setTimeout(() => { bar.style.animation = `barGrow 0.5s cubic-bezier(0.34,1,0.56,1) ${i * 0.05}s both`; }, 10);
+      });
+      showToast('Showing ' + label + ' data');
+    }
+
+    // Bar click
+    document.querySelectorAll('.chart-bar').forEach(bar => {
+      bar.addEventListener('click', function() {
+        showToast(this.getAttribute('data-label') || 'Ride data');
+      });
+    });
+  </script>
+
+  <script>
+    document.querySelectorAll('a,button,[onclick]').forEach(function(el){
+      el.addEventListener('mousedown',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+      el.addEventListener('mouseup',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('mouseleave',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('touchstart',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+      el.addEventListener('touchend',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('touchcancel',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    });
+    window.showToast=function(msg,isError){
+      document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
+      const t=document.createElement('div');
+      t.className='toast-msg';t.textContent=msg;
+      t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(),2200);
+    };
+  </script>
 </body>
 </html>

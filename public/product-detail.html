@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Comride — Product Detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+    a, button, [onclick] { cursor: pointer; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,12px)} to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes likeBlip { 0%,100%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(0.88)} }
+    .page-body { animation: slideUp 0.35s ease both; }
+    html, body { background: #000; color: #fff; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; margin: 0; padding: 0; }
+    ::selection { background: #E2FF3B; color: #2A3000; }
+    .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .thumb { cursor:pointer; border-radius:8px; overflow:hidden; border:2px solid transparent; transition:border-color 0.2s; }
+    .thumb.active { border-color:#E2FF3B; }
+    .size-chip { font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 14px;background:transparent;color:#ababab;cursor:pointer;transition:all 0.15s; }
+    .size-chip.active { background:#E2FF3B;color:#000;border-color:#E2FF3B; }
+    .color-dot { width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border-color 0.15s; }
+    .color-dot.active { border-color:#E2FF3B;box-shadow:0 0 0 2px rgba(226,255,59,0.3); }
+    .acc-content { overflow:hidden; transition:max-height 0.3s ease, opacity 0.3s ease; }
+    .star-btn { background:none;border:none;padding:2px;cursor:pointer;font-size:18px;color:#484848;transition:color 0.15s; }
+    .star-btn.lit { color:#E2FF3B; }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════ FIXED HEADER ═══════════════════════ -->
+  <header style="position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(0,0,0,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(72,72,72,0.15)">
+    <div style="max-width:390px;margin:0 auto;padding:0 20px;height:56px;display:flex;align-items:center;gap:12px">
+      <a href="marketplace.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:#191919">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </a>
+      <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1;text-transform:uppercase">Product Detail</span>
+      <div onclick="toggleWishlistHeader()" id="header-wish" data-wish="0" style="width:36px;height:36px;border-radius:50%;background:#191919;display:flex;align-items:center;justify-content:center;cursor:pointer">
+        <svg id="header-wish-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <div onclick="showToast('Share feature coming soon')" style="width:36px;height:36px;border-radius:50%;background:#191919;display:flex;align-items:center;justify-content:center;cursor:pointer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════ PAGE CONTENT ═══════════════════════ -->
+  <div class="page-body" style="max-width:390px;margin:0 auto;padding:56px 0 140px">
+
+    <!-- ── MAIN IMAGE ── -->
+    <div style="background:#fff;width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+      <img id="main-img" src="images/shop/3.webp" style="width:100%;height:100%;object-fit:contain;transition:opacity 0.2s ease" alt="Product" />
+      <!-- Sale badge -->
+      <div style="position:absolute;top:16px;left:16px;background:#ff4d6d;border-radius:9999px;padding:4px 12px">
+        <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#fff">SALE −15%</span>
+      </div>
+    </div>
+
+    <!-- ── THUMBNAIL GALLERY ── -->
+    <div class="no-scrollbar" style="display:flex;gap:8px;overflow-x:auto;padding:12px 20px">
+      <div class="thumb active" onclick="swapImage(this,'images/shop/3.webp')" style="width:64px;height:64px;background:#fff;flex-shrink:0">
+        <img src="images/shop/3.webp" style="width:100%;height:100%;object-fit:contain" alt="" />
+      </div>
+      <div class="thumb" onclick="swapImage(this,'images/shop/1.jpg')" style="width:64px;height:64px;background:#fff;flex-shrink:0">
+        <img src="images/shop/1.jpg" style="width:100%;height:100%;object-fit:contain" alt="" />
+      </div>
+      <div class="thumb" onclick="swapImage(this,'images/shop/2.webp')" style="width:64px;height:64px;background:#fff;flex-shrink:0">
+        <img src="images/shop/2.webp" style="width:100%;height:100%;object-fit:contain" alt="" />
+      </div>
+      <div class="thumb" onclick="swapImage(this,'images/shop/4.webp')" style="width:64px;height:64px;background:#fff;flex-shrink:0">
+        <img src="images/shop/4.webp" style="width:100%;height:100%;object-fit:contain" alt="" />
+      </div>
+      <div class="thumb" onclick="swapImage(this,'images/shop/5.webp')" style="width:64px;height:64px;background:#fff;flex-shrink:0">
+        <img src="images/shop/5.webp" style="width:100%;height:100%;object-fit:contain" alt="" />
+      </div>
+    </div>
+
+    <!-- ── PRODUCT INFO ── -->
+    <div style="padding:0 20px">
+
+      <!-- Brand + name -->
+      <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#ababab;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 4px">MT HELMETS</p>
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#fff;margin:0 0 6px;line-height:1.2">MT KRE+ Racing Helmet</h1>
+
+      <!-- Rating row -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        <div style="display:flex;gap:1px" id="review-stars-display">
+          <span style="color:#E2FF3B;font-size:14px">★</span>
+          <span style="color:#E2FF3B;font-size:14px">★</span>
+          <span style="color:#E2FF3B;font-size:14px">★</span>
+          <span style="color:#E2FF3B;font-size:14px">★</span>
+          <span style="color:#484848;font-size:14px">★</span>
+        </div>
+        <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">4.0 (128 reviews)</span>
+        <span onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})" style="font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;cursor:pointer">See all →</span>
+      </div>
+
+      <!-- Price row -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:28px;color:#E2FF3B">₹15,725</span>
+        <span style="font-family:'Manrope',sans-serif;font-size:15px;color:rgba(255,255,255,0.3);text-decoration:line-through">₹18,500</span>
+        <span style="background:rgba(255,77,109,0.15);color:#ff4d6d;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;border-radius:9999px;padding:2px 8px">−15%</span>
+      </div>
+
+      <!-- Color selector -->
+      <div style="margin-bottom:20px">
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#fff;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px">Color: <span id="color-label" style="color:#E2FF3B;font-weight:400;text-transform:none">Matte Black</span></p>
+        <div style="display:flex;gap:10px">
+          <div class="color-dot active" onclick="selectColor(this,'Matte Black')" style="background:#1a1a1a;border:2px solid #E2FF3B"></div>
+          <div class="color-dot" onclick="selectColor(this,'Gloss White')" style="background:#f0f0f0"></div>
+          <div class="color-dot" onclick="selectColor(this,'Racing Red')" style="background:#cc2222"></div>
+          <div class="color-dot" onclick="selectColor(this,'Electric Blue')" style="background:#1a44cc"></div>
+          <div class="color-dot" onclick="selectColor(this,'Neon Lime')" style="background:#c8f000"></div>
+        </div>
+      </div>
+
+      <!-- Size selector -->
+      <div style="margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#fff;text-transform:uppercase;letter-spacing:1px;margin:0">Size: <span id="size-label" style="color:#E2FF3B;font-weight:400;text-transform:none">M</span></p>
+          <span onclick="showToast('Size guide coming soon')" style="font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;cursor:pointer">Size Guide →</span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="size-chip" onclick="selectSize(this,'XS')">XS</button>
+          <button class="size-chip" onclick="selectSize(this,'S')">S</button>
+          <button class="size-chip active" onclick="selectSize(this,'M')">M</button>
+          <button class="size-chip" onclick="selectSize(this,'L')">L</button>
+          <button class="size-chip" onclick="selectSize(this,'XL')">XL</button>
+          <button class="size-chip" onclick="selectSize(this,'XXL')">XXL</button>
+        </div>
+      </div>
+
+      <!-- Quantity -->
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px">
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#fff;text-transform:uppercase;letter-spacing:1px;margin:0">Quantity</p>
+        <div style="display:flex;align-items:center;gap:0;background:#191919;border-radius:10px;overflow:hidden">
+          <button onclick="changeQty(-1)" style="width:40px;height:40px;background:transparent;border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
+          <span id="qty-display" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;min-width:32px;text-align:center">1</span>
+          <button onclick="changeQty(1)" style="width:40px;height:40px;background:transparent;border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+        </div>
+        <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.3)">12 in stock</span>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div style="display:flex;gap:10px;margin-bottom:28px">
+        <button id="add-cart-btn" onclick="handleAddToCart(this)" style="flex:1;background:#E2FF3B;border:none;border-radius:12px;padding:16px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#000;text-transform:uppercase;letter-spacing:0.5px;cursor:pointer">
+          ADD TO CART
+        </button>
+        <button onclick="location.href='payments.html'" style="flex:1;background:transparent;border:1px solid rgba(255,255,255,0.2);border-radius:12px;padding:16px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;cursor:pointer">
+          BUY NOW
+        </button>
+      </div>
+
+      <!-- Quick info pills -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px">
+        <div style="display:flex;align-items:center;gap:6px;background:#191919;border-radius:9999px;padding:8px 14px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <span style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">Free Delivery</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;background:#191919;border-radius:9999px;padding:8px 14px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          <span style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">7-Day Returns</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;background:#191919;border-radius:9999px;padding:8px 14px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">2-Year Warranty</span>
+        </div>
+      </div>
+
+      <!-- ── ACCORDION: Description ── -->
+      <div style="border-top:1px solid rgba(255,255,255,0.07);margin-bottom:2px">
+        <div onclick="toggleAccordion(this)" style="display:flex;align-items:center;justify-content:space-between;padding:16px 0;cursor:pointer">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff">Description</span>
+          <svg class="acc-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" style="transition:transform 0.3s ease;transform:rotate(180deg)"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="acc-content" style="max-height:300px;opacity:1">
+          <div style="padding-bottom:16px">
+            <p style="font-family:'Manrope',sans-serif;font-size:13px;color:#ababab;line-height:1.7;margin:0 0 12px">The MT KRE+ is MT Helmets' flagship racing helmet, engineered for performance riders who demand the best. Built with a multi-composite fiber shell and Pinlock-ready EverClear visor system, it delivers crystal clarity in all conditions.</p>
+            <ul style="font-family:'Manrope',sans-serif;font-size:13px;color:#ababab;line-height:1.9;margin:0;padding-left:18px">
+              <li>Multi-composite fiber shell — ultra-light at 1,350g</li>
+              <li>Pinlock EverClear Max Vision visor included</li>
+              <li>ECE 22.06 certified</li>
+              <li>Emergency Quick Release (EQR) system</li>
+              <li>Integrated sun visor</li>
+              <li>Removable & washable inner liner</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ACCORDION: Specifications ── -->
+      <div style="border-top:1px solid rgba(255,255,255,0.07);margin-bottom:2px">
+        <div onclick="toggleAccordion(this)" style="display:flex;align-items:center;justify-content:space-between;padding:16px 0;cursor:pointer">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff">Specifications</span>
+          <svg class="acc-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" style="transition:transform 0.3s ease;transform:rotate(0deg)"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="acc-content" style="max-height:0;opacity:0">
+          <div style="padding-bottom:16px">
+            <div style="display:flex;flex-direction:column;gap:0">
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">Shell Material</span>
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#fff;font-weight:600">Multi-composite Fiber</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">Weight</span>
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#fff;font-weight:600">~1,350g (size M)</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">Certification</span>
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#fff;font-weight:600">ECE 22.06</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">Visor</span>
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#fff;font-weight:600">Pinlock EverClear</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">Sizes Available</span>
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#fff;font-weight:600">XS – XXL</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0">
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">Country of Origin</span>
+                <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#fff;font-weight:600">Spain</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ACCORDION: Shipping ── -->
+      <div style="border-top:1px solid rgba(255,255,255,0.07);margin-bottom:28px">
+        <div onclick="toggleAccordion(this)" style="display:flex;align-items:center;justify-content:space-between;padding:16px 0;cursor:pointer">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff">Shipping &amp; Returns</span>
+          <svg class="acc-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" style="transition:transform 0.3s ease;transform:rotate(0deg)"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="acc-content" style="max-height:0;opacity:0">
+          <div style="padding-bottom:16px">
+            <p style="font-family:'Manrope',sans-serif;font-size:13px;color:#ababab;line-height:1.7;margin:0 0 8px">Free standard delivery on all orders above ₹999. Express delivery available at ₹149.</p>
+            <p style="font-family:'Manrope',sans-serif;font-size:13px;color:#ababab;line-height:1.7;margin:0">Returns accepted within 7 days of delivery. Item must be unused and in original packaging.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── REVIEWS SECTION ── -->
+      <div id="reviews-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff">Reviews</span>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:#E2FF3B">4.0</span>
+            <div style="display:flex;flex-direction:column;gap:1px">
+              <div style="display:flex;gap:1px">
+                <span style="color:#E2FF3B;font-size:10px">★★★★</span><span style="color:#484848;font-size:10px">★</span>
+              </div>
+              <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">128 reviews</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 1 -->
+        <div style="background:#111;border-radius:12px;padding:14px;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <img src="/images/profile/2.avif" style="width:32px;height:32px;border-radius:50%;object-fit:cover" alt="" />
+            <div style="flex:1">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#fff;margin:0">VOID_RUNNER</p>
+              <div style="display:flex;gap:1px;margin-top:2px"><span style="color:#E2FF3B;font-size:10px">★★★★★</span></div>
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">2 days ago</span>
+          </div>
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;color:#ababab;line-height:1.6;margin:0">Absolutely love this helmet. The visor clarity is insane — no fogging even in monsoon. Worth every rupee. Build quality is top tier.</p>
+        </div>
+
+        <!-- Review 2 -->
+        <div style="background:#111;border-radius:12px;padding:14px;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <img src="/images/profile/4.avif" style="width:32px;height:32px;border-radius:50%;object-fit:cover" alt="" />
+            <div style="flex:1">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#fff;margin:0">STEEL_PACK</p>
+              <div style="display:flex;gap:1px;margin-top:2px"><span style="color:#E2FF3B;font-size:10px">★★★★</span><span style="color:#484848;font-size:10px">★</span></div>
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">1 week ago</span>
+          </div>
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;color:#ababab;line-height:1.6;margin:0">Great helmet, very light. The chin strap could be a bit more padded but overall very happy with the purchase. Delivery was fast too.</p>
+        </div>
+
+        <!-- Review 3 -->
+        <div style="background:#111;border-radius:12px;padding:14px;margin-bottom:20px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <img src="/images/profile/5.avif" style="width:32px;height:32px;border-radius:50%;object-fit:cover" alt="" />
+            <div style="flex:1">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#fff;margin:0">MOTO_SURGE</p>
+              <div style="display:flex;gap:1px;margin-top:2px"><span style="color:#E2FF3B;font-size:10px">★★★</span><span style="color:#484848;font-size:10px">★★</span></div>
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">2 weeks ago</span>
+          </div>
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;color:#ababab;line-height:1.6;margin:0">Good helmet but runs a bit small. Order one size up. The aerodynamics are excellent on highway speeds — very stable above 120 km/h.</p>
+        </div>
+
+        <!-- Write a review -->
+        <div style="background:#111;border-radius:12px;padding:16px;margin-bottom:8px">
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;margin:0 0 12px">Write a Review</p>
+          <div style="display:flex;gap:4px;margin-bottom:12px" id="star-input">
+            <button class="star-btn" onclick="setRating(1)">★</button>
+            <button class="star-btn" onclick="setRating(2)">★</button>
+            <button class="star-btn" onclick="setRating(3)">★</button>
+            <button class="star-btn" onclick="setRating(4)">★</button>
+            <button class="star-btn" onclick="setRating(5)">★</button>
+          </div>
+          <textarea id="review-input" placeholder="Share your experience..." rows="3" style="width:100%;background:#191919;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;color:#fff;font-family:'Manrope',sans-serif;font-size:13px;outline:none;resize:none" onfocus="this.style.borderColor='#E2FF3B'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></textarea>
+          <button onclick="submitReview()" style="width:100%;background:#E2FF3B;border:none;border-radius:10px;padding:12px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#000;text-transform:uppercase;margin-top:10px;cursor:pointer">SUBMIT REVIEW</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ STICKY BOTTOM BAR ═══════════════════════ -->
+  <div style="position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,0.97);border-top:1px solid rgba(255,255,255,0.08);padding:12px 20px 28px;z-index:150">
+    <div style="max-width:390px;margin:0 auto;display:flex;gap:10px">
+      <button id="sticky-cart-btn" onclick="handleAddToCart(document.getElementById('add-cart-btn'))" style="flex:1;background:#E2FF3B;border:none;border-radius:12px;padding:14px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#000;text-transform:uppercase;cursor:pointer">
+        ADD TO CART
+      </button>
+      <button onclick="location.href='payments.html'" style="flex:1;background:#191919;border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:14px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;cursor:pointer">
+        BUY NOW
+      </button>
+    </div>
+  </div>
+
+  <script>
+  // Press effect
+  function applyPressEffect(el) {
+    el.addEventListener('mousedown', function(){this.style.cssText+=';transform:scale(0.94);opacity:0.78;transition:transform 0.1s ease,opacity 0.1s ease'}, {passive:true});
+    el.addEventListener('mouseup', function(){this.style.transform='';this.style.opacity='';}, {passive:true});
+    el.addEventListener('mouseleave', function(){this.style.transform='';this.style.opacity='';}, {passive:true});
+    el.addEventListener('touchstart', function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';}, {passive:true});
+    el.addEventListener('touchend', function(){this.style.transform='';this.style.opacity='';}, {passive:true});
+    el.addEventListener('touchcancel', function(){this.style.transform='';this.style.opacity='';}, {passive:true});
+  }
+  document.querySelectorAll('a,button,[onclick]').forEach(applyPressEffect);
+
+  // Toast
+  window.showToast = function(msg, isError) {
+    document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
+    const t=document.createElement('div');
+    t.className='toast-msg';
+    t.textContent=msg;
+    t.style.cssText=`position:fixed;bottom:110px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),2200);
+  };
+
+  // Image swap
+  function swapImage(thumb, src) {
+    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+    thumb.classList.add('active');
+    const img = document.getElementById('main-img');
+    img.style.opacity = '0';
+    setTimeout(() => { img.src = src; img.style.opacity = '1'; }, 150);
+  }
+
+  // Size selector
+  function selectSize(btn, size) {
+    document.querySelectorAll('.size-chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('size-label').textContent = size;
+  }
+
+  // Color selector
+  function selectColor(dot, name) {
+    document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+    dot.classList.add('active');
+    document.getElementById('color-label').textContent = name;
+  }
+
+  // Quantity
+  let qty = 1;
+  function changeQty(delta) {
+    qty = Math.max(1, Math.min(12, qty + delta));
+    document.getElementById('qty-display').textContent = qty;
+  }
+
+  // Cart
+  let cartCount = 0;
+  function handleAddToCart(btn) {
+    cartCount += qty;
+    showToast('Added ' + qty + ' item' + (qty > 1 ? 's' : '') + ' to cart!');
+    const orig = btn.textContent;
+    btn.textContent = '✓ ADDED';
+    btn.style.background = 'rgba(226,255,59,0.2)';
+    btn.style.color = '#E2FF3B';
+    // sync sticky button too
+    const sticky = document.getElementById('sticky-cart-btn');
+    if(sticky && sticky !== btn) {
+      sticky.textContent = '✓ ADDED';
+      sticky.style.background = 'rgba(226,255,59,0.2)';
+      sticky.style.color = '#E2FF3B';
+      setTimeout(()=>{sticky.textContent='ADD TO CART';sticky.style.background='#E2FF3B';sticky.style.color='#000';},2000);
+    }
+    setTimeout(()=>{btn.textContent='ADD TO CART';btn.style.background='#E2FF3B';btn.style.color='#000';},2000);
+  }
+
+  // Wishlist header
+  function toggleWishlistHeader() {
+    const btn = document.getElementById('header-wish');
+    const svg = document.getElementById('header-wish-svg');
+    const on = btn.getAttribute('data-wish') === '1';
+    btn.setAttribute('data-wish', on ? '0' : '1');
+    svg.style.fill = on ? 'none' : '#ff4d6d';
+    svg.style.stroke = on ? 'rgba(255,255,255,0.5)' : '#ff4d6d';
+    btn.style.animation = on ? '' : 'likeBlip 0.35s ease';
+    showToast(on ? 'Removed from wishlist' : 'Added to wishlist');
+  }
+
+  // Accordion
+  function toggleAccordion(header) {
+    const content = header.nextElementSibling;
+    const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+    content.style.transition = 'max-height 0.3s ease, opacity 0.3s ease';
+    content.style.overflow = 'hidden';
+    if (isOpen) {
+      content.style.maxHeight = '0px';
+      content.style.opacity = '0';
+      header.querySelector('.acc-arrow').style.transform = 'rotate(0deg)';
+    } else {
+      content.style.maxHeight = content.scrollHeight + 'px';
+      content.style.opacity = '1';
+      header.querySelector('.acc-arrow').style.transform = 'rotate(180deg)';
+    }
+  }
+
+  // Star rating input
+  let selectedRating = 0;
+  function setRating(n) {
+    selectedRating = n;
+    document.querySelectorAll('#star-input .star-btn').forEach((btn, i) => {
+      btn.classList.toggle('lit', i < n);
+    });
+    showToast('Rated ' + n + ' star' + (n > 1 ? 's' : ''));
+  }
+
+  // Submit review
+  function submitReview() {
+    const input = document.getElementById('review-input');
+    const val = input.value.trim();
+    if (!val) { showToast('Please write something first', true); return; }
+    if (!selectedRating) { showToast('Please select a star rating', true); return; }
+    const stars = '★'.repeat(selectedRating) + '☆'.repeat(5 - selectedRating);
+    const div = document.createElement('div');
+    div.style.cssText = 'background:#111;border-radius:12px;padding:14px;margin-bottom:10px;animation:slideUp 0.25s ease';
+    div.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <img src="/images/profile/1.avif" style="width:32px;height:32px;border-radius:50%;object-fit:cover" alt="" />
+        <div style="flex:1">
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#E2FF3B;margin:0">LEX_KINETIC</p>
+          <div style="display:flex;gap:1px;margin-top:2px"><span style="color:#E2FF3B;font-size:10px">${'★'.repeat(selectedRating)}</span><span style="color:#484848;font-size:10px">${'★'.repeat(5-selectedRating)}</span></div>
+        </div>
+        <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848">Just now</span>
+      </div>
+      <p style="font-family:'Manrope',sans-serif;font-size:13px;color:#ababab;line-height:1.6;margin:0">${val}</p>`;
+    document.getElementById('reviews-section').insertBefore(div, document.getElementById('reviews-section').querySelector('[style*="Write a Review"]').parentElement);
+    input.value = '';
+    selectedRating = 0;
+    document.querySelectorAll('#star-input .star-btn').forEach(b => b.classList.remove('lit'));
+    showToast('Review posted! Thanks.');
+  }
+  </script>
+
+</body>
+</html>
