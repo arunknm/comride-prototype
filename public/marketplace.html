@@ -351,73 +351,133 @@
       <!-- Category list -->
       <div style="display:flex;flex-direction:column;gap:2px">
 
-        <!-- Headlights -->
-        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
-          <img src="/images/bikes/1.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
-          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Headlights</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <!-- Featured products grid -->
+        <div style="margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#E2FF3B;text-transform:uppercase;letter-spacing:1px">Featured</span>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.4)">View All →</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+
+            <!-- Product 1: Black Helmet -->
+            <div style="background:#191919;border-radius:14px;overflow:hidden;cursor:pointer">
+              <div style="background:#fff;aspect-ratio:1;display:flex;align-items:center;justify-content:center">
+                <img src="images/shop/1.jpg" style="width:100%;height:100%;object-fit:contain" alt="Helmet" />
+              </div>
+              <div style="padding:10px 12px">
+                <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#fff;margin:0 0 2px">Open Face Helmet</p>
+                <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);margin:0 0 6px">Matt Black</p>
+                <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B;margin:0">₹4,200</p>
+              </div>
+            </div>
+
+            <!-- Product 2: White Helmet -->
+            <div style="background:#191919;border-radius:14px;overflow:hidden;cursor:pointer">
+              <div style="background:#fff;aspect-ratio:1;display:flex;align-items:center;justify-content:center">
+                <img src="images/shop/2.webp" style="width:100%;height:100%;object-fit:contain" alt="Helmet" />
+              </div>
+              <div style="padding:10px 12px">
+                <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#fff;margin:0 0 2px">Open Face Helmet</p>
+                <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);margin:0 0 6px">Gloss White</p>
+                <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B;margin:0">₹4,200</p>
+              </div>
+            </div>
+
+            <!-- Product 3: Racing Helmet -->
+            <div style="background:#191919;border-radius:14px;overflow:hidden;cursor:pointer">
+              <div style="background:#fff;aspect-ratio:1;display:flex;align-items:center;justify-content:center">
+                <img src="images/shop/3.webp" style="width:100%;height:100%;object-fit:contain" alt="Helmet" />
+              </div>
+              <div style="padding:10px 12px">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+                  <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#fff;margin:0">MT KRE+ Helmet</p>
+                  <span style="background:rgba(226,255,59,0.15);border:1px solid rgba(226,255,59,0.3);color:#E2FF3B;font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;border-radius:9999px;padding:1px 6px">TOP</span>
+                </div>
+                <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);margin:0 0 6px">Full Face Racing</p>
+                <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B;margin:0">₹18,500</p>
+              </div>
+            </div>
+
+            <!-- Product 4: Exhaust -->
+            <div style="background:#191919;border-radius:14px;overflow:hidden;cursor:pointer">
+              <div style="background:#fff;aspect-ratio:1;display:flex;align-items:center;justify-content:center">
+                <img src="images/shop/4.webp" style="width:100%;height:100%;object-fit:contain" alt="Exhaust" />
+              </div>
+              <div style="padding:10px 12px">
+                <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#fff;margin:0 0 2px">Chrome Silencer</p>
+                <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);margin:0 0 6px">Universal Fit</p>
+                <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B;margin:0">₹3,800</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Full width product: IXIL Exhaust -->
+          <div style="background:#191919;border-radius:14px;overflow:hidden;cursor:pointer;margin-top:10px;display:flex;gap:0">
+            <div style="background:#fff;width:120px;min-width:120px;display:flex;align-items:center;justify-content:center">
+              <img src="images/shop/5.webp" style="width:100%;height:100%;object-fit:contain" alt="Exhaust" />
+            </div>
+            <div style="padding:14px 16px;flex:1">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+                <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;margin:0">IXIL Dual Silencer</p>
+                <span style="background:rgba(226,255,59,0.15);border:1px solid rgba(226,255,59,0.3);color:#E2FF3B;font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;border-radius:9999px;padding:1px 6px">NEW</span>
+              </div>
+              <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);margin:0 0 8px">Titanium Blue · Racing Series</p>
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#E2FF3B;margin:0">₹24,999</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category rows -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px">Browse Categories</span>
         </div>
 
         <!-- Helmets -->
-        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
-          <img src="/images/bikes/4.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
+        <div style="background:#191919;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <div style="width:40px;height:40px;border-radius:10px;overflow:hidden;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center">
+            <img src="images/shop/1.jpg" style="width:100%;height:100%;object-fit:contain" alt="" />
+          </div>
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Helmets</span>
+          <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.3)">3 items</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
 
-        <!-- Seats -->
-        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
-          <img src="/images/bikes/2.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
-          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Seats</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </div>
-
-        <!-- Mudguards -->
-        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
-          <img src="/images/bikes/3.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
-          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Mudguards</span>
+        <!-- Exhaust / Silencers -->
+        <div style="background:#191919;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <div style="width:40px;height:40px;border-radius:10px;overflow:hidden;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center">
+            <img src="images/shop/5.webp" style="width:100%;height:100%;object-fit:contain" alt="" />
+          </div>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Exhaust & Silencers</span>
+          <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.3)">2 items</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
 
         <!-- Crash Guards -->
-        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
-          <img src="/images/bikes/5.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
+        <div style="background:#191919;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <img src="images/bikes/5.avif" style="width:40px;height:40px;border-radius:10px;object-fit:cover;flex-shrink:0" alt="" />
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Crash Guards</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
 
-        <!-- Tail Lamps -->
-        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
-          <img src="/images/bikes/6.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
-          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Tail Lamps</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </div>
-
-        <!-- Phone Stands -->
-        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
-          <img src="/images/bikes/7.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
-          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Phone Stands</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </div>
-
-        <!-- Air Filters -->
-        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
-          <img src="/images/bikes/8.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
-          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Air Filters</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </div>
-
         <!-- Leather Jackets -->
-        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
-          <img src="/images/bikes/9.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
+        <div style="background:#191919;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <img src="images/bikes/9.avif" style="width:40px;height:40px;border-radius:10px;object-fit:cover;flex-shrink:0" alt="" />
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Leather Jackets</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
 
         <!-- Intercoms -->
-        <div style="background:#191919;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
-          <img src="/images/bikes/10.avif" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="" />
+        <div style="background:#191919;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <img src="images/bikes/10.avif" style="width:40px;height:40px;border-radius:10px;object-fit:cover;flex-shrink:0" alt="" />
           <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Intercoms</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+
+        <!-- Phone Stands -->
+        <div style="background:#191919;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:16px;cursor:pointer;margin-bottom:4px">
+          <img src="images/bikes/7.avif" style="width:40px;height:40px;border-radius:10px;object-fit:cover;flex-shrink:0" alt="" />
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#fff;flex:1">Phone Stands</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
 
