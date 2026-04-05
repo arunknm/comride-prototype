@@ -11,9 +11,21 @@
   var styleTag = document.createElement('style');
   styleTag.textContent = [
 
-    /* ── Kill menu-drawer transition on first paint so it can't flash ── */
-    '#menu-drawer{transition:none!important}',
-    'body.cr-ready #menu-drawer,body:not(.cr-loading) #menu-drawer{transition:transform 0.3s ease!important}',
+    /* ── Keep all drawers hidden & non-animating until page is fully ready ── */
+    /* Covers both #menu-drawer (most pages) and #drawer (ride-tab etc.)     */
+    '#menu-drawer,#drawer,#drawer-backdrop{',
+    '  visibility:hidden!important;',
+    '  transition:none!important',
+    '}',
+    /* After load: restore visibility + transitions, but exclude from cr-reveal */
+    'body.cr-done #menu-drawer,body.cr-done #drawer,body.cr-done #drawer-backdrop{',
+    '  visibility:visible!important;',
+    '  transition:transform 0.3s ease!important',
+    '}',
+    /* Never let drawers participate in the reveal animation */
+    'body.cr-ready #menu-drawer,body.cr-ready #drawer,body.cr-ready #drawer-backdrop{',
+    '  animation:none!important;opacity:1!important',
+    '}',
 
     /* ── Splash ── */
     '.cr-splash{',
@@ -581,6 +593,8 @@
 
             setTimeout(function () {
               document.body.classList.remove('cr-ready');
+              // Mark fully done — restores drawer visibility + transitions
+              document.body.classList.add('cr-done');
             }, REVEAL_CLEAN);
 
           }, SKELETON_FADE);
@@ -740,6 +754,7 @@
         if (onDone) onDone();
         setTimeout(function() {
           document.body.classList.remove('cr-ready');
+          document.body.classList.add('cr-done');
         }, REVEAL_CLEAN);
       }, SKELETON_FADE);
     }, SKELETON_HOLD);
