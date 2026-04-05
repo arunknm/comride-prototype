@@ -35,8 +35,8 @@
     <!-- COVER + AVATAR HERO -->
     <div style="position:relative;">
       <div style="position:relative;width:100%;height:220px;overflow:hidden;">
-        <img src="/images/places/1.avif" alt="Cover" style="width:100%;height:100%;object-fit:cover;display:block;" />
-        <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.75) 100%);"></div>
+        <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&auto=format&fit=crop&q=80" alt="Cover" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" />
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.85) 100%);"></div>
       </div>
 
       <!-- Header -->
@@ -52,7 +52,7 @@
       <!-- Avatar -->
       <div style="position:absolute;bottom:-42px;left:20px;z-index:5;">
         <div style="width:84px;height:84px;border-radius:50%;border:3px solid #E2FF3B;overflow:hidden;">
-          <img src="/images/profile/3.avif" alt="Avatar" style="width:100%;height:100%;object-fit:cover;" />
+          <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=200&auto=format&fit=crop&q=80" alt="Avatar" style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
         </div>
         <div style="position:absolute;bottom:-12px;left:0;background:#E2FF3B;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9px;border-radius:9999px;padding:2px 7px;white-space:nowrap;z-index:6;">LV.38</div>
       </div>
@@ -134,27 +134,37 @@
           <a href="ride-tab.html" style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;font-weight:600;">View All →</a>
         </div>
 
-        <div onclick="location.href='my-ride-detail.html'" style="background:#111;border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;">
-          <div style="flex:1;min-width:0;">
-            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B;display:block;margin-bottom:4px;letter-spacing:0.5px;text-transform:uppercase;">Himalayan Run</span>
-            <p style="font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:#fff;margin-bottom:3px;">Manali ─────── Leh</p>
-            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);">5 Aug · 12 Aug</p>
+        <div onclick="location.href='my-ride-detail.html'" style="background:#111;border-radius:12px;overflow:hidden;margin-bottom:10px;cursor:pointer;">
+          <div style="position:relative;height:140px;overflow:hidden;">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&auto=format&fit=crop&q=80" alt="Leh" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" />
+            <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.8) 100%);"></div>
+            <div style="position:absolute;bottom:10px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:flex-end;">
+              <div>
+                <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B;display:block;margin-bottom:2px;letter-spacing:0.5px;text-transform:uppercase;">Himalayan Run</span>
+                <p style="font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:#fff;margin:0;">Manali ─── Leh</p>
+              </div>
+              <span style="background:rgba(226,255,59,0.2);color:#E2FF3B;border:1px solid rgba(226,255,59,0.4);border-radius:9999px;padding:3px 10px;font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;">Completed</span>
+            </div>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
-            <img src="/images/places/2.avif" alt="" style="width:80px;height:56px;border-radius:8px;object-fit:cover;" />
-            <span style="background:rgba(226,255,59,0.15);color:#E2FF3B;border:1px solid rgba(226,255,59,0.3);border-radius:9999px;padding:2px 10px;font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;">Completed</span>
+          <div style="padding:8px 14px;">
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);">5 Aug · 12 Aug</p>
           </div>
         </div>
 
-        <div onclick="location.href='my-ride-detail.html'" style="background:#111;border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;">
-          <div style="flex:1;min-width:0;">
-            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B;display:block;margin-bottom:4px;letter-spacing:0.5px;text-transform:uppercase;">Eastern Ghats</span>
-            <p style="font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:#fff;margin-bottom:3px;">Chennai ─────── Vizag</p>
-            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);">20 Sep · 22 Sep</p>
+        <div onclick="location.href='my-ride-detail.html'" style="background:#111;border-radius:12px;overflow:hidden;cursor:pointer;">
+          <div style="position:relative;height:140px;overflow:hidden;">
+            <img src="https://images.unsplash.com/photo-1433838552652-f9ded5282879?w=600&auto=format&fit=crop&q=80" alt="Vizag" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" />
+            <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.8) 100%);"></div>
+            <div style="position:absolute;bottom:10px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:flex-end;">
+              <div>
+                <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B;display:block;margin-bottom:2px;letter-spacing:0.5px;text-transform:uppercase;">Eastern Ghats</span>
+                <p style="font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:#fff;margin:0;">Chennai ─── Vizag</p>
+              </div>
+              <span style="background:rgba(226,255,59,0.2);color:#E2FF3B;border:1px solid rgba(226,255,59,0.4);border-radius:9999px;padding:3px 10px;font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;">Completed</span>
+            </div>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
-            <img src="/images/places/3.avif" alt="" style="width:80px;height:56px;border-radius:8px;object-fit:cover;" />
-            <span style="background:rgba(226,255,59,0.15);color:#E2FF3B;border:1px solid rgba(226,255,59,0.3);border-radius:9999px;padding:2px 10px;font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;">Completed</span>
+          <div style="padding:8px 14px;">
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);">20 Sep · 22 Sep</p>
           </div>
         </div>
       </div>
@@ -169,19 +179,19 @@
         <div style="display:flex;gap:12px;">
           <div onclick="location.href='comrade-profile.html'" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
             <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.1);">
-              <img src="/images/profile/4.avif" alt="" style="width:100%;height:100%;object-fit:cover;" />
+              <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=200&auto=format&fit=crop&q=80" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
             </div>
             <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.7);">Dev M</span>
           </div>
           <div onclick="location.href='comrade-profile.html'" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
             <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.1);">
-              <img src="/images/profile/5.avif" alt="" style="width:100%;height:100%;object-fit:cover;" />
+              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&auto=format&fit=crop&q=80" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
             </div>
             <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.7);">Ananya</span>
           </div>
           <div onclick="location.href='comrade-profile.html'" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
             <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.1);">
-              <img src="/images/profile/1.avif" alt="" style="width:100%;height:100%;object-fit:cover;" />
+              <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
             </div>
             <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.7);">Lex</span>
           </div>
@@ -227,5 +237,6 @@
     setTimeout(()=>t.remove(),2200);
   };
   </script>
+<script src="journey-mode.js"></script>
 </body>
 </html>

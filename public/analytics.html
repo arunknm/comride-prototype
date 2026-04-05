@@ -109,13 +109,17 @@
   <!-- PAGE CONTENT -->
   <div style="max-width:390px;margin:0 auto;padding:64px 24px 160px" class="page-body">
 
-    <!-- Page Header -->
-    <div style="margin-bottom:32px;padding-top:32px;display:flex;align-items:flex-end;justify-content:space-between">
-      <div>
-        <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">PERFORMANCE METRICS</p>
-        <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:48px;color:#E2FF3B;text-transform:uppercase;line-height:1;letter-spacing:-2px">ANALYTICS</h1>
+    <!-- HERO BANNER -->
+    <div style="position:relative;height:140px;border-radius:16px;overflow:hidden;margin-top:32px;margin-bottom:24px;">
+      <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&auto=format&fit=crop&q=80" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,0.85);"></div>
+      <div style="position:absolute;inset:0;padding:20px;display:flex;align-items:flex-end;justify-content:space-between;">
+        <div>
+          <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#ababab;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">PERFORMANCE METRICS</p>
+          <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:36px;color:#E2FF3B;text-transform:uppercase;line-height:1;letter-spacing:-1.5px">ANALYTICS</h1>
+        </div>
+        <button onclick="showToast('Export coming soon')" style="background:rgba(226,255,59,0.08);border:1px solid rgba(226,255,59,0.25);border-radius:9999px;padding:8px 16px;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#E2FF3B;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;flex-shrink:0;">EXPORT ↗</button>
       </div>
-      <button onclick="showToast('Export coming soon')" style="background:rgba(226,255,59,0.08);border:1px solid rgba(226,255,59,0.25);border-radius:9999px;padding:8px 16px;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#E2FF3B;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap">EXPORT ↗</button>
     </div>
 
     <!-- TIME PERIOD SWITCHER -->
@@ -232,15 +236,24 @@
     </div>
 
     <div class="ride-history-item" onclick="location.href='my-ride-detail.html'">
-      <div><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:2px">Coastal Highway Sprint</p><p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">280 km · 12 riders · May 14</p></div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:48px;height:48px;border-radius:10px;overflow:hidden;flex-shrink:0;"><img src="https://images.unsplash.com/photo-1433838552652-f9ded5282879?w=200&auto=format&fit=crop&q=80" loading="lazy" style="width:100%;height:100%;object-fit:cover;" /></div>
+        <div><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:2px">Coastal Highway Sprint</p><p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">280 km · 12 riders · May 14</p></div>
+      </div>
       <div style="text-align:right"><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B">₹4,200</p><p style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">4.9 ★</p></div>
     </div>
     <div class="ride-history-item" onclick="location.href='my-ride-detail.html'">
-      <div><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:2px">Western Ghats Run</p><p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">320 km · 8 riders · May 4</p></div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:48px;height:48px;border-radius:10px;overflow:hidden;flex-shrink:0;"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&auto=format&fit=crop&q=80" loading="lazy" style="width:100%;height:100%;object-fit:cover;" /></div>
+        <div><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:2px">Western Ghats Run</p><p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">320 km · 8 riders · May 4</p></div>
+      </div>
       <div style="text-align:right"><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B">₹2,800</p><p style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">4.8 ★</p></div>
     </div>
     <div class="ride-history-item" onclick="location.href='my-ride-detail.html'">
-      <div><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:2px">Midnight Highway Run</p><p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">142 km · 6 riders · Apr 28</p></div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:48px;height:48px;border-radius:10px;overflow:hidden;flex-shrink:0;"><img src="https://images.unsplash.com/photo-1519003300449-424ad0405076?w=200&auto=format&fit=crop&q=80" loading="lazy" style="width:100%;height:100%;object-fit:cover;" /></div>
+        <div><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;margin-bottom:2px">Midnight Highway Run</p><p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">142 km · 6 riders · Apr 28</p></div>
+      </div>
       <div style="text-align:right"><p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B">₹1,800</p><p style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">4.7 ★</p></div>
     </div>
 
@@ -325,5 +338,6 @@
       setTimeout(()=>t.remove(),2200);
     };
   </script>
+<script src="journey-mode.js"></script>
 </body>
 </html>

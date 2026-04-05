@@ -45,12 +45,23 @@
 
     /* Ride summary card */
     .ride-summary {
-      background: linear-gradient(135deg, #0d1a00, #111);
       border: 1px solid rgba(226,255,59,0.2);
-      border-radius: 16px; padding: 20px; margin-bottom: 24px;
-      cursor: pointer;
+      border-radius: 16px; margin-bottom: 24px;
+      cursor: pointer; overflow: hidden; position: relative;
     }
     .ride-summary:hover { border-color: rgba(226,255,59,0.4); }
+    .ride-summary-img {
+      width: 100%; height: 160px; object-fit: cover; display: block;
+    }
+    .ride-summary-overlay {
+      position: absolute; top: 0; left: 0; right: 0; height: 160px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.85));
+      pointer-events: none;
+    }
+    .ride-summary-content {
+      position: absolute; bottom: 0; left: 0; right: 0; padding: 16px 20px;
+    }
+    .ride-summary-below { padding: 16px 20px; background: linear-gradient(135deg, #0d1a00, #111); }
 
     /* Stats strip */
     .stats-strip { display: flex; gap: 8px; margin-bottom: 20px; }
@@ -132,12 +143,16 @@
 
     <!-- RIDE SUMMARY -->
     <div class="ride-summary" onclick="location.href='my-ride-detail.html'">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-        <span style="background:#E2FF3B;color:#000;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1.5px;padding:4px 10px;border-radius:9999px">ACTIVE RIDE</span>
-        <span style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">May 18 — 20, 2026</span>
+      <img src="https://images.unsplash.com/photo-1558981033-0f0309284409?w=800&auto=format&fit=crop&q=80" alt="Group ride" loading="lazy" class="ride-summary-img" />
+      <div class="ride-summary-overlay"></div>
+      <div class="ride-summary-content">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <span style="background:#E2FF3B;color:#000;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1.5px;padding:4px 10px;border-radius:9999px">ACTIVE RIDE</span>
+          <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.7)">May 18 — 20, 2026</span>
+        </div>
+        <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;color:#fff;text-transform:uppercase;letter-spacing:-0.5px;margin-bottom:4px">COASTAL HIGHWAY SPRINT</h2>
+        <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.65)">Mangalore → Gokarna · 280 KM</p>
       </div>
-      <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;color:#fff;text-transform:uppercase;letter-spacing:-0.5px;margin-bottom:4px">COASTAL HIGHWAY SPRINT</h2>
-      <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.5)">Mangalore → Gokarna · 280 KM</p>
     </div>
 
     <!-- STATS STRIP -->
@@ -166,7 +181,7 @@
     <div class="participant-card" id="card-ravi">
       <div class="participant-top">
         <div class="participant-avatar" onclick="location.href='comrade-profile.html'">
-          <img src="/images/profile/2.avif" alt="Ravi K" />
+          <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=400&auto=format&fit=crop&q=80" alt="Ravi K" loading="lazy" />
         </div>
         <div class="participant-info">
           <div class="participant-name">RAVI_KINETIC</div>
@@ -183,7 +198,7 @@
     <div class="participant-card" id="card-sara">
       <div class="participant-top">
         <div class="participant-avatar" onclick="location.href='comrade-profile.html'">
-          <img src="/images/profile/3.avif" alt="Sara V" />
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=80" alt="Sara V" loading="lazy" />
         </div>
         <div class="participant-info">
           <div class="participant-name">SARA_VOLT</div>
@@ -200,7 +215,7 @@
     <div class="participant-card" id="card-alex">
       <div class="participant-top">
         <div class="participant-avatar" onclick="location.href='comrade-profile.html'">
-          <img src="/images/profile/1.avif" alt="Alex R" />
+          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80" alt="Alex R" loading="lazy" />
         </div>
         <div class="participant-info">
           <div class="participant-name">ALEX_RUSH</div>
@@ -220,7 +235,7 @@
     <div class="participant-card">
       <div class="participant-top" style="margin-bottom:0">
         <div class="participant-avatar" onclick="location.href='comrade-profile.html'">
-          <img src="/images/profile/1.avif" alt="You" />
+          <img src="https://images.unsplash.com/photo-1611144527606-c3ae3e53c2f3?w=400&auto=format&fit=crop&q=80" alt="You" loading="lazy" />
         </div>
         <div class="participant-info">
           <div class="participant-name">LEX_KINETIC (YOU)</div>
@@ -233,13 +248,13 @@
     <div style="display:flex;gap:12px;margin-bottom:10px;overflow-x:auto;padding-bottom:4px">
       <div style="text-align:center;flex-shrink:0" onclick="location.href='comrade-profile.html'">
         <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid #E2FF3B;margin:0 auto 6px">
-          <img src="/images/profile/2.avif" style="width:100%;height:100%;object-fit:cover"/>
+          <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=400&auto=format&fit=crop&q=80" loading="lazy" style="width:100%;height:100%;object-fit:cover"/>
         </div>
         <div style="font-family:'Manrope',sans-serif;font-size:9px;color:#ababab;text-transform:uppercase;letter-spacing:0.5px">VOID_RUN</div>
       </div>
       <div style="text-align:center;flex-shrink:0" onclick="location.href='comrade-profile.html'">
         <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.15);margin:0 auto 6px">
-          <img src="/images/profile/3.avif" style="width:100%;height:100%;object-fit:cover"/>
+          <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=400&auto=format&fit=crop&q=80" loading="lazy" style="width:100%;height:100%;object-fit:cover"/>
         </div>
         <div style="font-family:'Manrope',sans-serif;font-size:9px;color:#ababab;text-transform:uppercase;letter-spacing:0.5px">STEEL_P</div>
       </div>
@@ -322,5 +337,6 @@
       setTimeout(()=>t.remove(),2200);
     };
   </script>
+<script src="journey-mode.js"></script>
 </body>
 </html>

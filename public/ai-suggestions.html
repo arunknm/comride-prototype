@@ -76,11 +76,22 @@
     }
 
     .hero-card {
-      background: linear-gradient(135deg, #0a1a00 0%, #111 60%, #000 100%);
       border: 1px solid rgba(226,255,59,0.2);
       border-radius: 16px;
       padding: 20px;
       margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop&q=80');
+      background-size: cover; background-position: center;
+      opacity: 0.08;
+    }
+    .hero-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #0a1a00 0%, rgba(0,0,0,0.85) 100%);
     }
     .ai-pill {
       display: inline-block;
@@ -576,9 +587,13 @@
   <main class="page-body">
 
     <div class="hero-card">
+      <div class="hero-card-bg"></div>
+      <div class="hero-card-overlay"></div>
+      <div style="position:relative;z-index:1">
       <span class="ai-pill">AI POWERED</span>
       <h1 class="hero-title">Let AI plan your<br>next ride</h1>
       <p class="hero-subtitle">Tell us your preferences — we'll find the perfect route and connect you with riders.</p>
+      </div><!-- end inner z-index div -->
     </div>
 
     <div id="inputs-section">
@@ -670,7 +685,7 @@
       <!-- CARD 1 -->
       <div class="ride-card" onclick="location.href='create-ride-modes.html'">
         <div class="ride-card-photo-wrap">
-          <img src="/images/places/1.avif" alt="Western Ghats Monsoon Run" />
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&auto=format&fit=crop&q=80" alt="Western Ghats Monsoon Run" loading="lazy" />
           <div class="photo-gradient"></div>
           <div class="photo-badge-tl"><span class="badge-lime">BEST MATCH</span></div>
           <div class="photo-badge-tr">98% match</div>
@@ -710,7 +725,7 @@
       <!-- CARD 2 -->
       <div class="ride-card" onclick="location.href='create-ride-modes.html'">
         <div class="ride-card-photo-wrap">
-          <img src="/images/places/3.avif" alt="Coastal Karnataka Loop" />
+          <img src="https://images.unsplash.com/photo-1433838552652-f9ded5282879?w=600&auto=format&fit=crop&q=80" alt="Coastal Karnataka Loop" loading="lazy" />
           <div class="photo-gradient"></div>
           <div class="photo-badge-tl"><span class="badge-white">POPULAR</span></div>
           <div class="photo-badge-tr">87% match</div>
@@ -750,7 +765,7 @@
       <!-- CARD 3 -->
       <div class="ride-card" onclick="location.href='create-ride-modes.html'">
         <div class="ride-card-photo-wrap">
-          <img src="/images/places/5.avif" alt="Hampi Heritage Ride" />
+          <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&auto=format&fit=crop&q=80" alt="Hampi Heritage Ride" loading="lazy" />
           <div class="photo-gradient"></div>
           <div class="photo-badge-tl"><span class="badge-blue">NEW ROUTE</span></div>
           <div class="photo-badge-tr">79% match</div>
@@ -914,5 +929,6 @@
       setTimeout(()=>t.remove(),2200);
     };
   </script>
+<script src="journey-mode.js"></script>
 </body>
 </html>

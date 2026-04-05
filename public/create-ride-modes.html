@@ -264,8 +264,9 @@
       <!-- Dropdown Panel -->
       <div class="mode-dropdown" id="mode-dropdown">
         <!-- Solo -->
-        <div class="mode-option" id="opt-Solo" onclick="selectMode('Solo')">
-          <div style="display:flex;align-items:center;gap:12px;">
+        <div class="mode-option" id="opt-Solo" onclick="selectMode('Solo')" style="position:relative;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&auto=format&fit=crop&q=80" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.15;pointer-events:none;" alt="" />
+          <div style="display:flex;align-items:center;gap:12px;position:relative;z-index:1;">
             <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
@@ -281,8 +282,9 @@
           </div>
         </div>
         <!-- Friends -->
-        <div class="mode-option" id="opt-Friends" onclick="selectMode('Friends')">
-          <div style="display:flex;align-items:center;gap:12px;">
+        <div class="mode-option" id="opt-Friends" onclick="selectMode('Friends')" style="position:relative;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1558981033-0f0309284409?w=400&auto=format&fit=crop&q=80" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.15;pointer-events:none;" alt="" />
+          <div style="display:flex;align-items:center;gap:12px;position:relative;z-index:1;">
             <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
@@ -293,13 +295,14 @@
               <div style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.4);margin-top:1px;">Invite your crew</div>
             </div>
           </div>
-          <div id="check-Friends" style="display:none;">
+          <div id="check-Friends" style="display:none;position:relative;z-index:1;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
           </div>
         </div>
         <!-- Public -->
-        <div class="mode-option active" id="opt-Public" onclick="selectMode('Public')">
-          <div style="display:flex;align-items:center;gap:12px;">
+        <div class="mode-option active" id="opt-Public" onclick="selectMode('Public')" style="position:relative;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=400&auto=format&fit=crop&q=80" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.15;pointer-events:none;" alt="" />
+          <div style="display:flex;align-items:center;gap:12px;position:relative;z-index:1;">
             <div style="width:36px;height:36px;border-radius:10px;background:rgba(226,255,59,0.12);display:flex;align-items:center;justify-content:center;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
@@ -310,7 +313,7 @@
               <div style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.4);margin-top:1px;">Visible to all riders</div>
             </div>
           </div>
-          <div id="check-Public">
+          <div id="check-Public" style="position:relative;z-index:1;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
           </div>
         </div>
@@ -426,11 +429,14 @@
 
     <!-- 8. CREATE ROUTE (Solo + Public) -->
     <div class="form-section" id="route-section" style="margin-bottom:12px;">
-      <div onclick="location.href='route-builder.html'" style="background:#191919;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.15s;" onmouseenter="this.style.background='#222'" onmouseleave="this.style.background='#191919'">
-        <span style="font-family:'Manrope',sans-serif;font-size:14px;color:#fff;font-weight:500;">Create route</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
+      <div onclick="location.href='route-builder.html'" style="position:relative;background:#191919;border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;cursor:pointer;transition:background 0.15s;" onmouseenter="this.style.background='#222'" onmouseleave="this.style.background='#191919'">
+        <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&auto=format&fit=crop&q=80" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.18;pointer-events:none;" alt="" />
+        <div style="position:relative;z-index:1;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:'Manrope',sans-serif;font-size:14px;color:#fff;font-weight:500;">Create route</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
       </div>
     </div>
 
@@ -714,5 +720,6 @@
     applyMode('Public');
   </script>
 
+<script src="journey-mode.js"></script>
 </body>
 </html>

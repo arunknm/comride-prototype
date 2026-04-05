@@ -38,6 +38,16 @@
       </p>
     </div>
 
+    <!-- Header image strip -->
+    <div style="position:relative;height:100px;border-radius:14px;overflow:hidden;margin-bottom:24px;margin-top:-20px;">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop&q=80" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />
+      <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,0.8),rgba(0,0,0,0.3));"></div>
+      <div style="position:absolute;left:16px;top:50%;transform:translateY(-50%);">
+        <div style="font-family:'Manrope',sans-serif;font-size:10px;color:#E2FF3B;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:2px">RIDE DNA</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;">Pick your riding style</div>
+      </div>
+    </div>
+
     <!-- Ride Type Grid -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:40px">
 
@@ -45,9 +55,10 @@
       <div
         class="ride-type-card"
         data-selected="true"
-        style="background:#191919;border:2px solid #E2FF3B;border-radius:12px;padding:24px;min-height:100px;display:flex;flex-direction:column;gap:8px;cursor:pointer;position:relative"
+        style="background:#191919;border:2px solid #E2FF3B;border-radius:12px;padding:24px;min-height:100px;display:flex;flex-direction:column;gap:8px;cursor:pointer;position:relative;overflow:hidden"
       >
-        <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div style="position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=400&auto=format&fit=crop&q=80');background-size:cover;background-position:center;opacity:0.15;"></div>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;position:relative;z-index:1">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
             <path d="M7 11V7a5 5 0 0110 0v4"/>
@@ -61,7 +72,7 @@
             </svg>
           </div>
         </div>
-        <div>
+        <div style="position:relative;z-index:1">
           <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;color:#fff;margin-bottom:4px">RACING</div>
           <div style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab;line-height:1.4">Track days &amp; high speed</div>
         </div>
@@ -71,9 +82,10 @@
       <div
         class="ride-type-card"
         data-selected="false"
-        style="background:#191919;border:1px solid rgba(72,72,72,0.3);border-radius:12px;padding:24px;min-height:100px;display:flex;flex-direction:column;gap:8px;cursor:pointer;position:relative"
+        style="background:#191919;border:1px solid rgba(72,72,72,0.3);border-radius:12px;padding:24px;min-height:100px;display:flex;flex-direction:column;gap:8px;cursor:pointer;position:relative;overflow:hidden"
       >
-        <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div style="position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1433838552652-f9ded5282879?w=400&auto=format&fit=crop&q=80');background-size:cover;background-position:center;opacity:0.15;"></div>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;position:relative;z-index:1">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/>
             <line x1="12" y1="2" x2="12" y2="22"/>
@@ -82,7 +94,7 @@
           </svg>
           <div class="check-circle" style="width:20px;height:20px;border-radius:50%;background:transparent;border:1.5px solid #484848;flex-shrink:0"></div>
         </div>
-        <div>
+        <div style="position:relative;z-index:1">
           <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;color:#fff;margin-bottom:4px">TOURING</div>
           <div style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab;line-height:1.4">Cross-country journeys</div>
         </div>
@@ -92,9 +104,10 @@
       <div
         class="ride-type-card"
         data-selected="false"
-        style="background:#191919;border:1px solid rgba(72,72,72,0.3);border-radius:12px;padding:24px;min-height:100px;display:flex;flex-direction:column;gap:8px;cursor:pointer;position:relative"
+        style="background:#191919;border:1px solid rgba(72,72,72,0.3);border-radius:12px;padding:24px;min-height:100px;display:flex;flex-direction:column;gap:8px;cursor:pointer;position:relative;overflow:hidden"
       >
-        <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div style="position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1519003300449-424ad0405076?w=400&auto=format&fit=crop&q=80');background-size:cover;background-position:center;opacity:0.15;"></div>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;position:relative;z-index:1">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="5"/>
             <line x1="12" y1="1" x2="12" y2="3"/>
@@ -108,7 +121,7 @@
           </svg>
           <div class="check-circle" style="width:20px;height:20px;border-radius:50%;background:transparent;border:1.5px solid #484848;flex-shrink:0"></div>
         </div>
-        <div>
+        <div style="position:relative;z-index:1">
           <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;color:#fff;margin-bottom:4px">WEEKEND RIDES</div>
           <div style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab;line-height:1.4">Social coffee runs</div>
         </div>
@@ -118,9 +131,10 @@
       <div
         class="ride-type-card"
         data-selected="false"
-        style="background:#191919;border:1px solid rgba(72,72,72,0.3);border-radius:12px;padding:24px;min-height:100px;display:flex;flex-direction:column;gap:8px;cursor:pointer;position:relative"
+        style="background:#191919;border:1px solid rgba(72,72,72,0.3);border-radius:12px;padding:24px;min-height:100px;display:flex;flex-direction:column;gap:8px;cursor:pointer;position:relative;overflow:hidden"
       >
-        <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div style="position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1580310614729-ccd69652491d?w=400&auto=format&fit=crop&q=80');background-size:cover;background-position:center;opacity:0.15;"></div>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;position:relative;z-index:1">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="3 20 21 20 12 4 3 20"/>
             <line x1="12" y1="8" x2="12" y2="14"/>
@@ -128,7 +142,7 @@
           </svg>
           <div class="check-circle" style="width:20px;height:20px;border-radius:50%;background:transparent;border:1.5px solid #484848;flex-shrink:0"></div>
         </div>
-        <div>
+        <div style="position:relative;z-index:1">
           <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;color:#fff;margin-bottom:4px">OFF-ROAD</div>
           <div style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab;line-height:1.4">Dirt &amp; adventure</div>
         </div>
@@ -138,9 +152,10 @@
       <div
         class="ride-type-card"
         data-selected="false"
-        style="background:#191919;border:1px solid rgba(72,72,72,0.3);border-radius:12px;padding:24px;min-height:100px;display:flex;flex-direction:column;gap:8px;cursor:pointer;position:relative"
+        style="background:#191919;border:1px solid rgba(72,72,72,0.3);border-radius:12px;padding:24px;min-height:100px;display:flex;flex-direction:column;gap:8px;cursor:pointer;position:relative;overflow:hidden"
       >
-        <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div style="position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=400&auto=format&fit=crop&q=80');background-size:cover;background-position:center;opacity:0.15;"></div>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;position:relative;z-index:1">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="3"/>
             <path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/>
@@ -148,7 +163,7 @@
           </svg>
           <div class="check-circle" style="width:20px;height:20px;border-radius:50%;background:transparent;border:1.5px solid #484848;flex-shrink:0"></div>
         </div>
-        <div>
+        <div style="position:relative;z-index:1">
           <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;color:#fff;margin-bottom:4px">CUSTOM STYLES</div>
           <div style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab;line-height:1.4">Build, not bought</div>
         </div>
@@ -195,5 +210,6 @@
       });
     });
   </script>
+<script src="journey-mode.js"></script>
 </body>
 </html>

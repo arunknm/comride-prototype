@@ -44,8 +44,15 @@
       background: #111; border-radius: 16px; padding: 20px; margin-bottom: 20px;
       cursor: pointer; transition: border-color 0.2s;
       border: 1px solid rgba(255,255,255,0.06);
+      position: relative; overflow: hidden;
     }
     .profile-pic-area:hover { border-color: rgba(226,255,59,0.3); }
+    .profile-pic-area-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1547549082-6bc09f2049ae?w=600&auto=format&fit=crop&q=80');
+      background-size: cover; background-position: center;
+      opacity: 0.08;
+    }
     .avatar-ring {
       width: 64px; height: 64px; border-radius: 50%;
       border: 2px solid #E2FF3B; overflow: hidden; flex-shrink: 0; position: relative;
@@ -147,17 +154,18 @@
 
     <!-- PROFILE PICTURE -->
     <div class="profile-pic-area" onclick="showToast('Photo upload coming soon')">
-      <div class="avatar-ring">
-        <img src="/images/profile/1.avif" alt="Profile" />
+      <div class="profile-pic-area-bg"></div>
+      <div class="avatar-ring" style="position:relative;z-index:1;">
+        <img src="https://images.unsplash.com/photo-1611144527606-c3ae3e53c2f3?w=200&auto=format&fit=crop&q=80" alt="Profile" loading="lazy" />
         <div class="avatar-edit-badge">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         </div>
       </div>
-      <div>
+      <div style="position:relative;z-index:1;">
         <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;text-transform:uppercase">LEX_KINETIC</div>
         <div style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab;margin-top:2px">Tap to change photo</div>
       </div>
-      <div style="margin-left:auto;color:rgba(255,255,255,0.3);font-size:18px">›</div>
+      <div style="margin-left:auto;color:rgba(255,255,255,0.3);font-size:18px;position:relative;z-index:1;">›</div>
     </div>
 
     <!-- ACCOUNT SECTION -->
@@ -322,5 +330,6 @@
       setTimeout(()=>t.remove(),2200);
     };
   </script>
+<script src="journey-mode.js"></script>
 </body>
 </html>
