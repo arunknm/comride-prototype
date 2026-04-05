@@ -1,23 +1,51 @@
 /**
- * skeleton-module.js — Comride Shimmer Skeleton Loading
- * Hides real page content on arrival, shows shimmer skeleton,
- * then reveals content only after the skeleton clears.
- * Each page loads its content only when the user navigates there.
+ * skeleton-module.js — Comride Splash + Shimmer Skeleton Loading
+ * Sequence per page:
+ *   1. Splash screen — logo centred, black bg, brief hold
+ *   2. Splash fades out → skeleton shimmer fades in
+ *   3. Skeleton fades out → real content reveals with slide-up
  */
 (function () {
 
-  // ── Shimmer keyframe + base class injected once ────────────────────────────
+  // ── Styles ─────────────────────────────────────────────────────────────────
   var styleTag = document.createElement('style');
   styleTag.textContent = [
+
+    /* ── Splash ── */
+    '.cr-splash{',
+    '  position:fixed;inset:0;z-index:10000;',
+    '  background:#000;',
+    '  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;',
+    '  transition:opacity 0.4s ease',
+    '}',
+    '.cr-splash-logo{',
+    '  width:140px;height:auto;',
+    '  animation:cr-logo-in 0.5s cubic-bezier(0.16,1,0.3,1) both',
+    '}',
+    '@keyframes cr-logo-in{',
+    '  from{opacity:0;transform:scale(0.82) translateY(10px)}',
+    '  to  {opacity:1;transform:scale(1)   translateY(0)}',
+    '}',
+    /* subtle lime pulse ring under the logo */
+    '.cr-splash-ring{',
+    '  width:72px;height:72px;border-radius:50%;',
+    '  background:radial-gradient(circle,rgba(226,255,59,0.18) 0%,transparent 70%);',
+    '  position:absolute;',
+    '  animation:cr-ring-pulse 1.6s ease-in-out infinite',
+    '}',
+    '@keyframes cr-ring-pulse{',
+    '  0%,100%{transform:scale(0.8);opacity:0.4}',
+    '  50%{transform:scale(1.6);opacity:0}',
+    '}',
+
+    /* ── Shimmer skeleton ── */
     '@keyframes cr-shimmer{',
     '  0%{background-position:-600px 0}',
     '  100%{background-position:600px 0}',
     '}',
-    /* Hide real page content until skeleton clears */
-    'body.cr-loading>*:not(.cr-sk-overlay):not(script):not(style){',
+    'body.cr-loading>*:not(.cr-splash):not(.cr-sk-overlay):not(script):not(style){',
     '  opacity:0!important;pointer-events:none!important',
     '}',
-    /* Reveal transition once cr-loading is removed */
     'body.cr-ready>*:not(script):not(style){',
     '  animation:cr-reveal 0.32s ease both',
     '}',
@@ -26,23 +54,22 @@
     '  background:linear-gradient(90deg,',
     '    rgba(255,255,255,0.055) 0%,',
     '    rgba(255,255,255,0.055) 35%,',
-    '    rgba(255,255,255,0.13) 50%,',
+    '    rgba(255,255,255,0.13)  50%,',
     '    rgba(255,255,255,0.055) 65%,',
     '    rgba(255,255,255,0.055) 100%',
     '  );',
     '  background-size:1200px 100%;',
     '  animation:cr-shimmer 1.5s linear infinite;',
-    '  border-radius:6px;',
-    '  flex-shrink:0',
+    '  border-radius:6px;flex-shrink:0',
     '}',
     '.cr-sk-r{border-radius:999px}',
     '.cr-sk-overlay{',
     '  position:fixed;inset:0;z-index:9999;',
-    '  background:#000;',
-    '  overflow:hidden;',
+    '  background:#000;overflow:hidden;',
     '  padding:64px 0 80px;',
-    '  transition:opacity 0.32s ease',
+    '  opacity:0;transition:opacity 0.28s ease',
     '}'
+
   ].join('');
   document.head.appendChild(styleTag);
 
@@ -486,43 +513,77 @@
     return overlay;
   }
 
+  // ── Splash screen builder ──────────────────────────────────────────────────
+  function buildSplash() {
+    var splash = el('div', '', 'cr-splash');
+
+    // Lime pulse ring behind logo
+    var ring = el('div', '', 'cr-splash-ring');
+    splash.appendChild(ring);
+
+    // Logo — use the real SVG file
+    var img = el('img');
+    img.src = 'comride.svg';
+    img.className = 'cr-splash-logo';
+    img.alt = 'Comride';
+    splash.appendChild(img);
+
+    return splash;
+  }
+
   function inject() {
     // Skip non-app pages
     if (page === 'index' || page === 'investor-deck' || page === 'user-journeys') return;
 
-    // ── Step 1: hide real page content immediately so nothing bleeds through ──
+    // ── Step 1: hide real content immediately ────────────────────────────────
     document.body.classList.add('cr-loading');
 
-    var overlay = buildOverlay();
-    document.body.appendChild(overlay);
+    // ── Step 2: show splash ──────────────────────────────────────────────────
+    var splash = buildSplash();
+    document.body.appendChild(splash);
 
-    // ── Step 2: after delay, dismiss skeleton and reveal real content ─────────
-    var delay = 1200;
+    var SPLASH_HOLD   = 900;   // ms logo is fully visible
+    var SPLASH_FADE   = 400;   // ms splash fades out
+    var SKELETON_HOLD = 900;   // ms skeleton is visible
+    var SKELETON_FADE = 300;   // ms skeleton fades out
+    var REVEAL_CLEAN  = 400;   // ms after reveal before cleanup
+
+    // ── Step 3: fade splash out, show skeleton ───────────────────────────────
     setTimeout(function () {
-      overlay.style.opacity = '0';
+      splash.style.opacity = '0';
 
       setTimeout(function () {
-        // Remove overlay from DOM
-        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        if (splash.parentNode) splash.parentNode.removeChild(splash);
 
-        // Swap classes: remove loading mask, trigger reveal animation
-        document.body.classList.remove('cr-loading');
-        document.body.classList.add('cr-ready');
+        // Build and fade-in the skeleton overlay
+        var overlay = buildOverlay();
+        document.body.appendChild(overlay);
+        // Force reflow so transition fires
+        overlay.getBoundingClientRect();
+        overlay.style.opacity = '1';
 
-        // Clean up cr-ready after animation so it doesn't re-trigger on next paint
+        // ── Step 4: fade skeleton out, reveal real content ───────────────────
         setTimeout(function () {
-          document.body.classList.remove('cr-ready');
-        }, 400);
+          overlay.style.opacity = '0';
 
-      }, 320);
-    }, delay);
+          setTimeout(function () {
+            if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+
+            document.body.classList.remove('cr-loading');
+            document.body.classList.add('cr-ready');
+
+            setTimeout(function () {
+              document.body.classList.remove('cr-ready');
+            }, REVEAL_CLEAN);
+
+          }, SKELETON_FADE);
+        }, SKELETON_HOLD);
+
+      }, SPLASH_FADE);
+    }, SPLASH_HOLD);
   }
 
-  // Run as early as possible — before DOMContentLoaded if we can,
-  // so cr-loading is on body before any content paints.
   if (document.readyState === 'loading') {
-    // Add the hiding class synchronously right now (body exists but content not yet parsed)
-    // We'll finish setup on DOMContentLoaded
     document.addEventListener('DOMContentLoaded', inject);
   } else {
     inject();
