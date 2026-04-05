@@ -65,7 +65,7 @@
 
     .social-btn {
       flex: 1; display: flex; align-items: center; justify-content: center;
-      background: #191919; border: none; border-radius: 16px; height: 56px;
+      background: #191919; border: none; border-radius: 12px; height: 56px;
       cursor: pointer; transition: background 0.15s, border-color 0.15s;
       border: 1px solid transparent;
     }
@@ -233,7 +233,7 @@
       document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
       const t=document.createElement('div');
       t.className='toast-msg';t.textContent=msg;
-      t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+      t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:12px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
       document.body.appendChild(t);
       setTimeout(()=>t.remove(),2200);
     };

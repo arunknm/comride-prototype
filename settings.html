@@ -41,7 +41,7 @@
     /* Profile area */
     .profile-pic-area {
       display: flex; align-items: center; gap: 16px;
-      background: #111; border-radius: 16px; padding: 20px; margin-bottom: 20px;
+      background: #111; border-radius: 12px; padding: 20px; margin-bottom: 20px;
       cursor: pointer; transition: border-color 0.2s;
       border: 1px solid rgba(255,255,255,0.06);
       position: relative; overflow: hidden;
@@ -89,7 +89,7 @@
 
     /* Toggle */
     .toggle {
-      width: 46px; height: 26px; border-radius: 13px;
+      width: 46px; height: 26px; border-radius: 12px;
       background: #E2FF3B; position: relative; flex-shrink: 0; cursor: pointer;
       transition: background 0.2s;
     }
@@ -169,7 +169,7 @@
     </div>
 
     <!-- ACCOUNT SECTION -->
-    <div style="background:#111;border-radius:14px;padding:0 16px;margin-bottom:14px">
+    <div style="background:#111;border-radius:12px;padding:0 16px;margin-bottom:14px">
       <div class="section-header" onclick="toggleSection(this)">
         <span class="section-header-label">ACCOUNT</span>
         <span class="section-arrow">▾</span>
@@ -197,7 +197,7 @@
     </div>
 
     <!-- NOTIFICATIONS SECTION -->
-    <div style="background:#111;border-radius:14px;padding:0 16px;margin-bottom:14px">
+    <div style="background:#111;border-radius:12px;padding:0 16px;margin-bottom:14px">
       <div class="section-header" onclick="toggleSection(this)">
         <span class="section-header-label">NOTIFICATIONS</span>
         <span class="section-arrow">▾</span>
@@ -223,7 +223,7 @@
     </div>
 
     <!-- PRIVACY SECTION -->
-    <div style="background:#111;border-radius:14px;padding:0 16px;margin-bottom:14px">
+    <div style="background:#111;border-radius:12px;padding:0 16px;margin-bottom:14px">
       <div class="section-header" onclick="toggleSection(this)">
         <span class="section-header-label">PRIVACY</span>
         <span class="section-arrow">▾</span>
@@ -245,7 +245,7 @@
     </div>
 
     <!-- LINKS SECTION -->
-    <div style="background:#111;border-radius:14px;padding:0 16px;margin-bottom:14px">
+    <div style="background:#111;border-radius:12px;padding:0 16px;margin-bottom:14px">
       <div class="section-header" onclick="toggleSection(this)">
         <span class="section-header-label">MORE</span>
         <span class="section-arrow">▾</span>
@@ -271,7 +271,7 @@
     </div>
 
     <!-- DANGER ZONE -->
-    <div style="background:rgba(255,59,59,0.05);border:1px solid rgba(255,59,59,0.15);border-radius:14px;padding:12px;margin-bottom:14px">
+    <div style="background:rgba(255,59,59,0.05);border:1px solid rgba(255,59,59,0.15);border-radius:12px;padding:12px;margin-bottom:14px">
       <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;color:#ff4444;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">DANGER ZONE</div>
       <p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab;line-height:1.5;margin-bottom:12px">Permanently delete your account and all associated data. This action cannot be undone.</p>
       <button class="danger-btn" onclick="if(confirm('Delete your account? This is permanent and cannot be undone.')){showToast('Account deletion requested',true)}">DELETE ACCOUNT</button>
@@ -325,7 +325,7 @@
       document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
       const t=document.createElement('div');
       t.className='toast-msg';t.textContent=msg;
-      t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+      t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:12px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
       document.body.appendChild(t);
       setTimeout(()=>t.remove(),2200);
     };

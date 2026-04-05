@@ -112,7 +112,7 @@
       </p>
 
       <!-- STATS ROW -->
-      <div style="background:#111;border-radius:14px;padding:12px;margin-top:20px;margin-bottom:20px;display:flex;align-items:stretch;">
+      <div style="background:#111;border-radius:12px;padding:12px;margin-top:20px;margin-bottom:20px;display:flex;align-items:stretch;">
 
         <div onclick="location.href='ride-tab.html'" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;cursor:pointer;">
           <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;color:#fff;line-height:1;">142</span>
@@ -156,7 +156,7 @@
       <div style="margin-bottom:24px;">
         <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;">MY BIKE</span>
 
-        <div onclick="location.href='brand-profile.html'" style="background:#111;border-radius:14px;padding:12px;margin-top:10px;display:flex;align-items:center;gap:14px;cursor:pointer;">
+        <div onclick="location.href='brand-profile.html'" style="background:#111;border-radius:12px;padding:12px;margin-top:10px;display:flex;align-items:center;gap:14px;cursor:pointer;">
           <img src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=600&auto=format&fit=crop&q=80" alt="KTM Duke 390" style="width:90px;height:60px;border-radius:8px;object-fit:cover;flex-shrink:0;" loading="lazy" />
           <div style="flex:1;min-width:0;">
             <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;margin-bottom:2px;">KTM Duke 390</h3>
@@ -413,7 +413,7 @@
 
   <!-- SHARE SHEET -->
   <div id="share-overlay" onclick="closeShareSheet()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:400;animation:fadeIn 0.2s ease"></div>
-  <div id="share-sheet" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#111;border-radius:20px 20px 0 0;padding:20px 12px 40px;z-index:401;animation:sheetUp 0.3s ease">
+  <div id="share-sheet" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#111;border-radius:12px 12px 0 0;padding:20px 12px 40px;z-index:401;animation:sheetUp 0.3s ease">
     <div style="width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 20px"></div>
     <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin:0 0 20px">SHARE PROFILE</p>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
@@ -452,7 +452,7 @@
     document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
     const t=document.createElement('div');
     t.className='toast-msg';t.textContent=msg;
-    t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+    t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:12px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
     document.body.appendChild(t);
     setTimeout(()=>t.remove(),2200);
   };

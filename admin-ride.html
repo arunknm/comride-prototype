@@ -46,7 +46,7 @@
     /* Ride summary card */
     .ride-summary {
       border: 1px solid rgba(226,255,59,0.2);
-      border-radius: 16px; margin-bottom: 24px;
+      border-radius: 12px; margin-bottom: 24px;
       cursor: pointer; overflow: hidden; position: relative;
     }
     .ride-summary:hover { border-color: rgba(226,255,59,0.4); }
@@ -73,7 +73,7 @@
 
     /* Participant card */
     .participant-card {
-      background: #111; border-radius: 14px; padding: 16px; margin-bottom: 10px;
+      background: #111; border-radius: 12px; padding: 16px; margin-bottom: 10px;
       border: 1px solid rgba(255,255,255,0.06);
       transition: all 0.4s ease; overflow: hidden;
     }
@@ -332,7 +332,7 @@
       document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
       const t=document.createElement('div');
       t.className='toast-msg';t.textContent=msg;
-      t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+      t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:12px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
       document.body.appendChild(t);
       setTimeout(()=>t.remove(),2200);
     };
