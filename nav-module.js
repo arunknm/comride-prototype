@@ -135,3 +135,46 @@
   }
 
 })();
+
+// ── Shrink top header on scroll ───────────────────────────────────────────────
+(function () {
+  function setupHeaderScroll() {
+    var header = document.querySelector('header');
+    if (!header) return;
+
+    // Find the inner row div — it carries the explicit height
+    var inner = header.querySelector('div[style*="height:64px"]')
+              || header.querySelector('div[style*="height:56px"]');
+    if (!inner) return;
+
+    var fullH   = inner.style.height || '64px';   // e.g. "64px"
+    var shrunK  = '46px';
+
+    // Smooth transition on header background + inner row height
+    header.style.transition = 'box-shadow 0.25s ease';
+    inner.style.transition  = 'height 0.25s ease';
+
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        requestAnimationFrame(function () {
+          if (window.scrollY > 12) {
+            inner.style.height = shrunK;
+            header.style.boxShadow = '0 2px 40px rgba(0,0,0,0.75),inset 0 1px 0 rgba(255,255,255,0.05)';
+          } else {
+            inner.style.height = fullH;
+            header.style.boxShadow = '0 1px 32px rgba(0,0,0,0.55),inset 0 1px 0 rgba(255,255,255,0.05)';
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupHeaderScroll);
+  } else {
+    setupHeaderScroll();
+  }
+})();
