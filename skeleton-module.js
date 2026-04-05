@@ -277,32 +277,57 @@
     return card;
   }
 
+  // ── Viewport budget ───────────────────────────────────────────────────────
+  // Available height = screen minus header (64px) and nav (72px)
+  function viewportBudget() {
+    return window.innerHeight - 64 - 72;
+  }
+
   // ── PAGE TEMPLATES ────────────────────────────────────────────────────────
+  // Each template receives (wrap, budget) and fills only up to budget px.
 
   var templates = {
 
-    home: function(wrap) {
-      wrap.appendChild(storiesRowSkel());
-      wrap.appendChild(pillRowSkel());
-      wrap.appendChild(postCardSkel(true));
-      wrap.appendChild(postCardSkel(false));
+    home: function(wrap, budget) {
+      var used = 0;
+      // Stories row ~80px, pills ~44px — these are always above the fold
+      wrap.appendChild(storiesRowSkel());  used += 80;
+      wrap.appendChild(pillRowSkel());     used += 44;
+      // Cards: with-image ~270px, without-image ~130px
+      var first = true;
+      while (used < budget) {
+        wrap.appendChild(postCardSkel(first));
+        used += first ? 270 : 130;
+        first = false;
+      }
     },
 
-    'ride-tab': function(wrap) {
-      wrap.appendChild(pillRowSkel());
-      wrap.appendChild(liveNowSkel());
-      wrap.appendChild(rideCardSkel());
-      wrap.appendChild(sectionHeaderSkel());
-      wrap.appendChild(rideCardSkel());
+    'ride-tab': function(wrap, budget) {
+      var used = 0;
+      wrap.appendChild(pillRowSkel());    used += 44;
+      wrap.appendChild(liveNowSkel());    used += 130;
+      // Ride cards ~200px each
+      while (used < budget) {
+        wrap.appendChild(rideCardSkel());
+        used += 200;
+      }
     },
 
-    marketplace: function(wrap) {
-      wrap.appendChild(pillRowSkel());
-      wrap.appendChild(sectionHeaderSkel());
-      wrap.appendChild(cardGridSkel(4));
+    marketplace: function(wrap, budget) {
+      var used = 0;
+      wrap.appendChild(pillRowSkel());        used += 44;
+      wrap.appendChild(sectionHeaderSkel());  used += 40;
+      // Grid rows: each row = 2 product cards ~190px
+      while (used < budget) {
+        var row2 = el('div','display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px;margin-bottom:10px');
+        row2.appendChild(productCardSkel());
+        row2.appendChild(productCardSkel());
+        wrap.appendChild(row2);
+        used += 190;
+      }
     },
 
-    'product-detail': function(wrap) {
+    'product-detail': function(wrap, budget) {
       wrap.appendChild(sk('100%','260px','border-radius:0'));
       var body = col('padding:14px 16px;gap:10px');
       append(body,
@@ -315,97 +340,133 @@
       wrap.appendChild(body);
     },
 
-    profile: function(wrap) {
-      wrap.appendChild(profileHeaderSkel());
-      wrap.appendChild(pillRowSkel());
-      for (var i=0;i<3;i++) wrap.appendChild(postCardSkel(i===0));
-    },
-
-    notifications: function(wrap) {
-      wrap.appendChild(pillRowSkel());
-      for (var i=0;i<7;i++) wrap.appendChild(listRowSkel());
-    },
-
-    chat: function(wrap) {
-      var searchBar = row('margin:8px 16px 4px;');
-      searchBar.appendChild(sk('100%','38px','border-radius:999px'));
-      wrap.appendChild(searchBar);
-      for (var i=0;i<6;i++) wrap.appendChild(listRowSkel());
-    },
-
-    discover: function(wrap) {
-      wrap.appendChild(pillRowSkel());
-      wrap.appendChild(sectionHeaderSkel());
-      wrap.appendChild(cardGridSkel(4));
-      wrap.appendChild(sectionHeaderSkel());
-      wrap.appendChild(cardGridSkel(2));
-    },
-
-    'ai-suggestions': function(wrap) {
-      var header = col('padding:14px 16px;gap:8px');
-      append(header, sk('55%','14px'), sk('80%','10px'));
-      wrap.appendChild(header);
-      for (var i=0;i<3;i++) {
-        var c = col('margin:0 16px 12px;border-radius:10px;background:rgba(255,255,255,0.04);padding:12px;gap:8px;border:1px solid rgba(255,255,255,0.06)');
-        append(c, sk('60px','18px','',true), sk('75%','13px'), sk('90%','10px'), sk('55%','10px'), sk('100%','36px','border-radius:8px;margin-top:4px'));
-        wrap.appendChild(c);
+    profile: function(wrap, budget) {
+      var used = 0;
+      wrap.appendChild(profileHeaderSkel()); used += 220;
+      wrap.appendChild(pillRowSkel());       used += 44;
+      var first = true;
+      while (used < budget) {
+        wrap.appendChild(postCardSkel(first));
+        used += first ? 270 : 130;
+        first = false;
       }
     },
 
-    challenges: function(wrap) {
-      wrap.appendChild(pillRowSkel());
-      wrap.appendChild(sectionHeaderSkel());
-      wrap.appendChild(challengeCardSkel());
-      wrap.appendChild(challengeCardSkel());
+    notifications: function(wrap, budget) {
+      var used = 0;
+      wrap.appendChild(pillRowSkel()); used += 44;
+      // List rows ~68px each
+      while (used < budget) {
+        wrap.appendChild(listRowSkel());
+        used += 68;
+      }
     },
 
-    groups: function(wrap) {
+    chat: function(wrap, budget) {
+      var used = 0;
+      var searchBar = row('margin:8px 16px 4px;');
+      searchBar.appendChild(sk('100%','38px','border-radius:999px'));
+      wrap.appendChild(searchBar); used += 54;
+      while (used < budget) {
+        wrap.appendChild(listRowSkel());
+        used += 68;
+      }
+    },
+
+    discover: function(wrap, budget) {
+      var used = 0;
+      wrap.appendChild(pillRowSkel());        used += 44;
+      wrap.appendChild(sectionHeaderSkel());  used += 40;
+      while (used < budget) {
+        var row2 = el('div','display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px;margin-bottom:10px');
+        row2.appendChild(productCardSkel());
+        row2.appendChild(productCardSkel());
+        wrap.appendChild(row2);
+        used += 190;
+      }
+    },
+
+    'ai-suggestions': function(wrap, budget) {
+      var used = 0;
+      var header = col('padding:14px 16px;gap:8px');
+      append(header, sk('55%','14px'), sk('80%','10px'));
+      wrap.appendChild(header); used += 60;
+      // AI card ~130px each
+      while (used < budget) {
+        var c = col('margin:0 16px 12px;border-radius:10px;background:rgba(255,255,255,0.04);padding:12px;gap:8px;border:1px solid rgba(255,255,255,0.06)');
+        append(c, sk('60px','18px','',true), sk('75%','13px'), sk('90%','10px'), sk('55%','10px'), sk('100%','36px','border-radius:8px;margin-top:4px'));
+        wrap.appendChild(c);
+        used += 130;
+      }
+    },
+
+    challenges: function(wrap, budget) {
+      var used = 0;
+      wrap.appendChild(pillRowSkel());        used += 44;
+      wrap.appendChild(sectionHeaderSkel());  used += 40;
+      // Challenge card ~180px
+      while (used < budget) {
+        wrap.appendChild(challengeCardSkel());
+        used += 180;
+      }
+    },
+
+    groups: function(wrap, budget) {
+      var used = 0;
       var searchBar = row('margin:8px 16px 8px;');
       searchBar.appendChild(sk('100%','38px','border-radius:999px'));
-      wrap.appendChild(searchBar);
-      wrap.appendChild(sectionHeaderSkel());
-      for (var i=0;i<4;i++) {
+      wrap.appendChild(searchBar);            used += 54;
+      wrap.appendChild(sectionHeaderSkel());  used += 40;
+      // Group row ~76px
+      while (used < budget) {
         var gr = row('gap:10px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.04)');
         var img = sk('56px','56px','border-radius:8px');
         var lines = col('gap:5px;flex:1');
         append(lines, sk('55%','11px'), sk('80%','9px'), sk('45%','9px'));
         append(gr, img, lines, sk('64px','26px','',true));
         wrap.appendChild(gr);
+        used += 76;
       }
     },
 
-    'comrade-profile': function(wrap) {
-      wrap.appendChild(profileHeaderSkel());
-      wrap.appendChild(pillRowSkel());
-      wrap.appendChild(postCardSkel(true));
-      wrap.appendChild(postCardSkel(false));
+    'comrade-profile': function(wrap, budget) {
+      templates.profile(wrap, budget);
     },
 
-    'brand-profile': function(wrap) {
-      wrap.appendChild(profileHeaderSkel());
-      wrap.appendChild(pillRowSkel());
-      wrap.appendChild(cardGridSkel(4));
+    'brand-profile': function(wrap, budget) {
+      var used = 0;
+      wrap.appendChild(profileHeaderSkel()); used += 220;
+      wrap.appendChild(pillRowSkel());       used += 44;
+      while (used < budget) {
+        var row2 = el('div','display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px;margin-bottom:10px');
+        row2.appendChild(productCardSkel());
+        row2.appendChild(productCardSkel());
+        wrap.appendChild(row2);
+        used += 190;
+      }
     },
 
-    'club-profile': function(wrap) {
-      wrap.appendChild(profileHeaderSkel());
-      var stats = row('gap:8px;padding:8px 16px');
+    'club-profile': function(wrap, budget) {
+      var used = 0;
+      wrap.appendChild(profileHeaderSkel()); used += 220;
+      var stats = row('gap:8px;padding:8px 16px'); used += 60;
       for (var i=0;i<3;i++) {
         var s = col('align-items:center;gap:5px;flex:1;padding:8px;border-radius:8px;background:rgba(255,255,255,0.04)');
         append(s, sk('44px','16px'), sk('60px','8px','',true));
         stats.appendChild(s);
       }
       wrap.appendChild(stats);
-      for (var j=0;j<2;j++) wrap.appendChild(rideCardSkel());
+      while (used < budget) {
+        wrap.appendChild(rideCardSkel());
+        used += 200;
+      }
     },
 
-    'influencer-profile': function(wrap) {
-      wrap.appendChild(profileHeaderSkel());
-      wrap.appendChild(pillRowSkel());
-      wrap.appendChild(postCardSkel(true));
+    'influencer-profile': function(wrap, budget) {
+      templates.profile(wrap, budget);
     },
 
-    'ride-details': function(wrap) {
+    'ride-details': function(wrap, budget) {
       wrap.appendChild(mapBlockSkel());
       var body = col('padding:0 16px;gap:9px');
       append(body,
@@ -421,7 +482,7 @@
       wrap.appendChild(body);
     },
 
-    'my-ride-detail': function(wrap) {
+    'my-ride-detail': function(wrap, budget) {
       wrap.appendChild(mapBlockSkel());
       var body = col('padding:0 16px;gap:9px');
       append(body, sk('65%','13px'), sk('100%','1px','background:rgba(255,255,255,0.07)'));
@@ -436,61 +497,68 @@
       wrap.appendChild(body);
     },
 
-    'admin-ride': function(wrap) {
+    'admin-ride': function(wrap, budget) {
+      var used = 0;
       var header = col('padding:14px 16px;gap:8px');
       append(header, sk('60%','14px'), sk('40%','10px'));
-      wrap.appendChild(header);
+      wrap.appendChild(header);              used += 60;
       var statsStrip = row('gap:8px;padding:0 16px 12px');
       for (var i=0;i<4;i++) {
         var s3 = col('align-items:center;gap:4px;flex:1;background:rgba(255,255,255,0.04);border-radius:8px;padding:7px');
         append(s3, sk('36px','16px'), sk('48px','8px','',true));
         statsStrip.appendChild(s3);
       }
-      wrap.appendChild(statsStrip);
-      for (var j=0;j<4;j++) wrap.appendChild(listRowSkel());
+      wrap.appendChild(statsStrip);          used += 70;
+      while (used < budget) {
+        wrap.appendChild(listRowSkel());
+        used += 68;
+      }
     },
 
-    experiences: function(wrap) {
-      wrap.appendChild(pillRowSkel());
-      wrap.appendChild(sectionHeaderSkel());
-      for (var i=0;i<2;i++) {
+    experiences: function(wrap, budget) {
+      var used = 0;
+      wrap.appendChild(pillRowSkel());        used += 44;
+      wrap.appendChild(sectionHeaderSkel());  used += 40;
+      // Experience card ~220px
+      while (used < budget) {
         var c = col('margin:0 16px 12px;border-radius:10px;background:rgba(255,255,255,0.04);overflow:hidden;border:1px solid rgba(255,255,255,0.06)');
         c.appendChild(sk('100%','160px','border-radius:0'));
         var bd = col('padding:10px;gap:6px');
         append(bd, sk('70%','12px'), sk('90%','10px'), row('gap:8px', sk('60px','20px','',true), sk('80px','20px','',true)));
         c.appendChild(bd);
         wrap.appendChild(c);
+        used += 220;
       }
     },
 
-    // ── fallback for any unrecognised page ──
-    _default: function(wrap) {
-      wrap.appendChild(pillRowSkel());
-      wrap.appendChild(sectionHeaderSkel());
-      wrap.appendChild(postCardSkel(true));
-      wrap.appendChild(postCardSkel(false));
+    _default: function(wrap, budget) {
+      var used = 0;
+      wrap.appendChild(pillRowSkel());        used += 44;
+      wrap.appendChild(sectionHeaderSkel());  used += 40;
+      var first = true;
+      while (used < budget) {
+        wrap.appendChild(postCardSkel(first));
+        used += first ? 270 : 130;
+        first = false;
+      }
     }
   };
 
   // Aliases
   ['analytics','rewards','insurance','payments','comride-pro','garage','mechanic','sos','settings'].forEach(function(p){
-    templates[p] = function(wrap){ wrap.appendChild(profileHeaderSkel()); for(var i=0;i<5;i++) wrap.appendChild(listRowSkel()); };
+    templates[p] = function(wrap, budget){
+      var used = 0;
+      wrap.appendChild(profileHeaderSkel()); used += 220;
+      while (used < budget) { wrap.appendChild(listRowSkel()); used += 68; }
+    };
   });
-  ['search-results','rxz-community'].forEach(function(p){
-    templates[p] = templates.discover;
-  });
-  ['invited-ride','request-to-join'].forEach(function(p){
-    templates[p] = templates['ride-details'];
-  });
+  ['search-results','rxz-community'].forEach(function(p){ templates[p] = templates.discover; });
+  ['invited-ride','request-to-join'].forEach(function(p){ templates[p] = templates['ride-details']; });
   ['route-builder'].forEach(function(p){
     templates[p] = function(wrap){ wrap.appendChild(sk('100%','100%','border-radius:0;position:absolute;inset:0')); };
   });
-  ['trip-start','tracking','end-ride'].forEach(function(p){
-    templates[p] = templates['my-ride-detail'];
-  });
-  ['create-ride','create-ride-modes','admin-accepted'].forEach(function(p){
-    templates[p] = templates['admin-ride'];
-  });
+  ['trip-start','tracking','end-ride'].forEach(function(p){ templates[p] = templates['my-ride-detail']; });
+  ['create-ride','create-ride-modes','admin-accepted'].forEach(function(p){ templates[p] = templates['admin-ride']; });
 
   // ── Build and inject overlay ───────────────────────────────────────────────
   function buildOverlay() {
@@ -508,10 +576,10 @@
     append(fakeHeader, sk('88px','20px'), row('gap:16px', sk('22px','22px','',true), sk('22px','22px','',true)));
     overlay.appendChild(fakeHeader);
 
-    // Scrollable content area
+    // Scrollable content area — only fill what fits in the viewport
     var content = el('div', 'height:100%;overflow:hidden;display:flex;flex-direction:column;gap:0');
     var builder = templates[page] || templates._default;
-    builder(content);
+    builder(content, viewportBudget());
     overlay.appendChild(content);
 
     // Fake nav
