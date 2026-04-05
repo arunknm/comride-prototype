@@ -19,7 +19,7 @@
     '  transition:opacity 0.4s ease',
     '}',
     '.cr-splash-logo{',
-    '  width:140px;height:auto;',
+    '  width:180px;height:auto;',
     '  animation:cr-logo-in 0.5s cubic-bezier(0.16,1,0.3,1) both',
     '}',
     '@keyframes cr-logo-in{',
@@ -521,9 +521,9 @@
     var ring = el('div', '', 'cr-splash-ring');
     splash.appendChild(ring);
 
-    // Logo — use the real SVG file
+    // Logo — use vt_logo from images folder
     var img = el('img');
-    img.src = 'comride.svg';
+    img.src = 'images/vt_logo.svg';
     img.className = 'cr-splash-logo';
     img.alt = 'Comride';
     splash.appendChild(img);
