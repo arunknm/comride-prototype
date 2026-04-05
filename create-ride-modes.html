@@ -705,10 +705,10 @@
     document.addEventListener('touchend', _fbUp);
     function _fbDown(e) {
       var el = e.target.closest('button,[onclick],a,.mode-option,.accordion-row,.pay-pill');
-      if (el) { el.style.transition = 'transform 0.08s,opacity 0.08s'; el.style.transform = 'scale(0.94)'; el.style.opacity = '0.78'; }
+      if (el) { el.style.opacity = '0.75'; }
     }
     function _fbUp() {
-      document.querySelectorAll('[style*="scale(0.94)"]').forEach(function(el) { el.style.transform = ''; el.style.opacity = ''; });
+      
     }
 
     // ---- INIT ----

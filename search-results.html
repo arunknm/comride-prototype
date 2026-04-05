@@ -349,12 +349,12 @@
 
   <script>
     document.querySelectorAll('a,button,[onclick]').forEach(function(el){
-      el.addEventListener('mousedown',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
-      el.addEventListener('mouseup',function(){this.style.transform='';this.style.opacity='';},{passive:true});
-      el.addEventListener('mouseleave',function(){this.style.transform='';this.style.opacity='';},{passive:true});
-      el.addEventListener('touchstart',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
-      el.addEventListener('touchend',function(){this.style.transform='';this.style.opacity='';},{passive:true});
-      el.addEventListener('touchcancel',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('mousedown',function(){this.style.opacity='0.75';},{passive:true});
+      el.addEventListener('mouseup',function(){this.style.opacity='';},{passive:true});
+      el.addEventListener('mouseleave',function(){this.style.opacity='';},{passive:true});
+      el.addEventListener('touchstart',function(){this.style.opacity='0.75';},{passive:true});
+      el.addEventListener('touchend',function(){this.style.opacity='';},{passive:true});
+      el.addEventListener('touchcancel',function(){this.style.opacity='';},{passive:true});
     });
     window.showToast=function(msg,isError){
       document.querySelectorAll('.toast-msg').forEach(t=>t.remove());

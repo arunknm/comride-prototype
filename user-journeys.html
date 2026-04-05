@@ -24,7 +24,7 @@
 
     a, button { cursor: pointer; }
     a, button, [onclick] { transition: transform 0.12s ease, opacity 0.12s ease; }
-    a:active, button:active, [onclick]:active { transform: scale(0.94); opacity: 0.8; }
+    a:active, button:active, [onclick]:active { opacity: 0.75; }
 
     /* Journey card */
     .journey-card {
@@ -468,11 +468,11 @@
   <script>
 // ── Global press feedback ──────────────────────────────────────────────────
 document.querySelectorAll('a,button,[onclick]').forEach(function(el){
-  el.addEventListener('mousedown',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
-  el.addEventListener('mouseup',  function(){this.style.transform='';this.style.opacity='';},{passive:true});
-  el.addEventListener('mouseleave',function(){this.style.transform='';this.style.opacity='';},{passive:true});
-  el.addEventListener('touchstart',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
-  el.addEventListener('touchend',  function(){this.style.transform='';this.style.opacity='';},{passive:true});
+  el.addEventListener('mousedown',function(){this.style.opacity='0.75';},{passive:true});
+  el.addEventListener('mouseup',  function(){this.style.opacity='';},{passive:true});
+  el.addEventListener('mouseleave',function(){this.style.opacity='';},{passive:true});
+  el.addEventListener('touchstart',function(){this.style.opacity='0.75';},{passive:true});
+  el.addEventListener('touchend',  function(){this.style.opacity='';},{passive:true});
 });
 
 // Toast

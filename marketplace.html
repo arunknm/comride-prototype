@@ -577,12 +577,12 @@
   <script>
   // Press effect on all tappable elements
   function applyPressEffect(el) {
-    el.addEventListener('mousedown', function(){this.style.cssText+=';transform:scale(0.94);opacity:0.78;transition:transform 0.1s ease,opacity 0.1s ease'}, {passive:true});
-    el.addEventListener('mouseup', function(){this.style.transform='';this.style.opacity='';}, {passive:true});
-    el.addEventListener('mouseleave', function(){this.style.transform='';this.style.opacity='';}, {passive:true});
-    el.addEventListener('touchstart', function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';}, {passive:true});
-    el.addEventListener('touchend', function(){this.style.transform='';this.style.opacity='';}, {passive:true});
-    el.addEventListener('touchcancel', function(){this.style.transform='';this.style.opacity='';}, {passive:true});
+    el.addEventListener('mousedown', function(){this.style.opacity='0.75'}, {passive:true});
+    el.addEventListener('mouseup', function(){this.style.opacity='';}, {passive:true});
+    el.addEventListener('mouseleave', function(){this.style.opacity='';}, {passive:true});
+    el.addEventListener('touchstart', function(){this.style.opacity='0.75';}, {passive:true});
+    el.addEventListener('touchend', function(){this.style.opacity='';}, {passive:true});
+    el.addEventListener('touchcancel', function(){this.style.opacity='';}, {passive:true});
   }
   document.querySelectorAll('a,button,[onclick]').forEach(applyPressEffect);
 

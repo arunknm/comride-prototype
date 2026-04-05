@@ -633,10 +633,10 @@
     document.addEventListener('touchend', feedbackUp);
     function feedbackDown(e) {
       const el = e.target.closest('button,[onclick],a,.share-card,.photo-slot-add,.sheet-icon-item,.achievement-badge');
-      if (el) { el._feedbackEl = el; el.style.transition = 'transform 0.08s,opacity 0.08s'; el.style.transform = 'scale(0.94)'; el.style.opacity = '0.78'; }
+      if (el) { el.style.opacity = '0.75'; }
     }
     function feedbackUp() {
-      document.querySelectorAll('[style*="scale(0.94)"]').forEach(el => { el.style.transform = ''; el.style.opacity = ''; });
+      
     }
 
     /* ── Star rating ── */
