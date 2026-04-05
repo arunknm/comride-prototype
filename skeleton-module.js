@@ -20,14 +20,14 @@
     '  transition:opacity 0.35s ease',
     '}',
 
-    /* ── Drawers stay hidden until cover is gone ── */
-    '#menu-drawer,#drawer,#drawer-backdrop{',
+    /* ── All panels/drawers stay hidden until cover is fully gone ── */
+    '#menu-drawer,#drawer,#drawer-backdrop,#notif-panel,#notif-backdrop{',
     '  visibility:hidden!important;transition:none!important',
     '}',
-    '#menu-drawer.cr-visible,#drawer.cr-visible{',
+    '#menu-drawer.cr-visible,#drawer.cr-visible,#notif-panel.cr-visible{',
     '  visibility:visible!important;transition:transform 0.3s ease!important',
     '}',
-    '#drawer-backdrop.cr-visible{',
+    '#drawer-backdrop.cr-visible,#notif-backdrop.cr-visible{',
     '  visibility:visible!important;transition:opacity 0.3s ease!important',
     '}',
 
@@ -533,8 +533,8 @@
   }
 
   function revealDrawers() {
-    // Re-enable drawer visibility and transitions after cover is fully gone
-    ['menu-drawer','drawer','drawer-backdrop'].forEach(function(id) {
+    // Re-enable all panel/drawer visibility and transitions after cover is gone
+    ['menu-drawer','drawer','drawer-backdrop','notif-panel','notif-backdrop'].forEach(function(id) {
       var el2 = document.getElementById(id);
       if (el2) el2.classList.add('cr-visible');
     });
