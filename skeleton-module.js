@@ -11,9 +11,12 @@
   var styleTag = document.createElement('style');
   styleTag.textContent = [
 
+    /* ── Kill first paint immediately — runs synchronously in <head> ── */
+    /* body starts invisible before a single pixel is drawn.            */
+    'html,body{background:#000!important}',
+    'body{opacity:0!important;transition:none!important}',
+
     /* ── Opaque cover: sits behind skeleton, hides real content ── */
-    /* Real content is ALWAYS rendered normally — the cover just sits on top. */
-    /* No body-class opacity hacks = no double-flash.                         */
     '#cr-cover{',
     '  position:fixed;inset:0;z-index:9997;',
     '  background:#000;pointer-events:none;',
@@ -541,15 +544,23 @@
   }
 
   function inject() {
-    // Skip non-app pages
-    if (page === 'index' || page === 'investor-deck' || page === 'user-journeys') return;
+    // Skip non-app pages — restore body opacity immediately for these
+    if (page === 'index' || page === 'investor-deck' || page === 'user-journeys') {
+      document.body.style.opacity = '';
+      document.body.style.transition = '';
+      return;
+    }
 
     // ── Cover div: opaque black layer that sits on top of real content ────────
-    // Real content renders normally underneath — no opacity hacks on body children.
-    // We simply reveal by fading this cover out. One transition. No double-flash.
     var cover = el('div', '', '');
     cover.id = 'cr-cover';
     document.body.appendChild(cover);
+
+    // ── NOW restore body opacity — cover is in place so content stays hidden ──
+    // The synchronous CSS set body{opacity:0} to kill the pre-DOMContentLoaded
+    // flash. We can safely make body visible now because #cr-cover covers it.
+    document.body.style.opacity = '';
+    document.body.style.transition = '';
 
     var SPLASH_HOLD   = 900;
     var SPLASH_FADE   = 400;
