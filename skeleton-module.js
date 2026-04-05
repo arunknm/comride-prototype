@@ -7,14 +7,17 @@
  */
 (function () {
 
+  // ── Synchronously hide page before first paint ────────────────────────────
+  // Sets visibility on <html> (no !important needed, no body required yet).
+  // Overridden by plain inline style in inject() — can't get stuck.
+  document.documentElement.style.visibility = 'hidden';
+
   // ── Styles ─────────────────────────────────────────────────────────────────
   var styleTag = document.createElement('style');
   styleTag.textContent = [
 
-    /* ── Kill first paint immediately — runs synchronously in <head> ── */
-    /* body starts invisible before a single pixel is drawn.            */
+    /* ── Black background so there's never a white flash ── */
     'html,body{background:#000!important}',
-    'body{opacity:0!important;transition:none!important}',
 
     /* ── Opaque cover: sits behind skeleton, hides real content ── */
     '#cr-cover{',
@@ -544,10 +547,9 @@
   }
 
   function inject() {
-    // Skip non-app pages — restore body opacity immediately for these
+    // Skip non-app pages — restore visibility immediately
     if (page === 'index' || page === 'investor-deck' || page === 'user-journeys') {
-      document.body.style.opacity = '';
-      document.body.style.transition = '';
+      document.documentElement.style.visibility = '';
       return;
     }
 
@@ -556,11 +558,9 @@
     cover.id = 'cr-cover';
     document.body.appendChild(cover);
 
-    // ── NOW restore body opacity — cover is in place so content stays hidden ──
-    // The synchronous CSS set body{opacity:0} to kill the pre-DOMContentLoaded
-    // flash. We can safely make body visible now because #cr-cover covers it.
-    document.body.style.opacity = '';
-    document.body.style.transition = '';
+    // ── Restore visibility — cover is in place so content is still hidden ─────
+    // Simple inline style removal, no !important conflict possible.
+    document.documentElement.style.visibility = '';
 
     var SPLASH_HOLD   = 900;
     var SPLASH_FADE   = 400;
