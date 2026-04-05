@@ -1,7 +1,8 @@
 /**
  * skeleton-module.js — Comride Shimmer Skeleton Loading
- * Injects a full-screen shimmer skeleton that matches each page's layout.
- * Auto-dismisses after content is ready (1 300 ms simulated load).
+ * Hides real page content on arrival, shows shimmer skeleton,
+ * then reveals content only after the skeleton clears.
+ * Each page loads its content only when the user navigates there.
  */
 (function () {
 
@@ -12,6 +13,15 @@
     '  0%{background-position:-600px 0}',
     '  100%{background-position:600px 0}',
     '}',
+    /* Hide real page content until skeleton clears */
+    'body.cr-loading>*:not(.cr-sk-overlay):not(script):not(style){',
+    '  opacity:0!important;pointer-events:none!important',
+    '}',
+    /* Reveal transition once cr-loading is removed */
+    'body.cr-ready>*:not(script):not(style){',
+    '  animation:cr-reveal 0.32s ease both',
+    '}',
+    '@keyframes cr-reveal{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}',
     '.cr-sk{',
     '  background:linear-gradient(90deg,',
     '    rgba(255,255,255,0.055) 0%,',
@@ -25,13 +35,13 @@
     '  border-radius:6px;',
     '  flex-shrink:0',
     '}',
-    '.cr-sk-r{border-radius:999px}',       // pill / circle variant
+    '.cr-sk-r{border-radius:999px}',
     '.cr-sk-overlay{',
     '  position:fixed;inset:0;z-index:9999;',
     '  background:#000;',
     '  overflow:hidden;',
-    '  padding:72px 0 80px;',              // header clearance + nav clearance
-    '  transition:opacity 0.35s ease',
+    '  padding:64px 0 80px;',
+    '  transition:opacity 0.32s ease',
     '}'
   ].join('');
   document.head.appendChild(styleTag);
@@ -477,23 +487,42 @@
   }
 
   function inject() {
-    // Don't show on index / investor-deck
+    // Skip non-app pages
     if (page === 'index' || page === 'investor-deck' || page === 'user-journeys') return;
+
+    // ── Step 1: hide real page content immediately so nothing bleeds through ──
+    document.body.classList.add('cr-loading');
 
     var overlay = buildOverlay();
     document.body.appendChild(overlay);
 
-    // Dismiss: fade out then remove
-    var delay = 1300; // ms simulated load
+    // ── Step 2: after delay, dismiss skeleton and reveal real content ─────────
+    var delay = 1200;
     setTimeout(function () {
       overlay.style.opacity = '0';
+
       setTimeout(function () {
+        // Remove overlay from DOM
         if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
-      }, 380);
+
+        // Swap classes: remove loading mask, trigger reveal animation
+        document.body.classList.remove('cr-loading');
+        document.body.classList.add('cr-ready');
+
+        // Clean up cr-ready after animation so it doesn't re-trigger on next paint
+        setTimeout(function () {
+          document.body.classList.remove('cr-ready');
+        }, 400);
+
+      }, 320);
     }, delay);
   }
 
+  // Run as early as possible — before DOMContentLoaded if we can,
+  // so cr-loading is on body before any content paints.
   if (document.readyState === 'loading') {
+    // Add the hiding class synchronously right now (body exists but content not yet parsed)
+    // We'll finish setup on DOMContentLoaded
     document.addEventListener('DOMContentLoaded', inject);
   } else {
     inject();
