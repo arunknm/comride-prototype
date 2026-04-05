@@ -11,69 +11,52 @@
   var styleTag = document.createElement('style');
   styleTag.textContent = [
 
-    /* ── Keep all drawers hidden & non-animating until page is fully ready ── */
-    /* Covers both #menu-drawer (most pages) and #drawer (ride-tab etc.)     */
+    /* ── Opaque cover: sits behind skeleton, hides real content ── */
+    /* Real content is ALWAYS rendered normally — the cover just sits on top. */
+    /* No body-class opacity hacks = no double-flash.                         */
+    '#cr-cover{',
+    '  position:fixed;inset:0;z-index:9997;',
+    '  background:#000;pointer-events:none;',
+    '  transition:opacity 0.35s ease',
+    '}',
+
+    /* ── Drawers stay hidden until cover is gone ── */
     '#menu-drawer,#drawer,#drawer-backdrop{',
-    '  visibility:hidden!important;',
-    '  transition:none!important',
+    '  visibility:hidden!important;transition:none!important',
     '}',
-    /* After load: restore visibility + transitions, but exclude from cr-reveal */
-    'body.cr-done #menu-drawer,body.cr-done #drawer,body.cr-done #drawer-backdrop{',
-    '  visibility:visible!important;',
-    '  transition:transform 0.3s ease!important',
+    '#menu-drawer.cr-visible,#drawer.cr-visible{',
+    '  visibility:visible!important;transition:transform 0.3s ease!important',
     '}',
-    /* Never let drawers participate in the reveal animation */
-    'body.cr-ready #menu-drawer,body.cr-ready #drawer,body.cr-ready #drawer-backdrop{',
-    '  animation:none!important;opacity:1!important',
+    '#drawer-backdrop.cr-visible{',
+    '  visibility:visible!important;transition:opacity 0.3s ease!important',
     '}',
 
     /* ── Splash ── */
     '.cr-splash{',
     '  position:fixed;inset:0;z-index:10000;',
     '  background:#000;',
-    '  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;',
+    '  display:flex;flex-direction:column;align-items:center;justify-content:center;',
     '  transition:opacity 0.4s ease',
     '}',
-    '.cr-splash-logo{',
-    '  width:180px;height:auto;',
-    '  animation:cr-logo-in 0.5s cubic-bezier(0.16,1,0.3,1) both',
-    '}',
+    '.cr-splash-logo{width:180px;height:auto;animation:cr-logo-in 0.5s cubic-bezier(0.16,1,0.3,1) both}',
     '@keyframes cr-logo-in{',
     '  from{opacity:0;transform:scale(0.82) translateY(10px)}',
-    '  to  {opacity:1;transform:scale(1)   translateY(0)}',
+    '  to{opacity:1;transform:scale(1) translateY(0)}',
     '}',
-    /* subtle lime pulse ring under the logo */
     '.cr-splash-ring{',
-    '  width:72px;height:72px;border-radius:50%;',
+    '  width:72px;height:72px;border-radius:50%;position:absolute;',
     '  background:radial-gradient(circle,rgba(226,255,59,0.18) 0%,transparent 70%);',
-    '  position:absolute;',
     '  animation:cr-ring-pulse 1.6s ease-in-out infinite',
     '}',
-    '@keyframes cr-ring-pulse{',
-    '  0%,100%{transform:scale(0.8);opacity:0.4}',
-    '  50%{transform:scale(1.6);opacity:0}',
-    '}',
+    '@keyframes cr-ring-pulse{0%,100%{transform:scale(0.8);opacity:0.4}50%{transform:scale(1.6);opacity:0}}',
 
     /* ── Shimmer skeleton ── */
-    '@keyframes cr-shimmer{',
-    '  0%{background-position:-600px 0}',
-    '  100%{background-position:600px 0}',
-    '}',
-    'body.cr-loading>*:not(.cr-splash):not(.cr-sk-overlay):not(script):not(style){',
-    '  opacity:0!important;pointer-events:none!important',
-    '}',
-    'body.cr-ready>*:not(script):not(style){',
-    '  animation:cr-reveal 0.32s ease both',
-    '}',
-    '@keyframes cr-reveal{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}',
+    '@keyframes cr-shimmer{0%{background-position:-600px 0}100%{background-position:600px 0}}',
     '.cr-sk{',
     '  background:linear-gradient(90deg,',
-    '    rgba(255,255,255,0.055) 0%,',
-    '    rgba(255,255,255,0.055) 35%,',
-    '    rgba(255,255,255,0.13)  50%,',
-    '    rgba(255,255,255,0.055) 65%,',
-    '    rgba(255,255,255,0.055) 100%',
-    '  );',
+    '    rgba(255,255,255,0.055) 0%,rgba(255,255,255,0.055) 35%,',
+    '    rgba(255,255,255,0.13) 50%,',
+    '    rgba(255,255,255,0.055) 65%,rgba(255,255,255,0.055) 100%);',
     '  background-size:1200px 100%;',
     '  animation:cr-shimmer 1.5s linear infinite;',
     '  border-radius:6px;flex-shrink:0',
@@ -82,8 +65,7 @@
     '.cr-sk-overlay{',
     '  position:fixed;inset:0;z-index:9999;',
     '  background:#000;overflow:hidden;',
-    '  padding-top:calc(env(safe-area-inset-top,0px) + 64px);',
-    '  padding-bottom:80px;',
+    '  padding-top:calc(env(safe-area-inset-top,0px) + 64px);padding-bottom:80px;',
     '  opacity:0;transition:opacity 0.28s ease',
     '}'
 
@@ -550,52 +532,62 @@
     return splash;
   }
 
+  function revealDrawers() {
+    // Re-enable drawer visibility and transitions after cover is fully gone
+    ['menu-drawer','drawer','drawer-backdrop'].forEach(function(id) {
+      var el2 = document.getElementById(id);
+      if (el2) el2.classList.add('cr-visible');
+    });
+  }
+
   function inject() {
     // Skip non-app pages
     if (page === 'index' || page === 'investor-deck' || page === 'user-journeys') return;
 
-    // ── Step 1: hide real content immediately ────────────────────────────────
-    document.body.classList.add('cr-loading');
+    // ── Cover div: opaque black layer that sits on top of real content ────────
+    // Real content renders normally underneath — no opacity hacks on body children.
+    // We simply reveal by fading this cover out. One transition. No double-flash.
+    var cover = el('div', '', '');
+    cover.id = 'cr-cover';
+    document.body.appendChild(cover);
 
-    // ── Step 2: show splash ──────────────────────────────────────────────────
+    var SPLASH_HOLD   = 900;
+    var SPLASH_FADE   = 400;
+    var SKELETON_HOLD = 900;
+    var SKELETON_FADE = 280;
+    var COVER_FADE    = 350;
+
+    // ── Splash (sits on top of cover, z-index:10000) ──────────────────────────
     var splash = buildSplash();
     document.body.appendChild(splash);
 
-    var SPLASH_HOLD   = 900;   // ms logo is fully visible
-    var SPLASH_FADE   = 400;   // ms splash fades out
-    var SKELETON_HOLD = 900;   // ms skeleton is visible
-    var SKELETON_FADE = 300;   // ms skeleton fades out
-    var REVEAL_CLEAN  = 400;   // ms after reveal before cleanup
-
-    // ── Step 3: fade splash out, show skeleton ───────────────────────────────
+    // ── Fade splash → skeleton ────────────────────────────────────────────────
     setTimeout(function () {
       splash.style.opacity = '0';
 
       setTimeout(function () {
         if (splash.parentNode) splash.parentNode.removeChild(splash);
 
-        // Build and fade-in the skeleton overlay
+        // Skeleton sits above cover (z-index:9999 > 9997)
         var overlay = buildOverlay();
         document.body.appendChild(overlay);
-        // Force reflow so transition fires
-        overlay.getBoundingClientRect();
+        overlay.getBoundingClientRect(); // force reflow
         overlay.style.opacity = '1';
 
-        // ── Step 4: fade skeleton out, reveal real content ───────────────────
+        // ── Fade skeleton out ─────────────────────────────────────────────────
         setTimeout(function () {
           overlay.style.opacity = '0';
 
           setTimeout(function () {
             if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
 
-            document.body.classList.remove('cr-loading');
-            document.body.classList.add('cr-ready');
+            // ── Fade cover out — single clean reveal, no body-class animation ─
+            cover.style.opacity = '0';
 
             setTimeout(function () {
-              document.body.classList.remove('cr-ready');
-              // Mark fully done — restores drawer visibility + transitions
-              document.body.classList.add('cr-done');
-            }, REVEAL_CLEAN);
+              if (cover.parentNode) cover.parentNode.removeChild(cover);
+              revealDrawers();
+            }, COVER_FADE);
 
           }, SKELETON_FADE);
         }, SKELETON_HOLD);
@@ -735,10 +727,13 @@
   // ── Skeleton-only sequence (used by pull-to-refresh) ─────────────────────
   function runSkeletonOnly(onDone) {
     var SKELETON_HOLD = 1000;
-    var SKELETON_FADE = 300;
-    var REVEAL_CLEAN  = 400;
+    var SKELETON_FADE = 280;
+    var COVER_FADE    = 300;
 
-    document.body.classList.add('cr-loading');
+    // Cover hides content while skeleton plays
+    var cover = el('div', '', '');
+    cover.id = 'cr-cover';
+    document.body.appendChild(cover);
 
     var overlay = buildOverlay();
     document.body.appendChild(overlay);
@@ -749,13 +744,12 @@
       overlay.style.opacity = '0';
       setTimeout(function() {
         if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
-        document.body.classList.remove('cr-loading');
-        document.body.classList.add('cr-ready');
+        // Fade cover out — single clean reveal
+        cover.style.opacity = '0';
         if (onDone) onDone();
         setTimeout(function() {
-          document.body.classList.remove('cr-ready');
-          document.body.classList.add('cr-done');
-        }, REVEAL_CLEAN);
+          if (cover.parentNode) cover.parentNode.removeChild(cover);
+        }, COVER_FADE);
       }, SKELETON_FADE);
     }, SKELETON_HOLD);
   }
