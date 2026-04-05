@@ -11,6 +11,10 @@
   var styleTag = document.createElement('style');
   styleTag.textContent = [
 
+    /* ── Kill menu-drawer transition on first paint so it can't flash ── */
+    '#menu-drawer{transition:none!important}',
+    'body.cr-ready #menu-drawer,body:not(.cr-loading) #menu-drawer{transition:transform 0.3s ease!important}',
+
     /* ── Splash ── */
     '.cr-splash{',
     '  position:fixed;inset:0;z-index:10000;',
