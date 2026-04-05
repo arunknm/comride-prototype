@@ -142,8 +142,14 @@
           style="flex:2;height:42px;background:#E2FF3B;border:none;border-radius:10px;font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;color:#000;letter-spacing:0.3px;">
           JOIN COMMUNITY
         </button>
-        <button onclick="location.href='chat.html'" style="flex:1;height:42px;background:transparent;border:1px solid rgba(255,255,255,0.2);border-radius:10px;font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:#fff;">
-          CHAT
+        <button
+          data-followed="0"
+          onclick="toggleFollow(this)"
+          style="flex:1;height:42px;background:transparent;border:1px solid rgba(255,255,255,0.2);border-radius:10px;font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:#fff;">
+          FOLLOW
+        </button>
+        <button onclick="location.href='chat.html'" style="width:42px;height:42px;background:#111;border:1px solid rgba(255,255,255,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         </button>
         <button onclick="showShareSheet()" style="width:42px;height:42px;background:#111;border:1px solid rgba(255,255,255,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -461,6 +467,16 @@
     btn.style.color = isJoined ? '#000' : '#E2FF3B';
     btn.style.border = isJoined ? 'none' : '1px solid #E2FF3B';
     showToast(isJoined ? 'Left community' : '🏍️ Welcome to RXZ Legends!');
+  }
+
+  function toggleFollow(btn) {
+    const isFollowing = btn.getAttribute('data-followed') === '1';
+    btn.setAttribute('data-followed', isFollowing ? '0' : '1');
+    btn.textContent = isFollowing ? 'FOLLOW' : 'FOLLOWING ✓';
+    btn.style.background = isFollowing ? 'transparent' : 'rgba(255,255,255,0.08)';
+    btn.style.color = isFollowing ? '#fff' : 'rgba(255,255,255,0.6)';
+    btn.style.border = isFollowing ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(255,255,255,0.12)';
+    showToast(isFollowing ? 'Unfollowed community' : 'Following RXZ Legends India');
   }
 
   function rxzVote(btn, pct) {
