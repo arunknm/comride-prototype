@@ -160,10 +160,10 @@
         requestAnimationFrame(function () {
           if (window.scrollY > 12) {
             inner.style.height = shrunK;
-            header.style.boxShadow = '0 2px 40px rgba(0,0,0,0.75),inset 0 1px 0 rgba(255,255,255,0.05)';
+            header.style.boxShadow = '0 2px 40px rgba(0,0,0,0.75)';
           } else {
             inner.style.height = fullH;
-            header.style.boxShadow = '0 1px 32px rgba(0,0,0,0.55),inset 0 1px 0 rgba(255,255,255,0.05)';
+            header.style.boxShadow = '0 1px 32px rgba(0,0,0,0.55)';
           }
           ticking = false;
         });
