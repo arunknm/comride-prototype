@@ -66,7 +66,8 @@
     '.cr-sk-overlay{',
     '  position:fixed;inset:0;z-index:9999;',
     '  background:#000;overflow:hidden;',
-    '  padding:64px 0 80px;',
+    '  padding-top:calc(env(safe-area-inset-top,0px) + 64px);',
+    '  padding-bottom:80px;',
     '  opacity:0;transition:opacity 0.28s ease',
     '}'
 
@@ -491,12 +492,14 @@
   function buildOverlay() {
     var overlay = el('div', '', 'cr-sk-overlay');
 
-    // Fake header
+    // Fake header (accounts for safe-area-inset-top)
     var fakeHeader = el('div', [
-      'position:absolute;top:0;left:0;right:0;height:64px;',
+      'position:absolute;top:0;left:0;right:0;',
+      'padding-top:env(safe-area-inset-top,0px);',
       'background:rgba(8,8,8,0.9);',
       'border-bottom:1px solid rgba(255,255,255,0.06);',
-      'display:flex;align-items:center;justify-content:space-between;padding:0 16px'
+      'display:flex;align-items:center;justify-content:space-between;padding-left:16px;padding-right:16px;padding-bottom:0;',
+      'height:calc(env(safe-area-inset-top,0px) + 64px)'
     ].join(''));
     append(fakeHeader, sk('88px','20px'), row('gap:16px', sk('22px','22px','',true), sk('22px','22px','',true)));
     overlay.appendChild(fakeHeader);
