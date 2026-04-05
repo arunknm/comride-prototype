@@ -14,7 +14,7 @@
       match : ['home', 'notifications', 'search-results', 'comrade-profile',
                'brand-profile', 'club-profile', 'ai-suggestions',
                'influencer-profile', 'rxz-community',
-               'experiences', 'dealer'],
+               'experiences'],
       // Compass — suits "Explore" perfectly
       icon  : `<circle cx="12" cy="12" r="10"/>
                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>`
