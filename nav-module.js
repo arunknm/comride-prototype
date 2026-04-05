@@ -26,7 +26,7 @@
                'admin-accepted', 'invited-ride', 'request-to-join',
                'ride-details', 'my-ride-detail', 'route-builder',
                'trip-start', 'tracking', 'end-ride', 'groups',
-               'challenges'],
+               'challenges', 'chat'],
       // Bicycle / two-wheel vehicle — clear for a ride app
       icon  : `<circle cx="18.5" cy="17.5" r="3.5"/>
                <circle cx="5.5" cy="17.5" r="3.5"/>
