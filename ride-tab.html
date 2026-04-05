@@ -378,7 +378,7 @@
               <span style="position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:#4ADE80;border:2px solid #111;"></span>
             </div>
             <div style="flex:1;">
-              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#fff;margin-bottom:1px;">PRIYA_MENON</p>
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#fff;margin-bottom:1px;">Priya Menon</p>
               <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);">4.1 km away · Honda CB500X</p>
             </div>
             <button onclick="event.stopPropagation();showToast('Ride request sent!')" style="background:#E2FF3B;color:#000;border:none;border-radius:9999px;padding:5px 12px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;letter-spacing:0.04em;cursor:pointer;">RIDE</button>
@@ -1119,12 +1119,12 @@
 
   <script>
     document.querySelectorAll('a,button,[onclick]').forEach(function(el){
-      el.addEventListener('mousedown',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
-      el.addEventListener('mouseup',function(){this.style.transform='';this.style.opacity='';},{passive:true});
-      el.addEventListener('mouseleave',function(){this.style.transform='';this.style.opacity='';},{passive:true});
-      el.addEventListener('touchstart',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
-      el.addEventListener('touchend',function(){this.style.transform='';this.style.opacity='';},{passive:true});
-      el.addEventListener('touchcancel',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('mousedown',function(){this.style.opacity='0.75';},{passive:true});
+      el.addEventListener('mouseup',function(){this.style.opacity='';},{passive:true});
+      el.addEventListener('mouseleave',function(){this.style.opacity='';},{passive:true});
+      el.addEventListener('touchstart',function(){this.style.opacity='0.75';},{passive:true});
+      el.addEventListener('touchend',function(){this.style.opacity='';},{passive:true});
+      el.addEventListener('touchcancel',function(){this.style.opacity='';},{passive:true});
     });
     window.showToast=function(msg,isError){
       document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
