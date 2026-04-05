@@ -583,10 +583,169 @@
     }, SPLASH_HOLD);
   }
 
+  // ── Pull-to-refresh ───────────────────────────────────────────────────────
+  function setupPullToRefresh() {
+    if (page === 'index' || page === 'investor-deck' || page === 'user-journeys') return;
+
+    var THRESHOLD   = 72;    // px of pull needed to trigger
+    var MAX_PULL    = 110;   // max rubber-band travel
+    var startY      = 0;
+    var pulling     = false;
+    var triggered   = false;
+    var pullDist    = 0;
+
+    // ── Pull indicator ───────────────────────────────────────────────────────
+    var indicator = el('div', [
+      'position:fixed;top:0;left:0;right:0;z-index:9998;',
+      'display:flex;align-items:center;justify-content:center;',
+      'height:0;overflow:hidden;',
+      'background:linear-gradient(to bottom,rgba(226,255,59,0.1),transparent);',
+      'transition:none;pointer-events:none'
+    ].join(''));
+
+    // Spinner icon inside the indicator
+    var spinnerWrap = el('div', [
+      'width:32px;height:32px;border-radius:50%;',
+      'border:2px solid rgba(226,255,59,0.2);',
+      'border-top-color:#E2FF3B;',
+      'display:flex;align-items:center;justify-content:center;',
+      'transition:transform 0.1s linear;opacity:0;transition:opacity 0.2s'
+    ].join(''));
+
+    // Checkmark / refresh arrow SVG
+    spinnerWrap.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
+
+    // "Pull to refresh" label
+    var label = el('div', [
+      'font-family:Manrope,sans-serif;font-size:11px;font-weight:600;',
+      'color:rgba(226,255,59,0.7);letter-spacing:0.06em;',
+      'margin-left:8px;opacity:0;transition:opacity 0.2s'
+    ].join(''));
+    label.textContent = 'Pull to refresh';
+
+    var inner = el('div','display:flex;align-items:center;gap:0;padding-top:8px');
+    append(inner, spinnerWrap, label);
+    indicator.appendChild(inner);
+    document.body.appendChild(indicator);
+
+    // ── Add pull indicator CSS spin animation ────────────────────────────────
+    var pullStyle = document.createElement('style');
+    pullStyle.textContent = [
+      '@keyframes cr-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}',
+      '.cr-ptr-spinning{animation:cr-spin 0.7s linear infinite!important}'
+    ].join('');
+    document.head.appendChild(pullStyle);
+
+    // ── Touch handlers ───────────────────────────────────────────────────────
+    document.addEventListener('touchstart', function(e) {
+      // Only start if at the very top of the page
+      if (window.scrollY > 2) return;
+      startY   = e.touches[0].clientY;
+      pulling  = true;
+      triggered = false;
+      pullDist = 0;
+    }, { passive: true });
+
+    document.addEventListener('touchmove', function(e) {
+      if (!pulling) return;
+      var dy = e.touches[0].clientY - startY;
+      if (dy <= 0) { pulling = false; return; }
+
+      // Rubber-band easing: gets harder to pull further
+      pullDist = Math.min(MAX_PULL, dy * (1 - dy / (MAX_PULL * 3.5)));
+
+      // Show indicator
+      indicator.style.height = pullDist + 'px';
+      spinnerWrap.style.opacity = Math.min(1, pullDist / THRESHOLD);
+      label.style.opacity       = Math.min(1, pullDist / THRESHOLD);
+
+      // Rotate the arrow proportionally while pulling
+      if (!triggered) {
+        spinnerWrap.querySelector('svg').style.transform =
+          'rotate(' + (pullDist / THRESHOLD * 180) + 'deg)';
+      }
+
+      // Past threshold — update label and mark triggered
+      if (pullDist >= THRESHOLD && !triggered) {
+        triggered = true;
+        label.textContent = 'Release to refresh';
+        label.style.color = '#E2FF3B';
+        spinnerWrap.classList.add('cr-ptr-spinning');
+        spinnerWrap.querySelector('svg').style.transform = '';
+      }
+      if (pullDist < THRESHOLD && triggered) {
+        triggered = false;
+        label.textContent = 'Pull to refresh';
+        label.style.color = 'rgba(226,255,59,0.7)';
+        spinnerWrap.classList.remove('cr-ptr-spinning');
+      }
+
+    }, { passive: true });
+
+    document.addEventListener('touchend', function() {
+      if (!pulling) return;
+      pulling = false;
+
+      if (triggered) {
+        // Lock indicator at threshold height, spin for a moment, then reload
+        indicator.style.transition = 'height 0.2s ease';
+        indicator.style.height     = THRESHOLD + 'px';
+        label.textContent = 'Refreshing…';
+
+        setTimeout(function() {
+          // Run skeleton sequence then remove indicator
+          runSkeletonOnly(function() {
+            // Snap indicator closed
+            indicator.style.height = '0';
+            indicator.style.transition = 'height 0.3s ease';
+            spinnerWrap.classList.remove('cr-ptr-spinning');
+          });
+        }, 300);
+
+      } else {
+        // Snap back
+        indicator.style.transition = 'height 0.3s ease';
+        indicator.style.height     = '0';
+        setTimeout(function() { indicator.style.transition = 'none'; }, 320);
+      }
+    }, { passive: true });
+  }
+
+  // ── Skeleton-only sequence (used by pull-to-refresh) ─────────────────────
+  function runSkeletonOnly(onDone) {
+    var SKELETON_HOLD = 1000;
+    var SKELETON_FADE = 300;
+    var REVEAL_CLEAN  = 400;
+
+    document.body.classList.add('cr-loading');
+
+    var overlay = buildOverlay();
+    document.body.appendChild(overlay);
+    overlay.getBoundingClientRect();
+    overlay.style.opacity = '1';
+
+    setTimeout(function() {
+      overlay.style.opacity = '0';
+      setTimeout(function() {
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        document.body.classList.remove('cr-loading');
+        document.body.classList.add('cr-ready');
+        if (onDone) onDone();
+        setTimeout(function() {
+          document.body.classList.remove('cr-ready');
+        }, REVEAL_CLEAN);
+      }, SKELETON_FADE);
+    }, SKELETON_HOLD);
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', inject);
+    document.addEventListener('DOMContentLoaded', function() {
+      inject();
+      setupPullToRefresh();
+    });
   } else {
     inject();
+    setupPullToRefresh();
   }
 
 })();
