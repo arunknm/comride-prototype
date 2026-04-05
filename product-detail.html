@@ -148,10 +148,10 @@
 
       <!-- CTA Buttons -->
       <div style="display:flex;gap:10px;margin-bottom:28px">
-        <button id="add-cart-btn" onclick="handleAddToCart(this)" style="flex:1;background:#E2FF3B;border:none;border-radius:12px;padding:16px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#000;text-transform:uppercase;letter-spacing:0.5px;cursor:pointer">
+        <button id="add-cart-btn" onclick="handleAddToCart(this)" style="flex:1;background:#E2FF3B;border:none;border-radius:12px;padding:12px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#000;text-transform:uppercase;letter-spacing:0.5px;cursor:pointer">
           ADD TO CART
         </button>
-        <button onclick="location.href='payments.html'" style="flex:1;background:transparent;border:1px solid rgba(255,255,255,0.2);border-radius:12px;padding:16px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;cursor:pointer">
+        <button onclick="location.href='payments.html'" style="flex:1;background:transparent;border:1px solid rgba(255,255,255,0.2);border-radius:12px;padding:12px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;cursor:pointer">
           BUY NOW
         </button>
       </div>
@@ -261,7 +261,7 @@
         </div>
 
         <!-- Review 1 -->
-        <div style="background:#111;border-radius:12px;padding:14px;margin-bottom:10px">
+        <div style="background:#111;border-radius:12px;padding:12px;margin-bottom:10px">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
             <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=400&auto=format&fit=crop&q=80" loading="lazy" style="width:32px;height:32px;border-radius:50%;object-fit:cover" alt="" />
             <div style="flex:1">
@@ -274,7 +274,7 @@
         </div>
 
         <!-- Review 2 -->
-        <div style="background:#111;border-radius:12px;padding:14px;margin-bottom:10px">
+        <div style="background:#111;border-radius:12px;padding:12px;margin-bottom:10px">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80" loading="lazy" style="width:32px;height:32px;border-radius:50%;object-fit:cover" alt="" />
             <div style="flex:1">
@@ -287,7 +287,7 @@
         </div>
 
         <!-- Review 3 -->
-        <div style="background:#111;border-radius:12px;padding:14px;margin-bottom:20px">
+        <div style="background:#111;border-radius:12px;padding:12px;margin-bottom:20px">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
             <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80" loading="lazy" style="width:32px;height:32px;border-radius:50%;object-fit:cover" alt="" />
             <div style="flex:1">
@@ -300,7 +300,7 @@
         </div>
 
         <!-- Write a review -->
-        <div style="background:#111;border-radius:12px;padding:16px;margin-bottom:8px">
+        <div style="background:#111;border-radius:12px;padding:12px;margin-bottom:8px">
           <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;margin:0 0 12px">Write a Review</p>
           <div style="display:flex;gap:4px;margin-bottom:12px" id="star-input">
             <button class="star-btn" onclick="setRating(1)">★</button>
@@ -320,10 +320,10 @@
   <!-- ═══════════════════════ STICKY BOTTOM BAR ═══════════════════════ -->
   <div style="position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,0.97);border-top:1px solid rgba(255,255,255,0.08);padding:12px 20px 28px;z-index:150">
     <div style="max-width:390px;margin:0 auto;display:flex;gap:10px">
-      <button id="sticky-cart-btn" onclick="handleAddToCart(document.getElementById('add-cart-btn'))" style="flex:1;background:#E2FF3B;border:none;border-radius:12px;padding:14px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#000;text-transform:uppercase;cursor:pointer">
+      <button id="sticky-cart-btn" onclick="handleAddToCart(document.getElementById('add-cart-btn'))" style="flex:1;background:#E2FF3B;border:none;border-radius:12px;padding:12px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#000;text-transform:uppercase;cursor:pointer">
         ADD TO CART
       </button>
-      <button onclick="location.href='payments.html'" style="flex:1;background:#191919;border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:14px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;cursor:pointer">
+      <button onclick="location.href='payments.html'" style="flex:1;background:#191919;border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:12px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;cursor:pointer">
         BUY NOW
       </button>
     </div>
@@ -449,7 +449,7 @@
     if (!selectedRating) { showToast('Please select a star rating', true); return; }
     const stars = '★'.repeat(selectedRating) + '☆'.repeat(5 - selectedRating);
     const div = document.createElement('div');
-    div.style.cssText = 'background:#111;border-radius:12px;padding:14px;margin-bottom:10px;animation:slideUp 0.25s ease';
+    div.style.cssText = 'background:#111;border-radius:12px;padding:12px;margin-bottom:10px;animation:slideUp 0.25s ease';
     div.innerHTML = `
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
         <img src="images/profile/1.avif" style="width:32px;height:32px;border-radius:50%;object-fit:cover" alt="" />
