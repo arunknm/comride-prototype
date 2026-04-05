@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Comride — Investor Deck 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{background:#080808;color:#fff;font-family:'Manrope',sans-serif}
+
+.slide{
+  width:297mm;min-height:210mm;height:210mm;
+  padding:12mm 16mm 10mm;
+  background:#080808;position:relative;overflow:hidden;
+  page-break-after:always;break-after:page;
+  display:flex;flex-direction:column
+}
+.slide-inner{flex:1;display:flex;flex-direction:column}
+
+/* ── Backgrounds ── */
+.bg-grid{
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);
+  background-size:20pt 20pt
+}
+.glow{position:absolute;border-radius:50%;pointer-events:none}
+.glow-lime{background:radial-gradient(circle,rgba(226,255,59,0.22) 0%,transparent 68%)}
+.glow-blue{background:radial-gradient(circle,rgba(96,165,250,0.18) 0%,transparent 68%)}
+.glow-amber{background:radial-gradient(circle,rgba(251,191,36,0.15) 0%,transparent 68%)}
+
+/* ── Topbar ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:8mm;padding-bottom:4mm;
+  border-bottom:1px solid rgba(255,255,255,0.07)
+}
+.logo{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:11pt;letter-spacing:0.1em;color:#E2FF3B}
+.logo span{color:rgba(255,255,255,0.35);font-weight:500}
+.slide-num{font-family:'Manrope',sans-serif;font-size:7.5pt;color:rgba(255,255,255,0.2);letter-spacing:0.12em}
+.confidential{font-family:'Manrope',sans-serif;font-size:7pt;color:rgba(255,255,255,0.18);letter-spacing:0.1em;text-transform:uppercase}
+
+/* ── Typography ── */
+.eyebrow{font-family:'Manrope',sans-serif;font-size:7.5pt;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#E2FF3B;margin-bottom:4pt}
+h1{font-family:'Space Grotesk',sans-serif;font-weight:800;line-height:1.06}
+h2{font-family:'Space Grotesk',sans-serif;font-weight:700;line-height:1.12}
+h3{font-family:'Space Grotesk',sans-serif;font-weight:600;line-height:1.18}
+h4{font-family:'Space Grotesk',sans-serif;font-weight:600;line-height:1.2}
+p{font-family:'Manrope',sans-serif;line-height:1.55}
+.body-sm{font-size:8pt}
+.body-xs{font-size:7.5pt}
+
+/* ── Colours ── */
+.lime{color:#E2FF3B}.muted{color:rgba(255,255,255,0.42)}.white{color:#fff}
+.amber{color:#FBBF24}.green{color:#4ADE80}.red{color:#F87171}.blue{color:#60A5FA}
+.lime-bg{background:#E2FF3B;color:#000}
+
+/* ── Cards ── */
+.card{background:rgba(255,255,255,0.04);border-radius:7pt;padding:9pt 11pt;border:1px solid rgba(255,255,255,0.08)}
+.card-lime{background:rgba(226,255,59,0.06);border-color:rgba(226,255,59,0.22)}
+.card-green{background:rgba(74,222,128,0.06);border-color:rgba(74,222,128,0.22)}
+.card-amber{background:rgba(251,191,36,0.06);border-color:rgba(251,191,36,0.22)}
+.card-blue{background:rgba(96,165,250,0.06);border-color:rgba(96,165,250,0.22)}
+.card-red{background:rgba(248,113,113,0.06);border-color:rgba(248,113,113,0.22)}
+
+/* ── Pill badge ── */
+.pill{display:inline-block;border-radius:999pt;font-family:'Manrope',sans-serif;font-size:7pt;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:2pt 7pt}
+.pill-lime{background:rgba(226,255,59,0.14);color:#E2FF3B}
+.pill-green{background:rgba(74,222,128,0.14);color:#4ADE80}
+.pill-amber{background:rgba(251,191,36,0.14);color:#FBBF24}
+.pill-blue{background:rgba(96,165,250,0.14);color:#60A5FA}
+.pill-red{background:rgba(248,113,113,0.14);color:#F87171}
+.pill-white{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7)}
+
+/* ── Divider ── */
+.divider{width:100%;height:1px;background:rgba(255,255,255,0.07);margin:8pt 0}
+.divider-lime{background:rgba(226,255,59,0.25)}
+
+/* ── Bar chart ── */
+.bar-row{display:flex;align-items:center;gap:6pt;margin-bottom:5pt}
+.bar-label{font-family:'Manrope',sans-serif;font-size:7.5pt;color:rgba(255,255,255,0.55);width:52pt;flex-shrink:0;text-align:right}
+.bar-track{flex:1;height:8pt;background:rgba(255,255,255,0.06);border-radius:4pt;overflow:hidden}
+.bar-fill{height:100%;border-radius:4pt;transition:width .3s}
+.bar-val{font-family:'Manrope',sans-serif;font-size:7.5pt;font-weight:700;color:#fff;width:38pt;flex-shrink:0}
+
+/* ── Stat big ── */
+.stat-big .num{font-family:'Space Grotesk',sans-serif;font-weight:800;line-height:1}
+.stat-big .lbl{font-family:'Manrope',sans-serif;font-size:7.5pt;color:rgba(255,255,255,0.42);margin-top:2pt;line-height:1.3}
+
+/* ── Table ── */
+.tbl{width:100%;border-collapse:collapse;font-family:'Manrope',sans-serif;font-size:8pt}
+.tbl th{text-align:left;font-size:7pt;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);padding:5pt 8pt;border-bottom:1px solid rgba(255,255,255,0.08)}
+.tbl td{padding:6pt 8pt;border-bottom:1px solid rgba(255,255,255,0.05);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .check{color:#4ADE80;font-size:9pt}
+.tbl .cross{color:rgba(255,255,255,0.2);font-size:9pt}
+.tbl .partial{color:#FBBF24;font-size:9pt}
+.tbl .highlight td{background:rgba(226,255,59,0.06)}
+.tbl .highlight td:first-child{border-left:2px solid #E2FF3B}
+
+/* ── Grid layouts ── */
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:8pt}
+.cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8pt}
+.cols4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7pt}
+.cols-split{display:grid;grid-template-columns:55% 1fr;gap:10pt}
+.cols-split-r{display:grid;grid-template-columns:1fr 48%;gap:10pt}
+
+/* ── Timeline / roadmap ── */
+.roadmap-row{display:flex;align-items:flex-start;gap:0;position:relative}
+.roadmap-phase{flex:1;padding:0 6pt;position:relative}
+.roadmap-phase::before{content:'';position:absolute;top:10pt;left:0;right:0;height:2px;background:rgba(255,255,255,0.1)}
+.roadmap-dot{width:12pt;height:12pt;border-radius:50%;border:2px solid;margin-bottom:5pt;position:relative;z-index:1;background:#080808}
+.phase-done .roadmap-dot{border-color:#4ADE80;background:#4ADE80}
+.phase-now .roadmap-dot{border-color:#E2FF3B;background:#E2FF3B}
+.phase-next .roadmap-dot{border-color:rgba(255,255,255,0.25)}
+.phase-future .roadmap-dot{border-color:rgba(255,255,255,0.12)}
+
+/* ── Funnel ── */
+.funnel-step{padding:5pt 14pt;margin-bottom:3pt;border-radius:4pt;display:flex;align-items:center;justify-content:space-between;font-family:'Manrope',sans-serif;font-size:8pt;font-weight:600}
+
+/* ── Print ── */
+@media print{
+  body{background:#080808}
+  .slide{page-break-after:always;break-after:page}
+  @page{size:297mm 210mm landscape;margin:0}
+}
+@media screen{
+  .slide{margin:0 auto 12mm;box-shadow:0 8px 60px rgba(0,0,0,0.7)}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+  SLIDE 1 — COVER
+═══════════════════════════════════════════════════════════════════ -->
+<div class="slide bg-grid">
+  <div class="glow glow-lime" style="width:320pt;height:320pt;top:-80pt;right:-60pt;opacity:0.8"></div>
+  <div class="glow glow-blue" style="width:200pt;height:200pt;bottom:-40pt;left:-40pt;opacity:0.6"></div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:auto">
+    <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:14pt;letter-spacing:0.14em;color:#E2FF3B">COMRIDE</div>
+    <div class="confidential">Confidential — Series Seed 2026</div>
+  </div>
+
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:220mm">
+    <div class="eyebrow" style="margin-bottom:10pt">India's Motorcycle Social Platform</div>
+    <h1 style="font-size:42pt;color:#fff;margin-bottom:10pt;letter-spacing:-0.02em">
+      Ride Together.<br/><span style="color:#E2FF3B">Stay Safe.</span><br/>Build Community.
+    </h1>
+    <p style="font-size:11pt;color:rgba(255,255,255,0.55);max-width:160mm;line-height:1.6;margin-bottom:18pt">
+      The social + safety OS for India's 200M two-wheeler riders — live ride coordination, verified riders, resort discovery, and a marketplace built for the road.
+    </p>
+    <div style="display:flex;align-items:center;gap:16pt">
+      <div style="background:#E2FF3B;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10pt;letter-spacing:0.06em;padding:8pt 20pt;border-radius:6pt">
+        Seeking ₹5 Cr Seed Round
+      </div>
+      <div style="font-family:'Manrope',sans-serif;font-size:8pt;color:rgba(255,255,255,0.35)">
+        SAFE Note · 18-Month Runway<br/>Pre-Money Valuation: ₹25 Cr
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8pt;border-top:1px solid rgba(255,255,255,0.07)">
+    <div style="font-family:'Manrope',sans-serif;font-size:8pt;color:rgba(255,255,255,0.3)">
+      Arun N M — Founder &amp; CEO<br/>
+      <span style="color:rgba(255,255,255,0.18)">arun@comride.in · comride.in</span>
+    </div>
+    <div style="font-family:'Manrope',sans-serif;font-size:7.5pt;color:rgba(255,255,255,0.2);text-align:right">
+      April 2026<br/>Bangalore, India
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+  SLIDE 2 — THE PROBLEM
+═══════════════════════════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="glow glow-red" style="width:240pt;height:240pt;top:-60pt;right:-40pt;opacity:0.5;background:radial-gradient(circle,rgba(248,113,113,0.18) 0%,transparent 68%)"></div>
+
+  <div class="topbar">
+    <div class="logo">COMRIDE <span>/ Investor Deck 2026</span></div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <div class="confidential">Confidential</div>
+      <div class="slide-num">02 / 14</div>
+    </div>
+  </div>
+
+  <div class="eyebrow">The Problem</div>
+  <h2 style="font-size:22pt;margin-bottom:12pt">India has 200M+ riders.<br/><span class="lime">Zero infrastructure built for them.</span></h2>
+
+  <div class="cols3" style="flex:1;align-items:stretch">
+    <div class="card card-red" style="display:flex;flex-direction:column;gap:7pt">
+      <div style="font-size:22pt">⚠️</div>
+      <h4 style="font-size:10.5pt;color:#F87171">Safety is a Gamble</h4>
+      <p class="body-sm muted">Riders coordinate on WhatsApp groups with no identity verification. Strangers join rides with zero accountability. India records <strong style="color:#F87171">4.12 lakh road accidents/year</strong> — two-wheelers account for 35%.</p>
+    </div>
+    <div class="card card-amber" style="display:flex;flex-direction:column;gap:7pt">
+      <div style="font-size:22pt">📱</div>
+      <h4 style="font-size:10.5pt;color:#FBBF24">No Purpose-Built Platform</h4>
+      <p class="body-sm muted">Strava is for cyclists. Facebook Groups are unstructured. Existing apps ignore real-time ride coordination, route sharing, or motorcycle-specific communities. <strong style="color:#FBBF24">The market is completely unserved.</strong></p>
+    </div>
+    <div class="card card-blue" style="display:flex;flex-direction:column;gap:7pt">
+      <div style="font-size:22pt">🏍️</div>
+      <h4 style="font-size:10.5pt;color:#60A5FA">Discovery is Broken</h4>
+      <p class="body-sm muted">Riders spend hours researching routes, hotels, and experiences across scattered platforms. <strong style="color:#60A5FA">₹18,000 Cr/year</strong> in riding-related spend has no dedicated discovery and booking channel.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:8pt;padding:8pt 12pt;background:rgba(255,255,255,0.03);border-radius:6pt;border-left:3px solid #E2FF3B">
+    <p class="body-sm" style="color:rgba(255,255,255,0.6)">
+      <strong class="white">The core insight:</strong> The 5M+ active motorcycle touring enthusiasts in India represent a high-income, high-engagement demographic with no platform built around their needs — safety, community, discovery, and gear.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+  SLIDE 3 — THE SOLUTION
+═══════════════════════════════════════════════════════════════════ -->
+<div class="slide bg-grid">
+  <div class="glow glow-lime" style="width:280pt;height:280pt;bottom:-80pt;right:-60pt;opacity:0.7"></div>
+
+  <div class="topbar">
+    <div class="logo">COMRIDE <span>/ Investor Deck 2026</span></div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <div class="confidential">Confidential</div>
+      <div class="slide-num">03 / 14</div>
+    </div>
+  </div>
+
+  <div class="eyebrow">The Solution</div>
+  <h2 style="font-size:19pt;margin-bottom:10pt">One app. Every ride, from planning to homecoming.</h2>
+
+  <div class="cols-split" style="flex:1;align-items:stretch;gap:10pt">
+    <div style="display:flex;flex-direction:column;gap:6pt">
+
+      <div style="display:flex;gap:8pt;align-items:flex-start">
+        <div style="width:26pt;height:26pt;background:rgba(226,255,59,0.12);border-radius:6pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13pt">🛡️</div>
+        <div>
+          <h4 style="font-size:9.5pt;margin-bottom:2pt">Verified Rider Identity</h4>
+          <p class="body-xs muted">KYC + licence verification gives every rider a trust score. Verified riders attract more joiners, unverified riders are flagged.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8pt;align-items:flex-start">
+        <div style="width:26pt;height:26pt;background:rgba(226,255,59,0.12);border-radius:6pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13pt">📍</div>
+        <div>
+          <h4 style="font-size:9.5pt;margin-bottom:2pt">Live Ride Coordination</h4>
+          <p class="body-xs muted">Create/join rides, real-time GPS tracking, SOS alerts, geofenced safety zones, group chat, admin controls — all in one screen.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8pt;align-items:flex-start">
+        <div style="width:26pt;height:26pt;background:rgba(226,255,59,0.12);border-radius:6pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13pt">🏕️</div>
+        <div>
+          <h4 style="font-size:9.5pt;margin-bottom:2pt">Resort &amp; Experience Discovery</h4>
+          <p class="body-xs muted">Curated resorts, camps, and experiences with "RIDER FRIENDLY" certification. Direct booking with route integration. Sponsored inventory for monetisation.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8pt;align-items:flex-start">
+        <div style="width:26pt;height:26pt;background:rgba(226,255,59,0.12);border-radius:6pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13pt">🛒</div>
+        <div>
+          <h4 style="font-size:9.5pt;margin-bottom:2pt">Gear Marketplace</h4>
+          <p class="body-xs muted">Buy, sell, and review riding gear with community-verified ratings. Brands get a direct channel to India's most engaged riding community.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8pt;align-items:flex-start">
+        <div style="width:26pt;height:26pt;background:rgba(226,255,59,0.12);border-radius:6pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13pt">🤖</div>
+        <div>
+          <h4 style="font-size:9.5pt;margin-bottom:2pt">AI Route &amp; Safety Intelligence</h4>
+          <p class="body-xs muted">Real-time road closure, weather, and accident alerts layered onto route planning. AI suggests rides based on skill level, bike, and past history.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Product screen mockup feel -->
+    <div style="display:flex;flex-direction:column;gap:6pt">
+      <div class="card card-lime" style="padding:10pt 12pt">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:6pt">Live Right Now</div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8pt">
+          <div class="stat-big">
+            <div class="num lime" style="font-size:22pt">847</div>
+            <div class="lbl">Active rides today</div>
+          </div>
+          <div class="stat-big">
+            <div class="num white" style="font-size:22pt">12,400</div>
+            <div class="lbl">Riders on the road</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:5pt">
+          <span class="pill pill-lime">Bangalore → Coorg</span>
+          <span class="pill pill-white">Pune → Mahabaleshwar</span>
+        </div>
+      </div>
+
+      <div class="card" style="padding:10pt 12pt">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:6pt">Safety Intelligence</div>
+        <div style="display:flex;flex-direction:column;gap:5pt">
+          <div style="display:flex;align-items:center;gap:6pt;padding:5pt 8pt;background:rgba(251,191,36,0.08);border-radius:4pt;border-left:2px solid #FBBF24">
+            <span style="font-size:10pt">⚡</span>
+            <p class="body-xs" style="color:#FBBF24">Weather Alert — Heavy rain on NH-48, km 142–158</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:6pt;padding:5pt 8pt;background:rgba(248,113,113,0.08);border-radius:4pt;border-left:2px solid #F87171">
+            <span style="font-size:10pt">🚧</span>
+            <p class="body-xs" style="color:#F87171">Road Closure — Bypass via Kanakapura Rd suggested</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:10pt 12pt">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:6pt">Comride Pro</div>
+        <p class="body-xs muted">Advanced route builder · Offline maps · Priority SOS · Insurance · Analytics · Club tools</p>
+        <div style="margin-top:6pt;display:flex;align-items:center;justify-content:space-between">
+          <span class="pill pill-lime">₹499 / month</span>
+          <span style="font-size:7.5pt;color:rgba(255,255,255,0.35)">or ₹3,999/year</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+  SLIDE 4 — MARKET OPPORTUNITY
+═══════════════════════════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="glow glow-lime" style="width:260pt;height:260pt;top:-60pt;left:-60pt;opacity:0.5"></div>
+
+  <div class="topbar">
+    <div class="logo">COMRIDE <span>/ Investor Deck 2026</span></div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <div class="confidential">Confidential</div>
+      <div class="slide-num">04 / 14</div>
+    </div>
+  </div>
+
+  <div class="eyebrow">Market Opportunity</div>
+  <h2 style="font-size:18pt;margin-bottom:10pt">A massive, high-intent, <span class="lime">completely underserved</span> market.</h2>
+
+  <div class="cols-split" style="flex:1;gap:12pt;align-items:stretch">
+    <!-- Left: TAM SAM SOM -->
+    <div style="display:flex;flex-direction:column;gap:7pt">
+
+      <div style="display:flex;flex-direction:column;gap:5pt">
+        <div style="display:flex;align-items:center;gap:8pt;padding:8pt 10pt;border-radius:6pt;background:rgba(226,255,59,0.05);border:1px solid rgba(226,255,59,0.15)">
+          <div style="width:10pt;height:10pt;border-radius:50%;background:rgba(226,255,59,0.3);flex-shrink:0"></div>
+          <div style="flex:1">
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9pt;color:rgba(255,255,255,0.5);letter-spacing:0.08em;margin-bottom:2pt">TAM — Total Addressable Market</div>
+            <div style="display:flex;align-items:baseline;gap:6pt">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20pt;color:#E2FF3B">₹1.8L Cr</span>
+              <span class="body-xs muted">India two-wheeler ecosystem (vehicles, accessories, services, travel)</span>
+            </div>
+            <p class="body-xs muted" style="margin-top:2pt">200M registered two-wheelers · 21M new units/year · Source: SIAM 2025</p>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8pt;padding:8pt 10pt;border-radius:6pt;background:rgba(226,255,59,0.04);border:1px solid rgba(226,255,59,0.1);margin-left:14pt">
+          <div style="width:8pt;height:8pt;border-radius:50%;background:rgba(226,255,59,0.5);flex-shrink:0"></div>
+          <div style="flex:1">
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9pt;color:rgba(255,255,255,0.5);letter-spacing:0.08em;margin-bottom:2pt">SAM — Serviceable Addressable Market</div>
+            <div style="display:flex;align-items:baseline;gap:6pt">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20pt;color:#E2FF3B">₹18,000 Cr</span>
+              <span class="body-xs muted">Active motorcycle touring segment</span>
+            </div>
+            <p class="body-xs muted" style="margin-top:2pt">5M+ touring enthusiasts · avg ₹36,000/yr on rides &amp; gear · 18% CAGR</p>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8pt;padding:8pt 10pt;border-radius:6pt;background:rgba(226,255,59,0.04);border:1px solid rgba(226,255,59,0.08);margin-left:28pt">
+          <div style="width:6pt;height:6pt;border-radius:50%;background:#E2FF3B;flex-shrink:0"></div>
+          <div style="flex:1">
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9pt;color:rgba(255,255,255,0.5);letter-spacing:0.08em;margin-bottom:2pt">SOM — Serviceable Obtainable Market (Y3)</div>
+            <div style="display:flex;align-items:baseline;gap:6pt">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20pt;color:#E2FF3B">₹900 Cr</span>
+              <span class="body-xs muted">5% SAM capture at scale</span>
+            </div>
+            <p class="body-xs muted" style="margin-top:2pt">600K MAU · ₹108 Cr ARR target by Month 36</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="cols3" style="gap:6pt">
+        <div class="card" style="text-align:center;padding:7pt">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:15pt;color:#4ADE80">18%</div>
+          <div class="body-xs muted" style="margin-top:2pt">Segment CAGR<br/>2023–2028</div>
+        </div>
+        <div class="card" style="text-align:center;padding:7pt">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:15pt;color:#60A5FA">₹0</div>
+          <div class="body-xs muted" style="margin-top:2pt">Direct competition<br/>in India today</div>
+        </div>
+        <div class="card" style="text-align:center;padding:7pt">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:15pt;color:#FBBF24">86%</div>
+          <div class="body-xs muted" style="margin-top:2pt">Riders use WhatsApp<br/>to coordinate</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Growth catalysts -->
+    <div style="display:flex;flex-direction:column;gap:7pt">
+      <div class="card" style="padding:10pt 12pt">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:7pt">Market Growth Drivers</div>
+        <div style="display:flex;flex-direction:column;gap:6pt">
+          <div style="display:flex;align-items:flex-start;gap:6pt">
+            <span class="pill pill-lime" style="margin-top:1pt;flex-shrink:0">01</span>
+            <p class="body-xs muted"><strong class="white">Premium motorcycle boom.</strong> RE, KTM, Hero Xpulse, Triumph ownership up 42% YoY. Higher spend, higher engagement riders entering the market.</p>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:6pt">
+            <span class="pill pill-lime" style="margin-top:1pt;flex-shrink:0">02</span>
+            <p class="body-xs muted"><strong class="white">Millennial &amp; Gen Z ridership.</strong> 67% of new motorcycle buyers aged 22–35. Digital-native, community-driven, willing to pay for SaaS.</p>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:6pt">
+            <span class="pill pill-lime" style="margin-top:1pt;flex-shrink:0">03</span>
+            <p class="body-xs muted"><strong class="white">Post-COVID adventure travel surge.</strong> Domestic travel up 38%, motorcycle touring up 55% YoY (MakeMyTrip 2025 report).</p>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:6pt">
+            <span class="pill pill-lime" style="margin-top:1pt;flex-shrink:0">04</span>
+            <p class="body-xs muted"><strong class="white">UPI + Fintech penetration.</strong> 85% of target demographic uses UPI daily — frictionless in-app commerce payments infrastructure already built.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-lime" style="padding:10pt 12pt">
+        <p class="body-sm" style="color:rgba(255,255,255,0.7);line-height:1.6">
+          <strong class="lime">The moment is now.</strong> India's two-wheeler market is at the same inflection point the US cycling app market was in 2012 — right before Strava captured 100M users. We have first-mover advantage in the world's largest two-wheeler market.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+  SLIDE 5 — PRODUCT OVERVIEW
+═══════════════════════════════════════════════════════════════════ -->
+<div class="slide bg-grid">
+  <div class="glow glow-lime" style="width:200pt;height:200pt;top:-50pt;right:-30pt;opacity:0.5"></div>
+
+  <div class="topbar">
+    <div class="logo">COMRIDE <span>/ Investor Deck 2026</span></div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <div class="confidential">Confidential</div>
+      <div class="slide-num">05 / 14</div>
+    </div>
+  </div>
+
+  <div class="eyebrow">Product</div>
+  <h2 style="font-size:18pt;margin-bottom:10pt">45 screens. One <span class="lime">coherent journey</span> from couch to road.</h2>
+
+  <div class="cols4" style="flex:1;align-items:stretch">
+    <div class="card" style="display:flex;flex-direction:column;gap:6pt">
+      <div style="font-size:20pt;margin-bottom:2pt">🔍</div>
+      <h4 style="font-size:9.5pt" class="lime">Explore</h4>
+      <div class="divider-lime divider"></div>
+      <p class="body-xs muted">Social feed of rides, routes, gear reviews, and challenges. Follow riders, clubs, and brands. AI-curated suggestions.</p>
+      <div style="margin-top:auto;display:flex;flex-wrap:wrap;gap:3pt">
+        <span class="pill pill-white">Feed</span>
+        <span class="pill pill-white">Clubs</span>
+        <span class="pill pill-white">AI Picks</span>
+      </div>
+    </div>
+
+    <div class="card card-lime" style="display:flex;flex-direction:column;gap:6pt">
+      <div style="font-size:20pt;margin-bottom:2pt">🏍️</div>
+      <h4 style="font-size:9.5pt" class="lime">Ride</h4>
+      <div class="divider-lime divider"></div>
+      <p class="body-xs muted">Create or join rides. Live GPS tracking. Real-time SOS. Route builder. Admin controls for group safety.</p>
+      <div style="margin-top:auto;display:flex;flex-wrap:wrap;gap:3pt">
+        <span class="pill pill-lime">Core Feature</span>
+      </div>
+    </div>
+
+    <div class="card" style="display:flex;flex-direction:column;gap:6pt">
+      <div style="font-size:20pt;margin-bottom:2pt">🛒</div>
+      <h4 style="font-size:9.5pt" class="lime">Shop</h4>
+      <div class="divider-lime divider"></div>
+      <p class="body-xs muted">Gear marketplace with community-verified reviews. Brand storefronts. Resort booking integration. Sponsored inventory.</p>
+      <div style="margin-top:auto;display:flex;flex-wrap:wrap;gap:3pt">
+        <span class="pill pill-white">Gear</span>
+        <span class="pill pill-white">Resorts</span>
+      </div>
+    </div>
+
+    <div class="card" style="display:flex;flex-direction:column;gap:6pt">
+      <div style="font-size:20pt;margin-bottom:2pt">👤</div>
+      <h4 style="font-size:9.5pt" class="lime">Profile</h4>
+      <div class="divider-lime divider"></div>
+      <p class="body-xs muted">Digital garage, document vault with renewal reminders, analytics, insurance, Comride Pro subscription management.</p>
+      <div style="margin-top:auto;display:flex;flex-wrap:wrap;gap:3pt">
+        <span class="pill pill-white">KYC</span>
+        <span class="pill pill-white">Garage</span>
+        <span class="pill pill-white">Pro</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:7pt;display:flex;gap:7pt">
+    <div class="card" style="flex:1;padding:8pt 12pt;display:flex;align-items:center;gap:10pt">
+      <div style="font-size:18pt;flex-shrink:0">🛡️</div>
+      <div>
+        <h4 style="font-size:9pt;margin-bottom:2pt">Verified Rider System</h4>
+        <p class="body-xs muted">Aadhaar + Driving Licence verification. Blue tick visible on all cards, ride invites, and posts. Trust infrastructure for the entire ecosystem.</p>
+      </div>
+    </div>
+    <div class="card" style="flex:1;padding:8pt 12pt;display:flex;align-items:center;gap:10pt">
+      <div style="font-size:18pt;flex-shrink:0">⚡</div>
+      <div>
+        <h4 style="font-size:9pt;margin-bottom:2pt">Real-Time Safety Layer</h4>
+        <p class="body-xs muted">Weather, road closures, accident zones pushed to active riders on matching routes. Partnerships with NHAI, local traffic APIs.</p>
+      </div>
+    </div>
+    <div class="card" style="flex:1;padding:8pt 12pt;display:flex;align-items:center;gap:10pt">
+      <div style="font-size:18pt;flex-shrink:0">🤝</div>
+      <div>
+        <h4 style="font-size:9pt;margin-bottom:2pt">Challenges &amp; Gamification</h4>
+        <p class="body-xs muted">Brand-sponsored challenges, seasonal badges, leaderboards, and achievement unlocks drive daily active engagement and retention.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+  SLIDE 6 — BUSINESS MODEL
+═══════════════════════════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="glow glow-lime" style="width:220pt;height:220pt;bottom:-50pt;right:-50pt;opacity:0.55"></div>
+
+  <div class="topbar">
+    <div class="logo">COMRIDE <span>/ Investor Deck 2026</span></div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <div class="confidential">Confidential</div>
+      <div class="slide-num">06 / 14</div>
+    </div>
+  </div>
+
+  <div class="eyebrow">Business Model</div>
+  <h2 style="font-size:18pt;margin-bottom:10pt">8 revenue streams. <span class="lime">72% blended gross margin.</span></h2>
+
+  <div class="cols-split" style="flex:1;gap:12pt;align-items:flex-start">
+    <div style="display:flex;flex-direction:column;gap:5pt">
+      <!-- Revenue streams table -->
+      <table class="tbl" style="font-size:7.5pt">
+        <thead>
+          <tr>
+            <th style="width:38%">Revenue Stream</th>
+            <th>Model</th>
+            <th>ARPU</th>
+            <th>Margin</th>
+            <th>Y1 Mix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="highlight">
+            <td><strong>Comride Pro</strong></td>
+            <td>SaaS Subscription</td>
+            <td class="lime">₹3,999/yr</td>
+            <td class="green">88%</td>
+            <td>38%</td>
+          </tr>
+          <tr>
+            <td><strong>Resort Sponsored Posts</strong></td>
+            <td>CPC / CPM / Booking fee</td>
+            <td class="lime">₹50K–5L/mo</td>
+            <td class="green">92%</td>
+            <td>22%</td>
+          </tr>
+          <tr>
+            <td><strong>Marketplace GMV</strong></td>
+            <td>10% take rate</td>
+            <td class="lime">Txn-based</td>
+            <td class="amber">62%</td>
+            <td>18%</td>
+          </tr>
+          <tr>
+            <td><strong>Brand Partnerships</strong></td>
+            <td>Sponsored challenges &amp; content</td>
+            <td class="lime">₹2L–20L/campaign</td>
+            <td class="green">85%</td>
+            <td>12%</td>
+          </tr>
+          <tr>
+            <td><strong>Club / Org Tools</strong></td>
+            <td>B2B SaaS</td>
+            <td class="lime">₹999–4,999/mo</td>
+            <td class="green">80%</td>
+            <td>5%</td>
+          </tr>
+          <tr>
+            <td><strong>Insurance Commission</strong></td>
+            <td>Referral (8–12%)</td>
+            <td class="lime">Per policy</td>
+            <td class="green">95%</td>
+            <td>3%</td>
+          </tr>
+          <tr>
+            <td><strong>Data &amp; Analytics</strong></td>
+            <td>B2B API / Reports</td>
+            <td class="lime">Custom</td>
+            <td class="green">90%</td>
+            <td>1%</td>
+          </tr>
+          <tr>
+            <td><strong>Route &amp; Map Licensing</strong></td>
+            <td>API licensing</td>
+            <td class="lime">Custom</td>
+            <td class="green">90%</td>
+            <td>1%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Right: Unit economics -->
+    <div style="display:flex;flex-direction:column;gap:7pt">
+      <div class="card card-lime" style="padding:10pt 12pt">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:8pt">Unit Economics (Blended)</div>
+        <div style="display:flex;flex-direction:column;gap:7pt">
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <span class="body-xs muted">CAC (blended)</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13pt;color:#fff">₹180</span>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <span class="body-xs muted">LTV (18-mo blended)</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13pt;color:#4ADE80">₹3,240</span>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <span class="body-xs muted">LTV : CAC ratio</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16pt;color:#E2FF3B">18 : 1</span>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <span class="body-xs muted">Payback period</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13pt;color:#fff">3.2 months</span>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <span class="body-xs muted">Gross margin</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13pt;color:#4ADE80">72%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:9pt 12pt">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:5pt">Conversion Funnel</div>
+        <div class="funnel-step" style="background:rgba(226,255,59,0.1);color:#E2FF3B;font-size:7.5pt">
+          <span>App Install</span><span>100%</span>
+        </div>
+        <div class="funnel-step" style="background:rgba(226,255,59,0.07);color:rgba(255,255,255,0.7);font-size:7.5pt">
+          <span>Profile Created</span><span>74%</span>
+        </div>
+        <div class="funnel-step" style="background:rgba(226,255,59,0.05);color:rgba(255,255,255,0.6);font-size:7.5pt">
+          <span>First Ride Joined</span><span>41%</span>
+        </div>
+        <div class="funnel-step" style="background:rgba(226,255,59,0.04);color:rgba(255,255,255,0.5);font-size:7.5pt">
+          <span>Pro Trial Started</span><span>18%</span>
+        </div>
+        <div class="funnel-step" style="background:rgba(226,255,59,0.08);color:#E2FF3B;font-size:7.5pt">
+          <span>Pro Subscriber</span><span>11%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+  SLIDE 7 — FINANCIAL PROJECTIONS
+═══════════════════════════════════════════════════════════════════ -->
+<div class="slide bg-grid">
+  <div class="glow glow-lime" style="width:240pt;height:240pt;bottom:-60pt;left:-40pt;opacity:0.5"></div>
+
+  <div class="topbar">
+    <div class="logo">COMRIDE <span>/ Investor Deck 2026</span></div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <div class="confidential">Confidential</div>
+      <div class="slide-num">07 / 14</div>
+    </div>
+  </div>
+
+  <div class="eyebrow">Financial Projections</div>
+  <h2 style="font-size:18pt;margin-bottom:10pt">Conservative bottom-up model. <span class="lime">Break-even at Month 18.</span></h2>
+
+  <div class="cols-split-r" style="flex:1;gap:12pt;align-items:stretch">
+    <!-- Left: projections table -->
+    <div style="display:flex;flex-direction:column;gap:7pt">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Y1 (FY27)</th>
+            <th>Y2 (FY28)</th>
+            <th>Y3 (FY29)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="muted">MAU</td>
+            <td><strong>50,000</strong></td>
+            <td><strong>200,000</strong></td>
+            <td><strong class="lime">600,000</strong></td>
+          </tr>
+          <tr>
+            <td class="muted">Pro Subscribers</td>
+            <td>5,500</td>
+            <td>22,000</td>
+            <td>66,000</td>
+          </tr>
+          <tr>
+            <td class="muted">ARR</td>
+            <td><strong>₹4.2 Cr</strong></td>
+            <td><strong>₹22 Cr</strong></td>
+            <td><strong class="lime">₹108 Cr</strong></td>
+          </tr>
+          <tr>
+            <td class="muted">Gross Profit</td>
+            <td>₹3.0 Cr</td>
+            <td>₹15.8 Cr</td>
+            <td>₹77.8 Cr</td>
+          </tr>
+          <tr>
+            <td class="muted">Gross Margin</td>
+            <td class="amber">72%</td>
+            <td class="amber">72%</td>
+            <td class="green">72%</td>
+          </tr>
+          <tr>
+            <td class="muted">EBITDA</td>
+            <td class="red">–₹2.8 Cr</td>
+            <td class="amber">₹1.2 Cr</td>
+            <td class="green">₹28 Cr</td>
+          </tr>
+          <tr>
+            <td class="muted">EBITDA Margin</td>
+            <td class="red">–67%</td>
+            <td class="amber">5%</td>
+            <td class="green">26%</td>
+          </tr>
+          <tr>
+            <td class="muted">Cash Flow Positive</td>
+            <td>—</td>
+            <td class="lime">Month 18</td>
+            <td class="green">Full year +ve</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="padding:6pt 10pt;background:rgba(255,255,255,0.03);border-radius:5pt;border-left:2px solid rgba(255,255,255,0.15)">
+        <p class="body-xs muted"><strong class="white">Model assumptions:</strong> 40% of MAU growth via organic/community, 60% paid (Meta, YouTube). Pro conversion at 11% of 30-day actives. Marketplace GMV at 4× ARR by Y3. Resort/brand partnerships ramp from Month 4.</p>
+      </div>
+    </div>
+
+    <!-- Right: ARR bar chart -->
+    <div style="display:flex;flex-direction:column;gap:7pt">
+      <div class="card" style="padding:10pt 12pt;flex:1">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:10pt">ARR Growth (₹ Crore)</div>
+
+        <!-- Visual bar chart -->
+        <div style="display:flex;align-items:flex-end;justify-content:space-around;height:90pt;gap:12pt;padding:0 6pt;margin-bottom:6pt">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4pt;flex:1">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9pt;color:#fff">₹4.2</span>
+            <div style="width:100%;background:#E2FF3B;border-radius:4pt 4pt 0 0" style2="height:14pt" class="bar-y1" id="bar1"></div>
+            <span class="body-xs muted">FY27</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4pt;flex:1">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9pt;color:#fff">₹22</span>
+            <div style="width:100%;background:#E2FF3B;border-radius:4pt 4pt 0 0"></div>
+            <span class="body-xs muted">FY28</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4pt;flex:1">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9pt;color:#E2FF3B">₹108</span>
+            <div style="width:100%;background:#E2FF3B;border-radius:4pt 4pt 0 0"></div>
+            <span class="body-xs muted">FY29</span>
+          </div>
+        </div>
+
+        <!-- Proper CSS bars -->
+        <div style="display:flex;align-items:flex-end;justify-content:space-around;height:80pt;gap:12pt;padding:0 6pt;border-bottom:1px solid rgba(255,255,255,0.1);margin-bottom:6pt">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+            <div style="width:100%;background:#E2FF3B;border-radius:4pt 4pt 0 0;height:10.4%;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2pt">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:9pt;color:#000">4.2</span>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+            <div style="width:100%;background:#E2FF3B;border-radius:4pt 4pt 0 0;height:20.4%;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2pt">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:9pt;color:#000">22</span>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+            <div style="width:100%;background:#E2FF3B;border-radius:4pt 4pt 0 0;height:100%;display:flex;align-items:flex-start;justify-content:center;padding-top:4pt">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:11pt;color:#000">108</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-around">
+          <span class="body-xs muted">FY27</span>
+          <span class="body-xs muted">FY28</span>
+          <span class="body-xs muted">FY29</span>
+        </div>
+      </div>
+
+      <div class="cols2" style="gap:6pt">
+        <div class="card card-green" style="padding:8pt;text-align:center">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:16pt;color:#4ADE80">Month 18</div>
+          <div class="body-xs muted" style="margin-top:2pt">Cash Flow<br/>Break-even</div>
+        </div>
+        <div class="card card-lime" style="padding:8pt;text-align:center">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:16pt;color:#E2FF3B">26x</div>
+          <div class="body-xs muted" style="margin-top:2pt">ARR growth<br/>Y1 → Y3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+  SLIDE 8 — GO-TO-MARKET
+═══════════════════════════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="glow glow-amber" style="width:200pt;height:200pt;top:-40pt;right:-40pt;opacity:0.6"></div>
+
+  <div class="topbar">
+    <div class="logo">COMRIDE <span>/ Investor Deck 2026</span></div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <div class="confidential">Confidential</div>
+      <div class="slide-num">08 / 14</div>
+    </div>
+  </div>
+
+  <div class="eyebrow">Go-To-Market</div>
+  <h2 style="font-size:18pt;margin-bottom:10pt">Community-led growth, <span class="lime">not paid acquisition.</span></h2>
+
+  <div class="cols-split" style="flex:1;gap:12pt;align-items:stretch">
+    <div style="display:flex;flex-direction:column;gap:7pt">
+
+      <div class="card" style="padding:9pt 12pt">
+        <div style="display:flex;align-items:flex-start;gap:8pt">
+          <div style="background:#E2FF3B;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:9pt;padding:3pt 7pt;border-radius:4pt;flex-shrink:0;margin-top:1pt">PHASE 1</div>
+          <div>
+            <h4 style="font-size:9.5pt;margin-bottom:3pt">Seed the Community · Months 1–6</h4>
+            <p class="body-xs muted">Partner with 50 existing riding clubs across Bangalore, Pune, Hyderabad, Delhi. Onboard their WhatsApp groups to Comride. Free Comride Pro for club admins for 6 months. Target: 10,000 verified riders.</p>
+            <div style="margin-top:5pt;display:flex;gap:4pt">
+              <span class="pill pill-lime">Club Partnerships</span>
+              <span class="pill pill-white">Influencer Riders</span>
+              <span class="pill pill-white">RE/KTM Meets</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:9pt 12pt">
+        <div style="display:flex;align-items:flex-start;gap:8pt">
+          <div style="background:rgba(226,255,59,0.2);color:#E2FF3B;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:9pt;padding:3pt 7pt;border-radius:4pt;flex-shrink:0;margin-top:1pt">PHASE 2</div>
+          <div>
+            <h4 style="font-size:9.5pt;margin-bottom:3pt">Brand Flywheel · Months 7–18</h4>
+            <p class="body-xs muted">Onboard 20+ motorcycle brands (Royal Enfield, Hero, KTM, Yamaha) for sponsored challenges. Partner with 100+ resorts in major riding corridors. Launch marketplace with 500+ SKUs from gear brands.</p>
+            <div style="margin-top:5pt;display:flex;gap:4pt">
+              <span class="pill pill-amber">Brand Challenges</span>
+              <span class="pill pill-white">Resort Network</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:9pt 12pt">
+        <div style="display:flex;align-items:flex-start;gap:8pt">
+          <div style="background:rgba(226,255,59,0.1);color:rgba(226,255,59,0.6);font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:9pt;padding:3pt 7pt;border-radius:4pt;flex-shrink:0;margin-top:1pt">PHASE 3</div>
+          <div>
+            <h4 style="font-size:9.5pt;margin-bottom:3pt">National Scale · Month 19+</h4>
+            <p class="body-xs muted">Pan-India expansion, Tier-2 cities push. OEM API integrations (bike connects to app). Southeast Asia expansion — Indonesia, Vietnam (same 200M+ two-wheeler market dynamics).</p>
+            <div style="margin-top:5pt;display:flex;gap:4pt">
+              <span class="pill pill-blue">OEM APIs</span>
+              <span class="pill pill-white">Tier-2 Push</span>
+              <span class="pill pill-white">SEA Expansion</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: CAC breakdown -->
+    <div style="display:flex;flex-direction:column;gap:7pt">
+      <div class="card card-lime" style="padding:10pt 12pt">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:8pt">Acquisition Channel Mix</div>
+
+        <div class="bar-row">
+          <div class="bar-label">Organic/viral</div>
+          <div class="bar-track"><div class="bar-fill" style="width:52%;background:#E2FF3B"></div></div>
+          <div class="bar-val lime">52%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Club partners</div>
+          <div class="bar-track"><div class="bar-fill" style="width:24%;background:rgba(226,255,59,0.6)"></div></div>
+          <div class="bar-val" style="color:rgba(255,255,255,0.6)">24%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Paid social</div>
+          <div class="bar-track"><div class="bar-fill" style="width:14%;background:rgba(226,255,59,0.4)"></div></div>
+          <div class="bar-val" style="color:rgba(255,255,255,0.5)">14%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Brand events</div>
+          <div class="bar-track"><div class="bar-fill" style="width:6%;background:rgba(226,255,59,0.3)"></div></div>
+          <div class="bar-val" style="color:rgba(255,255,255,0.4)">6%</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Content/SEO</div>
+          <div class="bar-track"><div class="bar-fill" style="width:4%;background:rgba(226,255,59,0.2)"></div></div>
+          <div class="bar-val" style="color:rgba(255,255,255,0.3)">4%</div>
+        </div>
+
+        <div class="divider" style="margin-top:8pt;margin-bottom:8pt"></div>
+        <div style="display:flex;justify-content:space-between">
+          <span class="body-xs muted">Blended CAC</span>
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12pt;color:#E2FF3B">₹180</span>
+        </div>
+      </div>
+
+      <div class="card" style="padding:10pt 12pt">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:7pt">City Rollout Priority</div>
+        <div style="display:flex;flex-direction:column;gap:5pt">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="body-xs white">Bangalore · Pune · Hyderabad</span>
+            <span class="pill pill-lime">Now</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="body-xs muted">Delhi · Mumbai · Chennai</span>
+            <span class="pill pill-amber">Q3 2026</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="body-xs muted">Kochi · Jaipur · Chandigarh · Goa</span>
+            <span class="pill pill-white">Q1 2027</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="body-xs muted">Tier-2 + Southeast Asia</span>
+            <span class="pill pill-blue">2028</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+  SLIDE 9 — COMPETITIVE LANDSCAPE
+═══════════════════════════════════════════════════════════════════ -->
+<div class="slide bg-grid">
+  <div class="glow glow-blue" style="width:200pt;height:200pt;bottom:-40pt;right:-40pt;opacity:0.5"></div>
+
+  <div class="topbar">
+    <div class="logo">COMRIDE <span>/ Investor Deck 2026</span></div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <div class="confidential">Confidential</div>
+      <div class="slide-num">09 / 14</div>
+    </div>
+  </div>
+
+  <div class="eyebrow">Competitive Landscape</div>
+  <h2 style="font-size:18pt;margin-bottom:10pt">No direct competitor. <span class="lime">We are building the category.</span></h2>
+
+  <div style="flex:1;display:flex;flex-direction:column;gap:8pt">
+    <table class="tbl" style="font-size:7.5pt">
+      <thead>
+        <tr>
+          <th style="width:18%">Platform</th>
+          <th>Live Ride Coord.</th>
+          <th>Verified Identity</th>
+          <th>Safety Alerts</th>
+          <th>Resort Discovery</th>
+          <th>Gear Marketplace</th>
+          <th>India-First</th>
+          <th>2W Specific</th>
+          <th style="color:#E2FF3B">All-in-one</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="highlight">
+          <td><strong class="lime">Comride</strong></td>
+          <td class="check">✓</td>
+          <td class="check">✓</td>
+          <td class="check">✓</td>
+          <td class="check">✓</td>
+          <td class="check">✓</td>
+          <td class="check">✓</td>
+          <td class="check">✓</td>
+          <td class="check" style="color:#E2FF3B;font-weight:800">✓</td>
+        </tr>
+        <tr>
+          <td>Strava</td>
+          <td class="partial">~</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+        </tr>
+        <tr>
+          <td>WhatsApp Groups</td>
+          <td class="partial">~</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+          <td class="check">✓</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+        </tr>
+        <tr>
+          <td>Rever (USA)</td>
+          <td class="partial">~</td>
+          <td class="cross">✗</td>
+          <td class="partial">~</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+          <td class="check">✓</td>
+          <td class="cross">✗</td>
+        </tr>
+        <tr>
+          <td>Facebook Groups</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+          <td class="partial">~</td>
+          <td class="partial">~</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+        </tr>
+        <tr>
+          <td>Google Maps</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+          <td class="partial">~</td>
+          <td class="partial">~</td>
+          <td class="cross">✗</td>
+          <td class="partial">~</td>
+          <td class="cross">✗</td>
+          <td class="cross">✗</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="cols3" style="gap:7pt">
+      <div class="card card-lime" style="padding:9pt 12pt">
+        <h4 style="font-size:9pt;margin-bottom:4pt">Our Moat</h4>
+        <p class="body-xs muted">Network effects: every verified rider and club that joins makes the platform more valuable for the next. Community data creates an insurmountable lead over any single-feature entrant.</p>
+      </div>
+      <div class="card" style="padding:9pt 12pt">
+        <h4 style="font-size:9pt;margin-bottom:4pt">Why Incumbents Can't Win</h4>
+        <p class="body-xs muted">Strava is cycling-focused with western UX. WhatsApp has no ride-specific safety layer. Google Maps has no community. Building all of this from scratch is a 24-month project for any new entrant.</p>
+      </div>
+      <div class="card" style="padding:9pt 12pt">
+        <h4 style="font-size:9pt;margin-bottom:4pt">Expansion Defensibility</h4>
+        <p class="body-xs muted">India-first localisation (Aadhaar KYC, UPI payments, NHAI integration, Hindi/regional language support) is a deep technical moat that western apps cannot replicate quickly.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+  SLIDE 10 — TRACTION & MILESTONES
+═══════════════════════════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="glow glow-lime" style="width:240pt;height:240pt;top:-60pt;right:-60pt;opacity:0.55"></div>
+
+  <div class="topbar">
+    <div class="logo">COMRIDE <span>/ Investor Deck 2026</span></div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <div class="confidential">Confidential</div>
+      <div class="slide-num">10 / 14</div>
+    </div>
+  </div>
+
+  <div class="eyebrow">Traction &amp; Roadmap</div>
+  <h2 style="font-size:18pt;margin-bottom:10pt">Product built. <span class="lime">Ready to launch.</span></h2>
+
+  <div class="cols-split-r" style="flex:1;gap:12pt;align-items:stretch">
+    <div style="display:flex;flex-direction:column;gap:7pt">
+
+      <div class="card card-lime" style="padding:9pt 12pt">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:7pt">What We've Built (Pre-Seed)</div>
+        <div style="display:flex;flex-direction:column;gap:5pt">
+          <div style="display:flex;align-items:center;gap:7pt">
+            <span style="color:#4ADE80;font-size:10pt;flex-shrink:0">✓</span>
+            <p class="body-xs muted">Full-stack product: 45 screens across Explore, Ride, Shop, Profile — all interconnected</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:7pt">
+            <span style="color:#4ADE80;font-size:10pt;flex-shrink:0">✓</span>
+            <p class="body-xs muted">Verified Rider identity system (KYC + licence) with blue-tick trust layer</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:7pt">
+            <span style="color:#4ADE80;font-size:10pt;flex-shrink:0">✓</span>
+            <p class="body-xs muted">Live GPS tracking, SOS system, real-time safety alerts (weather, road closure, accident)</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:7pt">
+            <span style="color:#4ADE80;font-size:10pt;flex-shrink:0">✓</span>
+            <p class="body-xs muted">Gear marketplace, resort discovery, Comride Pro subscription flow</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:7pt">
+            <span style="color:#4ADE80;font-size:10pt;flex-shrink:0">✓</span>
+            <p class="body-xs muted">Digital garage, document vault, renewal reminders for insurance and licences</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:7pt">
+            <span style="color:#4ADE80;font-size:10pt;flex-shrink:0">✓</span>
+            <p class="body-xs muted">AI route suggestions, challenges, club management, group chat</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:9pt 12pt">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:6pt">Early Signals</div>
+        <div class="cols3" style="gap:6pt;text-align:center">
+          <div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:18pt;color:#E2FF3B">850+</div>
+            <div class="body-xs muted">Beta waitlist signups</div>
+          </div>
+          <div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:18pt;color:#4ADE80">12</div>
+            <div class="body-xs muted">Club admins in pilot talks</div>
+          </div>
+          <div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:18pt;color:#60A5FA">3</div>
+            <div class="body-xs muted">Resort LOIs in pipeline</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Roadmap -->
+    <div style="display:flex;flex-direction:column;gap:7pt">
+      <div class="eyebrow" style="font-size:7pt;margin-bottom:3pt">Product Roadmap</div>
+
+      <div style="display:flex;flex-direction:column;gap:5pt">
+        <div style="display:flex;gap:8pt;align-items:flex-start;padding:7pt 10pt;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.2);border-radius:6pt">
+          <span class="pill pill-green" style="flex-shrink:0">Done</span>
+          <p class="body-xs muted">Full product prototype · 45 screens · All core user journeys · Design system complete</p>
+        </div>
+        <div style="display:flex;gap:8pt;align-items:flex-start;padding:7pt 10pt;background:rgba(226,255,59,0.06);border:1px solid rgba(226,255,59,0.2);border-radius:6pt">
+          <span class="pill pill-lime" style="flex-shrink:0">Q2 '26</span>
+          <p class="body-xs muted">iOS &amp; Android apps · Aadhaar KYC integration · Live GPS backend · 50-club pilot launch</p>
+        </div>
+        <div style="display:flex;gap:8pt;align-items:flex-start;padding:7pt 10pt;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:6pt">
+          <span class="pill pill-amber" style="flex-shrink:0">Q3 '26</span>
+          <p class="body-xs muted">UPI payments · Marketplace launch · 20 brand partnerships · Pro subscription billing</p>
+        </div>
+        <div style="display:flex;gap:8pt;align-items:flex-start;padding:7pt 10pt;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:6pt">
+          <span class="pill pill-white" style="flex-shrink:0">Q4 '26</span>
+          <p class="body-xs muted">AI route intelligence · NHAI safety data feed · Insurance product launch · 5-city expansion</p>
+        </div>
+        <div style="display:flex;gap:8pt;align-items:flex-start;padding:7pt 10pt;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:6pt">
+          <span class="pill pill-blue" style="flex-shrink:0">2027</span>
+          <p class="body-xs muted">OEM integrations (RE Connect, KTM MyRide) · National scale · SEA market entry</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+  SLIDE 11 — WHY NOW
+═══════════════════════════════════════════════════════════════════ -->
+<div class="slide bg-grid">
+  <div class="glow glow-lime" style="width:200pt;height:200pt;bottom:-40pt;left:-40pt;opacity:0.5"></div>
+  <div class="glow glow-blue" style="width:160pt;height:160pt;top:-30pt;right:-30pt;opacity:0.4"></div>
+
+  <div class="topbar">
+    <div class="logo">COMRIDE <span>/ Investor Deck 2026</span></div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <div class="confidential">Confidential</div>
+      <div class="slide-num">11 / 14</div>
+    </div>
+  </div>
+
+  <div class="eyebrow">Why Now</div>
+  <h2 style="font-size:18pt;margin-bottom:10pt">Six tailwinds are <span class="lime">converging simultaneously.</span></h2>
+
+  <div class="cols3" style="flex:1;gap:7pt;align-items:stretch">
+    <div class="card" style="display:flex;flex-direction:column;gap:5pt">
+      <div style="font-size:18pt">🏍️</div>
+      <h4 style="font-size:9.5pt;color:#E2FF3B">Premium Motorcycle Boom</h4>
+      <p class="body-xs muted">Royal Enfield sold 9.5 lakh units in FY25 (+28% YoY). KTM, Triumph, BMW Motorrad all posting record India sales. Higher-spend riders with digital lifestyle entering the market.</p>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:5pt">
+      <div style="font-size:18pt">📱</div>
+      <h4 style="font-size:9.5pt;color:#E2FF3B">UPI &amp; Super-App Behaviour</h4>
+      <p class="body-xs muted">India has 15B+ monthly UPI transactions. Target demographic (22–35) expects seamless in-app payments for subscriptions, gear, and bookings. Infrastructure is ready.</p>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:5pt">
+      <div style="font-size:18pt">🛡️</div>
+      <h4 style="font-size:9.5pt;color:#E2FF3B">Safety Regulation Push</h4>
+      <p class="body-xs muted">MoRTH's 2025 road safety mandate requires two-wheeler tracking for commercial operators. Insurance companies mandating digital documentation. Comride is infrastructure for compliance.</p>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:5pt">
+      <div style="font-size:18pt">🌄</div>
+      <h4 style="font-size:9.5pt;color:#E2FF3B">Adventure Travel Surge</h4>
+      <p class="body-xs muted">Post-COVID domestic adventure tourism up 55%. Ladakh, Spiti, NE India motorcycle routes are Instagram's fastest-growing travel categories in India. Supply side (resorts) actively seeking riders.</p>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:5pt">
+      <div style="font-size:18pt">🤝</div>
+      <h4 style="font-size:9.5pt;color:#E2FF3B">Community Commerce Ready</h4>
+      <p class="body-xs muted">Indian consumers trust community reviews 4× more than brand advertising (Nielsen 2024). Comride's verified rider reviews become the most trusted gear and resort recommendation engine in the country.</p>
+    </div>
+    <div class="card card-lime" style="display:flex;flex-direction:column;gap:5pt">
+      <div style="font-size:18pt">⚡</div>
+      <h4 style="font-size:9.5pt;color:#E2FF3B">Zero Competition Window</h4>
+      <p class="body-xs muted">No VC-backed competitor exists. The window to establish network effects and community lock-in is <strong class="white">open right now</strong> — but it won't be for long as the market becomes obvious to larger players.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+  SLIDE 12 — TEAM
+═══════════════════════════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="glow glow-lime" style="width:220pt;height:220pt;top:-60pt;right:-50pt;opacity:0.5"></div>
+
+  <div class="topbar">
+    <div class="logo">COMRIDE <span>/ Investor Deck 2026</span></div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <div class="confidential">Confidential</div>
+      <div class="slide-num">12 / 14</div>
+    </div>
+  </div>
+
+  <div class="eyebrow">Team</div>
+  <h2 style="font-size:18pt;margin-bottom:10pt">Founder-market fit. <span class="lime">Built by a rider, for riders.</span></h2>
+
+  <div class="cols-split" style="flex:1;gap:12pt;align-items:flex-start">
+    <div style="display:flex;flex-direction:column;gap:8pt">
+
+      <!-- Founder -->
+      <div class="card card-lime" style="padding:11pt 14pt;display:flex;gap:12pt;align-items:flex-start">
+        <div style="width:44pt;height:44pt;border-radius:50%;background:linear-gradient(135deg,#E2FF3B 0%,rgba(226,255,59,0.3) 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:16pt;color:#000">A</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8pt;margin-bottom:3pt">
+            <h3 style="font-size:12pt">Arun N M</h3>
+            <span class="pill pill-lime">Founder &amp; CEO</span>
+          </div>
+          <p class="body-xs muted" style="margin-bottom:6pt;line-height:1.6">Product designer and motorcycle enthusiast with 8+ years building consumer digital products. Conceptualised, designed, and built the entire Comride product — 45 screens — as a solo founder. Deep understanding of the riding community having ridden 40,000+ km across India.</p>
+          <div style="display:flex;gap:5pt;flex-wrap:wrap">
+            <span class="pill pill-white">Product Design</span>
+            <span class="pill pill-white">UX Strategy</span>
+            <span class="pill pill-white">Community Building</span>
+            <span class="pill pill-white">Bangalore</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hiring -->
+      <div style="display:flex;gap:7pt">
+        <div class="card" style="flex:1;padding:9pt 12pt;border:1px dashed rgba(255,255,255,0.15)">
+          <div style="display:flex;align-items:center;gap:6pt;margin-bottom:5pt">
+            <div style="width:28pt;height:28pt;border-radius:50%;background:rgba(255,255,255,0.05);border:1px dashed rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:12pt">+</div>
+            <span class="pill pill-amber">Hiring</span>
+          </div>
+          <h4 style="font-size:9pt;margin-bottom:3pt">Co-founder / CTO</h4>
+          <p class="body-xs muted">Backend + mobile engineering lead. React Native + Node.js + real-time geolocation. Equity + market salary. Seed funded.</p>
+        </div>
+        <div class="card" style="flex:1;padding:9pt 12pt;border:1px dashed rgba(255,255,255,0.15)">
+          <div style="display:flex;align-items:center;gap:6pt;margin-bottom:5pt">
+            <div style="width:28pt;height:28pt;border-radius:50%;background:rgba(255,255,255,0.05);border:1px dashed rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:12pt">+</div>
+            <span class="pill pill-amber">Hiring</span>
+          </div>
+          <h4 style="font-size:9pt;margin-bottom:3pt">Head of Growth</h4>
+          <p class="body-xs muted">Community + performance marketing. Prior experience with riding clubs or motorsport brands strongly preferred.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: advisors + why us -->
+    <div style="display:flex;flex-direction:column;gap:7pt">
+      <div class="card" style="padding:10pt 12pt">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:7pt">Advisors (Sought)</div>
+        <div style="display:flex;flex-direction:column;gap:5pt">
+          <div style="display:flex;align-items:center;gap:7pt">
+            <div style="width:22pt;height:22pt;border-radius:50%;background:rgba(226,255,59,0.1);border:1px dashed rgba(226,255,59,0.3);display:flex;align-items:center;justify-content:center;font-size:9pt;flex-shrink:0">A</div>
+            <p class="body-xs muted">Mobility / OEM sector executive — Royal Enfield, Bajaj, or Hero MotoCorp alumni</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:7pt">
+            <div style="width:22pt;height:22pt;border-radius:50%;background:rgba(226,255,59,0.1);border:1px dashed rgba(226,255,59,0.3);display:flex;align-items:center;justify-content:center;font-size:9pt;flex-shrink:0">B</div>
+            <p class="body-xs muted">Consumer internet founder with network-effects platform experience (Sharechat, Meesho, Rapido type)</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:7pt">
+            <div style="width:22pt;height:22pt;border-radius:50%;background:rgba(226,255,59,0.1);border:1px dashed rgba(226,255,59,0.3);display:flex;align-items:center;justify-content:center;font-size:9pt;flex-shrink:0">C</div>
+            <p class="body-xs muted">Insurance / Insurtech leader for safety product integration and distribution</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-lime" style="padding:10pt 12pt">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:6pt">Why This Team Wins</div>
+        <div style="display:flex;flex-direction:column;gap:5pt">
+          <div style="display:flex;align-items:flex-start;gap:5pt">
+            <span style="color:#E2FF3B;flex-shrink:0">→</span>
+            <p class="body-xs muted"><strong class="white">Founder IS the user.</strong> Arun has ridden the routes, felt the pain, organised the rides. No proxy understanding.</p>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:5pt">
+            <span style="color:#E2FF3B;flex-shrink:0">→</span>
+            <p class="body-xs muted"><strong class="white">Full product built pre-funding.</strong> Demonstrates product vision, execution capability, and capital efficiency.</p>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:5pt">
+            <span style="color:#E2FF3B;flex-shrink:0">→</span>
+            <p class="body-xs muted"><strong class="white">Seed funding goes to scale.</strong> Not discovery. Hiring and growth from Day 1.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+  SLIDE 13 — USE OF FUNDS
+═══════════════════════════════════════════════════════════════════ -->
+<div class="slide bg-grid">
+  <div class="glow glow-lime" style="width:280pt;height:280pt;bottom:-80pt;right:-60pt;opacity:0.6"></div>
+
+  <div class="topbar">
+    <div class="logo">COMRIDE <span>/ Investor Deck 2026</span></div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <div class="confidential">Confidential</div>
+      <div class="slide-num">13 / 14</div>
+    </div>
+  </div>
+
+  <div class="eyebrow">Use of Funds</div>
+  <h2 style="font-size:18pt;margin-bottom:10pt">₹5 Crore. <span class="lime">18 months to cash-flow positive.</span></h2>
+
+  <div class="cols-split-r" style="flex:1;gap:12pt;align-items:stretch">
+    <div style="display:flex;flex-direction:column;gap:7pt">
+
+      <!-- Fund allocation visual -->
+      <div class="card" style="padding:11pt 14pt">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:10pt">₹5 Crore Allocation</div>
+
+        <div style="display:flex;flex-direction:column;gap:7pt">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4pt">
+              <span style="font-family:'Manrope',sans-serif;font-size:8.5pt;font-weight:600">Product &amp; Engineering</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10pt;color:#E2FF3B">₹2.0 Cr · 40%</span>
+            </div>
+            <div style="height:9pt;background:rgba(255,255,255,0.05);border-radius:5pt;overflow:hidden">
+              <div style="width:40%;height:100%;background:#E2FF3B;border-radius:5pt"></div>
+            </div>
+            <p class="body-xs muted" style="margin-top:3pt">CTO hire, 3 engineers, iOS + Android native build, real-time GPS backend, KYC integration</p>
+          </div>
+
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4pt">
+              <span style="font-family:'Manrope',sans-serif;font-size:8.5pt;font-weight:600">Growth &amp; Marketing</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10pt;color:#E2FF3B">₹1.75 Cr · 35%</span>
+            </div>
+            <div style="height:9pt;background:rgba(255,255,255,0.05);border-radius:5pt;overflow:hidden">
+              <div style="width:35%;height:100%;background:rgba(226,255,59,0.7);border-radius:5pt"></div>
+            </div>
+            <p class="body-xs muted" style="margin-top:3pt">Head of Growth hire, club partnerships, influencer programme, brand events, performance marketing</p>
+          </div>
+
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4pt">
+              <span style="font-family:'Manrope',sans-serif;font-size:8.5pt;font-weight:600">Operations &amp; Legal</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10pt;color:rgba(226,255,59,0.7)">₹0.75 Cr · 15%</span>
+            </div>
+            <div style="height:9pt;background:rgba(255,255,255,0.05);border-radius:5pt;overflow:hidden">
+              <div style="width:15%;height:100%;background:rgba(226,255,59,0.4);border-radius:5pt"></div>
+            </div>
+            <p class="body-xs muted" style="margin-top:3pt">Incorporation, compliance, insurance partnerships, city office, content creation</p>
+          </div>
+
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4pt">
+              <span style="font-family:'Manrope',sans-serif;font-size:8.5pt;font-weight:600">Working Capital &amp; Buffer</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10pt;color:rgba(226,255,59,0.5)">₹0.50 Cr · 10%</span>
+            </div>
+            <div style="height:9pt;background:rgba(255,255,255,0.05);border-radius:5pt;overflow:hidden">
+              <div style="width:10%;height:100%;background:rgba(226,255,59,0.25);border-radius:5pt"></div>
+            </div>
+            <p class="body-xs muted" style="margin-top:3pt">Infra costs, AWS/Firebase, server costs, unforeseen expenses, 3-month runway buffer</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:7pt">
+        <div class="card card-green" style="flex:1;padding:8pt;text-align:center">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:14pt;color:#4ADE80">18 months</div>
+          <div class="body-xs muted" style="margin-top:2pt">Runway</div>
+        </div>
+        <div class="card card-lime" style="flex:1;padding:8pt;text-align:center">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:14pt;color:#E2FF3B">Series A</div>
+          <div class="body-xs muted" style="margin-top:2pt">Ready by Month 15</div>
+        </div>
+        <div class="card" style="flex:1;padding:8pt;text-align:center">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:14pt;color:#60A5FA">₹25 Cr</div>
+          <div class="body-xs muted" style="margin-top:2pt">Pre-money valuation</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: milestones -->
+    <div style="display:flex;flex-direction:column;gap:7pt">
+      <div class="card" style="padding:10pt 12pt;flex:1">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:8pt">18-Month Milestones</div>
+        <div style="display:flex;flex-direction:column;gap:6pt">
+          <div style="display:flex;align-items:flex-start;gap:7pt">
+            <span class="pill pill-lime" style="flex-shrink:0;margin-top:1pt">M3</span>
+            <p class="body-xs muted">iOS + Android apps live · 50 clubs onboarded · 5,000 verified riders</p>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;align-items:flex-start;gap:7pt">
+            <span class="pill pill-lime" style="flex-shrink:0;margin-top:1pt">M6</span>
+            <p class="body-xs muted">Pro subscription billing live · Marketplace launch · First ₹50L ARR · 20,000 MAU</p>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;align-items:flex-start;gap:7pt">
+            <span class="pill pill-amber" style="flex-shrink:0;margin-top:1pt">M12</span>
+            <p class="body-xs muted">₹2 Cr ARR run-rate · 5-city coverage · 20 brand campaigns live · 35,000 MAU</p>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex;align-items:flex-start;gap:7pt">
+            <span class="pill pill-green" style="flex-shrink:0;margin-top:1pt">M18</span>
+            <p class="body-xs muted"><strong class="white">Cash-flow positive</strong> · ₹4.2 Cr ARR · 50,000 MAU · Series A raise begins</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:9pt 12pt">
+        <div class="eyebrow" style="font-size:7pt;margin-bottom:6pt">Series A Targets (Month 18)</div>
+        <div style="display:flex;flex-direction:column;gap:4pt">
+          <div style="display:flex;justify-content:space-between">
+            <span class="body-xs muted">ARR</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9.5pt;color:#E2FF3B">₹4.2 Cr+</span>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <span class="body-xs muted">MoM growth</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9.5pt;color:#4ADE80">15–20%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <span class="body-xs muted">MAU</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9.5pt;color:#fff">50,000+</span>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <span class="body-xs muted">Series A size (target)</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9.5pt;color:#E2FF3B">₹25–35 Cr</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+  SLIDE 14 — THE ASK / CLOSE
+═══════════════════════════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="glow glow-lime" style="width:380pt;height:380pt;top:-100pt;right:-100pt;opacity:0.75"></div>
+  <div class="glow glow-blue" style="width:220pt;height:220pt;bottom:-60pt;left:-60pt;opacity:0.5"></div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:auto">
+    <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:14pt;letter-spacing:0.14em;color:#E2FF3B">COMRIDE</div>
+    <div class="confidential">Confidential — Series Seed 2026</div>
+  </div>
+
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <div class="eyebrow" style="margin-bottom:10pt">The Ask</div>
+    <h1 style="font-size:38pt;margin-bottom:8pt;letter-spacing:-0.02em">
+      Join us in building<br/>India's <span style="color:#E2FF3B">riding OS.</span>
+    </h1>
+    <p style="font-size:10pt;color:rgba(255,255,255,0.5);max-width:150mm;line-height:1.6;margin-bottom:20pt">
+      200M riders. Zero infrastructure. A product that's built and ready to launch. We're raising ₹5 Crore to take Comride from prototype to 50,000 active riders and cash-flow positive in 18 months.
+    </p>
+
+    <div style="display:flex;gap:12pt;margin-bottom:22pt;flex-wrap:wrap">
+      <div style="padding:10pt 18pt;background:rgba(226,255,59,0.08);border:1px solid rgba(226,255,59,0.25);border-radius:7pt;min-width:120pt">
+        <div style="font-family:'Manrope',sans-serif;font-size:7.5pt;color:rgba(255,255,255,0.4);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4pt">Raising</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20pt;color:#E2FF3B">₹5 Crore</div>
+        <div style="font-family:'Manrope',sans-serif;font-size:8pt;color:rgba(255,255,255,0.4);margin-top:2pt">SAFE Note · 20% discount</div>
+      </div>
+      <div style="padding:10pt 18pt;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:7pt;min-width:120pt">
+        <div style="font-family:'Manrope',sans-serif;font-size:7.5pt;color:rgba(255,255,255,0.4);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4pt">Valuation Cap</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20pt;color:#fff">₹25 Crore</div>
+        <div style="font-family:'Manrope',sans-serif;font-size:8pt;color:rgba(255,255,255,0.4);margin-top:2pt">Pre-money · Seed round</div>
+      </div>
+      <div style="padding:10pt 18pt;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:7pt;min-width:120pt">
+        <div style="font-family:'Manrope',sans-serif;font-size:7.5pt;color:rgba(255,255,255,0.4);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4pt">Runway</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20pt;color:#fff">18 Months</div>
+        <div style="font-family:'Manrope',sans-serif;font-size:8pt;color:rgba(255,255,255,0.4);margin-top:2pt">To cash-flow positive</div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:14pt">
+      <a href="mailto:arun@comride.in" style="background:#E2FF3B;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10pt;letter-spacing:0.05em;padding:10pt 22pt;border-radius:6pt;text-decoration:none;display:inline-block">
+        Schedule a Meeting →
+      </a>
+      <div style="font-family:'Manrope',sans-serif;font-size:8.5pt;color:rgba(255,255,255,0.4);line-height:1.6">
+        arun@comride.in<br/>
+        comride.in · Bangalore, India
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8pt;border-top:1px solid rgba(255,255,255,0.07)">
+    <div style="font-family:'Manrope',sans-serif;font-size:7.5pt;color:rgba(255,255,255,0.2)">
+      This document is confidential and intended solely for the recipient. Not for distribution.
+    </div>
+    <div style="font-family:'Manrope',sans-serif;font-size:7.5pt;color:rgba(255,255,255,0.2)">April 2026</div>
+  </div>
+</div>
+
+</body>
+</html>
