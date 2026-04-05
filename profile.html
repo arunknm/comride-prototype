@@ -85,9 +85,15 @@
     <!-- PROFILE INFO SECTION -->
     <div style="background:#000;padding:56px 16px 20px;">
 
-      <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;color:#fff;margin-bottom:2px;letter-spacing:-0.3px;">
-        LEX_KINETIC
-      </h1>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;">
+        <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;color:#fff;letter-spacing:-0.3px;margin:0;">
+          LEX_KINETIC
+        </h1>
+        <!-- Verified Rider Blue Tick -->
+        <span id="verified-badge" title="Verified Rider" style="width:22px;height:22px;border-radius:50%;background:#1D9BF0;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;" onclick="showToast('✓ Verified Rider — Identity & License Confirmed')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+      </div>
 
       <p style="font-family:'Manrope',sans-serif;font-size:14px;color:rgba(255,255,255,0.55);margin-bottom:10px;">
         Arun NM
@@ -152,21 +158,136 @@
         </button>
       </div>
 
-      <!-- MY BIKE SECTION -->
+      <!-- MY GARAGE — add / remove bikes -->
       <div style="margin-bottom:24px;">
-        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;">MY BIKE</span>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;">MY GARAGE</span>
+          <a href="garage.html" style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;font-weight:600;">Full Garage →</a>
+        </div>
 
-        <div onclick="location.href='brand-profile.html'" style="background:#111;border-radius:12px;padding:12px;margin-top:10px;display:flex;align-items:center;gap:14px;cursor:pointer;">
-          <img src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=600&auto=format&fit=crop&q=80" alt="KTM Duke 390" style="width:90px;height:60px;border-radius:8px;object-fit:cover;flex-shrink:0;" loading="lazy" />
+        <!-- Bike 1 — Primary -->
+        <div style="background:#111;border-radius:12px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px;border:1px solid rgba(226,255,59,0.15);">
+          <img src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=300&auto=format&fit=crop&q=80" alt="KTM Duke 390" style="width:80px;height:54px;border-radius:8px;object-fit:cover;flex-shrink:0;" loading="lazy" />
           <div style="flex:1;min-width:0;">
-            <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;margin-bottom:2px;">KTM Duke 390</h3>
-            <p style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:8px;">2022 · Orange · ABS</p>
-            <div style="display:flex;flex-wrap:wrap;gap:6px;">
-              <span style="background:rgba(255,255,255,0.07);border-radius:9999px;padding:3px 10px;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">390cc</span>
-              <span style="background:rgba(255,255,255,0.07);border-radius:9999px;padding:3px 10px;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">Single</span>
-              <span style="background:rgba(255,255,255,0.07);border-radius:9999px;padding:3px 10px;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">43hp</span>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;margin:0;">KTM Duke 390</p>
+              <span style="background:rgba(226,255,59,0.15);color:#E2FF3B;font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;padding:2px 6px;border-radius:9999px;">PRIMARY</span>
+            </div>
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:6px;">2022 · Orange · KA-01-AB-1234</p>
+            <div style="display:flex;gap:6px;">
+              <button onclick="location.href='garage.html'" style="height:26px;padding:0 10px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.1);border-radius:9999px;font-family:'Manrope',sans-serif;font-weight:600;font-size:10px;cursor:pointer;">Edit</button>
+              <button onclick="showToast('BLACKSTORM set as primary bike.')" style="height:26px;padding:0 10px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.1);border-radius:9999px;font-family:'Manrope',sans-serif;font-weight:600;font-size:10px;cursor:pointer;">Switch Primary</button>
             </div>
           </div>
+          <button onclick="showRemoveBikeSheet('KTM Duke 390')" style="width:28px;height:28px;background:rgba(239,68,68,0.08);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;" title="Remove bike">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <!-- Bike 2 -->
+        <div style="background:#111;border-radius:12px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px;border:1px solid rgba(255,255,255,0.06);">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&auto=format&fit=crop&q=80" alt="RE Himalayan 450" style="width:80px;height:54px;border-radius:8px;object-fit:cover;flex-shrink:0;" loading="lazy" />
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;margin:0;">RE Himalayan 450</p>
+            </div>
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:6px;">2024 · Slate · KA-01-CD-5678</p>
+            <div style="display:flex;gap:6px;">
+              <button onclick="location.href='garage.html'" style="height:26px;padding:0 10px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.1);border-radius:9999px;font-family:'Manrope',sans-serif;font-weight:600;font-size:10px;cursor:pointer;">Edit</button>
+              <button onclick="showToast('RE Himalayan set as primary.')" style="height:26px;padding:0 10px;background:rgba(226,255,59,0.08);color:#E2FF3B;border:1px solid rgba(226,255,59,0.2);border-radius:9999px;font-family:'Manrope',sans-serif;font-weight:600;font-size:10px;cursor:pointer;">Set Primary</button>
+            </div>
+          </div>
+          <button onclick="showRemoveBikeSheet('RE Himalayan 450')" style="width:28px;height:28px;background:rgba(239,68,68,0.08);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;" title="Remove bike">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <!-- Add Bike Button -->
+        <button onclick="openAddBikeSheet()" style="width:100%;height:44px;background:transparent;border:1.5px dashed rgba(226,255,59,0.3);border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;color:#E2FF3B;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.06em;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          ADD BIKE
+        </button>
+      </div>
+
+      <!-- MY DOCUMENTS — with renewal reminders -->
+      <div style="margin-bottom:24px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;">MY DOCUMENTS</span>
+          <button onclick="openAddDocSheet()" style="background:rgba(226,255,59,0.1);color:#E2FF3B;border:1px solid rgba(226,255,59,0.2);border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;cursor:pointer;">+ Add Doc</button>
+        </div>
+
+        <!-- Document rows -->
+        <div style="background:#111;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);">
+
+          <!-- RC Book — Valid -->
+          <div style="padding:12px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,0.05);">
+            <div style="width:36px;height:36px;background:rgba(74,222,128,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div style="flex:1;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;margin-bottom:1px;">Registration Certificate</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);">KTM Duke 390 · Expires Jan 2034</p>
+            </div>
+            <span style="background:rgba(74,222,128,0.12);color:#4ADE80;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;padding:3px 8px;border-radius:9999px;white-space:nowrap;">VALID</span>
+          </div>
+
+          <!-- Insurance — Expiring Soon -->
+          <div style="padding:12px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(251,191,36,0.04);">
+            <div style="width:36px;height:36px;background:rgba(251,191,36,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div style="flex:1;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;margin-bottom:1px;">Motor Insurance</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#FBBF24;font-weight:600;">⚠ Expires in 18 days — Aug 12, 2026</p>
+            </div>
+            <button onclick="location.href='insurance.html'" style="background:#FBBF24;color:#000;border:none;border-radius:9999px;padding:5px 10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;cursor:pointer;white-space:nowrap;">RENEW</button>
+          </div>
+
+          <!-- PUC — Expired -->
+          <div style="padding:12px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(239,68,68,0.04);">
+            <div style="width:36px;height:36px;background:rgba(239,68,68,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div style="flex:1;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;margin-bottom:1px;">PUC Certificate</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#EF4444;font-weight:600;">✕ Expired on Jun 30, 2026</p>
+            </div>
+            <button onclick="showToast('PUC renewal centres near you loaded.')" style="background:rgba(239,68,68,0.12);color:#EF4444;border:1px solid rgba(239,68,68,0.3);border-radius:9999px;padding:5px 10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;cursor:pointer;white-space:nowrap;">RENEW</button>
+          </div>
+
+          <!-- Driving Licence — Valid -->
+          <div style="padding:12px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,0.05);">
+            <div style="width:36px;height:36px;background:rgba(74,222,128,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            </div>
+            <div style="flex:1;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;margin-bottom:1px;">Driving Licence</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);">MCWG · Expires Mar 2031</p>
+            </div>
+            <span style="background:rgba(74,222,128,0.12);color:#4ADE80;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;padding:3px 8px;border-radius:9999px;white-space:nowrap;">VALID</span>
+          </div>
+
+          <!-- NOC — Valid -->
+          <div style="padding:12px 14px;display:flex;align-items:center;gap:12px;">
+            <div style="width:36px;height:36px;background:rgba(74,222,128,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div style="flex:1;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;margin-bottom:1px;">No Objection Certificate</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);">KTM Finance · Issued Dec 2024</p>
+            </div>
+            <span style="background:rgba(74,222,128,0.12);color:#4ADE80;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;padding:3px 8px;border-radius:9999px;white-space:nowrap;">VALID</span>
+          </div>
+
+        </div>
+
+        <!-- Renewal reminder banner -->
+        <div style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:10px;padding:10px 14px;margin-top:8px;display:flex;align-items:center;gap:10px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <p style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.7);flex:1;">
+            <strong style="color:#FBBF24;">2 documents</strong> need attention — Insurance expiring soon &amp; PUC expired.
+          </p>
+          <button onclick="showToast('Reminders set for 7 days before expiry.')" style="background:rgba(251,191,36,0.12);color:#FBBF24;border:1px solid rgba(251,191,36,0.25);border-radius:9999px;padding:5px 10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;cursor:pointer;white-space:nowrap;">REMIND ME</button>
         </div>
       </div>
 
@@ -386,9 +507,116 @@
     </div>
   </div>
 
+  <!-- ADD BIKE SHEET -->
+  <div id="add-bike-overlay" onclick="closeAddBikeSheet()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:400;"></div>
+  <div id="add-bike-sheet" style="display:none;position:fixed;bottom:0;left:0;right:0;max-width:390px;margin:0 auto;background:#111;border-radius:16px 16px 0 0;padding:20px 16px 40px;z-index:401;animation:sheetUp 0.3s ease;">
+    <div style="width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 20px;"></div>
+    <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;margin:0 0 18px;">ADD BIKE</p>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:18px;">
+      <input id="bike-name" type="text" placeholder="Bike model (e.g. Royal Enfield Himalayan 450)" style="width:100%;background:#1a1a1a;border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;color:#fff;" />
+      <input id="bike-year" type="text" placeholder="Year of manufacture" style="width:100%;background:#1a1a1a;border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;color:#fff;" />
+      <input id="bike-reg" type="text" placeholder="Registration number (e.g. KA-01-AB-1234)" style="width:100%;background:#1a1a1a;border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;color:#fff;" />
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="confirmAddBike()" style="flex:1;height:46px;background:#E2FF3B;color:#000;border:none;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.06em;cursor:pointer;">ADD BIKE</button>
+      <button onclick="closeAddBikeSheet()" style="width:46px;height:46px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- REMOVE BIKE CONFIRM SHEET -->
+  <div id="remove-overlay" onclick="closeRemoveSheet()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:400;"></div>
+  <div id="remove-sheet" style="display:none;position:fixed;bottom:0;left:0;right:0;max-width:390px;margin:0 auto;background:#111;border-radius:16px 16px 0 0;padding:24px 16px 40px;z-index:401;animation:sheetUp 0.3s ease;">
+    <div style="width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 20px;"></div>
+    <div style="text-align:center;margin-bottom:20px;">
+      <div style="width:52px;height:52px;background:rgba(239,68,68,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      </div>
+      <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;margin-bottom:6px;">Remove <span id="remove-bike-name">Bike</span>?</p>
+      <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.5);">This will remove the bike and all linked documents from your garage.</p>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="confirmRemoveBike()" style="flex:1;height:44px;background:rgba(239,68,68,0.12);color:#EF4444;border:1px solid rgba(239,68,68,0.3);border-radius:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;cursor:pointer;">REMOVE</button>
+      <button onclick="closeRemoveSheet()" style="flex:1;height:44px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.1);border-radius:10px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;cursor:pointer;">CANCEL</button>
+    </div>
+  </div>
+
+  <!-- ADD DOC SHEET -->
+  <div id="add-doc-overlay" onclick="closeAddDocSheet()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:400;"></div>
+  <div id="add-doc-sheet" style="display:none;position:fixed;bottom:0;left:0;right:0;max-width:390px;margin:0 auto;background:#111;border-radius:16px 16px 0 0;padding:20px 16px 40px;z-index:401;animation:sheetUp 0.3s ease;">
+    <div style="width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 20px;"></div>
+    <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;margin:0 0 16px;">ADD DOCUMENT</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+      <button onclick="showToast('RC upload flow opened.');closeAddDocSheet()" style="height:72px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        RC Book
+      </button>
+      <button onclick="showToast('Insurance upload flow opened.');closeAddDocSheet()" style="height:72px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Insurance
+      </button>
+      <button onclick="showToast('PUC upload flow opened.');closeAddDocSheet()" style="height:72px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        PUC Certificate
+      </button>
+      <button onclick="showToast('Licence upload flow opened.');closeAddDocSheet()" style="height:72px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        Driving Licence
+      </button>
+      <button onclick="showToast('NOC upload flow opened.');closeAddDocSheet()" style="height:72px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.8"><polyline points="20 6 9 17 4 12"/></svg>
+        NOC
+      </button>
+      <button onclick="showToast('Other document upload opened.');closeAddDocSheet()" style="height:72px;background:#1a1a1a;border:1px dashed rgba(255,255,255,0.15);border-radius:10px;color:rgba(255,255,255,0.4);font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.8"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Other
+      </button>
+    </div>
+    <button onclick="closeAddDocSheet()" style="width:100%;height:42px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.5);font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;cursor:pointer;">Cancel</button>
+  </div>
+
   <script>
   function showShareSheet(){document.getElementById('share-overlay').style.display='block';document.getElementById('share-sheet').style.display='block';}
   function closeShareSheet(){document.getElementById('share-overlay').style.display='none';document.getElementById('share-sheet').style.display='none';}
+
+  // Garage management
+  function openAddBikeSheet(){
+    document.getElementById('add-bike-overlay').style.display='block';
+    document.getElementById('add-bike-sheet').style.display='block';
+  }
+  function closeAddBikeSheet(){
+    document.getElementById('add-bike-overlay').style.display='none';
+    document.getElementById('add-bike-sheet').style.display='none';
+  }
+  function confirmAddBike(){
+    var name=document.getElementById('bike-name').value||'New Bike';
+    closeAddBikeSheet();
+    showToast(name+' added to your garage!');
+  }
+  function showRemoveBikeSheet(name){
+    document.getElementById('remove-bike-name').textContent=name;
+    document.getElementById('remove-overlay').style.display='block';
+    document.getElementById('remove-sheet').style.display='block';
+  }
+  function closeRemoveSheet(){
+    document.getElementById('remove-overlay').style.display='none';
+    document.getElementById('remove-sheet').style.display='none';
+  }
+  function confirmRemoveBike(){
+    closeRemoveSheet();
+    showToast('Bike removed from garage.');
+  }
+
+  // Document management
+  function openAddDocSheet(){
+    document.getElementById('add-doc-overlay').style.display='block';
+    document.getElementById('add-doc-sheet').style.display='block';
+  }
+  function closeAddDocSheet(){
+    document.getElementById('add-doc-overlay').style.display='none';
+    document.getElementById('add-doc-sheet').style.display='none';
+  }
 
   function openPhoto(src) {
     const overlay = document.createElement('div');
@@ -400,6 +628,7 @@
     document.body.appendChild(overlay);
   }
   </script>
+
 
   <script>
   document.querySelectorAll('a,button,[onclick]').forEach(function(el){
