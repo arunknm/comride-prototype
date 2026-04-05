@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Experiences — Comride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { background: #000; color: #fff; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,12px)} to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .page-body { animation: slideUp 0.35s ease both; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; }
+    ::selection { background: #E2FF3B; color: #000; }
+    .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .press-feedback { transition: opacity 0.12s, transform 0.12s; cursor: pointer; }
+    .press-feedback:active { opacity: 0.72; transform: scale(0.97); }
+    .filter-pill { display:inline-flex; align-items:center; padding:8px 16px; border-radius:9999px; font-family:'Manrope',sans-serif; font-size:13px; font-weight:600; white-space:nowrap; cursor:pointer; transition:all 0.18s; border:1px solid rgba(255,255,255,0.12); background:#111; color:rgba(255,255,255,0.7); }
+    .filter-pill.active { background:#E2FF3B; color:#000; border-color:#E2FF3B; }
+    .filter-pill:active { opacity:0.75; transform:scale(0.96); }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════ -->
+  <!-- FIXED TOP HEADER            -->
+  <!-- ═══════════════════════════ -->
+  <header style="position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06)">
+    <div style="max-width:390px;margin:0 auto;padding:0 16px;height:60px;display:flex;align-items:center;justify-content:space-between">
+      <!-- Back arrow -->
+      <a href="home.html" class="press-feedback" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:9999px;background:rgba(255,255,255,0.06)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </a>
+      <!-- Title -->
+      <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;letter-spacing:-0.3px">Experiences</span>
+      <!-- Filter icon -->
+      <div class="press-feedback" onclick="showToast('Filters coming soon')" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:9999px;background:rgba(255,255,255,0.06)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════ -->
+  <!-- PAGE BODY                   -->
+  <!-- ═══════════════════════════ -->
+  <div class="page-body" style="max-width:390px;margin:0 auto;padding-top:60px;padding-bottom:100px;">
+
+    <!-- HERO SECTION -->
+    <div style="padding:28px 16px 20px;">
+      <p style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#E2FF3B;margin-bottom:8px;">GUIDED RIDE EXPERIENCES</p>
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:800;letter-spacing:-0.8px;line-height:1.15;margin-bottom:8px;">Ride Beyond<br>the Ordinary</h1>
+      <p style="font-family:'Manrope',sans-serif;font-size:14px;font-weight:400;color:rgba(255,255,255,0.55);line-height:1.5;">Expert-led tours. Verified guides. Unforgettable roads.</p>
+    </div>
+
+    <!-- FILTER PILLS -->
+    <div style="padding:0 16px 20px;overflow-x:auto;" class="no-scrollbar">
+      <div style="display:flex;gap:8px;width:max-content;">
+        <span class="filter-pill active" onclick="setFilter(this,'All')">All</span>
+        <span class="filter-pill" onclick="setFilter(this,'Weekend')">Weekend</span>
+        <span class="filter-pill" onclick="setFilter(this,'Multi-day')">Multi-day</span>
+        <span class="filter-pill" onclick="setFilter(this,'Himalayan')">Himalayan</span>
+        <span class="filter-pill" onclick="setFilter(this,'South India')">South India</span>
+        <span class="filter-pill" onclick="setFilter(this,'Coastal')">Coastal</span>
+      </div>
+    </div>
+
+    <!-- CARDS WRAPPER -->
+    <div style="padding:0 16px;display:flex;flex-direction:column;gap:16px;">
+
+      <!-- ── CARD 1: Leh-Manali ── -->
+      <div style="background:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);">
+        <!-- Image -->
+        <div style="position:relative;height:200px;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&auto=format&fit=crop&q=80"
+               style="width:100%;height:100%;object-fit:cover;" alt="Leh-Manali Highway" />
+          <!-- Gradient overlay -->
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.75) 100%);"></div>
+          <!-- BESTSELLER badge -->
+          <div style="position:absolute;top:12px;left:12px;background:#E2FF3B;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10px;letter-spacing:1.2px;padding:4px 10px;border-radius:9999px;text-transform:uppercase;">BESTSELLER</div>
+          <!-- Spots left -->
+          <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.15);backdrop-filter:blur(8px);color:#fff;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;padding:4px 10px;border-radius:9999px;">
+            🔥 2 spots left
+          </div>
+          <!-- Duration on image -->
+          <div style="position:absolute;bottom:12px;left:12px;">
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;line-height:1.2;">Leh-Manali Highway<br>Expedition</p>
+          </div>
+        </div>
+        <!-- Card body -->
+        <div style="padding:14px 14px 16px;">
+          <!-- Meta row -->
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:5px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.55);">10 Days</span>
+            </div>
+            <div style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.25);"></div>
+            <div style="display:flex;align-items:center;gap:5px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.55);">1,240 KM</span>
+            </div>
+            <div style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.25);"></div>
+            <div style="display:flex;align-items:center;gap:4px;margin-left:auto;">
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;font-weight:700;">4.9★</span>
+              <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);">(128)</span>
+            </div>
+          </div>
+          <!-- Guide row -->
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:8px 10px;background:#111;border-radius:8px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#E2FF3B,#8aad00);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10px;color:#000;">IN</span>
+            </div>
+            <div>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;">IRON_NOMAD</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="#E2FF3B"><path d="M9 12l2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+              </div>
+              <span style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);">Verified Guide · 42 tours led</span>
+            </div>
+            <div style="margin-left:auto;background:rgba(226,255,59,0.1);padding:3px 8px;border-radius:9999px;">
+              <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#E2FF3B;font-weight:700;">EXPERT LEVEL</span>
+            </div>
+          </div>
+          <!-- Tags -->
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
+            <span style="background:#191919;border:1px solid rgba(255,255,255,0.1);padding:4px 10px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">Himalayan</span>
+            <span style="background:#191919;border:1px solid rgba(255,255,255,0.1);padding:4px 10px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">Expert Level</span>
+            <span style="background:rgba(226,255,59,0.07);border:1px solid rgba(226,255,59,0.2);padding:4px 10px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;">RE Himalayan rec.</span>
+          </div>
+          <!-- Price + CTA -->
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;color:#fff;">₹28,500</span>
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.4);margin-left:2px;">/person</span>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="press-feedback" onclick="showToast('Loading experience details...')" style="height:36px;padding:0 14px;border-radius:9999px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:#fff;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Details</button>
+              <button class="press-feedback" onclick="showBookingSheet('Leh-Manali Highway Expedition','₹28,500')" style="height:36px;padding:0 16px;border-radius:9999px;border:none;background:#E2FF3B;color:#000;font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Book Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CARD 2: Coorg Coffee Trail ── -->
+      <div style="background:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);">
+        <div style="position:relative;height:180px;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=700&auto=format&fit=crop&q=80"
+               style="width:100%;height:100%;object-fit:cover;" alt="Coorg Coffee Trail" />
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.05) 40%,rgba(0,0,0,0.75) 100%);"></div>
+          <div style="position:absolute;top:12px;left:12px;background:rgba(255,180,0,0.9);color:#000;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10px;letter-spacing:1.2px;padding:4px 10px;border-radius:9999px;text-transform:uppercase;">POPULAR</div>
+          <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.15);backdrop-filter:blur(8px);color:#fff;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;padding:4px 10px;border-radius:9999px;">6 spots left</div>
+          <div style="position:absolute;bottom:12px;left:12px;">
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;line-height:1.2;">Coorg Coffee Trail</p>
+          </div>
+        </div>
+        <div style="padding:14px 14px 16px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:5px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.55);">2 Days</span>
+            </div>
+            <div style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.25);"></div>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.55);">280 KM</span>
+            <div style="display:flex;align-items:center;gap:4px;margin-left:auto;">
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;font-weight:700;">4.7★</span>
+              <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);">(89)</span>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:8px 10px;background:#111;border-radius:8px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#4fc3f7,#1976d2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10px;color:#fff;">SP</span>
+            </div>
+            <div>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;">STEEL_PACK</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="#E2FF3B"><path d="M9 12l2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+              </div>
+              <span style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);">Verified Guide · 18 tours led</span>
+            </div>
+            <div style="margin-left:auto;background:rgba(78,205,196,0.1);padding:3px 8px;border-radius:9999px;">
+              <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#4ecdc4;font-weight:700;">BEGINNER FRIENDLY</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
+            <span style="background:#191919;border:1px solid rgba(255,255,255,0.1);padding:4px 10px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">Weekend</span>
+            <span style="background:#191919;border:1px solid rgba(255,255,255,0.1);padding:4px 10px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">Beginner Friendly</span>
+            <span style="background:#191919;border:1px solid rgba(255,255,255,0.1);padding:4px 10px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">All bikes</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;color:#fff;">₹4,200</span>
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.4);margin-left:2px;">/person</span>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="press-feedback" onclick="showToast('Loading experience details...')" style="height:36px;padding:0 14px;border-radius:9999px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:#fff;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Details</button>
+              <button class="press-feedback" onclick="showBookingSheet('Coorg Coffee Trail','₹4,200')" style="height:36px;padding:0 16px;border-radius:9999px;border:none;background:#E2FF3B;color:#000;font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Book Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CARD 3: Spiti Valley ── -->
+      <div style="background:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);">
+        <div style="position:relative;height:180px;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=700&auto=format&fit=crop&q=80"
+               style="width:100%;height:100%;object-fit:cover;" alt="Spiti Valley Loop" />
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.05) 40%,rgba(0,0,0,0.75) 100%);"></div>
+          <div style="position:absolute;top:12px;left:12px;background:rgba(100,220,120,0.9);color:#000;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10px;letter-spacing:1.2px;padding:4px 10px;border-radius:9999px;text-transform:uppercase;">NEW</div>
+          <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.15);backdrop-filter:blur(8px);color:#fff;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;padding:4px 10px;border-radius:9999px;">4 spots left</div>
+          <div style="position:absolute;bottom:12px;left:12px;">
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;line-height:1.2;">Spiti Valley Loop<br>10-Day Epic</p>
+          </div>
+        </div>
+        <div style="padding:14px 14px 16px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:5px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.55);">10 Days</span>
+            </div>
+            <div style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.25);"></div>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.55);">1,480 KM</span>
+            <div style="display:flex;align-items:center;gap:4px;margin-left:auto;">
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;font-weight:700;">5.0★</span>
+              <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);">(34)</span>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:8px 10px;background:#111;border-radius:8px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#ab47bc,#6a1b9a);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10px;color:#fff;">LK</span>
+            </div>
+            <div>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;">LEX_KINETIC</span>
+              <br>
+              <span style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);">Guide · 9 tours led</span>
+            </div>
+            <div style="margin-left:auto;background:rgba(171,71,188,0.12);padding:3px 8px;border-radius:9999px;">
+              <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ce93d8;font-weight:700;">ADVANCED</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
+            <span style="background:#191919;border:1px solid rgba(255,255,255,0.1);padding:4px 10px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">Himalayan</span>
+            <span style="background:#191919;border:1px solid rgba(255,255,255,0.1);padding:4px 10px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">Advanced</span>
+            <span style="background:rgba(255,100,100,0.08);border:1px solid rgba(255,100,100,0.2);padding:4px 10px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:11px;color:#ff8a80;">High Altitude</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;color:#fff;">₹32,000</span>
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.4);margin-left:2px;">/person</span>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="press-feedback" onclick="showToast('Loading experience details...')" style="height:36px;padding:0 14px;border-radius:9999px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:#fff;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Details</button>
+              <button class="press-feedback" onclick="showBookingSheet('Spiti Valley Loop','₹32,000')" style="height:36px;padding:0 16px;border-radius:9999px;border:none;background:#E2FF3B;color:#000;font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Book Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CARD 4: Goa Coastal ── -->
+      <div style="background:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);">
+        <div style="position:relative;height:180px;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=700&auto=format&fit=crop&q=80"
+               style="width:100%;height:100%;object-fit:cover;" alt="Goa Coastal Highway" />
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.05) 40%,rgba(0,0,0,0.75) 100%);"></div>
+          <div style="position:absolute;top:12px;left:12px;background:rgba(30,136,229,0.9);color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10px;letter-spacing:1.2px;padding:4px 10px;border-radius:9999px;text-transform:uppercase;">WEEKEND</div>
+          <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.15);backdrop-filter:blur(8px);color:#fff;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;padding:4px 10px;border-radius:9999px;">8 spots left</div>
+          <div style="position:absolute;bottom:12px;left:12px;">
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;line-height:1.2;">Goa Coastal<br>Highway Run</p>
+          </div>
+        </div>
+        <div style="padding:14px 14px 16px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:5px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.55);">3 Days</span>
+            </div>
+            <div style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.25);"></div>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.55);">520 KM</span>
+            <div style="display:flex;align-items:center;gap:4px;margin-left:auto;">
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;font-weight:700;">4.8★</span>
+              <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);">(156)</span>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:8px 10px;background:#111;border-radius:8px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#ff6e40,#bf360c);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10px;color:#fff;">VR</span>
+            </div>
+            <div>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;">VOID_RUNNER</span>
+              <br>
+              <span style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);">Guide · 27 tours led</span>
+            </div>
+            <div style="margin-left:auto;background:rgba(30,136,229,0.12);padding:3px 8px;border-radius:9999px;">
+              <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#64b5f6;font-weight:700;">INTERMEDIATE</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
+            <span style="background:#191919;border:1px solid rgba(255,255,255,0.1);padding:4px 10px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">Coastal</span>
+            <span style="background:#191919;border:1px solid rgba(255,255,255,0.1);padding:4px 10px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">Intermediate</span>
+            <span style="background:#191919;border:1px solid rgba(255,255,255,0.1);padding:4px 10px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">All bikes</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;color:#fff;">₹6,800</span>
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.4);margin-left:2px;">/person</span>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="press-feedback" onclick="showToast('Loading experience details...')" style="height:36px;padding:0 14px;border-radius:9999px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:#fff;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Details</button>
+              <button class="press-feedback" onclick="showBookingSheet('Goa Coastal Highway Run','₹6,800')" style="height:36px;padding:0 16px;border-radius:9999px;border:none;background:#E2FF3B;color:#000;font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Book Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- END CARDS -->
+
+    <!-- BECOME A GUIDE SECTION -->
+    <div style="padding:24px 16px 0;">
+      <div style="background:linear-gradient(135deg,#0f1500 0%,#0a0a0a 40%,#111800 100%);border:1px solid rgba(226,255,59,0.2);border-radius:12px;padding:24px;position:relative;overflow:hidden;">
+        <!-- Decorative glow -->
+        <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:rgba(226,255,59,0.08);border-radius:50%;filter:blur(30px);pointer-events:none;"></div>
+        <p style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#E2FF3B;margin-bottom:8px;">FOR EXPERIENCED RIDERS</p>
+        <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.5px;line-height:1.2;margin-bottom:8px;">Become a<br>Comride Guide</h2>
+        <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);line-height:1.55;margin-bottom:16px;">Share your knowledge of Indian roads. List your tours, set your price, and build a following of riders who trust your expertise.</p>
+        <!-- Highlight stat -->
+        <div style="background:rgba(226,255,59,0.08);border:1px solid rgba(226,255,59,0.2);border-radius:10px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:24px;color:#E2FF3B;">85%</span>
+          <span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.7);line-height:1.4;">of every booking goes<br>directly to you</span>
+        </div>
+        <!-- Mini stats -->
+        <div style="display:flex;gap:16px;margin-bottom:20px;">
+          <div style="text-align:center;">
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#fff;margin-bottom:2px;">₹2.4L+</p>
+            <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);">avg/guide/yr</p>
+          </div>
+          <div style="width:1px;background:rgba(255,255,255,0.1);"></div>
+          <div style="text-align:center;">
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#fff;margin-bottom:2px;">340+</p>
+            <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);">active guides</p>
+          </div>
+          <div style="width:1px;background:rgba(255,255,255,0.1);"></div>
+          <div style="text-align:center;">
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#fff;margin-bottom:2px;">4.8★</p>
+            <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);">avg rating</p>
+          </div>
+        </div>
+        <button class="press-feedback" onclick="showToast('Guide application coming soon — stay tuned!')" style="width:100%;height:48px;border-radius:9999px;border:none;background:#E2FF3B;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer;letter-spacing:-0.2px;">Apply as Guide →</button>
+      </div>
+    </div>
+
+    <!-- BOTTOM PADDING -->
+    <div style="height:24px;"></div>
+  </div>
+  <!-- END PAGE BODY -->
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- BOOKING BOTTOM SHEET                    -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="sheet-backdrop" onclick="closeBookingSheet()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:400;animation:fadeIn 0.2s ease both;"></div>
+
+  <div id="booking-sheet" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:401;max-width:390px;margin:0 auto;">
+    <div style="background:#0f0f0f;border-radius:12px 12px 0 0;border-top:1px solid rgba(255,255,255,0.1);padding:0 0 40px;">
+      <!-- Handle -->
+      <div style="display:flex;justify-content:center;padding:12px 0 0;">
+        <div style="width:36px;height:4px;border-radius:9999px;background:rgba(255,255,255,0.18);"></div>
+      </div>
+      <!-- Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 0;">
+        <div>
+          <p style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:3px;">BOOKING</p>
+          <p id="sheet-title" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;letter-spacing:-0.3px;"></p>
+        </div>
+        <div class="press-feedback" onclick="closeBookingSheet()" style="width:32px;height:32px;border-radius:9999px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </div>
+      </div>
+      <!-- Divider -->
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:16px 0;"></div>
+      <!-- Date picker -->
+      <div style="padding:0 20px;">
+        <p style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px;">Select Date</p>
+        <div style="display:flex;gap:8px;">
+          <div class="press-feedback date-pill" onclick="selectDate(this,'Apr 18')" style="flex:1;padding:10px 6px;border-radius:10px;background:#191919;border:1px solid rgba(255,255,255,0.1);text-align:center;cursor:pointer;">
+            <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:2px;">FRI</p>
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;">Apr 18</p>
+          </div>
+          <div class="press-feedback date-pill selected-date" onclick="selectDate(this,'May 2')" style="flex:1;padding:10px 6px;border-radius:10px;background:rgba(226,255,59,0.1);border:1px solid #E2FF3B;text-align:center;cursor:pointer;">
+            <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#E2FF3B;margin-bottom:2px;">FRI</p>
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B;">May 2</p>
+          </div>
+          <div class="press-feedback date-pill" onclick="selectDate(this,'May 16')" style="flex:1;padding:10px 6px;border-radius:10px;background:#191919;border:1px solid rgba(255,255,255,0.1);text-align:center;cursor:pointer;">
+            <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:2px;">FRI</p>
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;">May 16</p>
+          </div>
+        </div>
+      </div>
+      <!-- Rider count -->
+      <div style="padding:16px 20px 0;">
+        <p style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px;">Riders</p>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#191919;border-radius:10px;border:1px solid rgba(255,255,255,0.08);">
+          <span style="font-family:'Manrope',sans-serif;font-size:14px;color:rgba(255,255,255,0.7);">Number of riders</span>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <button class="press-feedback" onclick="changeCount(-1)" style="width:32px;height:32px;border-radius:9999px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;line-height:1;">−</button>
+            <span id="rider-count" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;min-width:20px;text-align:center;">1</span>
+            <button class="press-feedback" onclick="changeCount(1)" style="width:32px;height:32px;border-radius:9999px;border:none;background:#E2FF3B;color:#000;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;line-height:1;">+</button>
+          </div>
+        </div>
+      </div>
+      <!-- Price breakdown -->
+      <div style="padding:16px 20px 0;">
+        <div style="padding:14px;background:#191919;border-radius:10px;border:1px solid rgba(255,255,255,0.08);">
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);" id="price-per-label">₹28,500 × 1 rider</span>
+            <span style="font-family:'Manrope',sans-serif;font-size:13px;" id="price-subtotal">₹28,500</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+            <span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);">Platform fee (15%)</span>
+            <span style="font-family:'Manrope',sans-serif;font-size:13px;" id="price-fee">₹4,275</span>
+          </div>
+          <div style="height:1px;background:rgba(255,255,255,0.08);margin-bottom:10px;"></div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;">Total</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:15px;color:#E2FF3B;" id="price-total">₹32,775</span>
+          </div>
+        </div>
+      </div>
+      <!-- Trust badges -->
+      <div style="padding:14px 20px 0;">
+        <div style="display:flex;gap:8px;">
+          <div style="flex:1;display:flex;align-items:center;gap:6px;padding:8px 10px;background:#191919;border-radius:9px;border:1px solid rgba(255,255,255,0.06);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.6);line-height:1.3;">Secure<br>payment</span>
+          </div>
+          <div style="flex:1;display:flex;align-items:center;gap:6px;padding:8px 10px;background:#191919;border-radius:9px;border:1px solid rgba(255,255,255,0.06);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.6);line-height:1.3;">Free cancel<br>48hrs</span>
+          </div>
+          <div style="flex:1;display:flex;align-items:center;gap:6px;padding:8px 10px;background:#191919;border-radius:9px;border:1px solid rgba(255,255,255,0.06);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M9 12l2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.6);line-height:1.3;">Guide<br>verified</span>
+          </div>
+        </div>
+      </div>
+      <!-- Confirm button -->
+      <div style="padding:16px 20px 0;">
+        <button class="press-feedback" onclick="confirmBooking()" style="width:100%;height:52px;border-radius:9999px;border:none;background:#E2FF3B;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;cursor:pointer;letter-spacing:-0.2px;">Confirm Booking</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" style="display:none;position:fixed;bottom:90px;left:50%;transform:translate(-50%,0);background:#1a1a1a;border:1px solid rgba(255,255,255,0.12);color:#fff;padding:12px 20px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;z-index:9999;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.5);"></div>
+
+  <script src="nav-module.js"></script>
+  <script>
+    // ── Filter pills ──────────────────────────────────────
+    function setFilter(el, label) {
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      showToast('Filtering: ' + label);
+    }
+
+    // ── Toast ─────────────────────────────────────────────
+    let toastTimer;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      t.style.animation = 'toastIn 0.25s ease both';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { t.style.display = 'none'; }, 2800);
+    }
+
+    // ── Booking sheet state ────────────────────────────────
+    let currentBasePrice = 28500;
+    let riderCount = 1;
+
+    function showBookingSheet(name, price) {
+      const numStr = price.replace(/[₹,]/g,'');
+      currentBasePrice = parseInt(numStr, 10);
+      riderCount = 1;
+      document.getElementById('sheet-title').textContent = name;
+      updatePriceDisplay();
+      document.getElementById('booking-sheet').style.display = 'block';
+      document.getElementById('booking-sheet').style.animation = 'sheetUp 0.3s cubic-bezier(0.32,0.72,0,1) both';
+      document.getElementById('sheet-backdrop').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeBookingSheet() {
+      document.getElementById('booking-sheet').style.display = 'none';
+      document.getElementById('sheet-backdrop').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    function changeCount(delta) {
+      riderCount = Math.max(1, Math.min(8, riderCount + delta));
+      document.getElementById('rider-count').textContent = riderCount;
+      updatePriceDisplay();
+    }
+
+    function updatePriceDisplay() {
+      const subtotal = currentBasePrice * riderCount;
+      const fee = Math.round(subtotal * 0.15);
+      const total = subtotal + fee;
+      const fmt = n => '₹' + n.toLocaleString('en-IN');
+      document.getElementById('price-per-label').textContent = fmt(currentBasePrice) + ' × ' + riderCount + ' rider' + (riderCount > 1 ? 's' : '');
+      document.getElementById('price-subtotal').textContent = fmt(subtotal);
+      document.getElementById('price-fee').textContent = fmt(fee);
+      document.getElementById('price-total').textContent = fmt(total);
+    }
+
+    function selectDate(el, label) {
+      document.querySelectorAll('.date-pill').forEach(d => {
+        d.style.background = '#191919';
+        d.style.borderColor = 'rgba(255,255,255,0.1)';
+        d.querySelectorAll('p').forEach((p, i) => {
+          p.style.color = i === 0 ? 'rgba(255,255,255,0.4)' : '#fff';
+        });
+      });
+      el.style.background = 'rgba(226,255,59,0.1)';
+      el.style.borderColor = '#E2FF3B';
+      el.querySelectorAll('p').forEach(p => { p.style.color = '#E2FF3B'; });
+    }
+
+    function confirmBooking() {
+      closeBookingSheet();
+      showToast('Booking confirmed! Check your email.');
+    }
+
+    // ── Press feedback (JS fallback for non-CSS active) ───
+    document.querySelectorAll('.press-feedback').forEach(el => {
+      el.addEventListener('touchstart', () => { el.style.opacity='0.72'; el.style.transform='scale(0.97)'; }, {passive:true});
+      el.addEventListener('touchend', () => { el.style.opacity=''; el.style.transform=''; }, {passive:true});
+    });
+  </script>
+</body>
+</html>

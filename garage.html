@@ -1,0 +1,528 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>My Garage — Comride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *{-webkit-tap-highlight-color:transparent;box-sizing:border-box;margin:0;padding:0}
+    html,body{background:#000;color:#fff;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased}
+    @keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes toastIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
+    @keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes pressPulse{0%{transform:scale(1)}50%{transform:scale(0.95)}100%{transform:scale(1)}}
+    .page-body{animation:slideUp 0.35s ease both}
+    a{text-decoration:none;color:inherit}img{display:block}
+    ::selection{background:#E2FF3B;color:#000}
+    .hide-scroll::-webkit-scrollbar{display:none}
+    .hide-scroll{-ms-overflow-style:none;scrollbar-width:none}
+    .press-active:active{transform:scale(0.96);transition:transform 0.1s ease}
+  </style>
+</head>
+<body style="background:#000;color:#fff;margin:0;">
+
+<!-- TOAST -->
+<div id="toast" style="position:fixed;bottom:100px;left:50%;transform:translate(-50%,12px);background:#1a1a1a;border:1px solid #2a2a2a;color:#fff;padding:10px 20px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:500;z-index:9999;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity 0.2s;max-width:320px;text-align:center;"></div>
+
+<div class="page-body" style="max-width:390px;margin:0 auto;position:relative;padding-bottom:110px;">
+
+  <!-- FIXED HEADER -->
+  <div style="position:sticky;top:0;z-index:100;background:#000;padding:0 12px;border-bottom:1px solid #111;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:56px;">
+      <button onclick="history.back()" class="press-active" style="background:#111;border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      </button>
+      <span style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;letter-spacing:-0.3px;">My Garage</span>
+      <button onclick="pressFeedback(this);showToast('Opening bike registration...')" class="press-active" style="background:#E2FF3B;border:none;cursor:pointer;padding:8px 14px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:#000;letter-spacing:0.2px;white-space:nowrap;">＋ Add Bike</button>
+    </div>
+  </div>
+
+  <!-- MY BIKES SECTION -->
+  <div style="padding:20px 12px 0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <span style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;">My Bikes</span>
+      <span style="font-size:12px;color:#666;">2 vehicles</span>
+    </div>
+  </div>
+
+  <!-- HORIZONTAL BIKE CARD SCROLL -->
+  <div class="hide-scroll" style="display:flex;gap:12px;overflow-x:auto;padding:0 12px 4px;scroll-snap-type:x mandatory;">
+
+    <!-- BIKE 1: BLACKSTORM -->
+    <div onclick="pressFeedback(this)" class="press-active" style="flex-shrink:0;width:260px;scroll-snap-align:start;background:#0a0a0a;border:1px solid #1e1e1e;border-radius:16px;overflow:hidden;cursor:pointer;position:relative;">
+      <!-- PRIMARY BADGE -->
+      <div style="position:absolute;top:10px;right:10px;z-index:2;background:#00c853;color:#000;font-size:10px;font-weight:800;padding:3px 8px;border-radius:9999px;font-family:'Space Grotesk',sans-serif;letter-spacing:0.5px;">PRIMARY</div>
+      <!-- BIKE IMAGE -->
+      <div style="width:100%;height:148px;overflow:hidden;position:relative;">
+        <img src="https://images.unsplash.com/photo-1558981033-0f0309284409?w=500&auto=format&fit=crop&q=80" alt="Himalayan 450" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,0.8) 0%,transparent 60%);"></div>
+      </div>
+      <!-- CARD BODY -->
+      <div style="padding:12px;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;color:#E2FF3B;letter-spacing:-0.5px;line-height:1;">BLACKSTORM</div>
+        <div style="font-size:11.5px;color:#888;margin-top:3px;">Royal Enfield Himalayan 450 · 2024</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span style="font-size:12px;font-weight:600;color:#ccc;">12,840 KM</span>
+        </div>
+        <!-- SPEC PILLS -->
+        <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;">
+          <span style="background:#161616;border:1px solid #2a2a2a;color:#aaa;font-size:10px;font-weight:600;padding:3px 7px;border-radius:9999px;">BS6</span>
+          <span style="background:#161616;border:1px solid #2a2a2a;color:#aaa;font-size:10px;font-weight:600;padding:3px 7px;border-radius:9999px;">Single Cyl</span>
+          <span style="background:#161616;border:1px solid #2a2a2a;color:#aaa;font-size:10px;font-weight:600;padding:3px 7px;border-radius:9999px;">452cc</span>
+        </div>
+        <!-- VALUATION -->
+        <div style="margin-top:10px;background:#0f1500;border:1px solid #2a3800;border-radius:8px;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:10.5px;color:#888;">Est. Value</span>
+          <span style="font-size:13px;font-weight:800;color:#E2FF3B;font-family:'Space Grotesk',sans-serif;">₹2.45L ↑</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BIKE 2: PHANTOM -->
+    <div onclick="pressFeedback(this)" class="press-active" style="flex-shrink:0;width:260px;scroll-snap-align:start;background:#0a0a0a;border:1px solid #1e1e1e;border-radius:16px;overflow:hidden;cursor:pointer;position:relative;">
+      <!-- BIKE IMAGE -->
+      <div style="width:100%;height:148px;overflow:hidden;position:relative;">
+        <img src="https://images.unsplash.com/photo-1547549082-6bc09f2049ae?w=500&auto=format&fit=crop&q=80" alt="KTM Duke 390" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,0.8) 0%,transparent 60%);"></div>
+      </div>
+      <!-- CARD BODY -->
+      <div style="padding:12px;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;line-height:1;">PHANTOM</div>
+        <div style="font-size:11.5px;color:#888;margin-top:3px;">KTM Duke 390 · 2022</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span style="font-size:12px;font-weight:600;color:#ccc;">28,400 KM</span>
+        </div>
+        <!-- SPEC PILLS -->
+        <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;">
+          <span style="background:#161616;border:1px solid #2a2a2a;color:#aaa;font-size:10px;font-weight:600;padding:3px 7px;border-radius:9999px;">BS6</span>
+          <span style="background:#161616;border:1px solid #2a2a2a;color:#aaa;font-size:10px;font-weight:600;padding:3px 7px;border-radius:9999px;">Single Cyl</span>
+          <span style="background:#161616;border:1px solid #2a2a2a;color:#aaa;font-size:10px;font-weight:600;padding:3px 7px;border-radius:9999px;">373cc</span>
+        </div>
+        <!-- VALUATION -->
+        <div style="margin-top:10px;background:#130800;border:1px solid #2e1800;border-radius:8px;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:10.5px;color:#888;">Est. Value</span>
+          <span style="font-size:13px;font-weight:800;color:#FF8C42;font-family:'Space Grotesk',sans-serif;">₹1.82L ↓</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPACER -->
+    <div style="flex-shrink:0;width:1px;"></div>
+  </div>
+
+  <!-- QUICK STATS STRIP -->
+  <div style="padding:20px 12px 0;">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;">
+      <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:#E2FF3B;">BLACKSTORM</span>
+      <span style="font-size:11px;color:#555;">— Quick Stats</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+      <!-- Next Service -->
+      <div style="background:#0a0a0a;border:1px solid #1a1a1a;border-radius:12px;padding:10px 6px;text-align:center;">
+        <div style="font-size:8.5px;color:#555;font-weight:600;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:5px;">Service</div>
+        <div style="font-size:11px;font-weight:800;color:#fff;font-family:'Space Grotesk',sans-serif;line-height:1.1;">2,160</div>
+        <div style="font-size:8px;color:#666;margin-top:2px;">KM away</div>
+      </div>
+      <!-- Insurance -->
+      <div style="background:#0a0a0a;border:1px solid #1a1a1a;border-radius:12px;padding:10px 6px;text-align:center;">
+        <div style="font-size:8.5px;color:#555;font-weight:600;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:5px;">Insurance</div>
+        <div style="font-size:11px;font-weight:800;color:#F5A623;font-family:'Space Grotesk',sans-serif;line-height:1.1;">142</div>
+        <div style="font-size:8px;color:#666;margin-top:2px;">days left</div>
+      </div>
+      <!-- PUC -->
+      <div style="background:#0a0a0a;border:1px solid #1a1a1a;border-radius:12px;padding:10px 6px;text-align:center;">
+        <div style="font-size:8.5px;color:#555;font-weight:600;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:5px;">PUC</div>
+        <div style="font-size:11px;font-weight:800;color:#00c853;font-family:'Space Grotesk',sans-serif;line-height:1.1;">Valid</div>
+        <div style="font-size:8px;color:#666;margin-top:2px;">till Aug 26</div>
+      </div>
+      <!-- Mods -->
+      <div style="background:#0a0a0a;border:1px solid #1a1a1a;border-radius:12px;padding:10px 6px;text-align:center;">
+        <div style="font-size:8.5px;color:#555;font-weight:600;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:5px;">Mods</div>
+        <div style="font-size:11px;font-weight:800;color:#E2FF3B;font-family:'Space Grotesk',sans-serif;line-height:1.1;">7</div>
+        <div style="font-size:8px;color:#666;margin-top:2px;">upgrades</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div style="padding:20px 12px 0;">
+    <div class="hide-scroll" id="garageTabBar" style="display:flex;gap:4px;overflow-x:auto;background:#0a0a0a;border:1px solid #1a1a1a;border-radius:12px;padding:4px;">
+      <button onclick="switchTab('service')" id="tab-service" class="press-active" style="flex:1;min-width:80px;background:#E2FF3B;border:none;cursor:pointer;padding:8px 6px;border-radius:9px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;color:#000;white-space:nowrap;">Service Log</button>
+      <button onclick="switchTab('mods')" id="tab-mods" class="press-active" style="flex:1;min-width:80px;background:transparent;border:none;cursor:pointer;padding:8px 6px;border-radius:9px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#666;white-space:nowrap;">Mods &amp; Parts</button>
+      <button onclick="switchTab('docs')" id="tab-docs" class="press-active" style="flex:1;min-width:80px;background:transparent;border:none;cursor:pointer;padding:8px 6px;border-radius:9px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#666;white-space:nowrap;">Documents</button>
+      <button onclick="switchTab('valuation')" id="tab-valuation" class="press-active" style="flex:1;min-width:80px;background:transparent;border:none;cursor:pointer;padding:8px 6px;border-radius:9px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#666;white-space:nowrap;">Valuation</button>
+    </div>
+  </div>
+
+  <!-- ========== TAB: SERVICE LOG ========== -->
+  <div id="panel-service" style="padding:16px 12px 0;">
+
+    <!-- Add Entry Button -->
+    <button onclick="pressFeedback(this);showToast('Opening service entry form...')" class="press-active" style="width:100%;background:transparent;border:1px dashed #333;cursor:pointer;padding:12px;border-radius:12px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;color:#888;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      Add Service Entry
+    </button>
+
+    <!-- Upcoming Reminder -->
+    <div style="background:#130a00;border:1px solid #2e1800;border-left:3px solid #F5A623;border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:16px;">⛓</span>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#F5A623;">Upcoming Reminder</div>
+        <div style="font-size:11.5px;color:#999;margin-top:2px;">Chain lubrication due in 400 KM</div>
+      </div>
+    </div>
+
+    <!-- SERVICE LOG TIMELINE -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+
+      <!-- Entry 1 -->
+      <div onclick="pressFeedback(this)" class="press-active" style="background:#0a0a0a;border:1px solid #1e1e1e;border-left:3px solid #E2FF3B;border-radius:12px;padding:14px;cursor:pointer;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;">
+              <span style="font-size:14px;">✅</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;">Major Service</span>
+            </div>
+            <div style="font-size:11.5px;color:#666;">12,000 KM · Mar 15, 2026</div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px;">Moto Hub BLR</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:14px;font-weight:800;color:#E2FF3B;font-family:'Space Grotesk',sans-serif;">₹3,200</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Entry 2 -->
+      <div onclick="pressFeedback(this)" class="press-active" style="background:#0a0a0a;border:1px solid #1e1e1e;border-left:3px solid #444;border-radius:12px;padding:14px;cursor:pointer;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;">
+              <span style="font-size:14px;">✅</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;">Tyre Change (Front)</span>
+            </div>
+            <div style="font-size:11.5px;color:#666;">10,500 KM · Jan 8, 2026</div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px;">Self</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:14px;font-weight:800;color:#fff;font-family:'Space Grotesk',sans-serif;">₹1,800</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Entry 3 -->
+      <div onclick="pressFeedback(this)" class="press-active" style="background:#0a0a0a;border:1px solid #1e1e1e;border-left:3px solid #444;border-radius:12px;padding:14px;cursor:pointer;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;">
+              <span style="font-size:14px;">✅</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;">Oil Change</span>
+            </div>
+            <div style="font-size:11.5px;color:#666;">9,000 KM · Nov 2025</div>
+            <div style="font-size:11.5px;color:#888;margin-top:2px;">RE Service Center</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:14px;font-weight:800;color:#fff;font-family:'Space Grotesk',sans-serif;">₹850</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Next Service Alert -->
+      <div style="background:#130a00;border:1px solid #2e1800;border-left:3px solid #F5A623;border-radius:12px;padding:14px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:16px;">🔔</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#F5A623;font-family:'Space Grotesk',sans-serif;">Next Major Service</div>
+            <div style="font-size:11.5px;color:#999;margin-top:2px;">Due at 15,000 KM — 2,160 KM remaining</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== TAB: MODS & PARTS ========== -->
+  <div id="panel-mods" style="padding:16px 12px 0;display:none;">
+
+    <!-- Total spend -->
+    <div style="background:#0f1500;border:1px solid #2a3800;border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <span style="font-size:12px;color:#888;">Total Mods Spend</span>
+      <span style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:800;color:#E2FF3B;">₹26,880</span>
+    </div>
+
+    <!-- MODS GRID -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+
+      <!-- Akrapovic -->
+      <div onclick="pressFeedback(this)" class="press-active" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:12px;padding:12px;cursor:pointer;">
+        <div style="width:36px;height:36px;background:#191919;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+        </div>
+        <div style="font-size:11.5px;font-weight:700;color:#fff;line-height:1.3;">Akrapovic Slip-on Exhaust</div>
+        <div style="font-size:10.5px;color:#666;margin-top:3px;">May 2025</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:800;color:#E2FF3B;">₹14,500</span>
+          <span style="font-size:10px;color:#00c853;font-weight:700;">★ Worth it</span>
+        </div>
+      </div>
+
+      <!-- Barkbusters -->
+      <div onclick="pressFeedback(this)" class="press-active" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:12px;padding:12px;cursor:pointer;">
+        <div style="width:36px;height:36px;background:#191919;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div style="font-size:11.5px;font-weight:700;color:#fff;line-height:1.3;">Barkbusters Handguards</div>
+        <div style="font-size:10.5px;color:#666;margin-top:3px;">Mar 2025</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:800;color:#fff;">₹3,200</span>
+          <span style="font-size:10px;color:#00c853;font-weight:700;">★ Worth it</span>
+        </div>
+      </div>
+
+      <!-- Heated Grips -->
+      <div onclick="pressFeedback(this)" class="press-active" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:12px;padding:12px;cursor:pointer;">
+        <div style="width:36px;height:36px;background:#191919;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF8C42" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+        </div>
+        <div style="font-size:11.5px;font-weight:700;color:#fff;line-height:1.3;">Heated Grips</div>
+        <div style="font-size:10.5px;color:#666;margin-top:3px;">Jan 2025</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:800;color:#fff;">₹2,800</span>
+        </div>
+      </div>
+
+      <!-- Crash Guards -->
+      <div onclick="pressFeedback(this)" class="press-active" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:12px;padding:12px;cursor:pointer;">
+        <div style="width:36px;height:36px;background:#191919;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div style="font-size:11.5px;font-weight:700;color:#fff;line-height:1.3;">Crash Guards (Steel)</div>
+        <div style="font-size:10.5px;color:#666;margin-top:3px;">Dec 2024</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:800;color:#fff;">₹4,500</span>
+        </div>
+      </div>
+
+      <!-- USB Charger -->
+      <div onclick="pressFeedback(this)" class="press-active" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:12px;padding:12px;cursor:pointer;">
+        <div style="width:36px;height:36px;background:#191919;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        </div>
+        <div style="font-size:11.5px;font-weight:700;color:#fff;line-height:1.3;">USB Charger Mount</div>
+        <div style="font-size:10.5px;color:#666;margin-top:3px;">Oct 2024</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:800;color:#fff;">₹680</span>
+        </div>
+      </div>
+
+      <!-- Seat Cowl -->
+      <div onclick="pressFeedback(this)" class="press-active" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:12px;padding:12px;cursor:pointer;">
+        <div style="width:36px;height:36px;background:#191919;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+        </div>
+        <div style="font-size:11.5px;font-weight:700;color:#fff;line-height:1.3;">Seat Cowl Cover</div>
+        <div style="font-size:10.5px;color:#666;margin-top:3px;">Sep 2024</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:800;color:#fff;">₹1,200</span>
+        </div>
+      </div>
+
+      <!-- Add Mod -->
+      <div onclick="pressFeedback(this);showToast('Opening mod tracker...')" class="press-active" style="background:transparent;border:1.5px dashed #2a2a2a;border-radius:12px;padding:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100px;gap:6px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:#191919;display:flex;align-items:center;justify-content:center;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+        <span style="font-size:11px;color:#555;font-weight:600;">＋ Add Mod</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== TAB: DOCUMENTS ========== -->
+  <div id="panel-docs" style="padding:16px 12px 0;display:none;">
+
+    <div style="display:flex;flex-direction:column;gap:10px;">
+
+      <!-- RC -->
+      <div onclick="pressFeedback(this)" class="press-active" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:12px;padding:14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;background:#191919;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;">Registration Certificate (RC)</div>
+            <div style="font-size:11px;color:#666;margin-top:2px;">KA-01-AB-1234</div>
+          </div>
+        </div>
+        <span style="background:#003d1a;color:#00c853;font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:9999px;white-space:nowrap;">Valid ✅</span>
+      </div>
+
+      <!-- Insurance -->
+      <div onclick="pressFeedback(this)" class="press-active" style="background:#0a0a0a;border:1px solid #2e1800;border-radius:12px;padding:14px;cursor:pointer;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
+          <div style="display:flex;align-items:center;gap:12px;flex:1;">
+            <div style="width:40px;height:40px;background:#191919;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <div style="font-size:13px;font-weight:700;">Insurance</div>
+              <div style="font-size:11px;color:#888;margin-top:2px;">Bajaj Allianz · Expires Jun 14, 2026</div>
+              <div style="font-size:10.5px;color:#F5A623;margin-top:2px;font-weight:600;">⚠️ 142 days remaining</div>
+            </div>
+          </div>
+          <button onclick="event.stopPropagation();pressFeedback(this);showToast('Opening insurance renewal...')" class="press-active" style="background:#E2FF3B;border:none;cursor:pointer;padding:7px 12px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;color:#000;white-space:nowrap;flex-shrink:0;">Renew</button>
+        </div>
+      </div>
+
+      <!-- PUC -->
+      <div onclick="pressFeedback(this)" class="press-active" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:12px;padding:14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;background:#191919;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;">PUC Certificate</div>
+            <div style="font-size:11px;color:#666;margin-top:2px;">Valid till Aug 2026</div>
+          </div>
+        </div>
+        <span style="background:#003d1a;color:#00c853;font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:9999px;white-space:nowrap;">Valid ✅</span>
+      </div>
+
+      <!-- Pollution NOC -->
+      <div onclick="pressFeedback(this)" class="press-active" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:12px;padding:14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;background:#191919;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;">Pollution NOC</div>
+            <div style="font-size:11px;color:#666;margin-top:2px;">KSRTC Issued · 2025</div>
+          </div>
+        </div>
+        <span style="background:#003d1a;color:#00c853;font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:9999px;white-space:nowrap;">Valid ✅</span>
+      </div>
+
+    </div>
+
+    <!-- Upload Button -->
+    <button onclick="pressFeedback(this);showToast('Opening document uploader...')" class="press-active" style="width:100%;background:transparent;border:1px solid #2a2a2a;cursor:pointer;padding:14px;border-radius:12px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;color:#888;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Upload Document
+    </button>
+  </div>
+
+  <!-- ========== TAB: VALUATION ========== -->
+  <div id="panel-valuation" style="padding:16px 12px 0;display:none;">
+
+    <!-- Big Valuation Card -->
+    <div style="background:linear-gradient(135deg,#0f1500 0%,#0a0a0a 100%);border:1px solid #2a3800;border-radius:16px;padding:20px;margin-bottom:14px;">
+      <div style="font-size:11px;color:#666;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px;">BLACKSTORM — Estimated Value</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:42px;font-weight:800;color:#E2FF3B;letter-spacing:-1.5px;line-height:1;">₹2,45,000</div>
+      <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <div style="font-size:10.5px;color:#555;">Purchase Price</div>
+          <div style="font-size:14px;font-weight:700;color:#fff;margin-top:2px;">₹2,88,000</div>
+        </div>
+        <div>
+          <div style="font-size:10.5px;color:#555;">Depreciation</div>
+          <div style="font-size:14px;font-weight:700;color:#FF8C42;margin-top:2px;">−14.9% <span style="font-size:10.5px;color:#555;font-weight:400;">/ 14 mo</span></div>
+        </div>
+      </div>
+      <!-- Market Demand -->
+      <div style="margin-top:14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+          <span style="font-size:10.5px;color:#555;">Market Demand</span>
+          <span style="font-size:11px;font-weight:700;color:#E2FF3B;">HIGH</span>
+        </div>
+        <div style="height:6px;background:#1a1a1a;border-radius:9999px;overflow:hidden;">
+          <div style="height:100%;width:82%;background:linear-gradient(90deg,#E2FF3B,#b8d400);border-radius:9999px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Price History Chart (CSS bars) -->
+    <div style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:16px;padding:16px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:700;color:#888;margin-bottom:14px;text-transform:uppercase;letter-spacing:0.5px;">Price History</div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-around;height:72px;gap:10px;">
+        <!-- Bar 1 -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;">
+          <div style="font-size:9.5px;color:#888;">₹2.88L</div>
+          <div style="width:100%;height:60px;background:linear-gradient(180deg,#444,#2a2a2a);border-radius:4px 4px 0 0;"></div>
+          <div style="font-size:9px;color:#555;">Feb 2025</div>
+        </div>
+        <!-- Bar 2 -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;">
+          <div style="font-size:9.5px;color:#888;">₹2.65L</div>
+          <div style="width:100%;height:52px;background:linear-gradient(180deg,#444,#2a2a2a);border-radius:4px 4px 0 0;"></div>
+          <div style="font-size:9px;color:#555;">Aug 2025</div>
+        </div>
+        <!-- Bar 3 -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;">
+          <div style="font-size:9.5px;color:#E2FF3B;font-weight:700;">₹2.45L</div>
+          <div style="width:100%;height:45px;background:linear-gradient(180deg,#E2FF3B,#b8d400);border-radius:4px 4px 0 0;"></div>
+          <div style="font-size:9px;color:#666;font-weight:600;">Now</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTAs -->
+    <button onclick="pressFeedback(this);location.href='marketplace.html'" class="press-active" style="width:100%;background:#E2FF3B;border:none;cursor:pointer;padding:14px;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:#000;margin-bottom:10px;">List for Sale</button>
+
+    <button onclick="pressFeedback(this);showToast('Loading similar bikes comparison...')" class="press-active" style="width:100%;background:transparent;border:1px solid #2a2a2a;cursor:pointer;padding:13px;border-radius:12px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;color:#888;">Compare with similar bikes →</button>
+
+  </div>
+
+</div>
+
+<script src="journey-mode.js"></script>
+<script src="nav-module.js"></script>
+<script>
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.opacity = '1';
+    t.style.transform = 'translate(-50%, 0)';
+    t.style.animation = 'toastIn 0.25s ease both';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function() {
+      t.style.opacity = '0';
+      t.style.transform = 'translate(-50%, 12px)';
+    }, 2600);
+  }
+
+  function pressFeedback(el) {
+    el.style.transform = 'scale(0.96)';
+    el.style.transition = 'transform 0.08s ease';
+    setTimeout(function() {
+      el.style.transform = 'scale(1)';
+    }, 120);
+  }
+
+  var panels = ['service','mods','docs','valuation'];
+
+  function switchTab(id) {
+    panels.forEach(function(p) {
+      document.getElementById('panel-' + p).style.display = 'none';
+      var btn = document.getElementById('tab-' + p);
+      btn.style.background = 'transparent';
+      btn.style.color = '#666';
+    });
+    document.getElementById('panel-' + id).style.display = 'block';
+    var active = document.getElementById('tab-' + id);
+    active.style.background = '#E2FF3B';
+    active.style.color = '#000';
+  }
+
+  // Add press feedback to all interactive elements
+  document.querySelectorAll('button,[onclick]').forEach(function(el) {
+    el.addEventListener('touchstart', function() {
+      this.style.opacity = '0.85';
+    }, {passive:true});
+    el.addEventListener('touchend', function() {
+      this.style.opacity = '1';
+    }, {passive:true});
+  });
+</script>
+</body></html>

@@ -1,0 +1,470 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>Find Mechanic — Comride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *{-webkit-tap-highlight-color:transparent;box-sizing:border-box;margin:0;padding:0}
+    html,body{background:#000;color:#fff;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased}
+    @keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes toastIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
+    @keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    .page-body{animation:slideUp 0.35s ease both}
+    a{text-decoration:none;color:inherit}img{display:block}
+    ::selection{background:#E2FF3B;color:#000}
+    input,textarea{outline:none;border:none}
+    button,a,[onclick]{cursor:pointer}
+  </style>
+</head>
+<body style="background:#000;color:#fff">
+
+<!-- ═══════════════════════════════ -->
+<!-- FIXED TOP HEADER                -->
+<!-- ═══════════════════════════════ -->
+<header style="position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(72,72,72,0.15)">
+  <div style="max-width:390px;margin:0 auto;padding:0 12px;height:64px;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:14px">
+      <a href="home.html" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:#191919" onclick="pressFeedback(this)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </a>
+      <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;letter-spacing:-0.4px">Find Mechanic</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;background:#191919;border-radius:9999px;padding:6px 12px;cursor:pointer" onclick="showToast('Change location coming soon')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#E2FF3B">Bangalore</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════ -->
+<!-- PAGE CONTENT                    -->
+<!-- ═══════════════════════════════ -->
+<main class="page-body" style="max-width:390px;margin:0 auto;padding:80px 12px 160px">
+
+  <!-- SEARCH BAR -->
+  <div style="position:relative;margin-bottom:14px">
+    <svg style="position:absolute;left:14px;top:50%;transform:translateY(-50%)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" placeholder="Search mechanic, service type..." style="width:100%;background:#191919;border-radius:12px;padding:13px 14px 13px 40px;font-family:'Manrope',sans-serif;font-size:14px;font-weight:500;color:#fff;border:1px solid rgba(72,72,72,0.3)" />
+  </div>
+
+  <!-- FILTER PILLS -->
+  <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;scrollbar-width:none;-ms-overflow-style:none">
+    <button id="filter-all" onclick="setFilter('all',this)" style="flex-shrink:0;background:#E2FF3B;color:#000;border:none;border-radius:9999px;padding:7px 14px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;transition:all 0.15s">All</button>
+    <button onclick="setFilter('nearme',this)" style="flex-shrink:0;background:#191919;color:#ababab;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:7px 14px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;transition:all 0.15s">Near Me</button>
+    <button onclick="setFilter('open',this)" style="flex-shrink:0;background:#191919;color:#ababab;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:7px 14px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;transition:all 0.15s">Open Now</button>
+    <button onclick="setFilter('certified',this)" style="flex-shrink:0;background:#191919;color:#ababab;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:7px 14px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;transition:all 0.15s">Certified</button>
+    <button onclick="setFilter('chain',this)" style="flex-shrink:0;background:#191919;color:#ababab;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:7px 14px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;transition:all 0.15s">Chain &amp; Sprocket</button>
+    <button onclick="setFilter('tyres',this)" style="flex-shrink:0;background:#191919;color:#ababab;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:7px 14px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;transition:all 0.15s">Tyres</button>
+    <button onclick="setFilter('engine',this)" style="flex-shrink:0;background:#191919;color:#ababab;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:7px 14px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;transition:all 0.15s">Engine</button>
+    <button onclick="setFilter('electricals',this)" style="flex-shrink:0;background:#191919;color:#ababab;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:7px 14px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;transition:all 0.15s">Electricals</button>
+  </div>
+
+  <!-- NEAR YOU STAT BAR -->
+  <div style="display:flex;align-items:center;gap:8px;background:#0a0a0a;border-radius:9999px;padding:8px 14px;margin-bottom:20px;border:1px solid rgba(72,72,72,0.2)">
+    <div style="width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0"></div>
+    <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:500;color:#ababab">14 mechanics within 5 KM</span>
+    <span style="color:rgba(72,72,72,0.8)">·</span>
+    <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#22c55e">Open now: 9</span>
+  </div>
+
+  <!-- MECHANIC CARDS -->
+  <div style="display:flex;flex-direction:column;gap:16px">
+
+    <!-- CARD 1 — MOTO HUB SERVICE CENTER (TOP RATED) -->
+    <div style="background:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(72,72,72,0.2)">
+      <!-- Image placeholder -->
+      <div style="position:relative;height:120px;background:linear-gradient(135deg,#191919 0%,#0f1a00 100%);display:flex;align-items:center;justify-content:center">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(226,255,59,0.3)" stroke-width="1.5" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <div style="position:absolute;top:10px;left:10px;background:#E2FF3B;color:#000;border-radius:9999px;padding:3px 9px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:800;letter-spacing:0.5px">TOP RATED</div>
+      </div>
+      <!-- Card body -->
+      <div style="padding:14px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+              <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;letter-spacing:-0.3px">Moto Hub Service Center</h3>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#E2FF3B"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="background:rgba(226,255,59,0.12);color:#E2FF3B;border-radius:9999px;padding:2px 8px;font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.3px">COMRIDE CERTIFIED</span>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div style="display:flex;align-items:center;gap:4px;justify-content:flex-end">
+              <span style="color:#E2FF3B;font-size:13px">★</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700">4.9</span>
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">284 reviews · 1.2 KM</span>
+          </div>
+        </div>
+        <!-- Specialty pills -->
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+          <span style="background:#191919;border-radius:9999px;padding:3px 9px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">RE</span>
+          <span style="background:#191919;border-radius:9999px;padding:3px 9px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">KTM</span>
+          <span style="background:#191919;border-radius:9999px;padding:3px 9px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">Honda</span>
+        </div>
+        <!-- Wait & price -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div>
+            <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px">
+              <div style="width:6px;height:6px;border-radius:50%;background:#22c55e"></div>
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#22c55e">Available now · Est. 45 min</span>
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">₹500–₹3,500</span>
+          </div>
+          <div style="background:rgba(245,158,11,0.12);border-radius:9999px;padding:3px 9px">
+            <span style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;color:#f59e0b">3 slots left today</span>
+          </div>
+        </div>
+        <!-- Buttons -->
+        <div style="display:flex;gap:8px">
+          <button onclick="showBookingSheet('Moto Hub Service Center','4.9')" style="flex:1;background:#E2FF3B;color:#000;border:none;border-radius:9999px;padding:11px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;letter-spacing:-0.2px;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Book Slot</button>
+          <button onclick="showToast('Calling Moto Hub...')" style="flex:0 0 72px;background:transparent;color:#fff;border:1px solid rgba(72,72,72,0.5);border-radius:9999px;padding:11px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Call</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2 — RAJESH TWO WHEELER WORKS (POPULAR) -->
+    <div style="background:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(72,72,72,0.2)">
+      <div style="position:relative;height:100px;background:linear-gradient(135deg,#1a1000 0%,#191919 100%);display:flex;align-items:center;justify-content:center">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        <div style="position:absolute;top:10px;left:10px;background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);border-radius:9999px;padding:3px 9px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:800">POPULAR</div>
+      </div>
+      <div style="padding:14px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;letter-spacing:-0.3px">Rajesh Two Wheeler Works</h3>
+          <div style="text-align:right;flex-shrink:0;margin-left:8px">
+            <div style="display:flex;align-items:center;gap:4px;justify-content:flex-end">
+              <span style="color:#E2FF3B;font-size:13px">★</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700">4.7</span>
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">156 reviews · 0.8 KM</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+          <span style="background:#191919;border-radius:9999px;padding:3px 9px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">All bikes</span>
+          <span style="background:#191919;border-radius:9999px;padding:3px 9px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">Tyres</span>
+          <span style="background:#191919;border-radius:9999px;padding:3px 9px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">Chain</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div>
+            <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px">
+              <div style="width:6px;height:6px;border-radius:50%;background:#f59e0b"></div>
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#f59e0b">Next slot: 2:30 PM today</span>
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">₹200–₹1,800</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onclick="showBookingSheet('Rajesh Two Wheeler Works','4.7')" style="flex:1;background:#E2FF3B;color:#000;border:none;border-radius:9999px;padding:11px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;letter-spacing:-0.2px;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Book Slot</button>
+          <button onclick="showToast('Calling Rajesh Two Wheeler Works...')" style="flex:0 0 72px;background:transparent;color:#fff;border:1px solid rgba(72,72,72,0.5);border-radius:9999px;padding:11px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Call</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3 — SPEEDFIX MOBILE MECHANIC (DOORSTEP) -->
+    <div style="background:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(226,255,59,0.15)">
+      <div style="position:relative;height:100px;background:linear-gradient(135deg,#001a05 0%,#191919 100%);display:flex;align-items:center;justify-content:center">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(226,255,59,0.3)" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div style="position:absolute;top:10px;left:10px;display:flex;gap:6px">
+          <span style="background:#E2FF3B;color:#000;border-radius:9999px;padding:3px 9px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:800">DOORSTEP</span>
+          <span style="background:rgba(72,72,72,0.5);color:#fff;border-radius:9999px;padding:3px 9px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700">NEW</span>
+        </div>
+      </div>
+      <div style="padding:14px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;letter-spacing:-0.3px">SpeedFix Mobile Mechanic</h3>
+          <div style="text-align:right;flex-shrink:0;margin-left:8px">
+            <div style="display:flex;align-items:center;gap:4px;justify-content:flex-end">
+              <span style="color:#E2FF3B;font-size:13px">★</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700">4.6</span>
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">42 reviews · 5 KM radius</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+          <span style="background:#191919;border-radius:9999px;padding:3px 9px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">Breakdowns</span>
+          <span style="background:#191919;border-radius:9999px;padding:3px 9px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">Tyre puncture</span>
+          <span style="background:#191919;border-radius:9999px;padding:3px 9px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">Battery</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2.2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#E2FF3B">Comes to your location</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">₹350 call-out + parts</span>
+          <div style="background:rgba(226,255,59,0.08);border-radius:9999px;padding:3px 9px">
+            <span style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;color:#E2FF3B">Available in 20 min</span>
+          </div>
+        </div>
+        <button onclick="showToast('Requesting SpeedFix at your location...')" style="width:100%;background:#E2FF3B;color:#000;border:none;border-radius:9999px;padding:11px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;letter-spacing:-0.2px;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Request at My Location</button>
+      </div>
+    </div>
+
+    <!-- CARD 4 — KTM AUTHORIZED SERVICE (OEM) -->
+    <div style="background:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(72,72,72,0.2)">
+      <div style="position:relative;height:100px;background:linear-gradient(135deg,#1a0800 0%,#191919 100%);display:flex;align-items:center;justify-content:center">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(234,88,12,0.4)" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div style="position:absolute;top:10px;left:10px;background:rgba(234,88,12,0.15);color:#ea580c;border:1px solid rgba(234,88,12,0.3);border-radius:9999px;padding:3px 9px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:800">AUTHORIZED</div>
+      </div>
+      <div style="padding:14px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;letter-spacing:-0.3px">KTM Authorized Service</h3>
+          <div style="text-align:right;flex-shrink:0;margin-left:8px">
+            <div style="display:flex;align-items:center;gap:4px;justify-content:flex-end">
+              <span style="color:#E2FF3B;font-size:13px">★</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700">4.8</span>
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">521 reviews · 3.4 KM</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+          <span style="background:rgba(234,88,12,0.1);border:1px solid rgba(234,88,12,0.25);border-radius:9999px;padding:3px 9px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ea580c">KTM bikes only</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div>
+            <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px">
+              <div style="width:6px;height:6px;border-radius:50%;background:#ababab"></div>
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#ababab">Next slot: Tomorrow 10 AM</span>
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">As per KTM pricing</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onclick="showBookingSheet('KTM Authorized Service','4.8')" style="flex:1;background:#E2FF3B;color:#000;border:none;border-radius:9999px;padding:11px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;letter-spacing:-0.2px;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Book Slot</button>
+          <button onclick="showToast('Calling KTM Authorized Service...')" style="flex:0 0 72px;background:transparent;color:#fff;border:1px solid rgba(72,72,72,0.5);border-radius:9999px;padding:11px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Call</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 5 — ROYAL ENFIELD STUDIO (OEM) -->
+    <div style="background:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(185,28,28,0.2)">
+      <div style="position:relative;height:100px;background:linear-gradient(135deg,#1a0202 0%,#191919 100%);display:flex;align-items:center;justify-content:center">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(185,28,28,0.4)" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div style="position:absolute;top:10px;left:10px;background:rgba(185,28,28,0.15);color:#ef4444;border:1px solid rgba(185,28,28,0.3);border-radius:9999px;padding:3px 9px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:800">RE STUDIO</div>
+      </div>
+      <div style="padding:14px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;letter-spacing:-0.3px">Royal Enfield Studio</h3>
+          <div style="text-align:right;flex-shrink:0;margin-left:8px">
+            <div style="display:flex;align-items:center;gap:4px;justify-content:flex-end">
+              <span style="color:#E2FF3B;font-size:13px">★</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700">4.9</span>
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">892 reviews · 2.1 KM</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+          <span style="background:rgba(185,28,28,0.1);border:1px solid rgba(185,28,28,0.25);border-radius:9999px;padding:3px 9px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ef4444">RE bikes only</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div>
+            <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px">
+              <div style="width:6px;height:6px;border-radius:50%;background:#22c55e"></div>
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#22c55e">3 slots today</span>
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">As per RE pricing</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onclick="showBookingSheet('Royal Enfield Studio','4.9')" style="flex:1;background:#E2FF3B;color:#000;border:none;border-radius:9999px;padding:11px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;letter-spacing:-0.2px;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Book Slot</button>
+          <button onclick="showToast('Calling Royal Enfield Studio...')" style="flex:0 0 72px;background:transparent;color:#fff;border:1px solid rgba(72,72,72,0.5);border-radius:9999px;padding:11px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Call</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMERGENCY BREAKDOWN CARD -->
+    <div style="background:linear-gradient(135deg,#1a0000 0%,#0d0000 100%);border-radius:12px;padding:18px;border:1px solid rgba(239,68,68,0.3);margin-top:4px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(239,68,68,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div>
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#fff;margin-bottom:2px">Stranded? We've got you.</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab">Get emergency help in 15 minutes</p>
+        </div>
+      </div>
+      <button onclick="showToast('Connecting to nearest mechanic...')" style="width:100%;background:#ef4444;color:#fff;border:none;border-radius:9999px;padding:13px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;letter-spacing:-0.3px;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">
+        Emergency Mechanic — SOS
+      </button>
+    </div>
+
+  </div>
+</main>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- BOOKING BOTTOM SHEET                           -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="sheet-backdrop" onclick="closeBookingSheet()" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;display:none;animation:fadeIn 0.2s ease both"></div>
+<div id="booking-sheet" style="position:fixed;bottom:0;left:0;right:0;z-index:301;max-width:390px;margin:0 auto;background:#0a0a0a;border-radius:20px 20px 0 0;padding:0 0 40px;display:none;animation:sheetUp 0.35s cubic-bezier(0.32,0.72,0,1) both;border-top:1px solid rgba(72,72,72,0.25);max-height:92vh;overflow-y:auto">
+
+  <!-- Sheet handle -->
+  <div style="display:flex;justify-content:center;padding:12px 0 0">
+    <div style="width:40px;height:4px;border-radius:9999px;background:rgba(72,72,72,0.6)"></div>
+  </div>
+
+  <!-- Sheet header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 16px 0">
+    <div>
+      <p style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ababab;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Booking Slot At</p>
+      <h3 id="sheet-mechanic-name" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;letter-spacing:-0.4px"></h3>
+      <div style="display:flex;align-items:center;gap:4px;margin-top:3px">
+        <span style="color:#E2FF3B;font-size:12px">★</span>
+        <span id="sheet-rating" style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#ababab"></span>
+      </div>
+    </div>
+    <button onclick="closeBookingSheet()" style="width:32px;height:32px;border-radius:50%;background:#191919;border:none;display:flex;align-items:center;justify-content:center;transition:opacity 0.15s" onmousedown="this.style.opacity='0.6'" onmouseup="this.style.opacity='1'">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <div style="padding:16px">
+    <!-- Service type -->
+    <p style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;color:#ababab">Service Type</p>
+    <div id="service-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px">
+      <button onclick="selectService(this,'Quick Check')" style="background:#191919;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:8px 6px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#fff;transition:all 0.15s">Quick Check</button>
+      <button onclick="selectService(this,'Oil Change')" style="background:#E2FF3B;border:1px solid #E2FF3B;border-radius:9999px;padding:8px 6px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:#000;transition:all 0.15s">Oil Change</button>
+      <button onclick="selectService(this,'Tyre')" style="background:#191919;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:8px 6px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#fff;transition:all 0.15s">Tyre</button>
+      <button onclick="selectService(this,'Chain')" style="background:#191919;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:8px 6px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#fff;transition:all 0.15s">Chain</button>
+      <button onclick="selectService(this,'Major Service')" style="background:#191919;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:8px 6px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#fff;transition:all 0.15s">Major Service</button>
+      <button onclick="selectService(this,'Custom')" style="background:#191919;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:8px 6px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#fff;transition:all 0.15s">Custom</button>
+    </div>
+
+    <!-- Date & time slots -->
+    <p style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;color:#ababab">Date &amp; Time</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px">
+      <!-- Date row -->
+      <div style="grid-column:1/-1;display:flex;gap:8px">
+        <button onclick="selectSlot(this,'date')" style="flex:1;background:#E2FF3B;border:none;border-radius:9999px;padding:9px 6px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:#000;transition:all 0.15s">Today, Apr 5</button>
+        <button onclick="selectSlot(this,'date')" style="flex:1;background:#191919;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:9px 6px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#fff;transition:all 0.15s">Tomorrow, Apr 6</button>
+      </div>
+      <!-- Time row -->
+      <button onclick="selectSlot(this,'time')" style="background:#E2FF3B;border:none;border-radius:9999px;padding:9px 6px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:#000;transition:all 0.15s">10:00 AM</button>
+      <button onclick="selectSlot(this,'time')" style="background:#191919;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:9px 6px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#fff;transition:all 0.15s">12:30 PM</button>
+      <button onclick="selectSlot(this,'time')" style="background:#191919;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:9px 6px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#fff;transition:all 0.15s">2:30 PM</button>
+      <button onclick="selectSlot(this,'time')" style="background:#191919;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:9px 6px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#fff;transition:all 0.15s">4:00 PM</button>
+    </div>
+
+    <!-- Bike selection -->
+    <p style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;color:#ababab">Your Bike</p>
+    <div style="background:#191919;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:20px;border:1px solid rgba(226,255,59,0.2)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="1.8" stroke-linecap="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0 0 2h1l3 4.5"/><path d="M12 6H5l1 9h1"/></svg>
+      <div style="flex:1">
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#E2FF3B;margin-bottom:1px">BLACKSTORM</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">RE Himalayan 450</p>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+
+    <!-- Issue description -->
+    <p style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;color:#ababab">Describe Issue</p>
+    <textarea placeholder="Describe the issue..." style="width:100%;background:#191919;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:13px;color:#fff;resize:none;height:80px;border:1px solid rgba(72,72,72,0.3);margin-bottom:20px"></textarea>
+
+    <!-- Price estimate -->
+    <div style="background:#191919;border-radius:12px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border:1px solid rgba(72,72,72,0.2)">
+      <span style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;color:#ababab">Price estimate</span>
+      <span style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:#E2FF3B">₹850–₹1,400</span>
+    </div>
+
+    <!-- Confirm button -->
+    <button onclick="confirmBooking()" style="width:100%;background:#E2FF3B;color:#000;border:none;border-radius:9999px;padding:15px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;letter-spacing:-0.3px;margin-bottom:10px;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Confirm Booking</button>
+
+    <!-- Disclaimer -->
+    <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(171,171,171,0.6);text-align:center;line-height:1.5">Comride handles payment securely. 20% held as platform fee.</p>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" style="position:fixed;bottom:100px;left:50%;transform:translate(-50%,12px);background:#191919;color:#fff;border-radius:9999px;padding:11px 20px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;z-index:500;opacity:0;pointer-events:none;border:1px solid rgba(72,72,72,0.4);white-space:nowrap;max-width:320px;text-align:center"></div>
+
+<script>
+  var _toastTimer;
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.opacity = '1';
+    t.style.transform = 'translate(-50%, 0)';
+    t.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(function() {
+      t.style.opacity = '0';
+      t.style.transform = 'translate(-50%, 8px)';
+    }, 2800);
+  }
+
+  function pressFeedback(el) {
+    el.style.transform = 'scale(0.92)';
+    el.style.transition = 'transform 0.12s ease';
+    setTimeout(function() { el.style.transform = 'scale(1)'; }, 120);
+  }
+
+  function showBookingSheet(name, rating) {
+    document.getElementById('sheet-mechanic-name').textContent = name;
+    document.getElementById('sheet-rating').textContent = rating + ' rating';
+    document.getElementById('sheet-backdrop').style.display = 'block';
+    document.getElementById('booking-sheet').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeBookingSheet() {
+    document.getElementById('sheet-backdrop').style.display = 'none';
+    document.getElementById('booking-sheet').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  function selectService(btn, name) {
+    var grid = document.getElementById('service-grid');
+    var btns = grid.querySelectorAll('button');
+    btns.forEach(function(b) {
+      b.style.background = '#191919';
+      b.style.borderColor = 'rgba(72,72,72,0.4)';
+      b.style.color = '#fff';
+      b.style.fontWeight = '600';
+    });
+    btn.style.background = '#E2FF3B';
+    btn.style.borderColor = '#E2FF3B';
+    btn.style.color = '#000';
+    btn.style.fontWeight = '700';
+  }
+
+  function selectSlot(btn, type) {
+    var parent = btn.parentNode;
+    var siblings = parent.querySelectorAll('button');
+    siblings.forEach(function(b) {
+      if (b !== btn) {
+        b.style.background = '#191919';
+        b.style.borderColor = 'rgba(72,72,72,0.4)';
+        b.style.color = '#fff';
+        b.style.fontWeight = '600';
+      }
+    });
+    btn.style.background = '#E2FF3B';
+    btn.style.border = 'none';
+    btn.style.color = '#000';
+    btn.style.fontWeight = '700';
+  }
+
+  function setFilter(id, btn) {
+    var btns = document.querySelectorAll('[onclick^="setFilter"]');
+    btns.forEach(function(b) {
+      b.style.background = '#191919';
+      b.style.color = '#ababab';
+      b.style.border = '1px solid rgba(72,72,72,0.4)';
+    });
+    btn.style.background = '#E2FF3B';
+    btn.style.color = '#000';
+    btn.style.border = 'none';
+    showToast('Filtering: ' + btn.textContent);
+  }
+
+  function confirmBooking() {
+    closeBookingSheet();
+    showToast('Booking confirmed! You\'ll receive a reminder.');
+  }
+</script>
+
+<script src="journey-mode.js"></script><script src="nav-module.js"></script>
+</body></html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>Riding Challenges — Comride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *{-webkit-tap-highlight-color:transparent;box-sizing:border-box;margin:0;padding:0}
+    html,body{background:#000;color:#fff;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased}
+    @keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes toastIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
+    @keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes timerPulse{0%,100%{opacity:1}50%{opacity:0.6}}
+    .page-body{animation:slideUp 0.35s ease both}
+    a{text-decoration:none;color:inherit}img{display:block}
+    ::selection{background:#E2FF3B;color:#000}
+    .hide-scroll::-webkit-scrollbar{display:none}
+    .hide-scroll{-ms-overflow-style:none;scrollbar-width:none}
+    .press-active:active{transform:scale(0.96);transition:transform 0.1s ease}
+    .timer-colon{animation:timerPulse 1s infinite}
+  </style>
+</head>
+<body style="background:#000;color:#fff;margin:0;">
+
+<!-- TOAST -->
+<div id="toast" style="position:fixed;bottom:100px;left:50%;transform:translate(-50%,12px);background:#1a1a1a;border:1px solid #2a2a2a;color:#fff;padding:10px 20px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:500;z-index:9999;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity 0.2s;max-width:320px;text-align:center;"></div>
+
+<div class="page-body" style="max-width:390px;margin:0 auto;position:relative;padding-bottom:110px;">
+
+  <!-- FIXED HEADER -->
+  <div style="position:sticky;top:0;z-index:100;background:#000;padding:0 12px;border-bottom:1px solid #111;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:56px;">
+      <button onclick="history.back()" class="press-active" style="background:#111;border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      </button>
+      <span style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;letter-spacing:-0.3px;">Challenges</span>
+      <div style="width:36px;height:36px;background:#191919;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:18px;line-height:1;">🏆</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO BANNER -->
+  <div style="position:relative;margin:12px 12px 0;border-radius:16px;overflow:hidden;">
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&auto=format&fit=crop&q=80" alt="Castrol Challenge" style="width:100%;height:220px;object-fit:cover;display:block;" loading="lazy"/>
+    <!-- Dark overlay -->
+    <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.2) 100%);"></div>
+    <!-- Content -->
+    <div style="position:absolute;inset:0;padding:14px;display:flex;flex-direction:column;justify-content:space-between;">
+      <!-- Top label -->
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="background:rgba(245,166,35,0.2);border:1px solid rgba(245,166,35,0.4);color:#F5A623;font-size:9.5px;font-weight:800;padding:3px 9px;border-radius:9999px;letter-spacing:0.8px;text-transform:uppercase;">This Month's Spotlight</span>
+      </div>
+      <!-- Bottom content -->
+      <div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;line-height:1.1;margin-bottom:6px;">CASTROL POWER1<br/>DISTANCE KING</div>
+        <!-- Sponsor pill -->
+        <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(245,166,35,0.15);border:1px solid rgba(245,166,35,0.3);padding:4px 10px;border-radius:9999px;margin-bottom:8px;">
+          <div style="width:14px;height:14px;background:#F5A623;border-radius:3px;display:flex;align-items:center;justify-content:center;"><span style="font-size:8px;font-weight:800;color:#000;">C</span></div>
+          <span style="font-size:10.5px;font-weight:700;color:#F5A623;">Powered by CASTROL</span>
+        </div>
+        <!-- Prize -->
+        <div style="font-size:11.5px;color:#ccc;margin-bottom:10px;">₹25,000 cash + Castrol kit for top 3</div>
+        <!-- Countdown timer -->
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;">
+          <div style="text-align:center;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:#E2FF3B;line-height:1;">12</div>
+            <div style="font-size:8.5px;color:#888;margin-top:1px;">DAYS</div>
+          </div>
+          <span class="timer-colon" style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:#444;margin-bottom:8px;">:</span>
+          <div style="text-align:center;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:#fff;line-height:1;">06</div>
+            <div style="font-size:8.5px;color:#888;margin-top:1px;">HRS</div>
+          </div>
+          <span class="timer-colon" style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:#444;margin-bottom:8px;">:</span>
+          <div style="text-align:center;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:#fff;line-height:1;">42</div>
+            <div style="font-size:8.5px;color:#888;margin-top:1px;">MIN</div>
+          </div>
+          <span class="timer-colon" style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:#444;margin-bottom:8px;">:</span>
+          <div style="text-align:center;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:#fff;line-height:1;">18</div>
+            <div style="font-size:8.5px;color:#888;margin-top:1px;">SEC</div>
+          </div>
+        </div>
+        <!-- Join CTA -->
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <button onclick="joinChallenge('castrol-distance-king',this)" class="press-active" style="background:#E2FF3B;border:none;cursor:pointer;padding:11px 22px;border-radius:9999px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:#000;white-space:nowrap;">Join Challenge</button>
+          <span style="font-size:11px;color:#888;">1,840 riders joined</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTER PILLS -->
+  <div class="hide-scroll" id="filterBar" style="display:flex;gap:8px;overflow-x:auto;padding:16px 12px 0;">
+    <button onclick="filterChallenges('active',this)" id="filter-active" class="press-active" style="flex-shrink:0;background:#E2FF3B;border:none;cursor:pointer;padding:8px 16px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:#000;">Active</button>
+    <button onclick="filterChallenges('upcoming',this)" id="filter-upcoming" class="press-active" style="flex-shrink:0;background:#191919;border:1px solid #2a2a2a;cursor:pointer;padding:8px 16px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#888;">Upcoming</button>
+    <button onclick="filterChallenges('completed',this)" id="filter-completed" class="press-active" style="flex-shrink:0;background:#191919;border:1px solid #2a2a2a;cursor:pointer;padding:8px 16px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#888;">Completed</button>
+    <button onclick="filterChallenges('mine',this)" id="filter-mine" class="press-active" style="flex-shrink:0;background:#191919;border:1px solid #2a2a2a;cursor:pointer;padding:8px 16px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#888;">My Challenges</button>
+  </div>
+
+  <!-- CHALLENGE CARDS -->
+  <div style="padding:14px 12px 0;display:flex;flex-direction:column;gap:12px;">
+
+    <!-- CARD 1: SHELL HELIX MORNING RIDES -->
+    <div id="challenge-shell" class="challenge-card active" onclick="pressFeedback(this)" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:16px;overflow:hidden;cursor:pointer;">
+      <!-- Header band -->
+      <div style="background:#1a0e00;border-bottom:1px solid #2e1800;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <!-- Sponsor logo -->
+          <div style="width:28px;height:28px;background:#F5A623;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:800;color:#000;">S</span></div>
+          <div>
+            <div style="font-size:9.5px;color:#F5A623;font-weight:700;letter-spacing:0.3px;">SPONSORED · ACTIVE</div>
+          </div>
+        </div>
+        <span style="font-size:10px;color:#666;">Ends Apr 30</span>
+      </div>
+      <!-- Body -->
+      <div style="padding:14px;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:800;letter-spacing:-0.3px;margin-bottom:5px;">SHELL HELIX MORNING RIDES</div>
+        <div style="font-size:12px;color:#888;margin-bottom:12px;">Log 30 rides before 8AM this month</div>
+        <!-- Progress -->
+        <div style="margin-bottom:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+            <span style="font-size:11px;color:#888;">Your progress</span>
+            <span style="font-size:12px;font-weight:700;color:#fff;">14 / 30 rides</span>
+          </div>
+          <div style="height:7px;background:#1a1a1a;border-radius:9999px;overflow:hidden;">
+            <div style="height:100%;width:47%;background:linear-gradient(90deg,#F5A623,#ff6b00);border-radius:9999px;"></div>
+          </div>
+          <div style="font-size:10px;color:#666;margin-top:3px;">47% complete</div>
+        </div>
+        <!-- Prize + participants -->
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">
+          <div>
+            <div style="font-size:9.5px;color:#555;margin-bottom:2px;">Prize</div>
+            <div style="font-size:11.5px;color:#fff;font-weight:600;">Shell Helix kit (₹3,500) + badge</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:9.5px;color:#555;margin-bottom:2px;">Participants</div>
+            <div style="font-size:12px;font-weight:700;color:#E2FF3B;">3,240 riders</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2: COMRIDE MONSOON WARRIOR -->
+    <div id="challenge-monsoon" class="challenge-card active" onclick="pressFeedback(this)" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:16px;overflow:hidden;cursor:pointer;">
+      <!-- Header band -->
+      <div style="background:#050f05;border-bottom:1px solid #0d2a0d;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:28px;height:28px;background:#E2FF3B;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-family:'Space Grotesk',sans-serif;font-size:8px;font-weight:800;color:#000;">CR</span></div>
+          <div>
+            <div style="font-size:9.5px;color:#00c853;font-weight:700;letter-spacing:0.3px;">OFFICIAL · ACTIVE</div>
+          </div>
+        </div>
+        <span style="font-size:10px;color:#666;">Ends Jun 30</span>
+      </div>
+      <!-- Body -->
+      <div style="padding:14px;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:800;letter-spacing:-0.3px;margin-bottom:5px;">COMRIDE MONSOON WARRIOR</div>
+        <div style="font-size:12px;color:#888;margin-bottom:12px;">Ride 1,000 KM before June 30 monsoon deadline</div>
+        <!-- Progress -->
+        <div style="margin-bottom:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+            <span style="font-size:11px;color:#888;">Your progress</span>
+            <span style="font-size:12px;font-weight:700;color:#fff;">342 / 1000 KM</span>
+          </div>
+          <div style="height:7px;background:#1a1a1a;border-radius:9999px;overflow:hidden;">
+            <div style="height:100%;width:34%;background:linear-gradient(90deg,#E2FF3B,#b8d400);border-radius:9999px;"></div>
+          </div>
+          <div style="font-size:10px;color:#666;margin-top:3px;">34% complete · 658 KM remaining</div>
+        </div>
+        <!-- Prize + participants -->
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">
+          <div>
+            <div style="font-size:9.5px;color:#555;margin-bottom:2px;">Prize</div>
+            <div style="font-size:11.5px;color:#fff;font-weight:600;">Pro 6-month sub + exclusive badge</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:9.5px;color:#555;margin-bottom:2px;">Participants</div>
+            <div style="font-size:12px;font-weight:700;color:#E2FF3B;">8,720 riders</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3: HERO MOTOCORP ADVENTURE LEAGUE (UPCOMING) -->
+    <div id="challenge-hero" class="challenge-card upcoming" onclick="pressFeedback(this)" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:16px;overflow:hidden;cursor:pointer;display:none;">
+      <!-- Starting banner -->
+      <div style="background:#0a0a1a;border-bottom:1px solid #1a1a2e;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:28px;height:28px;background:#4A90E2;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:800;color:#fff;">H</span></div>
+          <div>
+            <div style="font-size:9.5px;color:#4A90E2;font-weight:700;letter-spacing:0.3px;">SPONSORED · UPCOMING</div>
+          </div>
+        </div>
+        <span style="background:#1a1a2e;color:#4A90E2;font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:9999px;">STARTING MAY 1</span>
+      </div>
+      <!-- Body -->
+      <div style="padding:14px;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:800;letter-spacing:-0.3px;margin-bottom:5px;">HERO MOTOCORP ADVENTURE LEAGUE</div>
+        <div style="font-size:12px;color:#888;margin-bottom:12px;">Complete 3 state-crossing rides on any Hero bike</div>
+        <!-- Prize -->
+        <div style="background:#0a0a1a;border:1px solid #1a1a2e;border-radius:10px;padding:10px 12px;margin-bottom:12px;">
+          <div style="font-size:10px;color:#555;margin-bottom:3px;">Prize Pool</div>
+          <div style="font-size:14px;font-weight:800;color:#4A90E2;font-family:'Space Grotesk',sans-serif;">₹50,000 Hero voucher + jersey</div>
+        </div>
+        <button onclick="event.stopPropagation();toggleReminder('hero-league',this)" class="press-active" style="width:100%;background:#191919;border:1px solid #2a2a2a;cursor:pointer;padding:11px;border-radius:10px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;gap:7px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Remind Me
+        </button>
+      </div>
+    </div>
+
+    <!-- CARD 4: RE THUNDERBIRD COASTAL KING (COMPLETED) -->
+    <div id="challenge-coastal" class="challenge-card completed" onclick="pressFeedback(this)" style="background:#0a0a0a;border:1px solid #1a1a1a;border-radius:16px;overflow:hidden;cursor:pointer;opacity:0.65;display:none;">
+      <!-- Header band -->
+      <div style="background:#0a0a0a;border-bottom:1px solid #1a1a1a;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:28px;height:28px;background:#333;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:800;color:#888;">RE</span></div>
+          <div>
+            <div style="font-size:9.5px;color:#666;font-weight:700;letter-spacing:0.3px;">SPONSORED · COMPLETED</div>
+          </div>
+        </div>
+        <span style="background:#1a2e1a;color:#00c853;font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:9999px;">FINISHED</span>
+      </div>
+      <!-- Body -->
+      <div style="padding:14px;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:800;letter-spacing:-0.3px;margin-bottom:5px;color:#888;">RE THUNDERBIRD COASTAL KING</div>
+        <!-- Result -->
+        <div style="background:#111;border-radius:10px;padding:10px 12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:10px;color:#555;margin-bottom:2px;">Your result</div>
+            <div style="font-size:15px;font-weight:800;color:#fff;font-family:'Space Grotesk',sans-serif;">#47 <span style="font-size:11px;color:#666;font-weight:400;">of 2,180</span></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:10px;color:#555;margin-bottom:2px;">Badge earned</div>
+            <div style="font-size:11.5px;color:#00c853;font-weight:700;">Coastal Warrior ✅</div>
+          </div>
+        </div>
+        <button onclick="event.stopPropagation();pressFeedback(this);showToast('Opening completion certificate...')" class="press-active" style="width:100%;background:#191919;border:1px solid #2a2a2a;cursor:pointer;padding:11px;border-radius:10px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:#888;display:flex;align-items:center;justify-content:center;gap:7px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+          View Certificate
+        </button>
+      </div>
+    </div>
+
+    <!-- CARD 5: COMRIDE WEEKLY SPRINT (ACTIVE) -->
+    <div id="challenge-sprint" class="challenge-card active mine" onclick="pressFeedback(this)" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:16px;overflow:hidden;cursor:pointer;">
+      <!-- Header band -->
+      <div style="background:#100800;border-bottom:1px solid #251a00;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:28px;height:28px;background:#E2FF3B;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-family:'Space Grotesk',sans-serif;font-size:8px;font-weight:800;color:#000;">CR</span></div>
+          <div>
+            <div style="font-size:9.5px;color:#E2FF3B;font-weight:700;letter-spacing:0.3px;">WEEKLY · ACTIVE</div>
+          </div>
+        </div>
+        <span style="font-size:10px;color:#666;">Resets Sunday</span>
+      </div>
+      <!-- Body -->
+      <div style="padding:14px;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:800;letter-spacing:-0.3px;margin-bottom:5px;">COMRIDE WEEKLY SPRINT</div>
+        <div style="font-size:12px;color:#888;margin-bottom:12px;">First to complete Nandi Hills loop this week</div>
+        <!-- Your rank -->
+        <div style="background:#130a00;border:1px solid #2e1800;border-radius:10px;padding:10px 12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:12px;color:#F5A623;font-weight:700;">You're #23</span>
+          <span style="font-size:11.5px;color:#888;">4 spots to podium</span>
+        </div>
+        <!-- Leaderboard preview mini -->
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;font-weight:800;color:#E2FF3B;width:20px;text-align:center;font-family:'Space Grotesk',sans-serif;">1</span>
+            <div style="width:26px;height:26px;border-radius:50%;background:#333;overflow:hidden;flex-shrink:0;"><div style="width:100%;height:100%;background:linear-gradient(135deg,#E2FF3B,#b8d400);"></div></div>
+            <span style="font-size:12px;font-weight:600;flex:1;">Vikram K.</span>
+            <span style="font-size:11px;color:#666;">1h 24m</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;font-weight:800;color:#aaa;width:20px;text-align:center;font-family:'Space Grotesk',sans-serif;">2</span>
+            <div style="width:26px;height:26px;border-radius:50%;background:#333;overflow:hidden;flex-shrink:0;"><div style="width:100%;height:100%;background:linear-gradient(135deg,#888,#555);"></div></div>
+            <span style="font-size:12px;font-weight:600;flex:1;">Riya M.</span>
+            <span style="font-size:11px;color:#666;">1h 31m</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;font-weight:800;color:#CD7F32;width:20px;text-align:center;font-family:'Space Grotesk',sans-serif;">3</span>
+            <div style="width:26px;height:26px;border-radius:50%;background:#333;overflow:hidden;flex-shrink:0;"><div style="width:100%;height:100%;background:linear-gradient(135deg,#CD7F32,#8B4513);"></div></div>
+            <span style="font-size:12px;font-weight:600;flex:1;">Arjun S.</span>
+            <span style="font-size:11px;color:#666;">1h 38m</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- LEADERBOARD SECTION -->
+  <div style="padding:24px 12px 0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <span style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;">Top Riders This Month</span>
+      <span style="font-size:11px;color:#555;background:#0a0a0a;border:1px solid #1a1a1a;padding:4px 10px;border-radius:9999px;">CASTROL CHALLENGE</span>
+    </div>
+
+    <div style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:16px;overflow:hidden;">
+
+      <!-- Rank 1 - Lime highlight -->
+      <div onclick="pressFeedback(this)" class="press-active" style="padding:12px 14px;display:flex;align-items:center;gap:10px;background:#0f1500;border-bottom:1px solid #1a1a1a;cursor:pointer;">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;color:#E2FF3B;width:24px;text-align:center;">#1</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#E2FF3B,#b8d400);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid #E2FF3B;"><span style="font-size:13px;font-weight:800;color:#000;">RS</span></div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:700;color:#fff;">Rajan Singh</div>
+          <div style="font-size:11px;color:#888;margin-top:1px;">Bangalore · Himalayan 450</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:14px;font-weight:800;color:#E2FF3B;font-family:'Space Grotesk',sans-serif;">3,240 KM</div>
+          <div style="display:inline-flex;align-items:center;background:#1a2e00;border:1px solid #2a4400;padding:2px 7px;border-radius:9999px;margin-top:3px;"><span style="font-size:9px;color:#E2FF3B;font-weight:700;">₹25K prize</span></div>
+        </div>
+      </div>
+
+      <!-- Rank 2 -->
+      <div onclick="pressFeedback(this)" class="press-active" style="padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #111;cursor:pointer;">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;color:#aaa;width:24px;text-align:center;">#2</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-size:13px;font-weight:800;color:#fff;">AK</span></div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:700;">Aditya Kumar</div>
+          <div style="font-size:11px;color:#888;margin-top:1px;">Mumbai · RE Classic 350</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:14px;font-weight:800;color:#aaa;font-family:'Space Grotesk',sans-serif;">3,108 KM</div>
+        </div>
+      </div>
+
+      <!-- Rank 3 -->
+      <div onclick="pressFeedback(this)" class="press-active" style="padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #111;cursor:pointer;">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;color:#CD7F32;width:24px;text-align:center;">#3</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:#3a2000;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-size:13px;font-weight:800;color:#CD7F32;">PM</span></div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:700;">Priya Menon</div>
+          <div style="font-size:11px;color:#888;margin-top:1px;">Chennai · Duke 390</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:14px;font-weight:800;color:#CD7F32;font-family:'Space Grotesk',sans-serif;">2,987 KM</div>
+        </div>
+      </div>
+
+      <!-- Rank 4 -->
+      <div onclick="pressFeedback(this)" class="press-active" style="padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #111;cursor:pointer;">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:#555;width:24px;text-align:center;">#4</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-size:13px;font-weight:800;color:#666;">VR</span></div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:700;color:#ccc;">Varun Rao</div>
+          <div style="font-size:11px;color:#666;margin-top:1px;">Hyderabad · Pulsar RS 200</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:14px;font-weight:800;color:#666;font-family:'Space Grotesk',sans-serif;">2,830 KM</div>
+        </div>
+      </div>
+
+      <!-- Rank 5 -->
+      <div onclick="pressFeedback(this)" class="press-active" style="padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #111;cursor:pointer;">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:#555;width:24px;text-align:center;">#5</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-size:13px;font-weight:800;color:#666;">SM</span></div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:700;color:#ccc;">Siddharth Mehta</div>
+          <div style="font-size:11px;color:#666;margin-top:1px;">Pune · Interceptor 650</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:14px;font-weight:800;color:#666;font-family:'Space Grotesk',sans-serif;">2,744 KM</div>
+        </div>
+      </div>
+
+      <!-- Your rank -->
+      <div style="padding:12px 14px;display:flex;align-items:center;gap:10px;background:#130a00;border-top:1px solid #2e1800;">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:#F5A623;width:24px;text-align:center;">#127</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#333,#111);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid #F5A623;"><span style="font-size:12px;font-weight:800;color:#F5A623;">YOU</span></div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:700;color:#F5A623;">Your Rank</div>
+          <div style="font-size:11px;color:#888;margin-top:1px;">842 KM logged this month</div>
+        </div>
+        <button onclick="pressFeedback(this);showToast('Boosting your rank...')" class="press-active" style="background:#E2FF3B;border:none;cursor:pointer;padding:7px 12px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;color:#000;">Ride Now</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MY BADGES SECTION -->
+  <div style="padding:24px 12px 0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <span style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;">My Badges</span>
+      <span style="font-size:12px;color:#E2FF3B;font-weight:600;">5 earned</span>
+    </div>
+
+    <div class="hide-scroll" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;">
+
+      <!-- Badge 1 -->
+      <div onclick="pressFeedback(this);showToast('Coastal Warrior badge earned Mar 2026')" class="press-active" style="flex-shrink:0;width:76px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div style="width:64px;height:64px;background:linear-gradient(135deg,#003d1a,#006630);border:2px solid #00c853;border-radius:14px;clip-path:polygon(50% 0%,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%);display:flex;align-items:center;justify-content:center;position:relative;">
+          <span style="font-size:26px;line-height:1;">🏄</span>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:9.5px;font-weight:700;color:#fff;line-height:1.2;">Coastal Warrior</div>
+          <div style="font-size:8.5px;color:#555;margin-top:2px;">Mar 2026</div>
+        </div>
+      </div>
+
+      <!-- Badge 2 -->
+      <div onclick="pressFeedback(this);showToast('Night Rider badge earned Jan 2026')" class="press-active" style="flex-shrink:0;width:76px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div style="width:64px;height:64px;background:linear-gradient(135deg,#0a0014,#1a0038);border:2px solid #7B4FFF;border-radius:14px;clip-path:polygon(50% 0%,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%);display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:26px;line-height:1;">🌙</span>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:9.5px;font-weight:700;color:#fff;line-height:1.2;">Night Rider</div>
+          <div style="font-size:8.5px;color:#555;margin-top:2px;">Jan 2026</div>
+        </div>
+      </div>
+
+      <!-- Badge 3 -->
+      <div onclick="pressFeedback(this);showToast('Mountain King badge earned Nov 2025')" class="press-active" style="flex-shrink:0;width:76px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div style="width:64px;height:64px;background:linear-gradient(135deg,#1a0800,#3d1a00);border:2px solid #FF8C42;border-radius:14px;clip-path:polygon(50% 0%,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%);display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:26px;line-height:1;">⛰️</span>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:9.5px;font-weight:700;color:#fff;line-height:1.2;">Mountain King</div>
+          <div style="font-size:8.5px;color:#555;margin-top:2px;">Nov 2025</div>
+        </div>
+      </div>
+
+      <!-- Badge 4 -->
+      <div onclick="pressFeedback(this);showToast('Early Bird badge earned Sep 2025')" class="press-active" style="flex-shrink:0;width:76px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div style="width:64px;height:64px;background:linear-gradient(135deg,#1a1400,#3d3200);border:2px solid #F5A623;border-radius:14px;clip-path:polygon(50% 0%,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%);display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:26px;line-height:1;">🌅</span>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:9.5px;font-weight:700;color:#fff;line-height:1.2;">Early Bird</div>
+          <div style="font-size:8.5px;color:#555;margin-top:2px;">Sep 2025</div>
+        </div>
+      </div>
+
+      <!-- Badge 5 -->
+      <div onclick="pressFeedback(this);showToast('First 1K badge earned Jul 2025')" class="press-active" style="flex-shrink:0;width:76px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div style="width:64px;height:64px;background:linear-gradient(135deg,#0a0f00,#1a2500);border:2px solid #E2FF3B;border-radius:14px;clip-path:polygon(50% 0%,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%);display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:26px;line-height:1;">🏁</span>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:9.5px;font-weight:700;color:#fff;line-height:1.2;">First 1K</div>
+          <div style="font-size:8.5px;color:#555;margin-top:2px;">Jul 2025</div>
+        </div>
+      </div>
+
+      <!-- Spacer -->
+      <div style="flex-shrink:0;width:1px;"></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="journey-mode.js"></script>
+<script src="nav-module.js"></script>
+<script>
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.opacity = '1';
+    t.style.transform = 'translate(-50%, 0)';
+    t.style.animation = 'toastIn 0.25s ease both';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function() {
+      t.style.opacity = '0';
+      t.style.transform = 'translate(-50%, 12px)';
+    }, 2600);
+  }
+
+  function pressFeedback(el) {
+    el.style.transform = 'scale(0.97)';
+    el.style.transition = 'transform 0.08s ease';
+    setTimeout(function() {
+      el.style.transform = 'scale(1)';
+    }, 130);
+  }
+
+  function joinChallenge(id, btn) {
+    pressFeedback(btn);
+    var joined = btn.getAttribute('data-joined') === 'true';
+    if (joined) {
+      btn.textContent = 'Join Challenge';
+      btn.style.background = '#E2FF3B';
+      btn.style.color = '#000';
+      btn.setAttribute('data-joined', 'false');
+      showToast('Left the challenge.');
+    } else {
+      btn.textContent = '✓ Joined!';
+      btn.style.background = '#00c853';
+      btn.style.color = '#000';
+      btn.setAttribute('data-joined', 'true');
+      showToast('You\'re in! Challenge joined 🏍');
+    }
+  }
+
+  function toggleReminder(id, btn) {
+    pressFeedback(btn);
+    var active = btn.getAttribute('data-reminder') === 'true';
+    if (active) {
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> Remind Me';
+      btn.style.color = '#fff';
+      btn.style.borderColor = '#2a2a2a';
+      btn.setAttribute('data-reminder', 'false');
+      showToast('Reminder removed');
+    } else {
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> Reminder Set ✓';
+      btn.style.background = '#E2FF3B';
+      btn.style.color = '#000';
+      btn.style.borderColor = '#E2FF3B';
+      btn.setAttribute('data-reminder', 'true');
+      showToast('Reminder set for May 1!');
+    }
+  }
+
+  var filterBtns = ['active','upcoming','completed','mine'];
+
+  function filterChallenges(type, clickedBtn) {
+    pressFeedback(clickedBtn);
+    // Update filter pill styles
+    filterBtns.forEach(function(f) {
+      var b = document.getElementById('filter-' + f);
+      b.style.background = '#191919';
+      b.style.border = '1px solid #2a2a2a';
+      b.style.color = '#888';
+    });
+    clickedBtn.style.background = '#E2FF3B';
+    clickedBtn.style.border = '1px solid #E2FF3B';
+    clickedBtn.style.color = '#000';
+
+    // Show/hide challenge cards
+    var cards = document.querySelectorAll('.challenge-card');
+    cards.forEach(function(card) {
+      if (type === 'active') {
+        card.style.display = card.classList.contains('active') ? 'block' : 'none';
+      } else if (type === 'upcoming') {
+        card.style.display = card.classList.contains('upcoming') ? 'block' : 'none';
+      } else if (type === 'completed') {
+        card.style.display = card.classList.contains('completed') ? 'block' : 'none';
+      } else if (type === 'mine') {
+        card.style.display = (card.classList.contains('active') || card.classList.contains('mine')) ? 'block' : 'none';
+      }
+    });
+  }
+
+  // Animate timer colons
+  var colons = document.querySelectorAll('.timer-colon');
+  setInterval(function() {
+    colons.forEach(function(c) {
+      c.style.opacity = c.style.opacity === '0.2' ? '1' : '0.2';
+    });
+  }, 1000);
+
+  // Global touch feedback
+  document.querySelectorAll('button,[onclick]').forEach(function(el) {
+    el.addEventListener('touchstart', function() {
+      this.style.opacity = '0.82';
+    }, {passive:true});
+    el.addEventListener('touchend', function() {
+      this.style.opacity = '1';
+    }, {passive:true});
+  });
+</script>
+</body></html>

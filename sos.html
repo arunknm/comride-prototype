@@ -1,0 +1,582 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>Safety Hub — Comride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *{-webkit-tap-highlight-color:transparent;box-sizing:border-box;margin:0;padding:0}
+    html,body{background:#000;color:#fff;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased}
+    @keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes toastIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
+    @keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes sosPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,50,50,0.7)}50%{transform:scale(1.05);box-shadow:0 0 0 20px rgba(255,50,50,0)}}
+    @keyframes sosCountdown{from{stroke-dashoffset:251}to{stroke-dashoffset:0}}
+    .page-body{animation:slideUp 0.35s ease both}
+    a{text-decoration:none;color:inherit}img{display:block}
+    ::selection{background:#E2FF3B;color:#000}
+    button,[onclick]{cursor:pointer}
+    .sos-active{animation:sosPulse 1.2s ease-in-out infinite!important}
+  </style>
+</head>
+<body style="background:#000;color:#fff">
+
+<!-- ═══════════════════════════════ -->
+<!-- PAGE CONTENT — NO NORMAL HEADER -->
+<!-- ═══════════════════════════════ -->
+<main class="page-body" style="max-width:390px;margin:0 auto;padding:16px 12px 140px">
+
+  <!-- PAGE TITLE ROW -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-top:8px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="home.html" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:#191919">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </a>
+      <div>
+        <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.5px">Safety Hub</h1>
+        <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">Bangalore · Ride active: No</p>
+      </div>
+    </div>
+    <div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);border-radius:9999px;padding:5px 10px">
+      <span style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;color:#22c55e">SAFE</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════ -->
+  <!-- GIANT SOS BUTTON HERO       -->
+  <!-- ═══════════════════════════ -->
+  <div style="background:linear-gradient(180deg,#0d0000 0%,#0a0a0a 100%);border-radius:12px;padding:28px 20px 22px;text-align:center;margin-bottom:16px;border:1px solid rgba(239,68,68,0.12);position:relative;overflow:hidden">
+    <!-- Subtle background glow -->
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(239,68,68,0.04) 0%,transparent 70%);pointer-events:none"></div>
+
+    <!-- SOS STATUS -->
+    <p id="sos-status" style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#ababab;margin-bottom:18px">SOS DEACTIVATED</p>
+
+    <!-- SOS BUTTON -->
+    <div style="position:relative;display:inline-block;margin-bottom:18px">
+      <!-- Outer ring -->
+      <div id="sos-outer-ring" style="width:128px;height:128px;border-radius:50%;background:rgba(239,68,68,0.08);display:flex;align-items:center;justify-content:center;border:2px solid rgba(239,68,68,0.15);transition:all 0.3s">
+        <!-- Countdown SVG ring -->
+        <svg id="sos-countdown-svg" style="position:absolute;top:0;left:0;transform:rotate(-90deg);display:none" width="128" height="128" viewBox="0 0 128 128">
+          <circle cx="64" cy="64" r="60" fill="none" stroke="#ef4444" stroke-width="3" stroke-dasharray="377" stroke-dashoffset="377" id="sos-countdown-circle" style="transition:stroke-dashoffset 0.1s linear"/>
+        </svg>
+        <!-- Main button -->
+        <button id="sos-btn" onclick="toggleSOS()" style="width:100px;height:100px;border-radius:50%;background:linear-gradient(145deg,#2a0000,#1a0000);border:3px solid rgba(239,68,68,0.3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:all 0.3s;position:relative;z-index:1" onmousedown="startSOSHold()" onmouseup="cancelSOSHold()" ontouchstart="startSOSHold()" ontouchend="cancelSOSHold()">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span id="sos-btn-label" style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:14px;color:#ef4444;letter-spacing:1px">SOS</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Hold instruction -->
+    <p id="sos-instruction" style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#ababab;margin-bottom:8px;letter-spacing:0.5px">HOLD 3 SECONDS TO ACTIVATE</p>
+    <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(171,171,171,0.4)">Last location shared: Never</p>
+  </div>
+
+  <!-- ═══════════════════════════ -->
+  <!-- QUICK ACTION GRID 2×2       -->
+  <!-- ═══════════════════════════ -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+
+    <!-- Hospital -->
+    <div onclick="showToast('Opening maps to AIIMS BLR...')" style="background:#0a0a0a;border-radius:12px;padding:14px;border:1px solid rgba(72,72,72,0.2);cursor:pointer;transition:opacity 0.15s;active:opacity:0.7" onmousedown="this.style.opacity='0.7'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.7'" ontouchend="this.style.opacity='1'">
+      <div style="width:36px;height:36px;border-radius:10px;background:rgba(239,68,68,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:8px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><rect x="9" y="14" width="6" height="8"/><path d="M9 10h6M12 7v6"/></svg>
+      </div>
+      <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;margin-bottom:3px">Nearest Hospital</p>
+      <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;font-weight:600">AIIMS BLR · 2.4 KM</p>
+    </div>
+
+    <!-- Traffic Police -->
+    <div onclick="showToast('Calling BTP — Dial 103...')" style="background:#0a0a0a;border-radius:12px;padding:14px;border:1px solid rgba(72,72,72,0.2);cursor:pointer;transition:opacity 0.15s" onmousedown="this.style.opacity='0.7'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.7'" ontouchend="this.style.opacity='1'">
+      <div style="width:36px;height:36px;border-radius:10px;background:rgba(59,130,246,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:8px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.49 12 19.79 19.79 0 0 1 1.21 3.25 2 2 0 0 1 3.22 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 15.92z"/></svg>
+      </div>
+      <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;margin-bottom:3px">Traffic Police</p>
+      <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#3b82f6;font-weight:600">Dial 103</p>
+    </div>
+
+    <!-- Emergency Mechanic -->
+    <a href="mechanic.html" style="background:#0a0a0a;border-radius:12px;padding:14px;border:1px solid rgba(72,72,72,0.2);cursor:pointer;display:block;transition:opacity 0.15s;text-decoration:none" onmousedown="this.style.opacity='0.7'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.7'" ontouchend="this.style.opacity='1'">
+      <div style="width:36px;height:36px;border-radius:10px;background:rgba(245,158,11,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:8px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      </div>
+      <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#fff;margin-bottom:3px">Emergency Mechanic</p>
+      <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#f59e0b;font-weight:600">Available · 12 min</p>
+    </a>
+
+    <!-- Share Location -->
+    <div onclick="showToast('Location shared with 3 emergency contacts')" style="background:#0a0a0a;border-radius:12px;padding:14px;border:1px solid rgba(72,72,72,0.2);cursor:pointer;transition:opacity 0.15s" onmousedown="this.style.opacity='0.7'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.7'" ontouchend="this.style.opacity='1'">
+      <div style="width:36px;height:36px;border-radius:10px;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:8px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;margin-bottom:3px">Share Location</p>
+      <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;font-weight:600">Send to contacts</p>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════ -->
+  <!-- EMERGENCY CONTACTS          -->
+  <!-- ═══════════════════════════ -->
+  <div style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px">Emergency Contacts</h2>
+      <span onclick="showToast('Edit contacts coming soon')" style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#E2FF3B;cursor:pointer">Edit</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+
+      <!-- Contact 1 — Primary -->
+      <div style="background:#0a0a0a;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;border:1px solid rgba(226,255,59,0.12)">
+        <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#1a2000,#0f1a00);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(226,255,59,0.2)">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B">P</span>
+        </div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px">Priya (Sister)</p>
+            <div style="width:6px;height:6px;border-radius:50%;background:#E2FF3B"></div>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;color:#E2FF3B">PRIMARY</span>
+          </div>
+          <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">+91 98765 43210</p>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+
+      <!-- Contact 2 -->
+      <div style="background:#0a0a0a;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;border:1px solid rgba(72,72,72,0.2)">
+        <div style="width:38px;height:38px;border-radius:50%;background:#191919;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#ababab">R</span>
+        </div>
+        <div style="flex:1">
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;margin-bottom:2px">Rajesh (Friend)</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">+91 87654 32109</p>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+
+      <!-- Contact 3 -->
+      <div style="background:#0a0a0a;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;border:1px solid rgba(72,72,72,0.2)">
+        <div style="width:38px;height:38px;border-radius:50%;background:#191919;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#ababab">D</span>
+        </div>
+        <div style="flex:1">
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;margin-bottom:2px">Dr. Mehta (Family Doctor)</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">+91 76543 21098</p>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+
+      <!-- Add contact button -->
+      <button onclick="showToast('Add contact coming soon')" style="width:100%;background:transparent;border:1px dashed rgba(72,72,72,0.5);border-radius:12px;padding:13px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:#ababab;letter-spacing:-0.2px;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity 0.15s" onmousedown="this.style.opacity='0.6'" onmouseup="this.style.opacity='1'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Add Contact
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ -->
+  <!-- LIVE RIDE TRACKING TOGGLE       -->
+  <!-- ═══════════════════════════════ -->
+  <div style="background:#0a0a0a;border-radius:12px;padding:16px;margin-bottom:20px;border:1px solid rgba(72,72,72,0.2)">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <div style="flex:1;margin-right:12px">
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;margin-bottom:4px">Share live location during rides</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:12px;color:#ababab;line-height:1.5">Your emergency contacts see your real-time GPS during active rides.</p>
+      </div>
+      <div id="location-toggle" onclick="toggleLocationSharing()" style="width:44px;height:24px;border-radius:9999px;background:#E2FF3B;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0;margin-top:2px">
+        <div id="location-knob" style="position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:#000;transition:all 0.2s"></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+      <div style="width:6px;height:6px;border-radius:50%;background:#22c55e"></div>
+      <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#22c55e">Currently sharing with: 2 contacts</span>
+    </div>
+    <!-- Pro upsell -->
+    <a href="comride-pro.html" style="display:flex;align-items:center;gap:8px;background:rgba(226,255,59,0.05);border-radius:8px;padding:10px 12px;border:1px solid rgba(226,255,59,0.1);text-decoration:none">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="#E2FF3B"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;line-height:1.4;flex:1">Pro tip: <span style="color:#E2FF3B;font-weight:600">Comride Pro</span> includes 15-min SOS priority response</p>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+
+  <!-- ═══════════════════════════ -->
+  <!-- PRE-RIDE SAFETY CHECKLIST   -->
+  <!-- ═══════════════════════════ -->
+  <div style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px">Pre-Ride Safety Check</h2>
+      <span id="check-count" style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#ababab">3/5 checks</span>
+    </div>
+
+    <!-- Progress bar -->
+    <div style="height:4px;background:#191919;border-radius:9999px;margin-bottom:16px;overflow:hidden">
+      <div id="check-progress" style="height:100%;border-radius:9999px;background:#E2FF3B;width:60%;transition:width 0.3s ease"></div>
+    </div>
+
+    <div id="checklist" style="display:flex;flex-direction:column;gap:8px">
+
+      <!-- Item 1 — Helmet (checked) -->
+      <div onclick="toggleCheck(this,0)" style="background:#0a0a0a;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;border:1px solid rgba(72,72,72,0.2);transition:all 0.15s" data-checked="true">
+        <div style="width:22px;height:22px;border-radius:6px;background:#E2FF3B;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <span style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:600">Helmet on and buckled</span>
+      </div>
+
+      <!-- Item 2 — Insurance (unchecked) -->
+      <div onclick="toggleCheck(this,1)" style="background:#0a0a0a;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;border:1px solid rgba(72,72,72,0.2);transition:all 0.15s" data-checked="false">
+        <div style="width:22px;height:22px;border-radius:6px;background:#191919;border:2px solid rgba(72,72,72,0.5);flex-shrink:0;transition:all 0.2s"></div>
+        <span style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;color:#ababab">Insurance valid</span>
+        <a href="insurance.html" onclick="event.stopPropagation()" style="margin-left:auto;font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;color:#E2FF3B;text-decoration:none;white-space:nowrap">Check →</a>
+      </div>
+
+      <!-- Item 3 — Tyre pressure (checked) -->
+      <div onclick="toggleCheck(this,2)" style="background:#0a0a0a;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;border:1px solid rgba(72,72,72,0.2);transition:all 0.15s" data-checked="true">
+        <div style="width:22px;height:22px;border-radius:6px;background:#E2FF3B;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <span style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:600">Tyre pressure checked</span>
+      </div>
+
+      <!-- Item 4 — Phone charged (checked) -->
+      <div onclick="toggleCheck(this,3)" style="background:#0a0a0a;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;border:1px solid rgba(72,72,72,0.2);transition:all 0.15s" data-checked="true">
+        <div style="width:22px;height:22px;border-radius:6px;background:#E2FF3B;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <span style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:600">Phone charged (&gt;20%)</span>
+      </div>
+
+      <!-- Item 5 — Emergency contacts notified (unchecked) -->
+      <div onclick="toggleCheck(this,4)" style="background:#0a0a0a;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;border:1px solid rgba(72,72,72,0.2);transition:all 0.15s" data-checked="false">
+        <div style="width:22px;height:22px;border-radius:6px;background:#191919;border:2px solid rgba(72,72,72,0.5);flex-shrink:0;transition:all 0.2s"></div>
+        <span style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;color:#ababab">Emergency contacts notified</span>
+      </div>
+
+    </div>
+
+    <!-- Start ride button -->
+    <button id="start-ride-btn" onclick="showToast('Ride started! Stay safe out there.')" style="width:100%;background:#484848;color:rgba(255,255,255,0.4);border:none;border-radius:9999px;padding:14px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;letter-spacing:-0.3px;margin-top:14px;transition:all 0.3s;cursor:not-allowed">All set! Start Ride →</button>
+  </div>
+
+  <!-- ═══════════════════════════ -->
+  <!-- RIDE SAFETY STATS           -->
+  <!-- ═══════════════════════════ -->
+  <div style="background:#0a0a0a;border-radius:12px;padding:18px;margin-bottom:20px;border:1px solid rgba(72,72,72,0.2)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div>
+        <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Your Safety Score</p>
+        <div style="display:flex;align-items:baseline;gap:6px">
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:42px;font-weight:800;color:#E2FF3B;letter-spacing:-2px;line-height:1">94</span>
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;color:rgba(226,255,59,0.5)">/100</span>
+        </div>
+      </div>
+      <div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);border-radius:9999px;padding:5px 12px;align-self:flex-start">
+        <span style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;color:#22c55e">TOP 12% IN BLR</span>
+      </div>
+    </div>
+    <!-- Stats row -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+      <div style="background:#191919;border-radius:8px;padding:10px 8px;text-align:center">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" style="margin:0 auto 5px"><circle cx="12" cy="8" r="4"/><path d="M4 20v-1a4 4 0 0 1 4-4h1"/></svg>
+        <p style="font-family:'Manrope',sans-serif;font-size:9px;color:#ababab;line-height:1.4">Always wears helmet</p>
+      </div>
+      <div style="background:#191919;border-radius:8px;padding:10px 8px;text-align:center">
+        <p style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:#E2FF3B;margin-bottom:3px">52</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:9px;color:#ababab">Avg kmph</p>
+      </div>
+      <div style="background:#191919;border-radius:8px;padding:10px 8px;text-align:center">
+        <p style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:#E2FF3B;margin-bottom:3px">8%</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:9px;color:#ababab">Night rides</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════ -->
+  <!-- NEARBY SAFETY POINTS        -->
+  <!-- ═══════════════════════════ -->
+  <div style="margin-bottom:20px">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;margin-bottom:12px">Nearby Safety Points</h2>
+    <div style="display:flex;flex-direction:column;gap:8px">
+
+      <div style="background:#0a0a0a;border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(72,72,72,0.2)" onclick="showToast('Opening directions to Manipal Hospital...')">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:8px;height:8px;border-radius:50%;background:#ef4444;flex-shrink:0"></div>
+          <div>
+            <p style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700">Trauma Centre</p>
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">Manipal Hospital · 1.8 KM</p>
+          </div>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+
+      <div style="background:#0a0a0a;border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(72,72,72,0.2)" onclick="showToast('Opening directions to Marathahalli PS...')">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:8px;height:8px;border-radius:50%;background:#3b82f6;flex-shrink:0"></div>
+          <div>
+            <p style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700">Police Station</p>
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">Marathahalli PS · 0.6 KM</p>
+          </div>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+
+      <div style="background:#0a0a0a;border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(72,72,72,0.2)" onclick="showToast('Opening directions to HP Petrol...')">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0"></div>
+          <div>
+            <p style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700">Petrol Pump</p>
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">HP Petrol · 0.3 KM</p>
+          </div>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+
+      <div style="background:#0a0a0a;border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(72,72,72,0.2)" onclick="showToast('Opening directions to RE Service...')">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:8px;height:8px;border-radius:50%;background:#ef4444;flex-shrink:0"></div>
+          <div>
+            <p style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700">RE Authorized Service</p>
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">Royal Enfield Studio · 2.1 KM</p>
+          </div>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER TIP / SHARE -->
+  <div style="background:#0a0a0a;border-radius:12px;padding:16px;display:flex;align-items:center;gap:14px;border:1px solid rgba(72,72,72,0.2)">
+    <div style="flex:1">
+      <p style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;margin-bottom:3px">Safety in numbers</p>
+      <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;line-height:1.4">Share this app with fellow riders</p>
+    </div>
+    <button onclick="showToast('Share link copied to clipboard!')" style="background:#E2FF3B;color:#000;border:none;border-radius:9999px;padding:9px 16px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;white-space:nowrap;flex-shrink:0;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Share App</button>
+  </div>
+
+</main>
+
+<!-- TOAST -->
+<div id="toast" style="position:fixed;bottom:80px;left:50%;transform:translate(-50%,12px);background:#191919;color:#fff;border-radius:9999px;padding:11px 20px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;z-index:500;opacity:0;pointer-events:none;border:1px solid rgba(72,72,72,0.4);white-space:nowrap;max-width:320px;text-align:center"></div>
+
+<script>
+  // ─── TOAST ───────────────────────────────────────────
+  var _toastTimer;
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.opacity = '1';
+    t.style.transform = 'translate(-50%, 0)';
+    t.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(function() {
+      t.style.opacity = '0';
+      t.style.transform = 'translate(-50%, 8px)';
+    }, 2800);
+  }
+
+  function pressFeedback(el) {
+    el.style.transform = 'scale(0.92)';
+    el.style.transition = 'transform 0.12s ease';
+    setTimeout(function() { el.style.transform = 'scale(1)'; }, 120);
+  }
+
+  // ─── SOS LOGIC ───────────────────────────────────────
+  var _sosActive = false;
+  var _sosHolding = false;
+  var _sosHoldTimer = null;
+  var _sosCountdownInterval = null;
+  var _sosProgress = 0;
+
+  function startSOSHold() {
+    if (_sosActive) {
+      // Deactivate on single tap when active
+      deactivateSOS();
+      return;
+    }
+    _sosHolding = true;
+    _sosProgress = 0;
+
+    // Show countdown ring
+    var svg = document.getElementById('sos-countdown-svg');
+    var circle = document.getElementById('sos-countdown-circle');
+    svg.style.display = 'block';
+    circle.style.strokeDashoffset = '377';
+
+    // Visual press feedback
+    var btn = document.getElementById('sos-btn');
+    btn.style.background = 'linear-gradient(145deg,#4a0000,#2a0000)';
+    btn.style.borderColor = 'rgba(239,68,68,0.7)';
+
+    var outer = document.getElementById('sos-outer-ring');
+    outer.style.background = 'rgba(239,68,68,0.15)';
+    outer.style.borderColor = 'rgba(239,68,68,0.4)';
+
+    document.getElementById('sos-instruction').textContent = 'HOLD... ACTIVATING SOS';
+    document.getElementById('sos-instruction').style.color = '#ef4444';
+
+    var totalMs = 3000;
+    var steps = 30;
+    var stepMs = totalMs / steps;
+    var fullDash = 377;
+    var step = 0;
+
+    _sosCountdownInterval = setInterval(function() {
+      step++;
+      _sosProgress = step / steps;
+      var offset = fullDash - (fullDash * _sosProgress);
+      circle.style.strokeDashoffset = offset;
+      circle.style.transition = 'none';
+
+      if (step >= steps) {
+        clearInterval(_sosCountdownInterval);
+        _sosCountdownInterval = null;
+        if (_sosHolding) {
+          activateSOS();
+        }
+      }
+    }, stepMs);
+  }
+
+  function cancelSOSHold() {
+    if (_sosActive) return;
+    _sosHolding = false;
+
+    if (_sosCountdownInterval) {
+      clearInterval(_sosCountdownInterval);
+      _sosCountdownInterval = null;
+    }
+
+    // Reset visuals
+    var svg = document.getElementById('sos-countdown-svg');
+    svg.style.display = 'none';
+    var circle = document.getElementById('sos-countdown-circle');
+    circle.style.strokeDashoffset = '377';
+
+    var btn = document.getElementById('sos-btn');
+    btn.style.background = 'linear-gradient(145deg,#2a0000,#1a0000)';
+    btn.style.borderColor = 'rgba(239,68,68,0.3)';
+
+    var outer = document.getElementById('sos-outer-ring');
+    outer.style.background = 'rgba(239,68,68,0.08)';
+    outer.style.borderColor = 'rgba(239,68,68,0.15)';
+
+    document.getElementById('sos-instruction').textContent = 'HOLD 3 SECONDS TO ACTIVATE';
+    document.getElementById('sos-instruction').style.color = '#ababab';
+  }
+
+  function activateSOS() {
+    _sosActive = true;
+    _sosHolding = false;
+
+    var btn = document.getElementById('sos-btn');
+    btn.style.background = 'linear-gradient(145deg,#ef4444,#b91c1c)';
+    btn.style.borderColor = '#ef4444';
+    btn.classList.add('sos-active');
+
+    document.getElementById('sos-btn-label').style.color = '#fff';
+    document.getElementById('sos-status').textContent = 'SOS ACTIVE — ALERTING CONTACTS';
+    document.getElementById('sos-status').style.color = '#ef4444';
+    document.getElementById('sos-instruction').textContent = 'TAP TO DEACTIVATE';
+    document.getElementById('sos-instruction').style.color = '#ef4444';
+
+    var outer = document.getElementById('sos-outer-ring');
+    outer.style.background = 'rgba(239,68,68,0.2)';
+    outer.style.borderColor = '#ef4444';
+
+    var svg = document.getElementById('sos-countdown-svg');
+    svg.style.display = 'none';
+
+    showToast('SOS activated! Alerting your emergency contacts + nearest hospital');
+  }
+
+  function deactivateSOS() {
+    _sosActive = false;
+
+    var btn = document.getElementById('sos-btn');
+    btn.style.background = 'linear-gradient(145deg,#2a0000,#1a0000)';
+    btn.style.borderColor = 'rgba(239,68,68,0.3)';
+    btn.classList.remove('sos-active');
+
+    document.getElementById('sos-btn-label').style.color = '#ef4444';
+    document.getElementById('sos-status').textContent = 'SOS DEACTIVATED';
+    document.getElementById('sos-status').style.color = '#ababab';
+    document.getElementById('sos-instruction').textContent = 'HOLD 3 SECONDS TO ACTIVATE';
+    document.getElementById('sos-instruction').style.color = '#ababab';
+
+    var outer = document.getElementById('sos-outer-ring');
+    outer.style.background = 'rgba(239,68,68,0.08)';
+    outer.style.borderColor = 'rgba(239,68,68,0.15)';
+
+    showToast('SOS deactivated.');
+  }
+
+  function toggleSOS() {
+    // Handled via hold events; single click fallback
+    if (_sosActive) {
+      deactivateSOS();
+    }
+  }
+
+  // ─── CHECKLIST ───────────────────────────────────────
+  var _checkedCount = 3; // 3 pre-checked out of 5
+  var _totalChecks = 5;
+
+  function toggleCheck(el, idx) {
+    var isChecked = el.getAttribute('data-checked') === 'true';
+    var box = el.querySelector('div:first-child');
+
+    if (isChecked) {
+      el.setAttribute('data-checked', 'false');
+      box.style.background = '#191919';
+      box.style.border = '2px solid rgba(72,72,72,0.5)';
+      box.innerHTML = '';
+      el.querySelector('span').style.color = '#ababab';
+      _checkedCount--;
+    } else {
+      el.setAttribute('data-checked', 'true');
+      box.style.background = '#E2FF3B';
+      box.style.border = 'none';
+      box.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      el.querySelector('span').style.color = '#fff';
+      _checkedCount++;
+    }
+
+    // Update progress
+    var pct = (_checkedCount / _totalChecks) * 100;
+    document.getElementById('check-progress').style.width = pct + '%';
+    document.getElementById('check-count').textContent = _checkedCount + '/' + _totalChecks + ' checks';
+
+    // Update start button
+    var btn = document.getElementById('start-ride-btn');
+    if (_checkedCount >= _totalChecks) {
+      btn.style.background = '#E2FF3B';
+      btn.style.color = '#000';
+      btn.style.cursor = 'pointer';
+    } else {
+      btn.style.background = '#484848';
+      btn.style.color = 'rgba(255,255,255,0.4)';
+      btn.style.cursor = 'not-allowed';
+    }
+  }
+
+  // ─── LIVE LOCATION TOGGLE ────────────────────────────
+  var _locationOn = true;
+  function toggleLocationSharing() {
+    _locationOn = !_locationOn;
+    var tog = document.getElementById('location-toggle');
+    var knob = document.getElementById('location-knob');
+    tog.style.background = _locationOn ? '#E2FF3B' : '#484848';
+    knob.style.right = _locationOn ? '3px' : 'auto';
+    knob.style.left = _locationOn ? 'auto' : '3px';
+    showToast(_locationOn ? 'Location sharing enabled' : 'Location sharing disabled');
+  }
+</script>
+
+<script src="journey-mode.js"></script><script src="nav-module.js"></script>
+</body></html>

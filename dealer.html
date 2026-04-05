@@ -1,0 +1,554 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>Test Rides — Comride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *{-webkit-tap-highlight-color:transparent;box-sizing:border-box;margin:0;padding:0}
+    html,body{background:#000;color:#fff;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased}
+    @keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes toastIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
+    @keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    .page-body{animation:slideUp 0.35s ease both}
+    a{text-decoration:none;color:inherit}img{display:block}
+    ::selection{background:#E2FF3B;color:#000}
+    input,textarea{outline:none;border:none}
+    button,a,[onclick]{cursor:pointer}
+    ::-webkit-scrollbar{display:none}
+  </style>
+</head>
+<body style="background:#000;color:#fff">
+
+<!-- ═══════════════════════════════ -->
+<!-- FIXED TOP HEADER                -->
+<!-- ═══════════════════════════════ -->
+<header style="position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(72,72,72,0.15)">
+  <div style="max-width:390px;margin:0 auto;padding:0 12px;height:64px;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:14px">
+      <a href="home.html" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:#191919" onclick="pressFeedback(this)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </a>
+      <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;letter-spacing:-0.4px">Test Rides</span>
+    </div>
+    <button onclick="showToast('Filter options coming soon')" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:#191919;border:none;transition:opacity 0.15s" onmousedown="this.style.opacity='0.6'" onmouseup="this.style.opacity='1'">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════ -->
+<!-- PAGE CONTENT                    -->
+<!-- ═══════════════════════════════ -->
+<main class="page-body" style="max-width:390px;margin:0 auto;padding:80px 12px 160px">
+
+  <!-- HERO BANNER -->
+  <div style="position:relative;height:160px;border-radius:12px;overflow:hidden;margin-bottom:20px;background:linear-gradient(135deg,#0a0a0a 0%,#0f1a00 50%,#0a0a0a 100%)">
+    <!-- Background texture -->
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(226,255,59,0.04) 0%,rgba(226,255,59,0.01) 100%)"></div>
+    <div style="position:absolute;bottom:0;right:-20px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(226,255,59,0.06) 0%,transparent 70%)"></div>
+    <div style="position:relative;z-index:1;padding:22px 18px">
+      <p style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#E2FF3B;margin-bottom:6px">DEALERSHIP EXPERIENCE</p>
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:28px;letter-spacing:-0.8px;line-height:1.1;margin-bottom:8px">Ride Before<br/>You Buy.</h1>
+      <p style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:400;color:#ababab;line-height:1.5;max-width:220px">Book test rides at dealerships near you. No paperwork, instant confirmation.</p>
+    </div>
+  </div>
+
+  <!-- TRUST PILLS -->
+  <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:20px;scrollbar-width:none">
+    <div style="flex-shrink:0;display:flex;align-items:center;gap:6px;background:#191919;border-radius:9999px;padding:7px 12px;border:1px solid rgba(72,72,72,0.3)">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <span style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;color:#E2FF3B;white-space:nowrap">Free Booking</span>
+    </div>
+    <div style="flex-shrink:0;display:flex;align-items:center;gap:6px;background:#191919;border-radius:9999px;padding:7px 12px;border:1px solid rgba(72,72,72,0.3)">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <span style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;color:#E2FF3B;white-space:nowrap">No Deposit</span>
+    </div>
+    <div style="flex-shrink:0;display:flex;align-items:center;gap:6px;background:#191919;border-radius:9999px;padding:7px 12px;border:1px solid rgba(72,72,72,0.3)">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <span style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;color:#E2FF3B;white-space:nowrap">30-min Rides</span>
+    </div>
+  </div>
+
+  <!-- BRAND FILTER -->
+  <div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;margin-bottom:24px;scrollbar-width:none;align-items:center">
+    <div id="brand-all" onclick="setBrand('all',this)" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer">
+      <div style="width:44px;height:44px;border-radius:50%;background:#E2FF3B;display:flex;align-items:center;justify-content:center;border:2px solid #E2FF3B">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:800;color:#000">ALL</span>
+      </div>
+      <span style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;color:#E2FF3B">All</span>
+    </div>
+    <div onclick="setBrand('re',this)" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer">
+      <div style="width:44px;height:44px;border-radius:50%;background:#1a0202;border:2px solid rgba(185,28,28,0.4);display:flex;align-items:center;justify-content:center">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:800;color:#ef4444">RE</span>
+      </div>
+      <span style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;color:#ababab">RE</span>
+    </div>
+    <div onclick="setBrand('ktm',this)" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer">
+      <div style="width:44px;height:44px;border-radius:50%;background:#1a0800;border:2px solid rgba(234,88,12,0.4);display:flex;align-items:center;justify-content:center">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:800;color:#ea580c">KTM</span>
+      </div>
+      <span style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;color:#ababab">KTM</span>
+    </div>
+    <div onclick="setBrand('hero',this)" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer">
+      <div style="width:44px;height:44px;border-radius:50%;background:#00051a;border:2px solid rgba(37,99,235,0.4);display:flex;align-items:center;justify-content:center">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:800;color:#3b82f6">HERO</span>
+      </div>
+      <span style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;color:#ababab">Hero</span>
+    </div>
+    <div onclick="setBrand('bajaj',this)" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer">
+      <div style="width:44px;height:44px;border-radius:50%;background:#000518;border:2px solid rgba(30,58,138,0.4);display:flex;align-items:center;justify-content:center">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:800;color:#818cf8">BAJAJ</span>
+      </div>
+      <span style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;color:#ababab">Bajaj</span>
+    </div>
+    <div onclick="setBrand('honda',this)" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer">
+      <div style="width:44px;height:44px;border-radius:50%;background:#1a0202;border:2px solid rgba(220,38,38,0.3);display:flex;align-items:center;justify-content:center">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:800;color:#f87171">HONDA</span>
+      </div>
+      <span style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;color:#ababab">Honda</span>
+    </div>
+    <div onclick="setBrand('yamaha',this)" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer">
+      <div style="width:44px;height:44px;border-radius:50%;background:#00001a;border:2px solid rgba(37,99,235,0.3);display:flex;align-items:center;justify-content:center">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:8px;font-weight:800;color:#60a5fa">YAMAHA</span>
+      </div>
+      <span style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;color:#ababab">Yamaha</span>
+    </div>
+    <div onclick="setBrand('tvs',this)" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer">
+      <div style="width:44px;height:44px;border-radius:50%;background:#080010;border:2px solid rgba(109,40,217,0.3);display:flex;align-items:center;justify-content:center">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:800;color:#a78bfa">TVS</span>
+      </div>
+      <span style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;color:#ababab">TVS</span>
+    </div>
+    <div onclick="setBrand('bmw',this)" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer">
+      <div style="width:44px;height:44px;border-radius:50%;background:#00051a;border:2px solid rgba(37,99,235,0.35);display:flex;align-items:center;justify-content:center">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:800;color:#93c5fd">BMW</span>
+      </div>
+      <span style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;color:#ababab">BMW</span>
+    </div>
+    <div onclick="setBrand('triumph',this)" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer">
+      <div style="width:44px;height:44px;border-radius:50%;background:#0a0800;border:2px solid rgba(202,138,4,0.35);display:flex;align-items:center;justify-content:center">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:7px;font-weight:800;color:#fbbf24">TRIUMPH</span>
+      </div>
+      <span style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;color:#ababab">Triumph</span>
+    </div>
+  </div>
+
+  <!-- FEATURED BIKES SECTION HEADER -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;letter-spacing:-0.4px">Available to Ride</h2>
+    <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#E2FF3B">See all 24 →</span>
+  </div>
+
+  <!-- BIKE CARDS -->
+  <div style="display:flex;flex-direction:column;gap:16px">
+
+    <!-- CARD 1 — RE Himalayan 452 -->
+    <div style="background:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(72,72,72,0.2)">
+      <div style="position:relative;height:160px;overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1558981033-0f0309284409?w=700&auto=format&fit=crop&q=80" style="width:100%;height:100%;object-fit:cover" alt="RE Himalayan 452" loading="lazy"/>
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.7) 100%)"></div>
+        <div style="position:absolute;top:10px;left:10px">
+          <span style="background:#E2FF3B;color:#000;border-radius:9999px;padding:3px 10px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:800">MOST BOOKED</span>
+        </div>
+        <div style="position:absolute;bottom:10px;left:12px">
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;letter-spacing:-0.3px;margin-bottom:1px">Royal Enfield Himalayan 452</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;color:#E2FF3B">₹2,69,000 <span style="font-size:11px;font-weight:500;color:#ababab">ex-showroom BLR</span></p>
+        </div>
+      </div>
+      <div style="padding:12px 14px">
+        <!-- Spec pills -->
+        <div style="display:flex;gap:7px;margin-bottom:10px">
+          <span style="background:#191919;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">452cc</span>
+          <span style="background:#191919;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">40 PS</span>
+          <span style="background:#191919;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">200 KG</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="display:flex;align-items:center;gap:5px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2.2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#ababab">3 dealerships nearby</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:4px">
+            <span style="color:#E2FF3B;font-size:12px">★</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700">4.8</span>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">(1,240 rides)</span>
+          </div>
+        </div>
+        <button onclick="showBookingSheet('Royal Enfield Himalayan 452','https://images.unsplash.com/photo-1558981033-0f0309284409?w=700&auto=format&fit=crop&q=80')" style="width:100%;background:#E2FF3B;color:#000;border:none;border-radius:9999px;padding:12px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;letter-spacing:-0.3px;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Book Test Ride</button>
+      </div>
+    </div>
+
+    <!-- CARD 2 — KTM Duke 390 -->
+    <div style="background:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(72,72,72,0.2)">
+      <div style="position:relative;height:160px;overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1547549082-6bc09f2049ae?w=700&auto=format&fit=crop&q=80" style="width:100%;height:100%;object-fit:cover" alt="KTM Duke 390" loading="lazy"/>
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.7) 100%)"></div>
+        <div style="position:absolute;bottom:10px;left:12px">
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;letter-spacing:-0.3px;margin-bottom:1px">KTM Duke 390</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;color:#E2FF3B">₹3,11,000</p>
+        </div>
+      </div>
+      <div style="padding:12px 14px">
+        <div style="display:flex;gap:7px;margin-bottom:10px">
+          <span style="background:#191919;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">399cc</span>
+          <span style="background:#191919;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">45 PS</span>
+          <span style="background:#191919;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">163 KG</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="display:flex;align-items:center;gap:5px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2.2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#ababab">2 dealers nearby</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:4px">
+            <span style="color:#E2FF3B;font-size:12px">★</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700">4.9</span>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">(890 rides)</span>
+          </div>
+        </div>
+        <button onclick="showBookingSheet('KTM Duke 390','https://images.unsplash.com/photo-1547549082-6bc09f2049ae?w=700&auto=format&fit=crop&q=80')" style="width:100%;background:#E2FF3B;color:#000;border:none;border-radius:9999px;padding:12px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;letter-spacing:-0.3px;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Book Test Ride</button>
+      </div>
+    </div>
+
+    <!-- CARD 3 — Hero XPulse 200 4V -->
+    <div style="background:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(72,72,72,0.2)">
+      <div style="position:relative;height:140px;background:linear-gradient(135deg,#00051a 0%,#191919 100%);display:flex;align-items:center;justify-content:center">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(59,130,246,0.25)" stroke-width="1.2" stroke-linecap="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0 0 2h1l3 4.5"/><path d="M12 6H5l1 9h1"/></svg>
+        <div style="position:absolute;top:10px;left:10px">
+          <span style="background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);border-radius:9999px;padding:3px 10px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:800">BEGINNER PICK</span>
+        </div>
+        <div style="position:absolute;bottom:10px;left:12px">
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;letter-spacing:-0.3px;margin-bottom:1px">Hero XPulse 200 4V</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;color:#E2FF3B">₹1,42,000</p>
+        </div>
+      </div>
+      <div style="padding:12px 14px">
+        <div style="display:flex;gap:7px;margin-bottom:10px">
+          <span style="background:#191919;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">199cc</span>
+          <span style="background:#191919;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">18.4 PS</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#ababab">4 dealers nearby</span>
+          <div style="display:flex;align-items:center;gap:4px">
+            <span style="color:#E2FF3B;font-size:12px">★</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700">4.6</span>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">(2,100 rides)</span>
+          </div>
+        </div>
+        <button onclick="showBookingSheet('Hero XPulse 200 4V','')" style="width:100%;background:#E2FF3B;color:#000;border:none;border-radius:9999px;padding:12px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;letter-spacing:-0.3px;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Book Test Ride</button>
+      </div>
+    </div>
+
+    <!-- CARD 4 — Bajaj Pulsar NS400Z -->
+    <div style="background:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(72,72,72,0.2)">
+      <div style="position:relative;height:120px;background:linear-gradient(135deg,#000518 0%,#191919 100%);display:flex;align-items:center;justify-content:center">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(99,102,241,0.25)" stroke-width="1.2" stroke-linecap="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0 0 2h1l3 4.5"/><path d="M12 6H5l1 9h1"/></svg>
+        <div style="position:absolute;top:10px;left:10px">
+          <span style="background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);border-radius:9999px;padding:3px 10px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:800">NEW LAUNCH</span>
+        </div>
+        <div style="position:absolute;bottom:10px;left:12px">
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#fff;letter-spacing:-0.3px;margin-bottom:1px">Bajaj Pulsar NS400Z</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;color:#E2FF3B">₹1,98,000</p>
+        </div>
+      </div>
+      <div style="padding:12px 14px">
+        <div style="display:flex;gap:7px;margin-bottom:10px">
+          <span style="background:#191919;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">373cc</span>
+          <span style="background:#191919;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">40 PS</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#ababab">5 dealers nearby</span>
+          <div style="display:flex;align-items:center;gap:4px">
+            <span style="color:#E2FF3B;font-size:12px">★</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700">4.7</span>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">(340 rides)</span>
+          </div>
+        </div>
+        <button onclick="showBookingSheet('Bajaj Pulsar NS400Z','')" style="width:100%;background:#E2FF3B;color:#000;border:none;border-radius:9999px;padding:12px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;letter-spacing:-0.3px;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Book Test Ride</button>
+      </div>
+    </div>
+
+    <!-- CARD 5 — BMW G 310 GS -->
+    <div style="background:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(37,99,235,0.2)">
+      <div style="position:relative;height:120px;background:linear-gradient(135deg,#00051a 0%,#0a0a0a 100%);display:flex;align-items:center;justify-content:center">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(59,130,246,0.2)" stroke-width="1.2" stroke-linecap="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0 0 2h1l3 4.5"/><path d="M12 6H5l1 9h1"/></svg>
+        <div style="position:absolute;top:10px;left:10px">
+          <span style="background:rgba(37,99,235,0.15);color:#93c5fd;border:1px solid rgba(37,99,235,0.3);border-radius:9999px;padding:3px 10px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:800">PREMIUM</span>
+        </div>
+        <div style="position:absolute;bottom:10px;left:12px">
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#fff;letter-spacing:-0.3px;margin-bottom:1px">BMW G 310 GS</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;color:#E2FF3B">₹3,99,000</p>
+        </div>
+      </div>
+      <div style="padding:12px 14px">
+        <div style="display:flex;gap:7px;margin-bottom:10px">
+          <span style="background:#191919;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">312cc</span>
+          <span style="background:#191919;border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:#ccc">34 PS</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#ababab">1 dealer nearby</span>
+          <div style="display:flex;align-items:center;gap:4px">
+            <span style="color:#E2FF3B;font-size:12px">★</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700">4.8</span>
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#ababab">(128 rides)</span>
+          </div>
+        </div>
+        <button onclick="showBookingSheet('BMW G 310 GS','')" style="width:100%;background:#E2FF3B;color:#000;border:none;border-radius:9999px;padding:12px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;letter-spacing:-0.3px;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Book Test Ride</button>
+      </div>
+    </div>
+
+    <!-- RECENTLY VIEWED DEALERS -->
+    <div style="margin-top:8px">
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;margin-bottom:14px">Recently Viewed Dealers</h2>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:#0a0a0a;border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(72,72,72,0.2)" onclick="showToast('Opening PowerTech RE dealership...')" style="cursor:pointer">
+          <div>
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;margin-bottom:2px">PowerTech RE Exclusive</p>
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">Koramangala · 1.4 KM · ★ 4.7</p>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div style="background:#0a0a0a;border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(72,72,72,0.2)" onclick="showToast('Opening Apex KTM dealership...')">
+          <div>
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;margin-bottom:2px">Apex KTM Showroom</p>
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">Whitefield · 3.2 KM · ★ 4.5</p>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- BOOKING BOTTOM SHEET                           -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="sheet-backdrop" onclick="closeBookingSheet()" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;display:none;animation:fadeIn 0.2s ease both"></div>
+<div id="booking-sheet" style="position:fixed;bottom:0;left:0;right:0;z-index:301;max-width:390px;margin:0 auto;background:#0a0a0a;border-radius:20px 20px 0 0;padding:0 0 48px;display:none;animation:sheetUp 0.35s cubic-bezier(0.32,0.72,0,1) both;border-top:1px solid rgba(72,72,72,0.25);max-height:92vh;overflow-y:auto">
+
+  <!-- Handle -->
+  <div style="display:flex;justify-content:center;padding:12px 0 0">
+    <div style="width:40px;height:4px;border-radius:9999px;background:rgba(72,72,72,0.6)"></div>
+  </div>
+
+  <!-- Bike header -->
+  <div style="padding:16px 16px 0;display:flex;align-items:center;gap:12px">
+    <div id="sheet-bike-thumb" style="width:60px;height:48px;border-radius:8px;background:#191919;overflow:hidden;flex-shrink:0"></div>
+    <div>
+      <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">Test Ride</p>
+      <h3 id="sheet-bike-name" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;letter-spacing:-0.4px"></h3>
+    </div>
+    <button onclick="closeBookingSheet()" style="margin-left:auto;width:32px;height:32px;border-radius:50%;background:#191919;border:none;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <div style="padding:16px">
+
+    <!-- Dealer selection -->
+    <p style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;color:#ababab">Choose Dealer</p>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+      <!-- Dealer 1 -->
+      <div id="dealer-1" onclick="selectDealer('dealer-1')" style="background:#191919;border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border:2px solid #E2FF3B;cursor:pointer;transition:all 0.15s">
+        <div>
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;margin-bottom:2px">PowerTech RE Exclusive</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">1.4 KM · ★ 4.7 · Available today</p>
+        </div>
+        <div style="width:18px;height:18px;border-radius:50%;background:#E2FF3B;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <!-- Dealer 2 -->
+      <div id="dealer-2" onclick="selectDealer('dealer-2')" style="background:#191919;border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(72,72,72,0.3);cursor:pointer;transition:all 0.15s">
+        <div>
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;margin-bottom:2px">MotoWorld Indiranagar</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">2.8 KM · ★ 4.5 · Available today</p>
+        </div>
+        <div style="width:18px;height:18px;border-radius:50%;background:transparent;border:2px solid rgba(72,72,72,0.4);flex-shrink:0"></div>
+      </div>
+      <!-- Dealer 3 -->
+      <div id="dealer-3" onclick="selectDealer('dealer-3')" style="background:#191919;border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(72,72,72,0.3);cursor:pointer;transition:all 0.15s">
+        <div>
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;margin-bottom:2px">City RE Showroom</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">4.1 KM · ★ 4.3 · Tomorrow only</p>
+        </div>
+        <div style="width:18px;height:18px;border-radius:50%;background:transparent;border:2px solid rgba(72,72,72,0.4);flex-shrink:0"></div>
+      </div>
+    </div>
+
+    <!-- Date picker -->
+    <p style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;color:#ababab">Pick a Date</p>
+    <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:20px;scrollbar-width:none">
+      <button onclick="selectDate(this)" style="flex-shrink:0;background:#E2FF3B;border:none;border-radius:9999px;padding:8px 14px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:#000;white-space:nowrap">Sat, Apr 5</button>
+      <button onclick="selectDate(this)" style="flex-shrink:0;background:#191919;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:8px 14px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#fff;white-space:nowrap">Sun, Apr 6</button>
+      <button onclick="selectDate(this)" style="flex-shrink:0;background:#191919;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:8px 14px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#fff;white-space:nowrap">Mon, Apr 7</button>
+      <button onclick="selectDate(this)" style="flex-shrink:0;background:#191919;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:8px 14px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#fff;white-space:nowrap">Tue, Apr 8</button>
+      <button onclick="selectDate(this)" style="flex-shrink:0;background:#191919;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:8px 14px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#fff;white-space:nowrap">Wed, Apr 9</button>
+    </div>
+
+    <!-- Time slot -->
+    <p style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;color:#ababab">Time Slot</p>
+    <div style="display:flex;gap:8px;margin-bottom:20px">
+      <button onclick="selectTime(this)" style="flex:1;background:#E2FF3B;border:none;border-radius:9999px;padding:10px 6px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:#000;text-align:center">Morning<br/><span style="font-size:10px;font-weight:500">10 AM – 12 PM</span></button>
+      <button onclick="selectTime(this)" style="flex:1;background:#191919;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:10px 6px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#fff;text-align:center">Afternoon<br/><span style="font-size:10px;color:#ababab">12 PM – 3 PM</span></button>
+      <button onclick="selectTime(this)" style="flex:1;background:#191919;border:1px solid rgba(72,72,72,0.4);border-radius:9999px;padding:10px 6px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#fff;text-align:center">Evening<br/><span style="font-size:10px;color:#ababab">3 PM – 6 PM</span></button>
+    </div>
+
+    <!-- Profile prefill -->
+    <div style="background:#191919;border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;border:1px solid rgba(72,72,72,0.2)">
+      <div>
+        <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;margin-bottom:2px">Contact (from profile)</p>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:rgba(255,255,255,0.5)">Arjun S · +91 98765...</p>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    </div>
+
+    <!-- DL toggle -->
+    <div style="background:#191919;border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;border:1px solid rgba(72,72,72,0.2)">
+      <div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;margin-bottom:2px">Valid Driving Licence?</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab">Required to complete test ride</p>
+      </div>
+      <div id="dl-toggle" onclick="toggleDL()" style="width:44px;height:24px;border-radius:9999px;background:#E2FF3B;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0">
+        <div id="dl-knob" style="position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:#000;transition:all 0.2s"></div>
+      </div>
+    </div>
+
+    <!-- Confirm button -->
+    <button onclick="confirmBooking()" style="width:100%;background:#E2FF3B;color:#000;border:none;border-radius:9999px;padding:15px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;letter-spacing:-0.3px;margin-bottom:10px;transition:opacity 0.15s" onmousedown="this.style.opacity='0.75'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='0.75'" ontouchend="this.style.opacity='1'">Confirm Test Ride</button>
+
+    <!-- Disclaimer -->
+    <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(171,171,171,0.6);text-align:center;line-height:1.5;margin-bottom:10px">Our partner dealer will call to confirm within 2 hours.</p>
+
+    <!-- Points reward -->
+    <div style="background:rgba(226,255,59,0.06);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;border:1px solid rgba(226,255,59,0.12)">
+      <span style="font-size:16px">🏆</span>
+      <p style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#E2FF3B">Earn 200 Comride points for completing your test ride</p>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" style="position:fixed;bottom:100px;left:50%;transform:translate(-50%,12px);background:#191919;color:#fff;border-radius:9999px;padding:11px 20px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;z-index:500;opacity:0;pointer-events:none;border:1px solid rgba(72,72,72,0.4);white-space:nowrap;max-width:320px;text-align:center"></div>
+
+<script>
+  var _toastTimer;
+  var _dlOn = true;
+  var _selectedDealer = 'dealer-1';
+
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.opacity = '1';
+    t.style.transform = 'translate(-50%, 0)';
+    t.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(function() {
+      t.style.opacity = '0';
+      t.style.transform = 'translate(-50%, 8px)';
+    }, 2800);
+  }
+
+  function pressFeedback(el) {
+    el.style.transform = 'scale(0.92)';
+    el.style.transition = 'transform 0.12s ease';
+    setTimeout(function() { el.style.transform = 'scale(1)'; }, 120);
+  }
+
+  function showBookingSheet(name, imgUrl) {
+    document.getElementById('sheet-bike-name').textContent = name;
+    var thumb = document.getElementById('sheet-bike-thumb');
+    if (imgUrl) {
+      thumb.innerHTML = '<img src="' + imgUrl + '" style="width:100%;height:100%;object-fit:cover" />';
+    } else {
+      thumb.innerHTML = '';
+      thumb.style.background = '#191919';
+    }
+    document.getElementById('sheet-backdrop').style.display = 'block';
+    document.getElementById('booking-sheet').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeBookingSheet() {
+    document.getElementById('sheet-backdrop').style.display = 'none';
+    document.getElementById('booking-sheet').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  function selectDealer(id) {
+    ['dealer-1','dealer-2','dealer-3'].forEach(function(d) {
+      var el = document.getElementById(d);
+      el.style.borderColor = 'rgba(72,72,72,0.3)';
+      el.style.borderWidth = '1px';
+      el.querySelector('div:last-child').style.background = 'transparent';
+      el.querySelector('div:last-child').style.border = '2px solid rgba(72,72,72,0.4)';
+      el.querySelector('div:last-child').innerHTML = '';
+    });
+    var sel = document.getElementById(id);
+    sel.style.borderColor = '#E2FF3B';
+    sel.style.borderWidth = '2px';
+    sel.querySelector('div:last-child').style.background = '#E2FF3B';
+    sel.querySelector('div:last-child').style.border = 'none';
+    sel.querySelector('div:last-child').innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    _selectedDealer = id;
+  }
+
+  function selectDate(btn) {
+    var parent = btn.parentNode;
+    parent.querySelectorAll('button').forEach(function(b) {
+      b.style.background = '#191919';
+      b.style.border = '1px solid rgba(72,72,72,0.4)';
+      b.style.color = '#fff';
+      b.style.fontWeight = '600';
+    });
+    btn.style.background = '#E2FF3B';
+    btn.style.border = 'none';
+    btn.style.color = '#000';
+    btn.style.fontWeight = '700';
+  }
+
+  function selectTime(btn) {
+    var parent = btn.parentNode;
+    parent.querySelectorAll('button').forEach(function(b) {
+      b.style.background = '#191919';
+      b.style.border = '1px solid rgba(72,72,72,0.4)';
+      b.style.color = '#fff';
+      b.querySelector('span').style.color = '#ababab';
+    });
+    btn.style.background = '#E2FF3B';
+    btn.style.border = 'none';
+    btn.style.color = '#000';
+    btn.querySelector('span').style.color = 'rgba(0,0,0,0.6)';
+  }
+
+  function toggleDL() {
+    _dlOn = !_dlOn;
+    var tog = document.getElementById('dl-toggle');
+    var knob = document.getElementById('dl-knob');
+    tog.style.background = _dlOn ? '#E2FF3B' : '#484848';
+    knob.style.right = _dlOn ? '3px' : 'auto';
+    knob.style.left = _dlOn ? 'auto' : '3px';
+  }
+
+  function setBrand(id, el) {
+    var containers = document.querySelectorAll('[onclick^="setBrand"]');
+    containers.forEach(function(c) {
+      var circle = c.querySelector('div');
+      if (circle) { circle.style.borderWidth = '2px'; }
+    });
+    showToast('Filtering by brand...');
+  }
+
+  function confirmBooking() {
+    if (!_dlOn) {
+      showToast('Please confirm you have a valid DL');
+      return;
+    }
+    closeBookingSheet();
+    showToast('Test ride booked! Dealer will call shortly.');
+  }
+</script>
+
+<script src="journey-mode.js"></script><script src="nav-module.js"></script>
+</body></html>

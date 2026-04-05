@@ -13,7 +13,8 @@
       href  : 'home.html',
       match : ['home', 'notifications', 'search-results', 'comrade-profile',
                'brand-profile', 'club-profile', 'ai-suggestions',
-               'influencer-profile', 'rxz-community'],
+               'influencer-profile', 'rxz-community',
+               'experiences', 'dealer'],
       // Compass — suits "Explore" perfectly
       icon  : `<circle cx="12" cy="12" r="10"/>
                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>`
@@ -24,7 +25,8 @@
       match : ['ride-tab', 'discover', 'create-ride', 'admin-ride',
                'admin-accepted', 'invited-ride', 'request-to-join',
                'ride-details', 'my-ride-detail', 'route-builder',
-               'trip-start', 'tracking', 'end-ride', 'groups'],
+               'trip-start', 'tracking', 'end-ride', 'groups',
+               'challenges'],
       // Bicycle / two-wheel vehicle — clear for a ride app
       icon  : `<circle cx="18.5" cy="17.5" r="3.5"/>
                <circle cx="5.5" cy="17.5" r="3.5"/>
@@ -44,7 +46,8 @@
       label : 'Profile',
       href  : 'profile.html',
       match : ['profile', 'settings', 'analytics', 'rewards',
-               'insurance', 'payments'],
+               'insurance', 'payments', 'comride-pro',
+               'garage', 'mechanic', 'sos'],
       // Rounded person silhouette — universally recognised
       icon  : `<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
                <circle cx="12" cy="8" r="4"/>`

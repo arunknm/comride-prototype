@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Comride Pro — Comride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { background: #000; color: #fff; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,12px)} to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes glowPulse { 0%,100%{opacity:0.4;transform:scale(1)} 50%{opacity:0.7;transform:scale(1.08)} }
+    .page-body { animation: slideUp 0.35s ease both; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; }
+    ::selection { background: #E2FF3B; color: #000; }
+    .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .press-feedback { transition: opacity 0.12s, transform 0.12s; cursor: pointer; }
+    .press-feedback:active { opacity: 0.72; transform: scale(0.97); }
+
+    /* Tier card */
+    .tier-card { background:#0a0a0a; border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:20px; transition:border-color 0.2s, background 0.2s; cursor:pointer; }
+    .tier-card.selected { border-color:#E2FF3B; background:#0d1200; }
+    .tier-card.explorer { border-color:rgba(226,255,59,0.35); background:#0a0f00; }
+
+    /* Feature row */
+    .feat-row { display:flex; align-items:flex-start; gap:10px; margin-bottom:8px; }
+    .feat-check { width:18px; height:18px; flex-shrink:0; margin-top:1px; }
+
+    /* FAQ accordion */
+    .faq-item { border-bottom:1px solid rgba(255,255,255,0.07); }
+    .faq-q { display:flex; align-items:center; justify-content:space-between; padding:16px 0; cursor:pointer; }
+    .faq-a { max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
+    .faq-a.open { max-height:200px; }
+    .faq-chevron { transition:transform 0.25s ease; flex-shrink:0; }
+    .faq-chevron.open { transform:rotate(180deg); }
+
+    /* Toggle switch */
+    .billing-toggle { display:flex; align-items:center; background:#111; border-radius:9999px; padding:4px; gap:0; }
+    .billing-option { padding:8px 20px; border-radius:9999px; font-family:'Manrope',sans-serif; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.2s; color:rgba(255,255,255,0.5); }
+    .billing-option.active { background:#E2FF3B; color:#000; }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════ -->
+  <!-- FIXED TOP HEADER            -->
+  <!-- ═══════════════════════════ -->
+  <header style="position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);">
+    <div style="max-width:390px;margin:0 auto;padding:0 16px;height:60px;display:flex;align-items:center;justify-content:space-between;">
+      <a href="profile.html" class="press-feedback" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:9999px;background:rgba(255,255,255,0.06);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </a>
+      <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;letter-spacing:-0.3px;">Comride Pro</span>
+      <div class="press-feedback" onclick="showToast('Upgrade anytime from your profile')" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:9999px;background:rgba(255,255,255,0.06);cursor:pointer;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════ -->
+  <!-- PAGE BODY                   -->
+  <!-- ═══════════════════════════ -->
+  <div class="page-body" style="max-width:390px;margin:0 auto;padding-top:60px;padding-bottom:140px;">
+
+    <!-- HERO SECTION -->
+    <div style="padding:32px 20px 24px;text-align:center;position:relative;">
+      <!-- Animated glow -->
+      <div style="position:absolute;top:20px;left:50%;transform:translateX(-50%);width:200px;height:200px;background:radial-gradient(circle,rgba(226,255,59,0.18) 0%,transparent 70%);border-radius:50%;animation:glowPulse 3s ease-in-out infinite;pointer-events:none;"></div>
+      <!-- PRO badge -->
+      <div style="position:relative;display:inline-block;margin-bottom:20px;">
+        <div style="background:linear-gradient(135deg,#E2FF3B 0%,#b8d400 50%,#E2FF3B 100%);border-radius:12px;padding:14px 28px;display:inline-block;box-shadow:0 0 40px rgba(226,255,59,0.3);">
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;color:#000;letter-spacing:-0.5px;line-height:1;">COMRIDE</p>
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;color:#000;letter-spacing:2px;line-height:1;">PRO</p>
+        </div>
+        <div style="position:absolute;top:-6px;right:-6px;background:#000;border:2px solid #E2FF3B;border-radius:9999px;padding:3px 8px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:9px;color:#E2FF3B;letter-spacing:1px;">BETA</span>
+        </div>
+      </div>
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;letter-spacing:-0.6px;line-height:1.2;margin-bottom:8px;">Ride Smarter.<br>Ride Further. Ride Elite.</h1>
+      <p style="font-family:'Manrope',sans-serif;font-size:14px;color:rgba(255,255,255,0.5);line-height:1.55;">Unlock the full Comride experience — advanced analytics, live streaming, AI coaching, and exclusive elite rides.</p>
+    </div>
+
+    <!-- BILLING TOGGLE -->
+    <div style="padding:0 20px 24px;display:flex;justify-content:center;">
+      <div class="billing-toggle">
+        <div class="billing-option active" id="toggle-monthly" onclick="setBilling('monthly')">Monthly</div>
+        <div class="billing-option" id="toggle-annual" onclick="setBilling('annual')">
+          Annual
+          <span style="display:inline-block;background:rgba(226,255,59,0.18);color:#E2FF3B;font-size:10px;font-weight:700;padding:2px 6px;border-radius:9999px;margin-left:6px;">2 FREE</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TIER CARDS ── -->
+    <div style="padding:0 16px;display:flex;flex-direction:column;gap:12px;">
+
+      <!-- FREE TIER -->
+      <div class="tier-card" id="tier-free" onclick="selectTier('free')">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+          <div>
+            <p style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:4px;">CURRENT PLAN</p>
+            <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.3px;">Free</h2>
+          </div>
+          <div style="text-align:right;">
+            <p style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:26px;color:rgba(255,255,255,0.8);">₹0</p>
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.35);">forever</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);">Basic ride tracking</span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);">Join up to 3 rides/month</span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);">Standard feed &amp; community</span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);">5 GPX downloads/month</span></div>
+        </div>
+      </div>
+
+      <!-- EXPLORER TIER (MOST POPULAR) -->
+      <div class="tier-card explorer selected" id="tier-explorer" onclick="selectTier('explorer')" style="position:relative;">
+        <!-- Most popular badge -->
+        <div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#E2FF3B;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10px;letter-spacing:1px;padding:4px 14px;border-radius:9999px;white-space:nowrap;">MOST POPULAR</div>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;margin-top:4px;">
+          <div>
+            <p style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#E2FF3B;margin-bottom:4px;">EXPLORER</p>
+            <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.3px;">Explorer</h2>
+          </div>
+          <div style="text-align:right;">
+            <div style="display:flex;align-items:baseline;gap:3px;justify-content:flex-end;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:26px;color:#E2FF3B;" id="explorer-price">₹299</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);" id="explorer-period">/month</p>
+            </div>
+            <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.35);" id="explorer-billing">billed monthly</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="#E2FF3B"><path d="M9 12l2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:#fff;">Everything in Free</span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="#E2FF3B"><path d="M9 12l2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:#fff;">Unlimited ride joins</span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="#E2FF3B"><path d="M9 12l2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:#fff;">Advanced route analytics <span style="color:rgba(255,255,255,0.45);font-size:12px;">(elevation, surface, traffic)</span></span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="#E2FF3B"><path d="M9 12l2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:#fff;">50 GPX downloads/month</span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="#E2FF3B"><path d="M9 12l2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:#fff;">Priority in ride matching</span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="#E2FF3B"><path d="M9 12l2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:#fff;">Exclusive Explorer badge on profile</span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="#E2FF3B"><path d="M9 12l2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:#fff;">Early access to new features</span></div>
+        </div>
+        <button class="press-feedback" onclick="event.stopPropagation();startTrial('Explorer')" style="width:100%;height:44px;border-radius:9999px;border:none;background:#E2FF3B;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;cursor:pointer;margin-top:16px;">Start Free 7-Day Trial</button>
+      </div>
+
+      <!-- EXPEDITION TIER -->
+      <div class="tier-card" id="tier-expedition" onclick="selectTier('expedition')" style="position:relative;">
+        <!-- Elite badge -->
+        <div style="position:absolute;top:16px;right:16px;background:linear-gradient(135deg,#E2FF3B,#b8d400);border-radius:9999px;padding:4px 10px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10px;color:#000;letter-spacing:1px;">ELITE</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+          <div>
+            <p style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:4px;">EXPEDITION</p>
+            <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.3px;">Expedition</h2>
+          </div>
+          <div style="text-align:right;padding-right:56px;">
+            <div style="display:flex;align-items:baseline;gap:3px;justify-content:flex-end;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:26px;" id="expedition-price">₹799</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);" id="expedition-period">/month</p>
+            </div>
+            <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.35);" id="expedition-billing">billed monthly</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.75);">Everything in Explorer</span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.75);">Unlimited GPX downloads</span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.75);">Live ride streaming to followers</span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.75);">AI Ride Coach — weekly tips</span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.75);">Priority SOS response <span style="color:rgba(255,255,255,0.4);font-size:12px;">(15-min guarantee)</span></span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.75);">Exclusive Expedition rides (invite-only)</span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.75);">Monthly merch box <span style="color:#E2FF3B;font-size:12px;">worth ₹500</span></span></div>
+          <div class="feat-row"><svg class="feat-check" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.75);">Direct access to IRON_NOMAD &amp; top creators</span></div>
+        </div>
+        <button class="press-feedback" onclick="event.stopPropagation();startTrial('Expedition')" style="width:100%;height:44px;border-radius:9999px;border:1px solid rgba(255,255,255,0.25);background:transparent;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;cursor:pointer;margin-top:16px;">Try Expedition Free</button>
+      </div>
+
+    </div>
+    <!-- END TIER CARDS -->
+
+    <!-- ── FEATURE DEEP-DIVES ── -->
+    <div style="padding:36px 16px 0;">
+      <p style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#E2FF3B;margin-bottom:4px;padding:0 4px;">PRO FEATURES</p>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.5px;margin-bottom:20px;padding:0 4px;">What you unlock</h2>
+
+      <!-- Feature 1: Route Intelligence -->
+      <div style="background:#0a0a0a;border:1px solid rgba(255,255,255,0.07);border-radius:12px;overflow:hidden;margin-bottom:12px;">
+        <div style="height:140px;overflow:hidden;position:relative;background:linear-gradient(135deg,#0d1a00 0%,#1a2e00 50%,#0a1400 100%);">
+          <!-- Simulated heatmap / map visual -->
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+            <svg width="320" height="140" viewBox="0 0 320 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Grid lines -->
+              <line x1="0" y1="35" x2="320" y2="35" stroke="rgba(226,255,59,0.08)" stroke-width="1"/>
+              <line x1="0" y1="70" x2="320" y2="70" stroke="rgba(226,255,59,0.08)" stroke-width="1"/>
+              <line x1="0" y1="105" x2="320" y2="105" stroke="rgba(226,255,59,0.08)" stroke-width="1"/>
+              <line x1="80" y1="0" x2="80" y2="140" stroke="rgba(226,255,59,0.08)" stroke-width="1"/>
+              <line x1="160" y1="0" x2="160" y2="140" stroke="rgba(226,255,59,0.08)" stroke-width="1"/>
+              <line x1="240" y1="0" x2="240" y2="140" stroke="rgba(226,255,59,0.08)" stroke-width="1"/>
+              <!-- Heatmap blobs -->
+              <ellipse cx="80" cy="55" rx="38" ry="28" fill="rgba(226,255,59,0.25)"/>
+              <ellipse cx="160" cy="85" rx="50" ry="32" fill="rgba(226,255,59,0.35)"/>
+              <ellipse cx="240" cy="45" rx="42" ry="30" fill="rgba(226,255,59,0.2)"/>
+              <!-- Route line -->
+              <path d="M 20 110 Q 80 50 160 80 Q 220 100 300 40" stroke="#E2FF3B" stroke-width="2.5" stroke-linecap="round" fill="none" stroke-dasharray="0"/>
+              <!-- Dots on route -->
+              <circle cx="20" cy="110" r="5" fill="#E2FF3B"/>
+              <circle cx="160" cy="80" r="5" fill="#E2FF3B"/>
+              <circle cx="300" cy="40" r="5" fill="#E2FF3B"/>
+            </svg>
+          </div>
+          <!-- Elevation bar overlay -->
+          <div style="position:absolute;bottom:0;left:0;right:0;height:32px;background:linear-gradient(to top,rgba(10,20,0,0.9),transparent);display:flex;align-items:flex-end;padding:6px 12px;gap:2px;">
+            <div style="flex:1;height:8px;background:rgba(226,255,59,0.3);border-radius:2px;"></div>
+            <div style="flex:1;height:14px;background:rgba(226,255,59,0.5);border-radius:2px;"></div>
+            <div style="flex:1;height:20px;background:rgba(226,255,59,0.7);border-radius:2px;"></div>
+            <div style="flex:1;height:16px;background:rgba(226,255,59,0.6);border-radius:2px;"></div>
+            <div style="flex:1;height:24px;background:#E2FF3B;border-radius:2px;"></div>
+            <div style="flex:1;height:18px;background:rgba(226,255,59,0.65);border-radius:2px;"></div>
+            <div style="flex:1;height:12px;background:rgba(226,255,59,0.45);border-radius:2px;"></div>
+            <div style="flex:1;height:10px;background:rgba(226,255,59,0.35);border-radius:2px;"></div>
+            <div style="flex:1;height:18px;background:rgba(226,255,59,0.6);border-radius:2px;"></div>
+            <div style="flex:1;height:22px;background:rgba(226,255,59,0.75);border-radius:2px;"></div>
+          </div>
+          <!-- Label -->
+          <div style="position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.7);border:1px solid rgba(226,255,59,0.3);border-radius:9999px;padding:4px 10px;backdrop-filter:blur(6px);">
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;color:#E2FF3B;letter-spacing:0.5px;">ROUTE INTELLIGENCE</span>
+          </div>
+        </div>
+        <div style="padding:16px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;letter-spacing:-0.2px;">Route Intelligence</h3>
+          </div>
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);line-height:1.55;margin-bottom:10px;">See where 10K+ riders go. Elevation profiles, road surface ratings, real-time traffic overlays — all before you leave home.</p>
+          <div style="display:flex;gap:8px;">
+            <div style="flex:1;padding:8px 10px;background:#191919;border-radius:8px;text-align:center;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#E2FF3B;">Elevation</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);">+3,240 m avg</p>
+            </div>
+            <div style="flex:1;padding:8px 10px;background:#191919;border-radius:8px;text-align:center;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#E2FF3B;">Surface</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);">Tarmac 78%</p>
+            </div>
+            <div style="flex:1;padding:8px 10px;background:#191919;border-radius:8px;text-align:center;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#E2FF3B;">Traffic</p>
+              <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);">Live overlay</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature 2: Live Streaming -->
+      <div style="background:#0a0a0a;border:1px solid rgba(255,255,255,0.07);border-radius:12px;overflow:hidden;margin-bottom:12px;">
+        <div style="height:140px;overflow:hidden;position:relative;background:linear-gradient(135deg,#0d0014 0%,#1a0028 50%,#0d0018 100%);">
+          <!-- Simulated stream UI -->
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;">
+            <!-- REC indicator -->
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:10px;height:10px;border-radius:50%;background:#ff4444;animation:glowPulse 1s ease-in-out infinite;"></div>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#ff6666;letter-spacing:1px;">LIVE</span>
+            </div>
+            <!-- Viewer count -->
+            <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:9999px;padding:5px 14px;display:flex;align-items:center;gap:6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;color:#fff;">342 watching</span>
+            </div>
+            <!-- GPS breadcrumb visual -->
+            <div style="display:flex;align-items:center;gap:4px;">
+              <div style="width:6px;height:6px;border-radius:50%;background:rgba(226,255,59,0.3);"></div>
+              <div style="width:6px;height:6px;border-radius:50%;background:rgba(226,255,59,0.5);"></div>
+              <div style="width:6px;height:6px;border-radius:50%;background:rgba(226,255,59,0.7);"></div>
+              <div style="width:6px;height:6px;border-radius:50%;background:#E2FF3B;"></div>
+              <div style="width:10px;height:10px;border-radius:50%;background:#E2FF3B;box-shadow:0 0 8px rgba(226,255,59,0.8);"></div>
+            </div>
+          </div>
+          <div style="position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.7);border:1px solid rgba(226,255,59,0.3);border-radius:9999px;padding:4px 10px;backdrop-filter:blur(6px);">
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;color:#E2FF3B;letter-spacing:0.5px;">LIVE STREAMING</span>
+          </div>
+        </div>
+        <div style="padding:16px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;letter-spacing:-0.2px;">Live Streaming</h3>
+          </div>
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);line-height:1.55;">Your followers watch your ride live. GPS breadcrumb on map, real-time speed, and live chat — all from your phone mount.</p>
+        </div>
+      </div>
+
+      <!-- Feature 3: Ride Coach -->
+      <div style="background:#0a0a0a;border:1px solid rgba(255,255,255,0.07);border-radius:12px;overflow:hidden;margin-bottom:12px;">
+        <div style="height:140px;overflow:hidden;position:relative;background:linear-gradient(135deg,#001a10 0%,#002818 50%,#001a10 100%);">
+          <div style="position:absolute;inset:0;padding:16px;display:flex;flex-direction:column;justify-content:center;gap:8px;">
+            <!-- Simulated coach insight card -->
+            <div style="background:rgba(226,255,59,0.08);border:1px solid rgba(226,255,59,0.2);border-radius:10px;padding:10px 12px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+                <div style="width:24px;height:24px;border-radius:9999px;background:#E2FF3B;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <span style="font-size:12px;">🤖</span>
+                </div>
+                <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#E2FF3B;">Weekly Insight</span>
+              </div>
+              <p style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.8);line-height:1.4;">"You're 12% slower on ascents. Here's your personalized training plan for next week."</p>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:8px;padding:7px 10px;text-align:center;">
+                <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B;">+18%</p>
+                <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);">climb speed</p>
+              </div>
+              <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:8px;padding:7px 10px;text-align:center;">
+                <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B;">92</p>
+                <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);">ride score</p>
+              </div>
+            </div>
+          </div>
+          <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.7);border:1px solid rgba(226,255,59,0.3);border-radius:9999px;padding:4px 10px;backdrop-filter:blur(6px);">
+            <span style="font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;color:#E2FF3B;letter-spacing:0.5px;">AI COACH</span>
+          </div>
+        </div>
+        <div style="padding:16px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;letter-spacing:-0.2px;">AI Ride Coach</h3>
+          </div>
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);line-height:1.55;">Weekly AI insights that analyze your ride data — pace, altitude, braking — and serve up a personalized training plan to make you a better rider.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SOCIAL PROOF / TESTIMONIALS ── -->
+    <div style="padding:32px 16px 0;">
+      <p style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#E2FF3B;margin-bottom:4px;">RIDERS LOVE IT</p>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.5px;margin-bottom:16px;">Don't take our word</h2>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+
+        <!-- Testimonial 1 -->
+        <div style="background:#0a0a0a;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <div style="width:38px;height:38px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,#E2FF3B,#8aad00);display:flex;align-items:center;justify-content:center;">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:14px;color:#000;">IN</span>
+            </div>
+            <div style="flex:1;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;margin-bottom:1px;">IRON_NOMAD</p>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <div style="background:rgba(226,255,59,0.12);padding:2px 8px;border-radius:9999px;">
+                  <span style="font-family:'Manrope',sans-serif;font-size:9px;font-weight:700;color:#E2FF3B;letter-spacing:0.5px;">EXPEDITION</span>
+                </div>
+                <span style="font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;">5.0★</span>
+              </div>
+            </div>
+          </div>
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.65);line-height:1.6;font-style:italic;">"The route intelligence alone is worth every rupee. I planned my entire Leh trip from the app — elevation, fuel stops, surface quality. Absolutely brilliant."</p>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div style="background:#0a0a0a;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <div style="width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,#4fc3f7,#1976d2);display:flex;align-items:center;justify-content:center;">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:14px;color:#fff;">SP</span>
+            </div>
+            <div style="flex:1;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;margin-bottom:1px;">STEEL_PACK</p>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <div style="background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:9999px;">
+                  <span style="font-family:'Manrope',sans-serif;font-size:9px;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:0.5px;">EXPLORER</span>
+                </div>
+                <span style="font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;">4.9★</span>
+              </div>
+            </div>
+          </div>
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.65);line-height:1.6;font-style:italic;">"Switched to Explorer last month. The unlimited ride joins changed everything — I've already done 11 rides this month. My PRO badge gets me respect in every pack."</p>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div style="background:#0a0a0a;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <div style="width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,#ff6e40,#bf360c);display:flex;align-items:center;justify-content:center;">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:14px;color:#fff;">VR</span>
+            </div>
+            <div style="flex:1;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;margin-bottom:1px;">VOID_RUNNER</p>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <div style="background:rgba(226,255,59,0.12);padding:2px 8px;border-radius:9999px;">
+                  <span style="font-family:'Manrope',sans-serif;font-size:9px;font-weight:700;color:#E2FF3B;letter-spacing:0.5px;">EXPEDITION</span>
+                </div>
+                <span style="font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;">5.0★</span>
+              </div>
+            </div>
+          </div>
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.65);line-height:1.6;font-style:italic;">"Live streaming my Goa coastal run got 400 viewers on day 1. The AI coach told me I'm overbraking in corners — fixed it in two rides. This app literally makes you better."</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── FAQ SECTION ── -->
+    <div style="padding:32px 16px 0;">
+      <p style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#E2FF3B;margin-bottom:4px;">GOT QUESTIONS</p>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.5px;margin-bottom:16px;">FAQ</h2>
+
+      <div style="background:#0a0a0a;border:1px solid rgba(255,255,255,0.07);border-radius:12px;overflow:hidden;padding:0 16px;">
+
+        <!-- FAQ 1 -->
+        <div class="faq-item">
+          <div class="faq-q press-feedback" onclick="toggleFaq(this)">
+            <span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:14px;">Can I cancel anytime?</span>
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="faq-a">
+            <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;padding-bottom:16px;">Yes — cancel anytime from your profile settings. You keep Pro access until the end of your current billing period. No fees, no questions asked.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="faq-item">
+          <div class="faq-q press-feedback" onclick="toggleFaq(this)">
+            <span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:14px;">What happens to my data if I downgrade?</span>
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="faq-a">
+            <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;padding-bottom:16px;">All your ride history, GPX files, and analytics data are preserved permanently. Pro features simply become inaccessible until you re-subscribe. Nothing is ever deleted.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="faq-item">
+          <div class="faq-q press-feedback" onclick="toggleFaq(this)">
+            <span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:14px;">Is there a free trial?</span>
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="faq-a">
+            <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;padding-bottom:16px;">7 days free on Explorer or Expedition — no credit card required. You'll get a reminder 2 days before the trial ends, and you only pay if you choose to continue.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="faq-item" style="border-bottom:none;">
+          <div class="faq-q press-feedback" onclick="toggleFaq(this)">
+            <span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:14px;">Can I switch tiers mid-cycle?</span>
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="faq-a">
+            <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;padding-bottom:16px;">Absolutely. Upgrading takes effect immediately and you're charged a prorated amount for the remainder of the cycle. Downgrading takes effect at the next renewal.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- BOTTOM PADDING -->
+    <div style="height:24px;"></div>
+  </div>
+  <!-- END PAGE BODY -->
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- STICKY BOTTOM CTA BAR                   -->
+  <!-- ═══════════════════════════════════════ -->
+  <div style="position:fixed;bottom:0;left:0;right:0;z-index:300;">
+    <!-- Gradient fade -->
+    <div style="max-width:390px;margin:0 auto;">
+      <div style="background:linear-gradient(to top,rgba(0,0,0,1) 0%,rgba(0,0,0,0.97) 60%,transparent 100%);padding:12px 16px 82px;">
+        <!-- Billing toggle micro -->
+        <div style="display:flex;justify-content:center;margin-bottom:10px;">
+          <div style="display:flex;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:9999px;padding:3px;gap:2px;">
+            <div id="cta-monthly" onclick="setBilling('monthly')" style="padding:5px 14px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;cursor:pointer;background:#E2FF3B;color:#000;transition:all 0.2s;">Monthly</div>
+            <div id="cta-annual" onclick="setBilling('annual')" style="padding:5px 14px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;cursor:pointer;color:rgba(255,255,255,0.5);transition:all 0.2s;">Annual <span style="font-size:10px;opacity:0.7;">(2 months free)</span></div>
+          </div>
+        </div>
+        <!-- CTA button -->
+        <button class="press-feedback" id="cta-btn" onclick="startTrial('Explorer')" style="width:100%;height:52px;border-radius:9999px;border:none;background:#E2FF3B;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:16px;cursor:pointer;letter-spacing:-0.2px;margin-bottom:6px;">Start 7-Day Free Trial</button>
+        <p style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.35);text-align:center;">No credit card required · Cancel anytime</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" style="display:none;position:fixed;bottom:140px;left:50%;transform:translate(-50%,0);background:#1a1a1a;border:1px solid rgba(255,255,255,0.12);color:#fff;padding:12px 20px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;z-index:9999;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.5);max-width:calc(100% - 32px);text-align:center;"></div>
+
+  <script src="nav-module.js"></script>
+  <script>
+    // ── Billing toggle ─────────────────────────────────────
+    let billingMode = 'monthly';
+
+    const PRICES = {
+      monthly:  { explorer: '₹299', expedition: '₹799', explorerBilling: 'billed monthly',    expeditionBilling: 'billed monthly'    },
+      annual:   { explorer: '₹249', expedition: '₹666', explorerBilling: 'billed annually (₹2,988)', expeditionBilling: 'billed annually (₹7,992)' }
+    };
+
+    function setBilling(mode) {
+      billingMode = mode;
+      const p = PRICES[mode];
+
+      // Update tier cards
+      document.getElementById('explorer-price').textContent   = p.explorer;
+      document.getElementById('explorer-billing').textContent = p.explorerBilling;
+      document.getElementById('expedition-price').textContent   = p.expedition;
+      document.getElementById('expedition-billing').textContent = p.expeditionBilling;
+
+      // Update pill toggles (hero)
+      document.getElementById('toggle-monthly').classList.toggle('active', mode === 'monthly');
+      document.getElementById('toggle-annual').classList.toggle('active',  mode === 'annual');
+
+      // Update CTA bar toggles
+      const ctaM = document.getElementById('cta-monthly');
+      const ctaA = document.getElementById('cta-annual');
+      if (mode === 'monthly') {
+        ctaM.style.background = '#E2FF3B'; ctaM.style.color = '#000';
+        ctaA.style.background = 'transparent'; ctaA.style.color = 'rgba(255,255,255,0.5)';
+      } else {
+        ctaA.style.background = '#E2FF3B'; ctaA.style.color = '#000';
+        ctaM.style.background = 'transparent'; ctaM.style.color = 'rgba(255,255,255,0.5)';
+      }
+
+      const label = mode === 'annual' ? '2 months free with annual' : '';
+      if (label) showToast(label);
+    }
+
+    // ── Tier selection ─────────────────────────────────────
+    function selectTier(tier) {
+      ['free','explorer','expedition'].forEach(t => {
+        const el = document.getElementById('tier-' + t);
+        if (!el) return;
+        el.classList.remove('selected');
+        if (t === 'explorer') {
+          el.style.borderColor = 'rgba(226,255,59,0.35)';
+          el.style.background  = '#0a0f00';
+        } else {
+          el.style.borderColor = 'rgba(255,255,255,0.08)';
+          el.style.background  = '#0a0a0a';
+        }
+      });
+      const active = document.getElementById('tier-' + tier);
+      if (active) {
+        active.classList.add('selected');
+        active.style.borderColor = '#E2FF3B';
+        active.style.background  = tier === 'free' ? '#0a0a0a' : '#0d1200';
+      }
+
+      // Update CTA
+      const names = { free: 'Free', explorer: 'Explorer', expedition: 'Expedition' };
+      document.getElementById('cta-btn').textContent = tier === 'free' ? 'Current Plan' : 'Start 7-Day Free Trial';
+    }
+
+    // ── FAQ accordion ──────────────────────────────────────
+    function toggleFaq(qEl) {
+      const answerEl  = qEl.nextElementSibling;
+      const chevronEl = qEl.querySelector('.faq-chevron');
+      const isOpen    = answerEl.classList.contains('open');
+
+      // Close all
+      document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+      document.querySelectorAll('.faq-chevron').forEach(c => c.classList.remove('open'));
+
+      // Open clicked if it was closed
+      if (!isOpen) {
+        answerEl.classList.add('open');
+        chevronEl.classList.add('open');
+      }
+    }
+
+    // ── Toast ──────────────────────────────────────────────
+    let toastTimer;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      t.style.animation = 'toastIn 0.25s ease both';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { t.style.display = 'none'; }, 2800);
+    }
+
+    // ── Trial start ────────────────────────────────────────
+    function startTrial(tier) {
+      showToast('Starting your 7-day ' + tier + ' trial...');
+    }
+
+    // ── Press feedback (JS fallback) ───────────────────────
+    document.querySelectorAll('.press-feedback').forEach(el => {
+      el.addEventListener('touchstart', () => { el.style.opacity='0.72'; el.style.transform='scale(0.97)'; }, {passive:true});
+      el.addEventListener('touchend',   () => { el.style.opacity='';     el.style.transform=''; }, {passive:true});
+    });
+  </script>
+</body>
+</html>
