@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Comride — Module Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#E2FF3B',
+            'on-primary': '#536000',
+            'surface-container-low': '#131313',
+            'surface-container': '#191919',
+            'surface-container-high': '#1f1f1f',
+            'surface-container-highest': '#262626',
+            'on-surface-variant': '#ababab',
+            'outline-variant': '#484848',
+          },
+          fontFamily: {
+            headline: ['"Space Grotesk"', 'sans-serif'],
+            body: ['"Manrope"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { background: #000; color: #fff; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; }
+    ::selection { background: #E2FF3B; color: #2A3000; }
+    .dna-btn { transition: all 0.15s ease; cursor: pointer; border: none; outline: none; }
+    .dna-btn.active { background: #E2FF3B; }
+    .dna-btn.active .dna-label { color: #536000; }
+    .dna-btn.inactive { background: #1f1f1f; border: 1px solid rgba(72,72,72,0.1); }
+    .dna-btn.inactive .dna-label { color: #fff; }
+  </style>
+</head>
+<body class="bg-black text-white">
+  <!-- ═══════════════════════════════ -->
+  <!-- FIXED TOP HEADER + MENU DRAWER -->
+  <!-- ═══════════════════════════════ -->
+  <header style="position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(0,0,0,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(72,72,72,0.15)">
+    <div style="max-width:390px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between">
+      <a href="home.html"><img src="comride.svg" style="height:22px;width:auto;object-fit:contain" alt="Comride" /></a>
+      <div style="display:flex;align-items:center;gap:20px">
+        <div style="position:relative;cursor:pointer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <div style="position:absolute;top:-1px;right:-1px;width:8px;height:8px;border-radius:50%;background:#E2FF3B;border:2px solid #000"></div>
+        </div>
+        <div style="cursor:pointer;display:flex;flex-direction:column;gap:5px" onclick="openMenu()">
+          <div style="width:22px;height:2px;background:#fff;border-radius:2px"></div>
+          <div style="width:14px;height:2px;background:#fff;border-radius:2px"></div>
+          <div style="width:22px;height:2px;background:#fff;border-radius:2px"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SLIDE-IN MENU DRAWER -->
+  <div id="menu-drawer" style="position:fixed;top:0;right:0;bottom:0;width:280px;background:#131313;z-index:300;transform:translateX(100%);transition:transform 0.3s ease;border-left:1px solid rgba(72,72,72,0.2);display:flex;flex-direction:column;padding:24px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;padding-top:12px">
+      <img src="comride.svg" style="height:20px;width:auto" alt="Comride" />
+      <div style="cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center" onclick="closeMenu()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </div>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:4px;overflow-y:auto;max-height:calc(100vh - 220px)">
+      <a href="index.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff;background:rgba(255,255,255,0.03)"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Index</span></a>
+      <a href="discover.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Discover Rides</span></a>
+      <a href="create-ride.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Create Ride</span></a>
+      <a href="tracking.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Live Tracking</span></a>
+      <a href="marketplace.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Gear Shop</span></a>
+      <a href="profile.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Profile</span></a>
+      <a href="rewards.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Rewards</span></a>
+      <a href="notifications.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Notifications</span></a>
+      <a href="insurance.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Compliance</span></a>
+      <a href="payments.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Payments</span></a>
+      <a href="analytics.html" style="display:flex;align-items:center;padding:16px;border-radius:16px;text-decoration:none;color:#fff"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:-0.3px">Analytics</span></a>
+    </nav>
+    <div style="margin-top:auto;border-top:1px solid rgba(72,72,72,0.2);padding-top:24px;display:flex;align-items:center;gap:12px">
+      <div style="width:40px;height:40px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden;flex-shrink:0">
+        <img src="images/profile/1.avif" style="width:100%;height:100%;object-fit:cover" alt="" />
+      </div>
+      <div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;color:#fff;margin:0">LEX_KINETIC</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:1px;color:#ababab;text-transform:uppercase;margin:0">MASTER SERGEANT</p>
+      </div>
+    </div>
+  </div>
+  <div id="menu-backdrop" onclick="closeMenu()" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:299;display:none"></div>
+  <script>
+    function openMenu() {
+      document.getElementById("menu-drawer").style.transform = "translateX(0)";
+      document.getElementById("menu-backdrop").style.display = "block";
+    }
+    function closeMenu() {
+      document.getElementById("menu-drawer").style.transform = "translateX(100%)";
+      document.getElementById("menu-backdrop").style.display = "none";
+    }
+  </script>
+
+
+  <div style="max-width:390px;margin:0 auto;padding:64px 24px 160px">
+
+    <!-- ═══════════════════════════════ -->
+    <!-- SECTION 1: HERO & BRANDING     -->
+    <!-- ═══════════════════════════════ -->
+    <section style="margin-bottom:80px">
+      <!-- Heading -->
+      <div style="margin-bottom:24px">
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:60px;line-height:60px;letter-spacing:-3px;text-transform:uppercase;color:#fff;margin:0">MASTER</p>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:60px;line-height:60px;letter-spacing:-3px;text-transform:uppercase;color:#E2FF3B;margin:0">MODULE</p>
+        <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:60px;line-height:60px;letter-spacing:-3px;text-transform:uppercase;color:#fff;margin:0">GALLERY</p>
+      </div>
+      <!-- Description -->
+      <p style="font-family:'Manrope',sans-serif;font-weight:300;font-size:18px;line-height:29.25px;color:#ababab;margin-bottom:42px">The definitive visual library for the Electric Void design system. A curated collection of cinematic components engineered for high-frequency motion and absolute precision.</p>
+      <!-- Buttons -->
+      <div style="display:flex;gap:12px;align-items:center">
+        <button style="background:#E2FF3B;border:none;border-radius:9999px;padding:14px 22px;cursor:pointer;white-space:nowrap;flex-shrink:0">
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#536000">Initialize System</span>
+        </button>
+        <button style="background:transparent;border:1px solid #484848;border-radius:9999px;padding:14px 20px;cursor:pointer;white-space:nowrap;flex-shrink:0">
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#fff">Documentation</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SECTION LABEL -->
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:48px">
+      <div style="height:1px;width:28px;background:#484848;flex-shrink:0"></div>
+      <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:3.6px;text-transform:uppercase;color:#ababab;white-space:nowrap">Upcoming Rides</span>
+    </div>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- SECTION 2: ONBOARDING          -->
+    <!-- ═══════════════════════════════ -->
+    <section style="margin-bottom:80px;display:flex;flex-direction:column;gap:48px">
+
+      <!-- Rider Profile Setup -->
+      <div style="background:#191919;border-radius:12px;padding:40px 20px">
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;line-height:32px;letter-spacing:-0.6px;text-transform:uppercase;color:#fff;margin:0 0 32px">Rider Profile Setup</h3>
+        <div style="display:flex;flex-direction:column;gap:24px">
+          <!-- Callsign Input -->
+          <div>
+            <label style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#ababab;display:block;margin-bottom:8.5px">Callsign / Username</label>
+            <div style="background:#131313;border:1px solid #484848;border-bottom:2px solid #484848;border-radius:10px;padding:18px 21px;overflow:hidden">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:400;font-size:20px;color:#6b7280;text-transform:uppercase">e.g. VOID_RUNNER</span>
+            </div>
+          </div>
+          <!-- Primary Vessel Input -->
+          <div>
+            <label style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#ababab;display:block;margin-bottom:8.5px">Primary Vessel</label>
+            <div style="background:#131313;border:1px solid #484848;border-bottom:2px solid #484848;border-radius:10px;padding:18px 21px;overflow:hidden">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:400;font-size:20px;color:#6b7280;text-transform:uppercase">Electric Superbike</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Riding DNA -->
+      <div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;line-height:32px;letter-spacing:-0.6px;text-transform:uppercase;color:#fff;margin:0 0 24px">Riding DNA</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" id="dna-grid">
+          <!-- Hyper Performance (active) -->
+          <button class="dna-btn active" style="border-radius:12px;padding:24px;display:flex;flex-direction:column;justify-content:space-between;height:160px" onclick="selectDna(this)">
+            <img src="https://www.figma.com/api/mcp/asset/f15836b8-e0b9-488c-afc1-070203c26221" style="width:25px;height:25px;object-fit:contain" alt="" />
+            <div class="dna-label" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;line-height:20px;letter-spacing:-0.8px;text-transform:uppercase;text-align:left">Hyper<br>Performance</div>
+          </button>
+          <!-- Midnight Cruising -->
+          <button class="dna-btn inactive" style="border-radius:12px;padding:25px;display:flex;flex-direction:column;justify-content:space-between;height:160px" onclick="selectDna(this)">
+            <img src="https://www.figma.com/api/mcp/asset/30bac6f6-bef6-47d2-ac87-06facb867cbc" style="width:25px;height:25px;object-fit:contain;filter:brightness(0.6)" alt="" />
+            <div class="dna-label" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;line-height:20px;letter-spacing:-0.8px;text-transform:uppercase;text-align:left">Midnight<br>Cruising</div>
+          </button>
+          <!-- Urban Exploration -->
+          <button class="dna-btn inactive" style="border-radius:12px;padding:25px;display:flex;flex-direction:column;justify-content:space-between;height:160px" onclick="selectDna(this)">
+            <img src="https://www.figma.com/api/mcp/asset/acc1dfeb-3f23-4193-a9c6-c6f51422752c" style="width:25px;height:22.5px;object-fit:contain;filter:brightness(0.6)" alt="" />
+            <div class="dna-label" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;line-height:20px;letter-spacing:-0.8px;text-transform:uppercase;text-align:left">Urban<br>Exploration</div>
+          </button>
+          <!-- Squad Tactics -->
+          <button class="dna-btn inactive" style="border-radius:12px;padding:25px;display:flex;flex-direction:column;justify-content:space-between;height:160px" onclick="selectDna(this)">
+            <img src="https://www.figma.com/api/mcp/asset/d2d2e104-cfe9-4d4b-8c8e-ad16206f9d29" style="width:25px;height:20px;object-fit:contain;filter:brightness(0.6)" alt="" />
+            <div class="dna-label" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;line-height:20px;letter-spacing:-0.8px;text-transform:uppercase;text-align:left">Squad<br>Tactics</div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION LABEL -->
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:48px">
+      <div style="height:1px;width:28px;background:#484848;flex-shrink:0"></div>
+      <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:3.6px;text-transform:uppercase;color:#ababab;white-space:nowrap">Button Systems</span>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- SECTION 3&4: DASHBOARD + MAP           -->
+    <!-- ═══════════════════════════════════════ -->
+    <section style="margin-bottom:80px;display:flex;flex-direction:column;gap:32px">
+
+      <!-- Map Module -->
+      <div style="border:1px solid rgba(72,72,72,0.2);border-radius:12px;height:500px;overflow:hidden;position:relative;background:#0a0a0a">
+        <!-- Map background image -->
+        <div style="position:absolute;inset:0;overflow:hidden">
+          <img src="images/places/1.avif" style="width:146.47%;height:100%;object-fit:cover;margin-left:-23.24%;opacity:0.4;filter:saturate(0)" alt="" />
+        </div>
+        <!-- Gradient overlay -->
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,#000 0%,transparent 50%)"></div>
+        <!-- LIVE TRACKING ACTIVE pill -->
+        <div style="position:absolute;top:24px;left:24px;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-radius:9999px;padding:8px 16px;display:flex;align-items:center;gap:12px">
+          <div style="width:8px;height:8px;border-radius:50%;background:#E2FF3B;flex-shrink:0"></div>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#fff">Live Tracking Active</span>
+        </div>
+        <!-- Center pulsing dot -->
+        <div style="position:absolute;top:50%;left:33.43%;transform:translate(-50%,-50%);width:10px;height:10px;border-radius:50%;background:#E2FF3B;box-shadow:0 0 15px #E2FF3B"></div>
+        <!-- Current Sector label -->
+        <div style="position:absolute;bottom:115.5px;left:32px;transform:translateY(50%)">
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:-0.5px;text-transform:uppercase;color:#ababab">Current Sector</span>
+        </div>
+        <!-- NEO-SHIBUYA 09 -->
+        <div style="position:absolute;bottom:68.5px;left:32px;transform:translateY(50%)">
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;line-height:36px;color:#fff;margin:0">NEO-SHIBUYA<br>09</p>
+        </div>
+        <!-- Navigate button -->
+        <div style="position:absolute;bottom:32px;right:32px;width:64px;height:64px;border-radius:9999px;background:#E2FF3B;display:flex;align-items:center;justify-content:center">
+          <img src="https://www.figma.com/api/mcp/asset/2b844232-8ad3-4814-8ae3-69ce5b3a9505" style="width:20px;height:23.75px;object-fit:contain" alt="" />
+        </div>
+      </div>
+
+      <!-- Upcoming Journey Card -->
+      <div style="background:#191919;border-left:4px solid #E2FF3B;border-radius:12px;padding:24px 24px 24px 28px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#E2FF3B">Upcoming Journey</span>
+          <img src="https://www.figma.com/api/mcp/asset/810ff61f-8aa7-4edc-82bb-4926a447a165" style="width:4px;height:16px;object-fit:contain" alt="" />
+        </div>
+        <h4 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;line-height:28px;text-transform:uppercase;color:#fff;margin:20px 0 0">Grid Lock Run</h4>
+        <p style="font-family:'Manrope',sans-serif;font-weight:400;font-size:14px;color:#ababab;margin:4px 0 0">Starts in <strong style="color:#fff;font-weight:700">42m 12s</strong></p>
+        <!-- Stacked Avatars -->
+        <div style="display:flex;align-items:center;padding-top:20px">
+          <div style="width:32px;height:32px;border-radius:50%;border:2px solid #000;overflow:hidden;flex-shrink:0;margin-right:-8px;z-index:3">
+            <img src="images/places/2.avif" style="width:100%;height:100%;object-fit:cover" alt="" />
+          </div>
+          <div style="width:32px;height:32px;border-radius:50%;border:2px solid #000;overflow:hidden;flex-shrink:0;margin-right:-8px;z-index:2">
+            <img src="images/places/3.avif" style="width:100%;height:100%;object-fit:cover" alt="" />
+          </div>
+          <div style="width:32px;height:32px;border-radius:50%;border:2px solid #000;background:#262626;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1">
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#fff">+12</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Global Sync -->
+      <div>
+        <h5 style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;letter-spacing:2.4px;text-transform:uppercase;color:#ababab;margin:0 0 16px">Global Sync</h5>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="border-bottom:1px solid rgba(72,72,72,0.1);display:flex;align-items:center;gap:16px;padding-bottom:9px;padding-top:8px">
+            <img src="https://www.figma.com/api/mcp/asset/1265fbb8-c40f-46f4-a955-81102a66d646" style="width:10.5px;height:11.667px;object-fit:contain;flex-shrink:0" alt="" />
+            <span style="font-family:'Manrope',sans-serif;font-weight:400;font-size:12px;color:#fff;flex:1"><strong style="font-weight:700">CYBER_DRIVE</strong> completed a 45km circuit.</span>
+            <span style="font-family:'Manrope',sans-serif;font-weight:400;font-size:10px;color:#ababab;white-space:nowrap">2m ago</span>
+          </div>
+          <div style="border-bottom:1px solid rgba(72,72,72,0.1);display:flex;align-items:center;gap:16px;padding-bottom:9px;padding-top:8px">
+            <img src="https://www.figma.com/api/mcp/asset/a31fc9d0-34e8-4603-8d5f-66d7b9657e3f" style="width:14px;height:7px;object-fit:contain;flex-shrink:0" alt="" />
+            <span style="font-family:'Manrope',sans-serif;font-weight:400;font-size:12px;color:#fff;flex:1"><strong style="font-weight:700">THE_PACK</strong> formed a new squad.</span>
+            <span style="font-family:'Manrope',sans-serif;font-weight:400;font-size:10px;color:#ababab;white-space:nowrap">15m ago</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION LABEL -->
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:48px">
+      <div style="height:1px;width:28px;background:#484848;flex-shrink:0"></div>
+      <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:3.6px;text-transform:uppercase;color:#ababab;white-space:nowrap">Presets &amp; Modes</span>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- SECTION 5: ACTIVE OPERATIONS           -->
+    <!-- ═══════════════════════════════════════ -->
+    <section style="margin-bottom:80px;display:flex;flex-direction:column;gap:48px">
+
+      <!-- Header -->
+      <div style="display:flex;align-items:flex-end;justify-content:space-between">
+        <div>
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:36px;line-height:40px;text-transform:uppercase;color:#fff;margin:0">Active<br>Operations</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:12.68px;padding-bottom:4px">
+          <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#E2FF3B;margin:0;text-align:center;line-height:15px">View<br>Archive</p>
+          <img src="https://www.figma.com/api/mcp/asset/f0adc3f6-9fa2-46fd-9948-3314933a5e18" style="width:8px;height:8px;object-fit:contain" alt="" />
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div style="display:flex;flex-direction:column;gap:32px">
+
+        <!-- Card 1: Midnight City Sprint -->
+        <div style="background:#191919;border-radius:12px;overflow:hidden;aspect-ratio:4/5;position:relative">
+          <div style="position:absolute;inset:0;overflow:hidden">
+            <img src="images/bikes/1.avif" style="width:125%;height:100%;object-fit:cover;margin-left:-12.5%;opacity:0.6" alt="" />
+          </div>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,#000 0%,rgba(0,0,0,0.2) 50%,transparent 100%)"></div>
+          <!-- HARD badge -->
+          <div style="position:absolute;top:24px;left:24px;background:#E2FF3B;border-radius:9999px;padding:4px 12px">
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#536000">Hard</span>
+          </div>
+          <!-- Content -->
+          <div style="position:absolute;bottom:32px;left:32px;right:32px;display:flex;flex-direction:column;gap:8px">
+            <h4 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;line-height:30px;color:#fff;margin:0">MIDNIGHT CITY<br>SPRINT</h4>
+            <div style="display:flex;gap:16px;align-items:center">
+              <div style="display:flex;gap:4px;align-items:center">
+                <img src="https://www.figma.com/api/mcp/asset/5b3d47f5-9976-43f4-bce0-a0ee012aca71" style="width:11.667px;height:11.667px;object-fit:contain" alt="" />
+                <span style="font-family:'Manrope',sans-serif;font-weight:400;font-size:12px;line-height:16px;color:#ababab">02:00 AM</span>
+              </div>
+              <div style="display:flex;gap:4px;align-items:center">
+                <img src="https://www.figma.com/api/mcp/asset/7a7a41ef-0e8f-4eb6-b846-774a89780b41" style="width:10.5px;height:10.5px;object-fit:contain" alt="" />
+                <span style="font-family:'Manrope',sans-serif;font-weight:400;font-size:12px;line-height:16px;color:#ababab">12.4 KM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Silent Velocity -->
+        <div style="background:#191919;border-radius:12px;overflow:hidden;aspect-ratio:4/5;position:relative">
+          <div style="position:absolute;inset:0;overflow:hidden">
+            <img src="images/bikes/2.avif" style="width:125%;height:100%;object-fit:cover;margin-left:-12.5%;opacity:0.6" alt="" />
+          </div>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,#000 0%,rgba(0,0,0,0.2) 50%,transparent 100%)"></div>
+          <!-- ENTRY badge -->
+          <div style="position:absolute;top:24px;left:24px;background:#ababab;border-radius:9999px;padding:4px 12px">
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#fff">Entry</span>
+          </div>
+          <div style="position:absolute;bottom:32px;left:32px;right:32px;display:flex;flex-direction:column;gap:8px">
+            <h4 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;line-height:30px;color:#fff;margin:0">SILENT VELOCITY</h4>
+            <div style="display:flex;gap:16px;align-items:center">
+              <div style="display:flex;gap:4px;align-items:center">
+                <img src="https://www.figma.com/api/mcp/asset/5b3d47f5-9976-43f4-bce0-a0ee012aca71" style="width:11.667px;height:11.667px;object-fit:contain" alt="" />
+                <span style="font-family:'Manrope',sans-serif;font-weight:400;font-size:12px;line-height:16px;color:#ababab">09:30 AM</span>
+              </div>
+              <div style="display:flex;gap:4px;align-items:center">
+                <img src="https://www.figma.com/api/mcp/asset/7a7a41ef-0e8f-4eb6-b846-774a89780b41" style="width:10.5px;height:10.5px;object-fit:contain" alt="" />
+                <span style="font-family:'Manrope',sans-serif;font-weight:400;font-size:12px;line-height:16px;color:#ababab">25.0 KM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Harbor Protocol -->
+        <div style="background:#191919;border-radius:12px;overflow:hidden;aspect-ratio:4/5;position:relative">
+          <div style="position:absolute;inset:0;overflow:hidden">
+            <img src="images/bikes/3.avif" style="width:125%;height:100%;object-fit:cover;margin-left:-12.5%;opacity:0.6" alt="" />
+          </div>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,#000 0%,rgba(0,0,0,0.2) 50%,transparent 100%)"></div>
+          <!-- ELITE badge -->
+          <div style="position:absolute;top:24px;left:24px;background:#E2FF3B;border-radius:9999px;padding:4px 12px">
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#536000">Elite</span>
+          </div>
+          <div style="position:absolute;bottom:32px;left:32px;right:32px;display:flex;flex-direction:column;gap:8px">
+            <h4 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;line-height:30px;color:#fff;margin:0">HARBOR PROTOCOL</h4>
+            <div style="display:flex;gap:16px;align-items:center">
+              <div style="display:flex;gap:4px;align-items:center">
+                <img src="https://www.figma.com/api/mcp/asset/5b3d47f5-9976-43f4-bce0-a0ee012aca71" style="width:11.667px;height:11.667px;object-fit:contain" alt="" />
+                <span style="font-family:'Manrope',sans-serif;font-weight:400;font-size:12px;line-height:16px;color:#ababab">05:00 AM</span>
+              </div>
+              <div style="display:flex;gap:4px;align-items:center">
+                <img src="https://www.figma.com/api/mcp/asset/7a7a41ef-0e8f-4eb6-b846-774a89780b41" style="width:10.5px;height:10.5px;object-fit:contain" alt="" />
+                <span style="font-family:'Manrope',sans-serif;font-weight:400;font-size:12px;line-height:16px;color:#ababab">40.2 KM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION LABEL -->
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:48px">
+      <div style="height:1px;width:28px;background:#484848;flex-shrink:0"></div>
+      <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:3.6px;text-transform:uppercase;color:#ababab;white-space:nowrap">Dashboard Modules</span>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- SECTION 6&7: RIDER IDENTITY            -->
+    <!-- ═══════════════════════════════════════ -->
+    <section style="margin-bottom:80px;display:flex;flex-direction:column;gap:48px">
+
+      <!-- Rider Identity Card -->
+      <div style="background:#191919;border:1px solid rgba(72,72,72,0.1);border-radius:12px;overflow:hidden">
+        <!-- Profile header -->
+        <div style="border-bottom:1px solid rgba(72,72,72,0.1);height:177px;position:relative">
+          <!-- Avatar -->
+          <div style="position:absolute;top:50%;left:40px;transform:translateY(-50%);display:flex;flex-direction:column;align-items:flex-start">
+            <div style="border:4px solid #E2FF3B;border-radius:50%;padding:8px;position:relative;width:96px;height:96px;box-sizing:border-box;overflow:hidden">
+              <img src="images/profile/1.avif" style="width:100%;height:100%;border-radius:50%;object-fit:cover" alt="" />
+            </div>
+            <!-- Gear badge -->
+            <div style="position:absolute;bottom:-4px;right:-4px;width:32px;height:32px;background:#E2FF3B;border:4px solid #191919;border-radius:50%;display:flex;align-items:center;justify-content:center">
+              <img src="https://www.figma.com/api/mcp/asset/4fc5a504-8d02-4877-b4aa-45a5819d5fe5" style="width:12.833px;height:12.25px;object-fit:contain" alt="" />
+            </div>
+          </div>
+          <!-- Name & Rank -->
+          <div style="position:absolute;top:50%;left:168px;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px">
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;line-height:30px;text-transform:uppercase;color:#fff;margin:0">LEX_KINETIC</h3>
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#ababab">Rank: Master Sergeant</span>
+          </div>
+        </div>
+        <!-- Stats row -->
+        <div style="display:grid;grid-template-columns:1fr 1fr">
+          <div style="border-right:1px solid rgba(72,72,72,0.1);padding:32px">
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#ababab;display:block;margin-bottom:4px">Total Distance</span>
+            <div>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;line-height:36px;color:#fff">12,482</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#fff;display:block">KM</span>
+            </div>
+          </div>
+          <div style="padding:32px">
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#ababab;display:block;margin-bottom:4px">Total Rides</span>
+            <div style="display:flex;align-items:baseline;gap:4px">
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;line-height:36px;color:#fff">482</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#fff">OPS</span>
+            </div>
+          </div>
+        </div>
+        <!-- Core Achievements -->
+        <div style="background:rgba(31,31,31,0.5);padding:32px">
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#ababab;display:block;margin-bottom:16px">Core Achievements</span>
+          <div style="display:flex;gap:16px">
+            <div style="width:48px;height:48px;border:1px solid rgba(226,255,58,0.2);background:#191919;border-radius:12px;display:flex;align-items:center;justify-content:center">
+              <img src="https://www.figma.com/api/mcp/asset/acc24420-c187-4fd9-b566-3e66ee0ecd05" style="width:16px;height:21px;object-fit:contain" alt="" />
+            </div>
+            <div style="width:48px;height:48px;border:1px solid rgba(72,72,72,0.2);background:#191919;border-radius:12px;display:flex;align-items:center;justify-content:center">
+              <img src="https://www.figma.com/api/mcp/asset/daa2478c-2c76-4142-b78a-81bf70ddd73c" style="width:20px;height:20px;object-fit:contain" alt="" />
+            </div>
+            <div style="width:48px;height:48px;border:1px solid rgba(72,72,72,0.2);background:#191919;border-radius:12px;display:flex;align-items:center;justify-content:center">
+              <img src="https://www.figma.com/api/mcp/asset/d35714fd-87e6-4d32-a675-73dbb5f3f1e4" style="width:10px;height:20px;object-fit:contain" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gamification Level Circle -->
+      <div style="background:#131313;border:1px solid rgba(72,72,72,0.1);border-radius:12px;padding:49px;display:flex;flex-direction:column;align-items:center;gap:0;position:relative;overflow:hidden">
+        <!-- Glow blob -->
+        <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:rgba(226,255,58,0.05);border-radius:50%;filter:blur(32px)"></div>
+        <!-- Circle -->
+        <div style="position:relative;width:256px;height:256px;display:flex;align-items:center;justify-content:center">
+          <!-- SVG arc from Figma -->
+          <img src="https://www.figma.com/api/mcp/asset/b1ea9bda-2f21-453c-b08e-ebe25871e6be" style="position:absolute;inset:0;width:256px;height:256px;transform:rotate(-90deg)" alt="" />
+          <!-- Center content -->
+          <div style="text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center">
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#ababab">Level</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:96px;line-height:96px;color:#fff">42</span>
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#E2FF3B">2,450 / 3,000 XP</span>
+          </div>
+        </div>
+        <!-- Progression Path -->
+        <div style="padding-top:48px;width:100%;display:flex;flex-direction:column;gap:16px">
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#ababab;text-align:center">Progression Path</span>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:0 8px">
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;text-transform:uppercase;color:#fff">Initiate</span>
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;text-transform:uppercase;color:#E2FF3B">Stryker</span>
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;text-transform:uppercase;color:#ababab">Elite</span>
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;text-transform:uppercase;color:#ababab">Legend</span>
+          </div>
+          <!-- Progress bar -->
+          <div style="background:#191919;height:4px;border-radius:9999px;overflow:hidden">
+            <div style="background:#E2FF3B;height:100%;width:66.66%"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION LABEL -->
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:48px">
+      <div style="height:1px;width:28px;background:#484848;flex-shrink:0"></div>
+      <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:3.6px;text-transform:uppercase;color:#ababab;white-space:nowrap">Ride &amp; Event Cards</span>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- SECTION 8&9: E-COMMERCE & UTILITY      -->
+    <!-- ═══════════════════════════════════════ -->
+    <section style="margin-bottom:80px;display:flex;flex-direction:column;gap:32px">
+
+      <!-- Product Card 1: VOID-1 HELMET -->
+      <div style="background:#191919;border-radius:12px;overflow:hidden">
+        <div style="background:#1f1f1f;position:relative;height:342px">
+          <img src="images/bikes/4.avif" style="width:100%;height:100%;object-fit:cover" alt="" />
+          <!-- Cart button -->
+          <div style="position:absolute;top:16px;right:16px;width:40px;height:40px;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border:1px solid rgba(226,255,58,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center">
+            <img src="https://www.figma.com/api/mcp/asset/322d73dc-d419-49dc-ac34-7517006797a7" style="width:14.986px;height:15px;object-fit:contain" alt="" />
+          </div>
+        </div>
+        <div style="padding:24px;display:flex;flex-direction:column;gap:4px">
+          <div style="padding-bottom:16px">
+            <h4 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;line-height:28px;text-transform:uppercase;color:#fff;margin:0">VOID-1 HELMET</h4>
+            <p style="font-family:'Manrope',sans-serif;font-weight:400;font-size:12px;line-height:16px;color:#ababab;margin:0">Carbon Fiber + AR Visor</p>
+          </div>
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;line-height:28px;color:#E2FF3B">$849.00</span>
+        </div>
+      </div>
+
+      <!-- Product Card 2: KINETIC CHASSIS -->
+      <div style="background:#191919;border-radius:12px;overflow:hidden">
+        <div style="background:#1f1f1f;position:relative;height:342px">
+          <img src="images/bikes/5.avif" style="width:100%;height:100%;object-fit:cover" alt="" />
+          <div style="position:absolute;top:16px;right:16px;width:40px;height:40px;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border:1px solid rgba(72,72,72,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center">
+            <img src="https://www.figma.com/api/mcp/asset/287d4138-7842-482e-961e-882c2ee2632d" style="width:14.986px;height:15px;object-fit:contain" alt="" />
+          </div>
+        </div>
+        <div style="padding:24px;display:flex;flex-direction:column;gap:4px">
+          <div style="padding-bottom:16px">
+            <h4 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;line-height:28px;text-transform:uppercase;color:#fff;margin:0">KINETIC CHASSIS</h4>
+            <p style="font-family:'Manrope',sans-serif;font-weight:400;font-size:12px;line-height:16px;color:#ababab;margin:0">Impact-Proof Weave</p>
+          </div>
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;line-height:28px;color:#E2FF3B">$520.00</span>
+        </div>
+      </div>
+
+      <!-- Compliance Card -->
+      <div style="background:#1f1f1f;border:1px solid rgba(226,255,58,0.1);border-radius:12px;padding:33px;display:flex;flex-direction:column;justify-content:space-between">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:12px;height:12px;border-radius:50%;background:#E2FF3B;flex-shrink:0"></div>
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#fff">Compliance Status</span>
+          </div>
+          <h5 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;line-height:37.5px;text-transform:uppercase;color:#fff;margin:8px 0 0">RENEWAL<br>PENDING</h5>
+          <p style="font-family:'Manrope',sans-serif;font-weight:400;font-size:12px;line-height:19.5px;color:#ababab;margin:0">System scan reveals mandatory safety protocols expire in <strong style="font-weight:700;color:#fff">8 days</strong>. Update required for Elite Ops access.</p>
+        </div>
+        <div style="padding-top:32px">
+          <button style="width:100%;background:#262626;border:1px solid rgba(226,255,58,0.4);border-radius:9999px;padding:17px 1px;cursor:pointer">
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#E2FF3B">Launch Renewal Center</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Operation Complete Notification -->
+      <div style="background:rgba(226,255,58,0.1);border:1px solid rgba(226,255,58,0.3);border-radius:12px;padding:33px;position:relative;overflow:hidden">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <!-- Trophy icon circle -->
+          <div style="width:48px;height:48px;background:#E2FF3B;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <img src="https://www.figma.com/api/mcp/asset/e7a94e80-0121-4626-882f-ed486c0b4dc4" style="width:18px;height:18px;object-fit:contain" alt="" />
+          </div>
+          <div style="padding-top:16px">
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#E2FF3B">Priority Alert</span>
+          </div>
+          <h5 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;line-height:30px;text-transform:uppercase;color:#fff;margin:0">OPERATION COMPLETE</h5>
+          <p style="font-family:'Manrope',sans-serif;font-weight:400;font-size:12px;line-height:16px;color:#ababab;margin:0 0 15.5px">Your performance data from 'Midnight City Sprint' has been analyzed. Reward tier: <strong style="font-weight:700;color:#E2FF3B">PLATINUM</strong>.</p>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;text-transform:uppercase;color:#fff;text-decoration:underline;text-decoration-color:#E2FF3B;cursor:pointer">Claim Assets</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION LABEL -->
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:48px">
+      <div style="height:1px;width:28px;background:#484848;flex-shrink:0"></div>
+      <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:3.6px;text-transform:uppercase;color:#ababab;white-space:nowrap">Rider Identity</span>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- SECTION 10: FINANCIALS & ANALYTICS     -->
+    <!-- ═══════════════════════════════════════ -->
+    <section style="margin-bottom:80px;display:flex;flex-direction:column;gap:32px">
+
+      <!-- Earnings Protocol -->
+      <div style="background:#191919;border-radius:12px;padding:40px;display:flex;flex-direction:column;gap:40px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;letter-spacing:2.4px;text-transform:uppercase;color:#ababab">Earnings Protocol</span>
+          <img src="https://www.figma.com/api/mcp/asset/96af22b5-7f65-4831-b3b4-aa3cc9d2f3c3" style="width:19px;height:18px;object-fit:contain" alt="" />
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;padding-bottom:8px">
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#ababab">Total Credit Pool</span>
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:60px;line-height:60px;letter-spacing:-3px;color:#fff;margin:0">₵14,250<br>.00</p>
+        </div>
+        <div style="border-top:1px solid rgba(72,72,72,0.1);display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;padding-top:33px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:8px;letter-spacing:0.8px;text-transform:uppercase;color:#ababab">Weekly</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;line-height:28px;color:#E2FF3B">+12%</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:8px;letter-spacing:0.8px;text-transform:uppercase;color:#ababab">Avg/Ride</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;line-height:28px;color:#fff">₵45.0</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:8px;letter-spacing:0.8px;text-transform:uppercase;color:#ababab">Status</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;line-height:28px;color:#4ade80">LIQUID</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Velocity Metrics Bar Chart -->
+      <div style="background:#191919;border-radius:12px;padding:40px;display:flex;flex-direction:column;gap:32px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;letter-spacing:2.4px;text-transform:uppercase;color:#ababab">Velocity Metrics</span>
+          <div style="display:flex;gap:8px">
+            <div style="background:rgba(226,255,58,0.2);border-radius:9999px;padding:4px 12px">
+              <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:8px;text-transform:uppercase;color:#E2FF3B">7D</span>
+            </div>
+            <div style="background:#1f1f1f;border-radius:9999px;padding:4px 12px">
+              <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:8px;text-transform:uppercase;color:#ababab">30D</span>
+            </div>
+          </div>
+        </div>
+        <!-- Chart area -->
+        <div style="height:200px;display:flex;align-items:flex-end;justify-content:space-between;gap:8px;padding-top:8px">
+          <!-- Bars -->
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;gap:8px">
+            <div style="width:100%;background:#E2FF3B;border-radius:4px 4px 0 0;height:60%"></div>
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:8px;text-transform:uppercase;color:#ababab">Mon</span>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;gap:8px">
+            <div style="width:100%;background:rgba(226,255,58,0.2);border-radius:4px 4px 0 0;height:80%"></div>
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:8px;text-transform:uppercase;color:#ababab">Tue</span>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;gap:8px">
+            <div style="width:100%;background:#E2FF3B;border-radius:4px 4px 0 0;height:45%"></div>
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:8px;text-transform:uppercase;color:#ababab">Wed</span>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;gap:8px">
+            <div style="width:100%;background:rgba(226,255,58,0.2);border-radius:4px 4px 0 0;height:90%"></div>
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:8px;text-transform:uppercase;color:#ababab">Thu</span>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;gap:8px">
+            <div style="width:100%;background:#E2FF3B;border-radius:4px 4px 0 0;height:70%"></div>
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:8px;text-transform:uppercase;color:#ababab">Fri</span>
+          </div>
+        </div>
+        <!-- Legend -->
+        <div style="display:flex;gap:24px;align-items:center;justify-content:center">
+          <div style="display:flex;gap:8px;align-items:center">
+            <div style="width:8px;height:8px;border-radius:50%;background:#E2FF3B;flex-shrink:0"></div>
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:8px;text-transform:uppercase;color:#ababab">Peak Velocity</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <div style="width:8px;height:8px;border-radius:50%;background:rgba(226,255,58,0.2);flex-shrink:0"></div>
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:8px;text-transform:uppercase;color:#ababab">Cruising Speed</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- SECTION: UPCOMING JOURNEY (HERO)       -->
+    <!-- ═══════════════════════════════════════ -->
+    <section style="margin-bottom:80px;display:flex;flex-direction:column;gap:32px">
+
+      <!-- Heading + Badge -->
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
+        <div>
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:48px;line-height:48px;letter-spacing:-2.4px;text-transform:uppercase;color:#fff;margin:0">UPCOMING</p>
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:48px;line-height:48px;letter-spacing:-2.4px;text-transform:uppercase;color:#E2FF3B;margin:0">JOURNEY</p>
+        </div>
+        <div style="background:rgba(226,255,58,0.1);border:1px solid rgba(226,255,58,0.2);border-radius:9999px;padding:9px 17px;display:flex;align-items:center;gap:8px;box-shadow:0 0 12px rgba(226,255,59,0.4);flex-shrink:0;margin-top:8px">
+          <div style="width:8px;height:8px;border-radius:50%;background:#E2FF3B;flex-shrink:0"></div>
+          <span style="font-family:'Manrope',sans-serif;font-weight:800;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#E2FF3B">Pro Rider Status</span>
+        </div>
+      </div>
+
+      <!-- Journey Card -->
+      <div style="background:#191919;border-radius:12px;height:500px;overflow:hidden;position:relative">
+        <!-- Background cyclist photo -->
+        <div style="position:absolute;inset:0;overflow:hidden">
+          <img src="images/places/4.avif" style="width:146.2%;height:100%;object-fit:cover;margin-left:-23.1%;opacity:0.6;filter:saturate(0)" alt="" />
+        </div>
+        <!-- Gradient -->
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,#000 0%,transparent 50%)"></div>
+        <!-- Journey details card (glass) -->
+        <div style="position:absolute;bottom:32px;left:32px;right:32px;background:rgba(0,0,0,0.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:33px;display:flex;flex-direction:column;gap:24px">
+          <!-- Route header -->
+          <div style="display:flex;align-items:flex-start;justify-content:space-between">
+            <div style="position:relative;height:128.5px;width:169.36px">
+              <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;letter-spacing:1.1px;text-transform:uppercase;color:#ababab;display:block;margin-bottom:4px">Current Route</span>
+              <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;line-height:36px;color:#fff;margin:0">The<br>Obsidian<br>Trail</h3>
+            </div>
+            <!-- Route image (oval) -->
+            <div style="width:42.64px;height:64px;border-radius:12px;overflow:hidden;background:#262626;flex-shrink:0">
+              <img src="images/places/5.avif" style="width:150.09%;height:100%;object-fit:cover;margin-left:-25.05%" alt="" />
+            </div>
+          </div>
+          <!-- Stats row -->
+          <div style="border-top:1px solid rgba(255,255,255,0.1);display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-top:25px">
+            <div style="display:flex;flex-direction:column;gap:0.5px">
+              <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#ababab">Distance</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;line-height:28px;color:#E2FF3B">64.2 km</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:0.5px">
+              <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#ababab">Est. Time</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;line-height:28px;color:#fff">2h 15m</span>
+            </div>
+          </div>
+          <!-- START RIDE button -->
+          <button style="width:100%;border:none;border-radius:9999px;padding:16px;cursor:pointer;background:linear-gradient(166.22deg,#E2FF3B 0%,#C0DC03 100%)">
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;letter-spacing:1.4px;text-transform:uppercase;color:#000">START RIDE</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- SECTION: FRIENDS ACTIVITY BENTO        -->
+    <!-- ═══════════════════════════════════════ -->
+    <section style="margin-bottom:80px;display:flex;flex-direction:column;gap:32px">
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:36px;line-height:40px;letter-spacing:-1.8px;text-transform:uppercase;color:#fff;margin:0">Friends Activity</h2>
+
+      <div style="display:flex;flex-direction:column;gap:24px">
+
+        <!-- Activity Card 1: Alex V. -->
+        <div style="background:#191919;border-radius:12px;padding:32px;display:flex;flex-direction:column;gap:32px">
+          <div style="display:flex;align-items:center;gap:16px">
+            <div style="width:48px;height:48px;border-radius:50%;border:2px solid #E2FF3B;overflow:hidden;flex-shrink:0;padding:2px;box-sizing:border-box">
+              <img src="images/profile/2.avif" style="width:100%;height:100%;border-radius:50%;object-fit:cover" alt="" />
+            </div>
+            <div>
+              <h4 style="font-family:'Manrope',sans-serif;font-weight:700;font-size:18px;line-height:28px;color:#fff;margin:0">Alex V.</h4>
+              <span style="font-family:'Manrope',sans-serif;font-weight:400;font-size:12px;line-height:16px;color:#ababab">2 hours ago</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;align-items:flex-end;justify-content:space-between">
+              <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;color:#ababab">Night Sprint</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;line-height:32px;color:#fff">24.5 km</span>
+            </div>
+            <!-- Progress bar -->
+            <div style="background:rgba(255,255,255,0.05);height:4px;border-radius:9999px;overflow:hidden">
+              <div style="background:#E2FF3B;height:100%;width:75%"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between">
+              <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;color:#ababab">Avg 32 km/h</span>
+              <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;color:#ababab">+450m Elev</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity Card 2: Marcus K. -->
+        <div style="background:#191919;border-radius:12px;padding:32px;display:flex;flex-direction:column;gap:32px">
+          <div style="display:flex;align-items:center;gap:16px">
+            <div style="width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);overflow:hidden;flex-shrink:0;padding:2px;box-sizing:border-box">
+              <img src="images/profile/3.avif" style="width:100%;height:100%;border-radius:50%;object-fit:cover" alt="" />
+            </div>
+            <div>
+              <h4 style="font-family:'Manrope',sans-serif;font-weight:700;font-size:18px;line-height:28px;color:#fff;margin:0">Marcus K.</h4>
+              <span style="font-family:'Manrope',sans-serif;font-weight:400;font-size:12px;line-height:16px;color:#ababab">4 hours ago</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;align-items:flex-end;justify-content:space-between">
+              <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;color:#ababab">Mountain Loop</span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;line-height:32px;color:#fff">52.1 km</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);height:4px;border-radius:9999px;overflow:hidden">
+              <div style="background:#E2FF3B;height:100%;width:50%"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between">
+              <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;color:#ababab">Avg 24 km/h</span>
+              <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;color:#ababab">+1200m Elev</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Global Activity Card (lime background) -->
+        <div style="background:#E2FF3B;border-radius:12px;padding:32px;display:flex;flex-direction:column;justify-content:space-between">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <h4 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;line-height:30px;letter-spacing:-1.5px;text-transform:uppercase;color:#000;margin:0">GLOBAL<br>ACTIVITY</h4>
+            <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.6px;text-transform:uppercase;color:rgba(0,0,0,0.6)">Live data feed</span>
+          </div>
+          <div style="padding-top:32px;display:flex;flex-direction:column;gap:16px">
+            <div style="border-bottom:1px solid rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:space-between;padding-bottom:9px">
+              <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;color:#000">London Pelotons</span>
+              <span style="font-family:'Manrope',sans-serif;font-weight:800;font-size:16px;line-height:24px;color:#000">1.2k active</span>
+            </div>
+            <div style="border-bottom:1px solid rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:space-between;padding-bottom:9px">
+              <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;color:#000">SF Climbers</span>
+              <span style="font-family:'Manrope',sans-serif;font-weight:800;font-size:16px;line-height:24px;color:#000">842 active</span>
+            </div>
+            <div style="border-bottom:1px solid rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:space-between;padding-bottom:9px">
+              <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;color:#000">Berlin City</span>
+              <span style="font-family:'Manrope',sans-serif;font-weight:800;font-size:16px;line-height:24px;color:#000">2.5k active</span>
+            </div>
+          </div>
+          <div style="padding-top:32px;display:flex;align-items:center;gap:8px">
+            <span style="font-family:'Manrope',sans-serif;font-weight:800;font-size:14px;letter-spacing:1.4px;text-transform:uppercase;color:#000">View Map</span>
+            <img src="https://www.figma.com/api/mcp/asset/753a6bcf-7bb8-471d-96ac-84ce13df32b0" style="width:16px;height:16px;object-fit:contain" alt="" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- SECTION: STATS GRID                    -->
+    <!-- ═══════════════════════════════════════ -->
+    <section>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+
+        <!-- Weekly Distance -->
+        <div style="background:#131313;border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:33px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#ababab;line-height:15px">Weekly<br>Distance</span>
+          <div style="height:40px;position:relative">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:36px;line-height:40px;color:#fff;position:absolute;left:0;top:0">128</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;line-height:20px;color:#E2FF3B;position:absolute;left:63.27px;top:7px">km</span>
+          </div>
+        </div>
+
+        <!-- Calories -->
+        <div style="background:#131313;border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:33px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#ababab">Calories</span>
+          <div style="height:40px;position:relative">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:36px;line-height:40px;color:#fff;position:absolute;left:0;top:0">4.2k</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;line-height:20px;color:#E2FF3B;position:absolute;left:79.31px;top:7px">kcal</span>
+          </div>
+        </div>
+
+        <!-- Elevation -->
+        <div style="background:#131313;border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:33px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#ababab">Elevation</span>
+          <div style="height:40px;position:relative">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:36px;line-height:40px;color:#fff;position:absolute;left:0;top:0">3.1k</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;line-height:20px;color:#E2FF3B;position:absolute;left:71.33px;top:7px">m</span>
+          </div>
+        </div>
+
+        <!-- Ride Hours -->
+        <div style="background:#131313;border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:33px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#ababab">Ride Hours</span>
+          <div style="height:40px;position:relative">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:36px;line-height:40px;color:#fff;position:absolute;left:0;top:0">12.5</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;line-height:20px;color:#E2FF3B;position:absolute;left:73.98px;top:7px">h</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ═══════════════════════════════ -->
+  <!-- FIXED BOTTOM NAVIGATION        -->
+  <!-- ═══════════════════════════════ -->
+  <nav style="position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;background:rgba(14,14,14,0.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(72,72,72,0.1);border-radius:12px 32px 0 0;box-shadow:0px -8px 40px 0px rgba(226,255,59,0.08);padding:16px 32px 32px;z-index:100;box-sizing:border-box">
+    <!-- Explore (active) -->
+    <div style="background:rgba(226,255,59,0.1);border-radius:9999px;padding:8px 20px;display:flex;align-items:center;justify-content:center;cursor:pointer">
+      <img src="https://www.figma.com/api/mcp/asset/195508b3-facb-4aa9-96b4-7433d7f8ef32" style="width:20px;height:20px;object-fit:contain" alt="" />
+    </div>
+    <!-- Modules -->
+    <div style="display:flex;align-items:center;justify-content:center;cursor:pointer;padding:8px">
+      <img src="https://www.figma.com/api/mcp/asset/7ccfef2c-2823-45a2-a0aa-740e127471a5" style="width:19px;height:19px;object-fit:contain" alt="" />
+    </div>
+    <!-- Ride -->
+    <div style="display:flex;align-items:center;justify-content:center;cursor:pointer;padding:8px">
+      <img src="https://www.figma.com/api/mcp/asset/999275d0-fbb6-4e90-8477-cd96819efefa" style="width:18px;height:16px;object-fit:contain" alt="" />
+    </div>
+    <!-- Shop -->
+    <div style="display:flex;align-items:center;justify-content:center;cursor:pointer;padding:8px">
+      <img src="https://www.figma.com/api/mcp/asset/22a7d281-b15d-482e-b98a-7eaf52476e7e" style="width:16px;height:20px;object-fit:contain" alt="" />
+    </div>
+    <!-- Profile -->
+    <div style="display:flex;align-items:center;justify-content:center;cursor:pointer;padding:8px">
+      <img src="https://www.figma.com/api/mcp/asset/c3cb466a-9606-4970-9f67-a7bb58fb72c8" style="width:20px;height:20px;object-fit:contain" alt="" />
+    </div>
+  </nav>
+
+  <script>
+    function selectDna(btn) {
+      document.querySelectorAll('.dna-btn').forEach(function(b) {
+        b.classList.remove('active');
+        b.classList.add('inactive');
+        var img = b.querySelector('img');
+        if (img) img.style.filter = 'brightness(0.6)';
+      });
+      btn.classList.remove('inactive');
+      btn.classList.add('active');
+      var img = btn.querySelector('img');
+      if (img) img.style.filter = 'none';
+    }
+  </script>
+<script src="journey-mode.js"></script>
+</body>
+</html>

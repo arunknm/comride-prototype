@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Group Chat — Comride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    a, button, [onclick] { cursor: pointer; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes likeBlip { 0%,100%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(0.88)} }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,12px)} to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes typingPulse { 0%,100%{opacity:0.4;transform:scale(0.85)} 50%{opacity:1;transform:scale(1)} }
+    .page-body { animation: slideUp 0.35s ease both; }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { background: #000; color: #fff; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; height: 100%; }
+    ::selection { background: #E2FF3B; color: #000; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; }
+
+    #msg-list::-webkit-scrollbar { display: none; }
+    #msg-list { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .typing-dot {
+      width: 7px; height: 7px;
+      background: #ababab;
+      border-radius: 50%;
+      animation: typingPulse 1s infinite;
+    }
+  </style>
+</head>
+<body style="background:#000;color:#fff;margin:0;height:100vh;display:flex;flex-direction:column;">
+
+  <!-- FIXED CHAT HEADER -->
+  <header style="flex-shrink:0;background:rgba(0,0,0,0.98);border-bottom:1px solid rgba(255,255,255,0.07);padding:0 16px;z-index:100;">
+    <div style="max-width:390px;margin:0 auto;height:64px;display:flex;align-items:center;gap:12px;">
+
+      <!-- Back -->
+      <button onclick="history.back()" style="background:transparent;border:none;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      </button>
+
+      <!-- Group avatar + info — tappable to club profile -->
+      <div onclick="location.href='club-profile.html'" style="display:flex;align-items:center;gap:10px;flex:1;cursor:pointer;">
+        <div style="position:relative;flex-shrink:0;">
+          <div style="width:40px;height:40px;border-radius:12px;overflow:hidden;border:2px solid rgba(226,255,59,0.4);">
+            <img src="https://images.unsplash.com/photo-1558981033-0f0309284409?w=200&auto=format&fit=crop&q=80" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
+          </div>
+          <div style="position:absolute;bottom:-2px;right:-2px;width:10px;height:10px;background:#22c55e;border-radius:50%;border:2px solid #000;"></div>
+        </div>
+        <div>
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#fff;line-height:1.2;">Western Ghats Riders</h2>
+          <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);">2,340 members · 18 online</p>
+        </div>
+      </div>
+
+      <!-- Call / Video icons -->
+      <button onclick="showToast('Voice call coming soon!')" style="background:transparent;border:none;width:36px;height:36px;display:flex;align-items:center;justify-content:center;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </button>
+      <button onclick="showToast('More options coming soon!')" style="background:transparent;border:none;width:36px;height:36px;display:flex;align-items:center;justify-content:center;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" stroke="none"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- PINNED MESSAGE -->
+  <div style="flex-shrink:0;max-width:390px;width:100%;margin:0 auto;background:rgba(226,255,59,0.05);border-bottom:1px solid rgba(226,255,59,0.12);padding:10px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="showToast('Pinned: Coorg ride departs 5:30 AM sharp!')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="#E2FF3B" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    <p style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.65);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+      <span style="color:#E2FF3B;font-weight:700;">Pinned:</span> Coorg ride departs 5:30 AM sharp! Meeting at Silk Board flyover.
+    </p>
+    <div style="width:48px;height:48px;border-radius:8px;overflow:hidden;flex-shrink:0;">
+      <img src="https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=200&auto=format&fit=crop&q=80" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
+    </div>
+  </div>
+
+  <!-- MESSAGE LIST -->
+  <div id="msg-list" class="page-body" style="flex:1;overflow-y:auto;padding:16px;max-width:390px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:0;">
+
+    <!-- Date separator -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <div style="flex:1;height:1px;background:rgba(255,255,255,0.06);"></div>
+      <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.3);">Today</span>
+      <div style="flex:1;height:1px;background:rgba(255,255,255,0.06);"></div>
+    </div>
+
+    <!-- Incoming msg 1 -->
+    <div style="display:flex;align-items:flex-end;gap:8px;margin-bottom:12px;">
+      <div style="width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;">
+        <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100&auto=format&fit=crop&q=80" style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
+      </div>
+      <div style="max-width:75%;">
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#E2FF3B;margin-bottom:4px;font-weight:600;">Ravi K</p>
+        <div style="background:#1a1a1a;border-radius:4px 16px 16px 16px;padding:10px 14px;">
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;color:#fff;margin:0;line-height:1.5;">Yo who's all confirmed for the Coorg ride this Saturday? 🏍️</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848;margin:4px 0 0;">9:14 AM</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Incoming msg 2 -->
+    <div style="display:flex;align-items:flex-end;gap:8px;margin-bottom:12px;">
+      <div style="width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;">
+        <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=100&auto=format&fit=crop&q=80" style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
+      </div>
+      <div style="max-width:75%;">
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#E2FF3B;margin-bottom:4px;font-weight:600;">Dev M</p>
+        <div style="background:#1a1a1a;border-radius:4px 16px 16px 16px;padding:10px 14px;">
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;color:#fff;margin:0;line-height:1.5;">I'm in! Duke 390 ready 🔥 leaving from Silk Board at 5:30</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848;margin:4px 0 0;">9:17 AM</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outgoing msg -->
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
+      <div style="max-width:75%;background:#E2FF3B;border-radius:16px 16px 4px 16px;padding:10px 14px;">
+        <p style="font-family:'Manrope',sans-serif;font-size:13px;color:#000;margin:0;line-height:1.5;">Confirmed! I'll be there. Should we do a fuel stop at Channapatna?</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(0,0,0,0.5);margin:4px 0 0;text-align:right;">9:21 AM ✓✓</p>
+      </div>
+    </div>
+
+    <!-- Image message from RAZE_THROTTLE -->
+    <div style="display:flex;justify-content:flex-start;margin-bottom:12px;">
+      <div style="width:32px;height:32px;border-radius:50%;overflow:hidden;margin-right:8px;flex-shrink:0;">
+        <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover" loading="lazy"/>
+      </div>
+      <div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:#ababab;margin:0 0 4px">RAZE_THROTTLE</p>
+        <div style="border-radius:4px 16px 16px 16px;overflow:hidden;width:180px">
+          <img src="https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=400&auto=format&fit=crop&q=80" style="width:100%;height:120px;object-fit:cover;display:block" loading="lazy"/>
+          <div style="background:#1a1a1a;padding:6px 10px"><p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;margin:0">Found our route! 🗺️</p></div>
+        </div>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848;margin:4px 0 0;">9:20 AM</p>
+      </div>
+    </div>
+
+    <!-- Incoming msg 3 -->
+    <div style="display:flex;align-items:flex-end;gap:8px;margin-bottom:12px;">
+      <div style="width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;">
+        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&auto=format&fit=crop&q=80" style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
+      </div>
+      <div style="max-width:75%;">
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#E2FF3B;margin-bottom:4px;font-weight:600;">Ananya R</p>
+        <div style="background:#1a1a1a;border-radius:4px 16px 16px 16px;padding:10px 14px;">
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;color:#fff;margin:0;line-height:1.5;">Yes! Channapatna works great. Also let's avoid the NH275 toll if possible 😅</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848;margin:4px 0 0;">9:24 AM</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Incoming msg 4 -->
+    <div style="display:flex;align-items:flex-end;gap:8px;margin-bottom:12px;">
+      <div style="width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
+      </div>
+      <div style="max-width:75%;">
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#E2FF3B;margin-bottom:4px;font-weight:600;">Priya S</p>
+        <div style="background:#1a1a1a;border-radius:4px 16px 16px 16px;padding:10px 14px;">
+          <p style="font-family:'Manrope',sans-serif;font-size:13px;color:#fff;margin:0;line-height:1.5;">The weather looks perfect for Saturday ☀️ Can't wait!</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848;margin:4px 0 0;">9:31 AM</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Image message from Dev M — gear photo -->
+    <div style="display:flex;justify-content:flex-start;margin-bottom:12px;">
+      <div style="width:32px;height:32px;border-radius:50%;overflow:hidden;margin-right:8px;flex-shrink:0;">
+        <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=100&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover" loading="lazy"/>
+      </div>
+      <div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:#ababab;margin:0 0 4px">Dev M</p>
+        <div style="border-radius:4px 16px 16px 16px;overflow:hidden;width:180px">
+          <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&auto=format&fit=crop&q=80" style="width:100%;height:120px;object-fit:cover;display:block" loading="lazy"/>
+          <div style="background:#1a1a1a;padding:6px 10px"><p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;margin:0">Helmet ready, gear packed 🏍️</p></div>
+        </div>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848;margin:4px 0 0;">9:29 AM</p>
+      </div>
+    </div>
+
+    <!-- Image message from Priya S — mountain road -->
+    <div style="display:flex;justify-content:flex-start;margin-bottom:12px;">
+      <div style="width:32px;height:32px;border-radius:50%;overflow:hidden;margin-right:8px;flex-shrink:0;">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover" loading="lazy"/>
+      </div>
+      <div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:#ababab;margin:0 0 4px">Priya S</p>
+        <div style="border-radius:4px 16px 16px 16px;overflow:hidden;width:180px">
+          <img src="https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=400&auto=format&fit=crop&q=80" style="width:100%;height:120px;object-fit:cover;display:block" loading="lazy"/>
+          <div style="background:#1a1a1a;padding:6px 10px"><p style="font-family:'Manrope',sans-serif;font-size:11px;color:#ababab;margin:0">Last year's Coorg shots 🌄</p></div>
+        </div>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848;margin:4px 0 0;">9:32 AM</p>
+      </div>
+    </div>
+
+    <!-- Outgoing msg 2 -->
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
+      <div style="max-width:75%;background:#E2FF3B;border-radius:16px 16px 4px 16px;padding:10px 14px;">
+        <p style="font-family:'Manrope',sans-serif;font-size:13px;color:#000;margin:0;line-height:1.5;">Let's do it! Sharing the route now 🗺️</p>
+        <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(0,0,0,0.5);margin:4px 0 0;text-align:right;">9:33 AM ✓✓</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CHAT INPUT BAR -->
+  <div style="flex-shrink:0;background:rgba(0,0,0,0.98);border-top:1px solid rgba(255,255,255,0.07);padding:10px 16px 28px;">
+    <div style="max-width:390px;margin:0 auto;display:flex;align-items:center;gap:8px;">
+
+      <!-- Attachment -->
+      <button onclick="showToast('Attachments coming soon!')" style="background:#1a1a1a;border:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+
+      <!-- Camera -->
+      <button onclick="showToast('Camera coming soon')" style="background:#1a1a1a;border:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      </button>
+
+      <!-- Text input -->
+      <input
+        id="chat-input"
+        type="text"
+        placeholder="Message…"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"
+        style="flex:1;background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);border-radius:22px;padding:10px 16px;font-family:'Manrope',sans-serif;font-size:14px;color:#fff;outline:none;-webkit-appearance:none;"
+      />
+
+      <!-- Send -->
+      <button onclick="sendMessage()" style="background:#E2FF3B;border:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+
+    </div>
+  </div>
+
+  <script>
+  function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const val = input.value.trim();
+    if (!val) return;
+    const msgList = document.getElementById('msg-list');
+    const div = document.createElement('div');
+    div.style.cssText = 'display:flex;justify-content:flex-end;margin-bottom:12px;animation:slideUp 0.2s ease';
+    div.innerHTML = `<div style="max-width:75%;background:#E2FF3B;border-radius:16px 16px 4px 16px;padding:10px 14px"><p style="font-family:'Manrope',sans-serif;font-size:13px;color:#000;margin:0;line-height:1.5">${escapeHtml(val)}</p><p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(0,0,0,0.5);margin:4px 0 0;text-align:right">${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</p></div>`;
+    msgList.appendChild(div);
+    input.value = '';
+    msgList.scrollTop = msgList.scrollHeight;
+    // attach long-press to new message
+    attachLongPress(div);
+    setTimeout(simulateReply, 300);
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function simulateReply() {
+    const msgList = document.getElementById('msg-list');
+    // Typing indicator
+    const typing = document.createElement('div');
+    typing.id = 'typing-indicator';
+    typing.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:12px;animation:slideUp 0.2s ease';
+    typing.innerHTML = `<div style="width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" style="width:100%;height:100%;object-fit:cover" loading="lazy"/></div><div style="background:#1a1a1a;border-radius:4px 16px 16px 16px;padding:10px 16px;display:flex;gap:5px;align-items:center"><span class="typing-dot" style="animation-delay:0s"></span><span class="typing-dot" style="animation-delay:0.2s"></span><span class="typing-dot" style="animation-delay:0.4s"></span></div>`;
+    msgList.appendChild(typing);
+    msgList.scrollTop = msgList.scrollHeight;
+    const replies = ['🔥 Sounds sick!', 'Count me in!', 'What time are we meeting?', 'The roads should be clear!', "I'll bring snacks 😂", "Amazing! Can't wait!", 'Let\'s goooo 🏍️', 'Perfect! See you there 👊'];
+    setTimeout(() => {
+      typing.remove();
+      const reply = document.createElement('div');
+      reply.style.cssText = 'display:flex;align-items:flex-end;gap:8px;margin-bottom:12px;animation:slideUp 0.2s ease';
+      reply.innerHTML = `<div style="width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" style="width:100%;height:100%;object-fit:cover" loading="lazy"/></div><div style="max-width:75%;background:#1a1a1a;border-radius:4px 16px 16px 16px;padding:10px 14px"><p style="font-family:'Manrope',sans-serif;font-size:13px;color:#fff;margin:0;line-height:1.5">${replies[Math.floor(Math.random()*replies.length)]}</p><p style="font-family:'Manrope',sans-serif;font-size:10px;color:#484848;margin:4px 0 0">${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</p></div>`;
+      msgList.appendChild(reply);
+      msgList.scrollTop = msgList.scrollHeight;
+      attachLongPress(reply);
+    }, 1500);
+  }
+
+  // Long-press reaction picker
+  function attachLongPress(msgEl) {
+    let timer;
+    msgEl.addEventListener('touchstart', () => { timer = setTimeout(() => showReactionPicker(msgEl), 500); }, { passive: true });
+    msgEl.addEventListener('touchend', () => clearTimeout(timer), { passive: true });
+    msgEl.addEventListener('touchcancel', () => clearTimeout(timer), { passive: true });
+    // Also support right-click/long mouse for desktop testing
+    msgEl.addEventListener('contextmenu', (e) => { e.preventDefault(); showReactionPicker(msgEl); });
+  }
+
+  function showReactionPicker(msgEl) {
+    document.querySelectorAll('.reaction-picker').forEach(p => p.remove());
+    const picker = document.createElement('div');
+    picker.className = 'reaction-picker';
+    picker.style.cssText = 'position:absolute;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:8px 12px;display:flex;gap:12px;z-index:200;font-size:20px;animation:slideUp 0.2s ease;box-shadow:0 8px 24px rgba(0,0,0,0.5)';
+    ['👍','🔥','❤️','😂','👌'].forEach(emoji => {
+      const btn = document.createElement('span');
+      btn.textContent = emoji;
+      btn.style.cursor = 'pointer';
+      btn.onclick = () => { addReaction(msgEl, emoji); picker.remove(); };
+      picker.appendChild(btn);
+    });
+    msgEl.style.position = 'relative';
+    msgEl.appendChild(picker);
+    setTimeout(() => picker.remove(), 3000);
+  }
+
+  function addReaction(msgEl, emoji) {
+    let reactions = msgEl.querySelector('.reactions-row');
+    if (!reactions) {
+      reactions = document.createElement('div');
+      reactions.className = 'reactions-row';
+      reactions.style.cssText = 'display:flex;gap:4px;margin-top:6px;flex-wrap:wrap;justify-content:flex-end';
+      msgEl.appendChild(reactions);
+    }
+    // Check if emoji already there
+    let existing = Array.from(reactions.querySelectorAll('span')).find(s => s.getAttribute('data-emoji') === emoji);
+    if (existing) {
+      const count = parseInt(existing.getAttribute('data-count') || '1') + 1;
+      existing.setAttribute('data-count', count);
+      existing.textContent = emoji + ' ' + count;
+      existing.style.animation = 'likeBlip 0.3s ease';
+    } else {
+      const r = document.createElement('span');
+      r.setAttribute('data-emoji', emoji);
+      r.setAttribute('data-count', '1');
+      r.style.cssText = 'background:rgba(255,255,255,0.08);border-radius:10px;padding:3px 8px;font-size:13px;animation:likeBlip 0.3s ease;cursor:pointer;border:1px solid rgba(255,255,255,0.1)';
+      r.textContent = emoji + ' 1';
+      r.onclick = () => addReaction(msgEl, emoji);
+      reactions.appendChild(r);
+    }
+    showToast(emoji + ' reaction added');
+  }
+
+  // Attach long-press to all existing messages on load
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#msg-list > div').forEach(attachLongPress);
+    // Scroll to bottom
+    const ml = document.getElementById('msg-list');
+    ml.scrollTop = ml.scrollHeight;
+  });
+  </script>
+
+  <script>
+  document.querySelectorAll('a,button,[onclick]').forEach(function(el){
+    el.addEventListener('mousedown',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+    el.addEventListener('mouseup',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    el.addEventListener('mouseleave',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    el.addEventListener('touchstart',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+    el.addEventListener('touchend',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    el.addEventListener('touchcancel',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+  });
+  window.showToast=function(msg,isError){
+    document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
+    const t=document.createElement('div');
+    t.className='toast-msg';t.textContent=msg;
+    t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),2200);
+  };
+  </script>
+<script src="journey-mode.js"></script>
+</body>
+</html>

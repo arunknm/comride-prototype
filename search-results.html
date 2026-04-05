@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search — Comride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; margin: 0; padding: 0; }
+    a, button, [onclick] { cursor: pointer; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes likeBlip { 0%,100%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(0.88)} }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,12px)} to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .page-body { animation: slideUp 0.35s ease both; }
+    body { background: #000; color: #fff; font-family: 'Manrope', sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(0,0,0,0.95); border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .header-top {
+      max-width: 390px; margin: 0 auto;
+      padding: 12px 16px 0; display: flex; align-items: center; gap: 12px;
+    }
+    .search-bar {
+      flex: 1; display: flex; align-items: center; gap: 10px;
+      background: #111; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px; padding: 10px 14px;
+      transition: border-color 0.15s;
+    }
+    .search-bar:focus-within { border-color: #E2FF3B; }
+    .search-input {
+      flex: 1; background: transparent; border: none; outline: none;
+      font-family: 'Manrope', sans-serif; font-size: 14px; color: #fff;
+    }
+    .search-input::placeholder { color: rgba(255,255,255,0.3); }
+    .search-clear {
+      background: none; border: none; color: #ababab; font-size: 16px; cursor: pointer; padding: 0;
+    }
+    .header-cancel {
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 13px;
+      color: #E2FF3B; text-decoration: none; white-space: nowrap;
+    }
+
+    /* Tabs */
+    .tabs-row {
+      max-width: 390px; margin: 0 auto;
+      display: flex; padding: 0 16px; overflow-x: auto; scrollbar-width: none;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .tabs-row::-webkit-scrollbar { display: none; }
+    .search-tab-btn {
+      padding: 12px 18px; font-family: 'Manrope', sans-serif; font-weight: 700;
+      font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+      background: none; border: none; white-space: nowrap;
+      color: #ababab; border-bottom: 2px solid transparent;
+      cursor: pointer; transition: color 0.15s; flex-shrink: 0;
+    }
+    .search-tab-btn.active { color: #E2FF3B; border-bottom-color: #E2FF3B; }
+
+    .page-body { padding-top: 116px; padding-bottom: 100px; padding-left: 16px; padding-right: 16px; max-width: 390px; margin: 0 auto; }
+
+    /* Filter chips */
+    .filter-row { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin-bottom: 20px; padding-bottom: 2px; }
+    .filter-row::-webkit-scrollbar { display: none; }
+    .filter-chip {
+      flex-shrink: 0; border-radius: 9999px; padding: 6px 14px;
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 11px;
+      letter-spacing: 0.5px; cursor: pointer; transition: all 0.15s;
+      border: 1px solid rgba(255,255,255,0.12); background: transparent; color: #ababab;
+    }
+    .filter-chip.active { background: #E2FF3B; border-color: #E2FF3B; color: #000; }
+
+    /* Result items */
+    .search-result-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+      cursor: pointer; transition: opacity 0.15s;
+    }
+    .search-result-item:last-child { border-bottom: none; }
+    .search-result-item:hover { opacity: 0.8; }
+    .result-thumb {
+      width: 52px; height: 52px; border-radius: 12px; overflow: hidden;
+      background: #191919; flex-shrink: 0;
+    }
+    .result-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .result-avatar {
+      width: 52px; height: 52px; border-radius: 50%; overflow: hidden;
+      background: #191919; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.1);
+    }
+    .result-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .result-info { flex: 1; min-width: 0; }
+    .result-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: #fff; text-transform: uppercase; letter-spacing: -0.2px; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .result-sub { font-family: 'Manrope', sans-serif; font-size: 12px; color: #ababab; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .result-badge {
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 10px;
+      letter-spacing: 1px; padding: 4px 10px; border-radius: 9999px; flex-shrink: 0;
+    }
+    .badge-lime { background: rgba(226,255,59,0.12); color: #E2FF3B; border: 1px solid rgba(226,255,59,0.3); }
+    .badge-gray { background: rgba(255,255,255,0.06); color: #ababab; border: 1px solid rgba(255,255,255,0.1); }
+
+    /* Tab panels */
+    .search-tab-panel { display: none; }
+    .search-tab-panel.active { display: block; }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: 48px 24px; }
+    .empty-state-icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-state-text { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; color: rgba(255,255,255,0.3); }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; height: 80px;
+      background: rgba(0,0,0,0.95); border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: space-around; padding: 0 8px;
+    }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; flex: 1; }
+    .nav-icon-wrap { width: 40px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 10px; }
+    .nav-label { font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 10px; color: rgba(255,255,255,0.35); }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-top">
+      <div class="search-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" id="search-input" placeholder="Search rides, riders, clubs…" oninput="liveSearch(this)" value="Coastal" />
+        <button class="search-clear" onclick="this.previousElementSibling.value='';showToast('Search cleared');liveSearch(document.getElementById('search-input'))">✕</button>
+      </div>
+      <a class="header-cancel" href="home.html">Cancel</a>
+    </div>
+    <div class="tabs-row">
+      <button class="search-tab-btn active" onclick="switchSearchTab(this,'rides')">Rides</button>
+      <button class="search-tab-btn" onclick="switchSearchTab(this,'riders')">Riders</button>
+      <button class="search-tab-btn" onclick="switchSearchTab(this,'clubs')">Clubs</button>
+      <button class="search-tab-btn" onclick="switchSearchTab(this,'places')">Places</button>
+    </div>
+  </header>
+
+  <div class="page-body">
+
+    <!-- RIDES PANEL -->
+    <div class="search-tab-panel active" data-tab-panel="rides">
+      <!-- Filter chips -->
+      <div class="filter-row">
+        <span class="filter-chip active" onclick="selectFilter(this)">ALL</span>
+        <span class="filter-chip" onclick="selectFilter(this)">FREE</span>
+        <span class="filter-chip" onclick="selectFilter(this)">WEEKEND</span>
+        <span class="filter-chip" onclick="selectFilter(this)">MOUNTAIN</span>
+        <span class="filter-chip" onclick="selectFilter(this)">COASTAL</span>
+        <span class="filter-chip" onclick="selectFilter(this)">NEARBY</span>
+      </div>
+
+      <div id="rides-list">
+        <div class="search-result-item" onclick="location.href='ride-details.html'">
+          <div class="result-thumb"><img src="https://images.unsplash.com/photo-1433838552652-f9ded5282879?w=120&auto=format&fit=crop&q=80" alt="" loading="lazy"/></div>
+          <div class="result-info">
+            <div class="result-name">Coastal Highway Sprint</div>
+            <div class="result-sub">Mangalore → Gokarna · 280 KM · May 18</div>
+          </div>
+          <span class="result-badge badge-lime">FREE</span>
+        </div>
+        <div class="search-result-item" onclick="location.href='ride-details.html'">
+          <div class="result-thumb"><img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=120&auto=format&fit=crop&q=80" alt="" loading="lazy"/></div>
+          <div class="result-info">
+            <div class="result-name">Coastal Karnataka Loop</div>
+            <div class="result-sub">Udupi → Gokarna · 2 days · 8 riders</div>
+          </div>
+          <span class="result-badge badge-gray">₹1200</span>
+        </div>
+        <div class="search-result-item" onclick="location.href='ride-details.html'">
+          <div class="result-thumb"><img src="https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=120&auto=format&fit=crop&q=80" alt="" loading="lazy"/></div>
+          <div class="result-info">
+            <div class="result-name">Western Ghats Monsoon Run</div>
+            <div class="result-sub">Bangalore → Goa · 320 KM · 12 riders</div>
+          </div>
+          <span class="result-badge badge-lime">FREE</span>
+        </div>
+        <div class="search-result-item" onclick="location.href='ride-details.html'">
+          <div class="result-thumb"><img src="https://images.unsplash.com/photo-1547549082-6bc09f2049ae?w=120&auto=format&fit=crop&q=80" alt="" loading="lazy"/></div>
+          <div class="result-info">
+            <div class="result-name">Hampi Heritage Ride</div>
+            <div class="result-sub">Bangalore → Hampi · 340 KM · 5 riders</div>
+          </div>
+          <span class="result-badge badge-gray">₹800</span>
+        </div>
+        <div class="search-result-item" onclick="location.href='ride-details.html'">
+          <div class="result-thumb"><img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=120&auto=format&fit=crop&q=80" alt="" loading="lazy"/></div>
+          <div class="result-info">
+            <div class="result-name">Konkan Coast Explorer</div>
+            <div class="result-sub">Mumbai → Goa · 580 KM · 3 days</div>
+          </div>
+          <span class="result-badge badge-gray">₹2400</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIDERS PANEL -->
+    <div class="search-tab-panel" data-tab-panel="riders">
+      <div class="filter-row">
+        <span class="filter-chip active" onclick="selectFilter(this)">ALL</span>
+        <span class="filter-chip" onclick="selectFilter(this)">NEARBY</span>
+        <span class="filter-chip" onclick="selectFilter(this)">TOP RATED</span>
+        <span class="filter-chip" onclick="selectFilter(this)">NEW</span>
+      </div>
+      <div id="riders-list">
+        <div class="search-result-item" onclick="location.href='comrade-profile.html'">
+          <div class="result-avatar"><img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=120&auto=format&fit=crop&q=80" alt="" loading="lazy"/></div>
+          <div class="result-info">
+            <div class="result-name">VOID_RUNNER</div>
+            <div class="result-sub">Bangalore · 2,400 km · ⭐ 4.8</div>
+          </div>
+          <span class="result-badge badge-lime">FOLLOW</span>
+        </div>
+        <div class="search-result-item" onclick="location.href='comrade-profile.html'">
+          <div class="result-avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&auto=format&fit=crop&q=80" alt="" loading="lazy"/></div>
+          <div class="result-info">
+            <div class="result-name">SARA_VOLT</div>
+            <div class="result-sub">Mumbai · 1,800 km · ⭐ 4.6</div>
+          </div>
+          <span class="result-badge badge-gray">FOLLOWING</span>
+        </div>
+        <div class="search-result-item" onclick="location.href='comrade-profile.html'">
+          <div class="result-avatar"><img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=120&auto=format&fit=crop&q=80" alt="" loading="lazy"/></div>
+          <div class="result-info">
+            <div class="result-name">STEEL_PACK</div>
+            <div class="result-sub">Pune · 3,100 km · ⭐ 4.9</div>
+          </div>
+          <span class="result-badge badge-lime">FOLLOW</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLUBS PANEL -->
+    <div class="search-tab-panel" data-tab-panel="clubs">
+      <div class="filter-row">
+        <span class="filter-chip active" onclick="selectFilter(this)">ALL</span>
+        <span class="filter-chip" onclick="selectFilter(this)">OPEN</span>
+        <span class="filter-chip" onclick="selectFilter(this)">INVITE ONLY</span>
+      </div>
+      <div id="clubs-list">
+        <div class="search-result-item" onclick="location.href='club-profile.html'">
+          <div class="result-thumb"><img src="https://images.unsplash.com/photo-1558981033-0f0309284409?w=120&auto=format&fit=crop&q=80" alt="" loading="lazy"/></div>
+          <div class="result-info">
+            <div class="result-name">COASTAL RIDERS MC</div>
+            <div class="result-sub">124 members · Open · Karnataka</div>
+          </div>
+          <span class="result-badge badge-lime">JOIN</span>
+        </div>
+        <div class="search-result-item" onclick="location.href='club-profile.html'">
+          <div class="result-thumb"><img src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=120&auto=format&fit=crop&q=80" alt="" loading="lazy"/></div>
+          <div class="result-info">
+            <div class="result-name">NEON VOLT SQUAD</div>
+            <div class="result-sub">89 members · Invite only · Bangalore</div>
+          </div>
+          <span class="result-badge badge-gray">REQUEST</span>
+        </div>
+        <div class="search-result-item" onclick="location.href='club-profile.html'">
+          <div class="result-thumb"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=120&auto=format&fit=crop&q=80" alt="" loading="lazy"/></div>
+          <div class="result-info">
+            <div class="result-name">WAVE RIDERS CLUB</div>
+            <div class="result-sub">67 members · Open · Goa</div>
+          </div>
+          <span class="result-badge badge-lime">JOIN</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLACES PANEL -->
+    <div class="search-tab-panel" data-tab-panel="places">
+      <div class="filter-row">
+        <span class="filter-chip active" onclick="selectFilter(this)">ALL</span>
+        <span class="filter-chip" onclick="selectFilter(this)">MOUNTAIN</span>
+        <span class="filter-chip" onclick="selectFilter(this)">COASTAL</span>
+        <span class="filter-chip" onclick="selectFilter(this)">CITY</span>
+      </div>
+      <div id="places-list">
+        <div class="search-result-item" onclick="location.href='tracking.html'">
+          <div class="result-thumb"><img src="https://images.unsplash.com/photo-1433838552652-f9ded5282879?w=120&auto=format&fit=crop&q=80" alt="" loading="lazy"/></div>
+          <div class="result-info">
+            <div class="result-name">GOKARNA BEACH ROAD</div>
+            <div class="result-sub">Karnataka · 42 km scenic stretch</div>
+          </div>
+          <span class="result-badge badge-lime">POPULAR</span>
+        </div>
+        <div class="search-result-item" onclick="location.href='tracking.html'">
+          <div class="result-thumb"><img src="https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=120&auto=format&fit=crop&q=80" alt="" loading="lazy"/></div>
+          <div class="result-info">
+            <div class="result-name">WESTERN GHATS PASS</div>
+            <div class="result-sub">Kerala · High altitude · Scenic</div>
+          </div>
+          <span class="result-badge badge-gray">REMOTE</span>
+        </div>
+        <div class="search-result-item" onclick="location.href='tracking.html'">
+          <div class="result-thumb"><img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=120&auto=format&fit=crop&q=80" alt="" loading="lazy"/></div>
+          <div class="result-info">
+            <div class="result-name">COORG COFFEE TRAIL</div>
+            <div class="result-sub">Karnataka · 68 km · Misty roads</div>
+          </div>
+          <span class="result-badge badge-lime">TRENDING</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="nav-item"><div class="nav-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"><path d="M3 9.5L12 3L21 9.5V19a1 1 0 01-1 1H15v-5H9v5H4a1 1 0 01-1-1V9.5z"/></svg></div><span class="nav-label">Explore</span></a>
+    <a href="ride-tab.html" class="nav-item"><div class="nav-icon-wrap"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="6" width="18" height="10" rx="3" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" fill="none"/></svg></div><span class="nav-label">Ride</span></a>
+    <a href="marketplace.html" class="nav-item"><div class="nav-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><span class="nav-label">Shop</span></a>
+    <a href="profile.html" class="nav-item"><div class="nav-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"><circle cx="12" cy="7" r="4"/><path d="M3 21c0-4 4-7 9-7s9 3 9 7"/></svg></div><span class="nav-label">Profile</span></a>
+  </nav>
+
+  <script>
+    function switchSearchTab(btn, tabName) {
+      document.querySelectorAll('.search-tab-btn').forEach(t => {
+        t.style.color = '#ababab'; t.style.borderBottom = '2px solid transparent'; t.classList.remove('active');
+      });
+      btn.style.color = '#E2FF3B'; btn.style.borderBottom = '2px solid #E2FF3B'; btn.classList.add('active');
+      document.querySelectorAll('.search-tab-panel').forEach(p => p.style.display = 'none');
+      const panel = document.querySelector('[data-tab-panel="' + tabName + '"]');
+      if (panel) { panel.style.display = 'block'; panel.style.animation = 'slideUp 0.25s ease'; }
+    }
+
+    function selectFilter(el) {
+      el.closest('.filter-row').querySelectorAll('.filter-chip').forEach(c => {
+        c.classList.remove('active'); c.style.background = 'transparent'; c.style.color = '#ababab'; c.style.borderColor = 'rgba(255,255,255,0.12)';
+      });
+      el.classList.add('active'); el.style.background = '#E2FF3B'; el.style.color = '#000'; el.style.borderColor = '#E2FF3B';
+      showToast('Filtered: ' + el.textContent);
+    }
+
+    let searchTimer;
+    function liveSearch(input) {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        document.querySelectorAll('.search-result-item').forEach((item, i) => {
+          item.style.animation = 'none';
+          setTimeout(() => item.style.animation = 'slideUp 0.2s ease', i * 50);
+        });
+      }, 400);
+    }
+  </script>
+
+  <script>
+    document.querySelectorAll('a,button,[onclick]').forEach(function(el){
+      el.addEventListener('mousedown',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+      el.addEventListener('mouseup',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('mouseleave',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('touchstart',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+      el.addEventListener('touchend',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('touchcancel',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    });
+    window.showToast=function(msg,isError){
+      document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
+      const t=document.createElement('div');
+      t.className='toast-msg';t.textContent=msg;
+      t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(),2200);
+    };
+  </script>
+<script src="journey-mode.js"></script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Comrade Profile — Comride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    a, button, [onclick] { cursor: pointer; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes likeBlip { 0%,100%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(0.88)} }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,12px)} to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .page-body { animation: slideUp 0.35s ease both; }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { background: #000; color: #fff; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; }
+    ::selection { background: #E2FF3B; color: #000; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; }
+    .rides-scroll::-webkit-scrollbar { display: none; }
+    .rides-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+    .stat-tap { transition: background 0.15s; border-radius: 10px; }
+    .stat-tap:active { background: rgba(226,255,59,0.08); }
+  </style>
+</head>
+<body style="background:#000;color:#fff;margin:0;">
+
+  <div class="page-body" style="max-width:390px;margin:0 auto;position:relative;padding-bottom:40px;">
+
+    <!-- COVER + AVATAR HERO -->
+    <div style="position:relative;">
+      <div style="position:relative;width:100%;height:220px;overflow:hidden;">
+        <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&auto=format&fit=crop&q=80" alt="Cover" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" />
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.85) 100%);"></div>
+      </div>
+
+      <!-- Header -->
+      <div style="position:absolute;top:0;left:0;right:0;z-index:10;padding:16px;display:flex;align-items:center;justify-content:space-between;">
+        <button onclick="history.back()" style="background:rgba(0,0,0,0.4);border:none;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        </button>
+        <button onclick="showToast('More options coming soon!')" style="background:rgba(0,0,0,0.4);border:none;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" stroke="none"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+        </button>
+      </div>
+
+      <!-- Avatar -->
+      <div style="position:absolute;bottom:-42px;left:20px;z-index:5;">
+        <div style="width:84px;height:84px;border-radius:50%;border:3px solid #E2FF3B;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=200&auto=format&fit=crop&q=80" alt="Avatar" style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
+        </div>
+        <div style="position:absolute;bottom:-12px;left:0;background:#E2FF3B;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9px;border-radius:9999px;padding:2px 7px;white-space:nowrap;z-index:6;">LV.38</div>
+      </div>
+    </div>
+
+    <!-- PROFILE INFO -->
+    <div style="background:#000;padding:56px 16px 20px;">
+
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;color:#fff;margin-bottom:2px;letter-spacing:-0.3px;">RAVI_THROTTLE</h1>
+      <p style="font-family:'Manrope',sans-serif;font-size:14px;color:rgba(255,255,255,0.55);margin-bottom:10px;">Ravi Kumar</p>
+
+      <div style="display:flex;align-items:center;margin-bottom:8px;">
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;color:#E2FF3B;background:rgba(226,255,59,0.1);border-radius:9999px;padding:4px 10px;letter-spacing:0.5px;">★ SERGEANT</span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:5px;margin-bottom:12px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.45);">Chennai, Tamil Nadu</span>
+      </div>
+
+      <p style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.65);line-height:1.5;margin-bottom:20px;">
+        Royal Enfield Himalayan rider. Mountain passes and long highways. 5 years on the saddle. Always up for a group ride.
+      </p>
+
+      <!-- STATS ROW -->
+      <div style="background:#111;border-radius:14px;padding:16px;margin-bottom:20px;display:flex;align-items:stretch;">
+        <div class="stat-tap" onclick="showToast('118 rides completed')" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;cursor:pointer;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;color:#fff;line-height:1;">118</span>
+          <span style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.45);">Rides</span>
+        </div>
+        <div style="width:1px;background:rgba(255,255,255,0.08);flex-shrink:0;"></div>
+        <div class="stat-tap" onclick="showToast('14,800 KM ridden')" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;cursor:pointer;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;color:#fff;line-height:1;">14,800</span>
+          <span style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.45);">KM</span>
+        </div>
+        <div style="width:1px;background:rgba(255,255,255,0.08);flex-shrink:0;"></div>
+        <div class="stat-tap" onclick="showToast('67 comrades')" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;cursor:pointer;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;color:#fff;line-height:1;">67</span>
+          <span style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.45);">Comrades</span>
+        </div>
+        <div style="width:1px;background:rgba(255,255,255,0.08);flex-shrink:0;"></div>
+        <div class="stat-tap" onclick="showToast('Rated 4.8 stars')" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;cursor:pointer;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;color:#fff;line-height:1;">4.8★</span>
+          <span style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.45);">Rating</span>
+        </div>
+      </div>
+
+      <!-- ACTION ROW -->
+      <div style="display:flex;gap:8px;margin-bottom:24px;">
+        <button
+          data-following="0"
+          onclick="toggleFollow(this)"
+          style="flex:1;height:42px;background:#E2FF3B;border:none;border-radius:10px;font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;color:#000;letter-spacing:0.3px;">
+          FOLLOW
+        </button>
+        <button onclick="location.href='chat.html'" style="flex:1;height:42px;background:transparent;border:1px solid rgba(255,255,255,0.2);border-radius:10px;font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:#fff;letter-spacing:0.3px;">
+          MESSAGE
+        </button>
+        <button onclick="location.href='create-ride-modes.html'" style="height:42px;padding:0 14px;background:transparent;border:1px solid rgba(226,255,59,0.3);border-radius:10px;font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;color:#E2FF3B;letter-spacing:0.3px;">
+          INVITE
+        </button>
+      </div>
+
+      <!-- RIDE DNA -->
+      <div style="margin-bottom:24px;">
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;">RIDE DNA</span>
+        <div style="display:flex;flex-wrap:wrap;margin-top:10px;">
+          <span style="background:rgba(226,255,59,0.15);border:1px solid rgba(226,255,59,0.4);color:#E2FF3B;border-radius:9999px;padding:6px 14px;font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;margin:4px;">MOUNTAIN PASSES</span>
+          <span style="background:rgba(226,255,59,0.15);border:1px solid rgba(226,255,59,0.4);color:#E2FF3B;border-radius:9999px;padding:6px 14px;font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;margin:4px;">LONG HAUL</span>
+          <span style="background:rgba(226,255,59,0.15);border:1px solid rgba(226,255,59,0.4);color:#E2FF3B;border-radius:9999px;padding:6px 14px;font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;margin:4px;">GROUP RIDES</span>
+          <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);border-radius:9999px;padding:6px 14px;font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;margin:4px;">ADVENTURE</span>
+        </div>
+      </div>
+
+      <!-- RECENT RIDES -->
+      <div style="margin-bottom:24px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;">RECENT RIDES</span>
+          <a href="ride-tab.html" style="font-family:'Manrope',sans-serif;font-size:12px;color:#E2FF3B;font-weight:600;">View All →</a>
+        </div>
+
+        <div onclick="location.href='my-ride-detail.html'" style="background:#111;border-radius:12px;overflow:hidden;margin-bottom:10px;cursor:pointer;">
+          <div style="position:relative;height:140px;overflow:hidden;">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&auto=format&fit=crop&q=80" alt="Leh" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" />
+            <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.8) 100%);"></div>
+            <div style="position:absolute;bottom:10px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:flex-end;">
+              <div>
+                <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B;display:block;margin-bottom:2px;letter-spacing:0.5px;text-transform:uppercase;">Himalayan Run</span>
+                <p style="font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:#fff;margin:0;">Manali ─── Leh</p>
+              </div>
+              <span style="background:rgba(226,255,59,0.2);color:#E2FF3B;border:1px solid rgba(226,255,59,0.4);border-radius:9999px;padding:3px 10px;font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;">Completed</span>
+            </div>
+          </div>
+          <div style="padding:8px 14px;">
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);">5 Aug · 12 Aug</p>
+          </div>
+        </div>
+
+        <div onclick="location.href='my-ride-detail.html'" style="background:#111;border-radius:12px;overflow:hidden;cursor:pointer;">
+          <div style="position:relative;height:140px;overflow:hidden;">
+            <img src="https://images.unsplash.com/photo-1433838552652-f9ded5282879?w=600&auto=format&fit=crop&q=80" alt="Vizag" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" />
+            <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.8) 100%);"></div>
+            <div style="position:absolute;bottom:10px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:flex-end;">
+              <div>
+                <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B;display:block;margin-bottom:2px;letter-spacing:0.5px;text-transform:uppercase;">Eastern Ghats</span>
+                <p style="font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:#fff;margin:0;">Chennai ─── Vizag</p>
+              </div>
+              <span style="background:rgba(226,255,59,0.2);color:#E2FF3B;border:1px solid rgba(226,255,59,0.4);border-radius:9999px;padding:3px 10px;font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;">Completed</span>
+            </div>
+          </div>
+          <div style="padding:8px 14px;">
+            <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);">20 Sep · 22 Sep</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- MUTUAL COMRADES -->
+      <div style="margin-bottom:24px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;">MUTUAL COMRADES</span>
+          <span style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.4);">12 mutual</span>
+        </div>
+
+        <div style="display:flex;gap:12px;">
+          <div onclick="location.href='comrade-profile.html'" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
+            <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.1);">
+              <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=200&auto=format&fit=crop&q=80" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.7);">Dev M</span>
+          </div>
+          <div onclick="location.href='comrade-profile.html'" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
+            <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.1);">
+              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&auto=format&fit=crop&q=80" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.7);">Ananya</span>
+          </div>
+          <div onclick="location.href='comrade-profile.html'" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
+            <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.1);">
+              <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.7);">Lex</span>
+          </div>
+          <div onclick="location.href='comrade-profile.html'" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
+            <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.1);background:#1a1a1a;display:flex;align-items:center;justify-content:center;">
+              <span style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,0.5);">+9</span>
+            </div>
+            <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.7);">More</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+  function toggleFollow(btn) {
+    const isFollowing = btn.getAttribute('data-following')==='1';
+    btn.setAttribute('data-following', isFollowing?'0':'1');
+    btn.textContent = isFollowing ? 'FOLLOW' : 'FOLLOWING';
+    btn.style.background = isFollowing ? '#E2FF3B' : 'transparent';
+    btn.style.color = isFollowing ? '#000' : '#E2FF3B';
+    btn.style.border = isFollowing ? 'none' : '1px solid #E2FF3B';
+    showToast(isFollowing ? 'Unfollowed' : 'Now following!');
+  }
+  </script>
+
+  <script>
+  document.querySelectorAll('a,button,[onclick]').forEach(function(el){
+    el.addEventListener('mousedown',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+    el.addEventListener('mouseup',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    el.addEventListener('mouseleave',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    el.addEventListener('touchstart',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+    el.addEventListener('touchend',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    el.addEventListener('touchcancel',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+  });
+  window.showToast=function(msg,isError){
+    document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
+    const t=document.createElement('div');
+    t.className='toast-msg';t.textContent=msg;
+    t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),2200);
+  };
+  </script>
+<script src="journey-mode.js"></script>
+</body>
+</html>

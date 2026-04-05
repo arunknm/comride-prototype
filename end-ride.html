@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comride — End Ride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: #000;
+      min-height: 100vh;
+      color: #fff;
+      font-family: 'Manrope', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Global animations ── */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes likeBlip {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.45); }
+      70%  { transform: scale(0.88); }
+      100% { transform: scale(1); }
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(16px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    @keyframes sheetUp {
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes confettiFall {
+      0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+    @keyframes badgeSlide {
+      from { opacity: 0; transform: translateY(30px) scale(0.85); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes starPop {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.4); }
+      100% { transform: scale(1); }
+    }
+
+    /* Tap highlight suppression */
+    * { -webkit-tap-highlight-color: transparent; }
+    button, [onclick], a { cursor: pointer; }
+
+    /* Page entry */
+    .page-body { animation: slideUp 0.3s ease both; }
+
+    /* Card base */
+    .card {
+      background: #111;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    /* Section label */
+    .section-label {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 10px;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* Stats 4-col */
+    .stats-4col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .stat-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px 6px;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-big {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: #fff;
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+    .stat-sub {
+      font-family: 'Manrope', sans-serif;
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+    }
+
+    /* Photo grid slot */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .photo-slot {
+      aspect-ratio: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    .photo-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-slot-add {
+      aspect-ratio: 1;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1.5px dashed rgba(255,255,255,0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .photo-slot-add:hover {
+      background: rgba(226,255,59,0.06);
+      border-color: rgba(226,255,59,0.3);
+    }
+    .remove-badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 18px;
+      height: 18px;
+      background: rgba(0,0,0,0.6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Share option cards */
+    .share-options {
+      display: flex;
+      gap: 8px;
+    }
+    .share-card {
+      flex: 1;
+      background: #111;
+      border-radius: 12px;
+      padding: 14px 8px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .share-card.active {
+      border: 1px solid rgba(226,255,59,0.4);
+      background: rgba(226,255,59,0.04);
+    }
+    .share-card-label {
+      font-family: 'Manrope', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+    }
+    .share-card.active .share-card-label {
+      color: #E2FF3B;
+    }
+
+    /* Stars */
+    .stars-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin: 12px 0;
+    }
+    .star-icon {
+      font-size: 30px;
+      color: rgba(255,255,255,0.15);
+      line-height: 1;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+    .star-icon.filled { color: #E2FF3B; }
+
+    /* Avatar chip */
+    .tag-chip {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid #111;
+    }
+
+    /* Achievement badge */
+    .achievement-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      animation: badgeSlide 0.45s ease both;
+    }
+    .badge-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #111;
+      border: 2px solid rgba(226,255,59,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .badge-name {
+      font-family: 'Manrope', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      letter-spacing: 0.2px;
+    }
+
+    /* Fixed bottom */
+    .fixed-bottom {
+      position: fixed;
+      bottom: 80px;
+      left: 0;
+      right: 0;
+      padding: 12px 16px;
+      background: #000;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .btn-share {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 52px;
+      background: #E2FF3B;
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-share:active { opacity: 0.8; }
+    .btn-outline {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 48px;
+      background: transparent;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline:hover { border-color: rgba(226,255,59,0.4); color: #E2FF3B; }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 180px;
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      background: #E2FF3B;
+      color: #000;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 10px 22px;
+      border-radius: 9999px;
+      z-index: 9999;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    #toast.error { background: #ff4d4d; color: #fff; }
+    #toast.show { opacity: 1; animation: toastIn 0.3s ease; }
+
+    /* Share sheet */
+    #share-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      animation: fadeIn 0.2s ease;
+    }
+    #share-backdrop.open { display: block; }
+    #share-sheet {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #111;
+      border-radius: 20px 20px 0 0;
+      padding: 20px 20px 40px;
+      z-index: 201;
+      animation: sheetUp 0.3s ease;
+    }
+    .sheet-handle {
+      width: 36px; height: 4px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 2px;
+      margin: 0 auto 18px;
+    }
+    .sheet-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 1.5px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .sheet-icons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      text-align: center;
+    }
+    .sheet-icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .sheet-icon-circle {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: #1c1c1c;
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .sheet-icon-label {
+      font-family: 'Manrope', sans-serif;
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toast -->
+  <div id="toast"></div>
+
+  <!-- Share sheet backdrop -->
+  <div id="share-backdrop" onclick="closeShareSheet()">
+    <div id="share-sheet" onclick="event.stopPropagation()">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">SHARE RIDE</div>
+      <div class="sheet-icons">
+        <div class="sheet-icon-item" onclick="closeShareSheet(); showToast('Link copied!')">
+          <div class="sheet-icon-circle">🔗</div>
+          <span class="sheet-icon-label">Copy Link</span>
+        </div>
+        <div class="sheet-icon-item" onclick="closeShareSheet(); showToast('Opening WhatsApp...')">
+          <div class="sheet-icon-circle">💬</div>
+          <span class="sheet-icon-label">WhatsApp</span>
+        </div>
+        <div class="sheet-icon-item" onclick="closeShareSheet(); showToast('Opening Instagram...')">
+          <div class="sheet-icon-circle">📸</div>
+          <span class="sheet-icon-label">Instagram</span>
+        </div>
+        <div class="sheet-icon-item" onclick="closeShareSheet(); showToast('More options...')">
+          <div class="sheet-icon-circle">⋯</div>
+          <span class="sheet-icon-label">More</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden file input for photo upload -->
+  <input type="file" id="photo-upload-input" accept="image/*" style="display:none;" multiple onchange="handlePhotoUpload(this)" />
+
+  <!-- HERO -->
+  <div style="position:relative; width:100%; height:240px; overflow:hidden;">
+    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&auto=format&fit=crop&q=80" alt="Ride Complete" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />
+    <div style="position:absolute;top:0;left:0;right:0;height:100px;background:linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, transparent 100%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:130px;background:linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);pointer-events:none;"></div>
+
+    <!-- Header -->
+    <div style="position:absolute;top:0;left:0;right:0;z-index:10;padding:16px;display:flex;align-items:center;justify-content:space-between;">
+      <div onclick="history.back()" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);border-radius:50%;backdrop-filter:blur(8px);cursor:pointer;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+      </div>
+      <div style="background:rgba(226,255,59,0.15);border:1px solid rgba(226,255,59,0.4);border-radius:9999px;padding:4px 12px;">
+        <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#E2FF3B;letter-spacing:0.3px;">RIDE COMPLETE</span>
+      </div>
+    </div>
+
+    <!-- Hero content -->
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:20px;">
+      <div style="width:56px;height:56px;border-radius:50%;background:rgba(226,255,59,0.15);border:2px solid #E2FF3B;display:flex;align-items:center;justify-content:center;margin-bottom:12px;animation:slideUp 0.5s 0.1s ease both;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:28px;color:#fff;text-align:center;letter-spacing:-0.5px;line-height:1.1;animation:slideUp 0.5s 0.2s ease both;opacity:0;animation-fill-mode:both;">RIDE COMPLETED!</div>
+      <div style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.6);margin-top:6px;text-align:center;animation:slideUp 0.5s 0.3s ease both;opacity:0;animation-fill-mode:both;">Asphalt Fix · 6 Days · 350 KM</div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="page-body" style="background:#000; padding:16px; padding-bottom:200px;">
+
+    <!-- STATS CELEBRATION -->
+    <div class="card" style="padding:0; overflow:hidden; margin-bottom:20px;">
+      <div class="stats-4col">
+        <div class="stat-cell">
+          <span class="stat-big">350 KM</span>
+          <span class="stat-sub">Ridden</span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-big">6 Days</span>
+          <span class="stat-sub">Duration</span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-big">20</span>
+          <span class="stat-sub">Comrades</span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-big" style="color:#E2FF3B;">4.8★</span>
+          <span class="stat-sub">Avg Rating</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENTS UNLOCKED -->
+    <div style="margin-bottom:20px;">
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#E2FF3B;letter-spacing:1px;margin-bottom:4px;">ACHIEVEMENTS UNLOCKED</div>
+      <div style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:14px;">You earned these on this ride</div>
+      <div style="display:flex;gap:16px;justify-content:center;">
+        <div class="achievement-badge" style="animation-delay:0.1s;">
+          <div class="badge-icon-wrap">🏍️</div>
+          <span class="badge-name">Road<br>Warrior</span>
+        </div>
+        <div class="achievement-badge" style="animation-delay:0.2s;">
+          <div class="badge-icon-wrap">🌄</div>
+          <span class="badge-name">Hill<br>Climber</span>
+        </div>
+        <div class="achievement-badge" style="animation-delay:0.3s;">
+          <div class="badge-icon-wrap">🤝</div>
+          <span class="badge-name">Pack<br>Rider</span>
+        </div>
+        <div class="achievement-badge" style="animation-delay:0.4s;">
+          <div class="badge-icon-wrap">⭐</div>
+          <span class="badge-name">Top<br>Rated</span>
+        </div>
+        <div class="achievement-badge" style="animation-delay:0.5s;">
+          <div class="badge-icon-wrap">🔥</div>
+          <span class="badge-name">On<br>Fire</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD PHOTOS SECTION -->
+    <div style="margin-bottom:12px;">
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#E2FF3B;letter-spacing:1px;margin-bottom:4px;">ADD YOUR RIDE PHOTOS</div>
+      <div style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:12px;">Share the journey with your comrades</div>
+
+      <div class="photo-grid" id="photo-grid">
+        <!-- Slot 1: added -->
+        <div class="photo-slot">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&auto=format&fit=crop&q=80" alt="Ride photo" loading="lazy" />
+          <div class="remove-badge" onclick="removePhoto(this)">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </div>
+        </div>
+        <!-- Slot 2: added -->
+        <div class="photo-slot">
+          <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=300&auto=format&fit=crop&q=80" alt="Ride photo" loading="lazy" />
+          <div class="remove-badge" onclick="removePhoto(this)">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </div>
+        </div>
+        <!-- Slot 3: added -->
+        <div class="photo-slot">
+          <img src="https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=300&auto=format&fit=crop&q=80" alt="Ride photo" loading="lazy" />
+          <div class="remove-badge" onclick="removePhoto(this)">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </div>
+        </div>
+        <!-- Slot 4: add more -->
+        <div class="photo-slot-add" onclick="document.getElementById('photo-upload-input').click()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.3);">Add</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAPTION INPUT -->
+    <div style="margin-bottom:10px;">
+      <textarea id="caption-input" placeholder="Write a caption for your ride post..." oninput="updateCharCount(this)" style="background:#191919;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;color:#fff;width:100%;height:80px;resize:none;font-family:'Manrope',sans-serif;font-size:13px;outline:none;display:block;transition:border-color 0.2s;" onfocus="this.style.borderColor='rgba(226,255,59,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'"></textarea>
+      <div id="char-count" style="text-align:right;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;">0/280</div>
+    </div>
+
+    <!-- TAG COMRADES -->
+    <div class="card" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;margin-bottom:16px;cursor:pointer;" onclick="showToast('Tag comrades coming soon')">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-family:'Manrope',sans-serif;font-size:16px;color:rgba(255,255,255,0.4);font-weight:600;">@</span>
+        <span style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.4);">Tag comrades...</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:2px;">
+        <img class="tag-chip" src="images/profile/1.avif" alt="" onclick="event.stopPropagation();location.href='comrade-profile.html'" />
+        <img class="tag-chip" src="images/profile/2.avif" alt="" style="margin-left:-6px;" onclick="event.stopPropagation();location.href='comrade-profile.html'" />
+        <img class="tag-chip" src="images/profile/3.avif" alt="" style="margin-left:-6px;" onclick="event.stopPropagation();location.href='comrade-profile.html'" />
+        <span style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#E2FF3B;margin-left:8px;">+14 more</span>
+      </div>
+    </div>
+
+    <!-- SHARE OPTIONS -->
+    <div style="margin-bottom:16px;">
+      <div class="section-label" style="margin-bottom:10px;">Share On</div>
+      <div class="share-options">
+        <div class="share-card active" id="share-wall" onclick="selectShareOption('wall')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span class="share-card-label">Wall</span>
+        </div>
+        <div class="share-card" id="share-story" onclick="selectShareOption('story')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>
+          </svg>
+          <span class="share-card-label">Story</span>
+        </div>
+        <div class="share-card" id="share-whatsapp" onclick="selectShareOption('whatsapp')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span class="share-card-label">WhatsApp</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RATE THE RIDE -->
+    <div class="card" style="margin-bottom:0;">
+      <div class="section-label" style="margin-bottom:8px;">Rate This Ride</div>
+      <div style="font-family:'Manrope',sans-serif;font-size:14px;color:#fff;margin-bottom:0;">How was the Asphalt Fix ride?</div>
+      <div class="stars-row" id="stars-row">
+        <span class="star-icon" onclick="setRating(1)">★</span>
+        <span class="star-icon" onclick="setRating(2)">★</span>
+        <span class="star-icon" onclick="setRating(3)">★</span>
+        <span class="star-icon" onclick="setRating(4)">★</span>
+        <span class="star-icon" onclick="setRating(5)">★</span>
+      </div>
+      <textarea placeholder="Leave a review..." style="background:#191919;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px;color:rgba(255,255,255,0.7);width:100%;height:70px;resize:none;font-family:'Manrope',sans-serif;font-size:13px;outline:none;display:block;transition:border-color 0.2s;" onfocus="this.style.borderColor='rgba(226,255,59,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'"></textarea>
+    </div>
+
+  </main>
+
+  <!-- FIXED BOTTOM CTA -->
+  <div class="fixed-bottom">
+    <button class="btn-share" id="share-wall-btn" onclick="postToWall(this)">SHARE ON WALL →</button>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-outline" style="flex:1;" onclick="location.href='my-ride-detail.html'">VIEW SUMMARY</button>
+      <button class="btn-outline" style="flex:1;" onclick="location.href='home.html'">HOME</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav style="position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-around;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);height:80px;z-index:100;box-sizing:border-box;padding:0 8px">
+    <a href="home.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Explore</span></div></a>
+    <a href="ride-tab.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(226,255,59,0.1);border-radius:9999px;padding:6px 16px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><circle cx="7" cy="17" r="1.5" fill="currentColor" stroke="none"/><circle cx="17" cy="17" r="1.5" fill="currentColor" stroke="none"/><line x1="2" y1="11" x2="22" y2="11"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B">Ride</span></div></a>
+    <a href="marketplace.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Shop</span></div></a>
+    <a href="profile-setup.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Profile</span></div></a>
+  </nav>
+
+  <script>
+    /* ── Toast ── */
+    let toastTimer;
+    window.showToast = function(msg, isError) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = isError ? 'error show' : 'show';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { t.className = ''; }, 2600);
+    };
+
+    /* ── Press feedback ── */
+    document.addEventListener('mousedown', feedbackDown);
+    document.addEventListener('touchstart', feedbackDown, { passive: true });
+    document.addEventListener('mouseup', feedbackUp);
+    document.addEventListener('touchend', feedbackUp);
+    function feedbackDown(e) {
+      const el = e.target.closest('button,[onclick],a,.share-card,.photo-slot-add,.sheet-icon-item,.achievement-badge');
+      if (el) { el._feedbackEl = el; el.style.transition = 'transform 0.08s,opacity 0.08s'; el.style.transform = 'scale(0.94)'; el.style.opacity = '0.78'; }
+    }
+    function feedbackUp() {
+      document.querySelectorAll('[style*="scale(0.94)"]').forEach(el => { el.style.transform = ''; el.style.opacity = ''; });
+    }
+
+    /* ── Star rating ── */
+    let currentRating = 0;
+    function setRating(n) {
+      currentRating = n;
+      const stars = document.querySelectorAll('#stars-row .star-icon');
+      stars.forEach((s, i) => {
+        s.classList.toggle('filled', i < n);
+        if (i < n) { s.style.animation = 'none'; s.offsetHeight; s.style.animation = 'starPop 0.25s ease'; }
+      });
+      const labels = ['', 'Poor', 'Fair', 'Good', 'Great', 'Excellent!'];
+      showToast(labels[n] + (n === 5 ? ' 🏍️' : ''));
+    }
+
+    /* ── Share option selector ── */
+    function selectShareOption(opt) {
+      const ids = ['share-wall','share-story','share-whatsapp'];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        el.classList.remove('active');
+        el.querySelector('svg').setAttribute('stroke', 'rgba(255,255,255,0.4)');
+      });
+      const sel = document.getElementById('share-' + opt);
+      sel.classList.add('active');
+      sel.querySelector('svg').setAttribute('stroke', '#E2FF3B');
+      const labels = { wall: 'Wall', story: 'Story', whatsapp: 'WhatsApp' };
+      showToast('Sharing to ' + labels[opt]);
+    }
+
+    /* ── Photo upload ── */
+    function handlePhotoUpload(input) {
+      if (input.files && input.files.length > 0) {
+        showToast('Photo added!');
+      } else {
+        showToast('Photo upload coming soon');
+      }
+    }
+
+    /* ── Remove photo ── */
+    function removePhoto(btn) {
+      const slot = btn.closest('.photo-slot');
+      slot.style.transition = 'opacity 0.25s, transform 0.25s';
+      slot.style.opacity = '0';
+      slot.style.transform = 'scale(0.8)';
+      setTimeout(() => slot.remove(), 250);
+      showToast('Photo removed');
+    }
+
+    /* ── Character count ── */
+    function updateCharCount(textarea) {
+      const count = textarea.value.length;
+      const display = document.getElementById('char-count');
+      display.textContent = count + '/280';
+      display.style.color = count > 260 ? '#ff4d4d' : 'rgba(255,255,255,0.3)';
+      if (count > 280) textarea.value = textarea.value.substring(0, 280);
+    }
+
+    /* ── Post to wall ── */
+    function postToWall(btn) {
+      btn.textContent = 'POSTING...';
+      btn.style.opacity = '0.7';
+      btn.disabled = true;
+      setTimeout(() => {
+        showToast('Posted to your wall!');
+        setTimeout(() => { location.href = 'ride-tab.html'; }, 1200);
+      }, 1400);
+    }
+
+    /* ── Share sheet ── */
+    function openShareSheet() {
+      document.getElementById('share-backdrop').classList.add('open');
+    }
+    function closeShareSheet() {
+      document.getElementById('share-backdrop').classList.remove('open');
+    }
+
+    /* ── Confetti burst on load ── */
+    (function spawnConfetti() {
+      const colors = ['#E2FF3B','#fff','#4a90d9','#ff6b6b','#a8ff78'];
+      for (let w = 0; w < 2; w++) {
+        setTimeout(() => {
+          for (let i = 0; i < 10; i++) {
+            const p = document.createElement('div');
+            const size = 6 + Math.random() * 8;
+            p.style.cssText = `position:fixed;top:-20px;left:${Math.random()*100}%;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>0.5?'50%':'2px'};animation:confettiFall ${1.4+Math.random()*1.2}s ${Math.random()*0.5}s ease-in forwards;pointer-events:none;z-index:9998;`;
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 3000);
+          }
+        }, w * 400);
+      }
+    })();
+  </script>
+<script src="journey-mode.js"></script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Comride — Create Your Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { background: #000; color: #fff; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; }
+    ::selection { background: #E2FF3B; color: #2A3000; }
+    input::placeholder { color: #484848; }
+    select option { background: #191919; color: #fff; }
+  </style>
+</head>
+<body style="background:#000;color:#fff">
+  <!-- FIXED MOTORCYCLE BACKGROUND TEXTURE -->
+  <div style="position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0">
+    <img src="https://images.unsplash.com/photo-1547549082-6bc09f2049ae?w=800&auto=format&fit=crop&q=80" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;opacity:0.06;" />
+  </div>
+  <div style="max-width:390px;margin:0 auto;min-height:100vh;padding:60px 24px 60px;position:relative;z-index:1">
+
+    <!-- Header: Back arrow + logo -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:40px">
+      <button onclick="history.back()" style="display:flex;align-items:center;justify-content:center;background:#191919;border:none;border-radius:9999px;width:40px;height:40px;cursor:pointer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <img src="comride.svg" alt="Comride" style="height:26px" />
+    </div>
+
+    <!-- Headline -->
+    <div style="margin-bottom:40px">
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:48px;line-height:1.05;text-transform:uppercase;margin:0 0 4px 0;color:#fff">CREATE YOUR</h1>
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:48px;line-height:1.05;text-transform:uppercase;margin:0 0 16px 0;color:#E2FF3B">RIDER PROFILE</h1>
+      <p style="font-family:'Manrope',sans-serif;font-size:14px;color:#ababab;margin:0;line-height:1.6">
+        Join the high-frequency community. Set up your identity and your machine.
+      </p>
+    </div>
+
+    <!-- Avatar Upload -->
+    <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:40px">
+      <div style="position:relative;width:88px;height:88px">
+        <div style="width:88px;height:88px;border-radius:50%;background:#191919;border:2px solid rgba(226,255,59,0.5);overflow:hidden;cursor:pointer">
+          <img src="https://images.unsplash.com/photo-1611144527606-c3ae3e53c2f3?w=200&auto=format&fit=crop&q=80" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+        <div style="position:absolute;bottom:0;right:0;width:24px;height:24px;background:#E2FF3B;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 12px rgba(226,255,59,0.4)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Basic Information -->
+    <div style="margin-bottom:16px">
+      <label style="display:block;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ababab;margin-bottom:16px">
+        BASIC INFORMATION
+      </label>
+
+      <!-- Full Name -->
+      <input
+        type="text"
+        placeholder="Full Name"
+        style="width:100%;background:#191919;border-radius:12px;padding:18px;font-family:'Manrope',sans-serif;font-size:14px;color:#fff;border:none;outline:none;margin-bottom:12px;display:block"
+      />
+
+      <!-- Username -->
+      <div style="display:flex;align-items:center;background:#191919;border-radius:12px;padding:18px;margin-bottom:12px;gap:4px">
+        <span style="font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;color:#E2FF3B">@</span>
+        <input
+          type="text"
+          placeholder="username"
+          style="flex:1;background:transparent;border:none;outline:none;font-family:'Manrope',sans-serif;font-size:14px;color:#fff"
+        />
+      </div>
+
+      <!-- City -->
+      <div style="display:flex;align-items:center;background:#191919;border-radius:12px;padding:18px;margin-bottom:0;gap:12px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <input
+          type="text"
+          placeholder="City / Locality"
+          style="flex:1;background:transparent;border:none;outline:none;font-family:'Manrope',sans-serif;font-size:14px;color:#fff"
+        />
+      </div>
+    </div>
+
+    <!-- Gap -->
+    <div style="height:8px"></div>
+
+    <!-- Bike Details -->
+    <div style="margin-bottom:24px">
+      <label style="display:block;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ababab;margin-bottom:16px">
+        BIKE DETAILS
+      </label>
+
+      <!-- Brand + Model -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+        <input
+          type="text"
+          placeholder="Brand"
+          style="width:100%;background:#191919;border-radius:12px;padding:18px;font-family:'Manrope',sans-serif;font-size:14px;color:#fff;border:none;outline:none"
+        />
+        <input
+          type="text"
+          placeholder="Model"
+          style="width:100%;background:#191919;border-radius:12px;padding:18px;font-family:'Manrope',sans-serif;font-size:14px;color:#fff;border:none;outline:none"
+        />
+      </div>
+
+      <!-- Engine CC + Experience -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <input
+          type="number"
+          placeholder="Engine CC"
+          style="width:100%;background:#191919;border-radius:12px;padding:18px;font-family:'Manrope',sans-serif;font-size:14px;color:#fff;border:none;outline:none"
+        />
+        <div style="position:relative">
+          <select style="width:100%;background:#191919;border-radius:12px;padding:18px;font-family:'Manrope',sans-serif;font-size:14px;color:#fff;border:none;outline:none;appearance:none;-webkit-appearance:none;cursor:pointer">
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+            <option value="expert">Expert</option>
+          </select>
+          <div style="position:absolute;right:16px;top:50%;transform:translateY(-50%);pointer-events:none">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ababab" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Photo Card -->
+    <div style="height:120px;background:#191919;border-radius:12px;overflow:hidden;position:relative;margin-bottom:32px">
+      <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&auto=format&fit=crop&q=80" alt="Bike" loading="lazy" style="width:100%;height:100%;object-fit:cover;opacity:0.5" />
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;padding:16px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#E2FF3B">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+        </svg>
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;color:#fff;letter-spacing:0.5px">READY TO RIDE?</span>
+      </div>
+    </div>
+
+    <!-- Continue Button -->
+    <button style="width:100%;background:#E2FF3B;border-radius:9999px;padding:18px;border:none;font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;text-transform:uppercase;color:#000;cursor:pointer;box-shadow:0 0 32px rgba(226,255,59,0.3)" onclick="window.location.href='interests.html'">
+      CONTINUE →
+    </button>
+
+  </div>
+<script src="journey-mode.js"></script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comride — Welcome</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; margin: 0; padding: 0; }
+    a, button, [onclick] { cursor: pointer; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes likeBlip { 0%,100%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(0.88)} }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,12px)} to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .page-body { animation: slideUp 0.35s ease both; }
+
+    @keyframes heroFade {
+      from { opacity:0; letter-spacing:8px; transform:translateY(20px); }
+      to   { opacity:1; letter-spacing:-3px; transform:translateY(0); }
+    }
+    @keyframes heroFadeNormal {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes glowPulse {
+      0%,100% { opacity: 0.4; transform: scale(1); }
+      50%     { opacity: 0.7; transform: scale(1.08); }
+    }
+    @keyframes dotBlink {
+      0%,100% { opacity:1; } 50% { opacity:0.2; }
+    }
+    @keyframes logoIn {
+      from { opacity:0; transform:scale(0.8) translateY(-10px); }
+      to   { opacity:1; transform:scale(1) translateY(0); }
+    }
+    @keyframes statIn {
+      from { opacity:0; transform:translateY(12px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes btnGlow {
+      0%,100% { box-shadow: 0 4px 24px rgba(226,255,59,0.35); }
+      50%     { box-shadow: 0 4px 48px rgba(226,255,59,0.65); }
+    }
+
+    body {
+      background: #000; color: #fff;
+      font-family: 'Manrope', sans-serif;
+      min-height: 100vh; -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .splash-wrap {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+    }
+
+    /* Background image */
+    .bg-image {
+      position: absolute; inset: 0;
+      overflow: hidden;
+    }
+    .bg-image img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center;
+      opacity: 0.55;
+    }
+    /* Secondary image overlay strip */
+    .bg-image-secondary {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&auto=format&fit=crop&q=80');
+      background-size: cover; background-position: center top;
+      opacity: 0.12;
+      mix-blend-mode: screen;
+    }
+    /* Gradient overlay */
+    .bg-gradient {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.5) 0%,
+        rgba(0,0,0,0.1) 30%,
+        rgba(0,0,0,0.6) 65%,
+        rgba(0,0,0,0.98) 100%
+      );
+    }
+    /* Glow blob */
+    .glow-blob {
+      position: absolute; top: -80px; left: 50%;
+      transform: translateX(-50%);
+      width: 320px; height: 320px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(226,255,59,0.18) 0%, transparent 70%);
+      animation: glowPulse 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    /* Content */
+    .splash-content {
+      position: relative; z-index: 10;
+      display: flex; flex-direction: column;
+      min-height: 100vh; padding: 0 24px;
+      max-width: 390px; margin: 0 auto; width: 100%;
+    }
+
+    /* Logo */
+    .logo-area {
+      padding-top: 60px; margin-bottom: auto;
+      animation: logoIn 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s both;
+    }
+
+    /* Live pill */
+    .live-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(226,255,59,0.1); border: 1px solid rgba(226,255,59,0.3);
+      border-radius: 9999px; padding: 6px 14px;
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 10px;
+      letter-spacing: 2px; color: #E2FF3B; text-transform: uppercase;
+      margin-bottom: 20px;
+      animation: statIn 0.6s ease 0.4s both;
+    }
+    .live-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #E2FF3B;
+      animation: dotBlink 1.2s ease infinite;
+    }
+
+    /* Hero heading */
+    .hero-heading {
+      font-family: 'Space Grotesk', sans-serif; font-weight: 800;
+      line-height: 1.0; text-transform: uppercase; margin-bottom: 16px;
+    }
+    .hero-word-1 {
+      display: block; font-size: 72px; color: #fff;
+      animation: heroFade 0.8s cubic-bezier(0.22,1,0.36,1) 0.2s both;
+    }
+    .hero-word-2 {
+      display: block; font-size: 72px; color: #E2FF3B;
+      animation: heroFade 0.8s cubic-bezier(0.22,1,0.36,1) 0.38s both;
+    }
+    .hero-word-3 {
+      display: block; font-size: 36px; color: rgba(255,255,255,0.5);
+      letter-spacing: 0.05em;
+      animation: heroFadeNormal 0.8s cubic-bezier(0.22,1,0.36,1) 0.55s both;
+    }
+
+    /* Subtitle */
+    .hero-sub {
+      font-family: 'Manrope', sans-serif; font-size: 15px;
+      color: rgba(255,255,255,0.6); line-height: 1.6; margin-bottom: 32px;
+      animation: statIn 0.6s ease 0.65s both;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: flex; gap: 0; margin-bottom: 40px;
+      animation: statIn 0.6s ease 0.75s both;
+    }
+    .stat-item {
+      flex: 1; text-align: center; padding: 16px 8px;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .stat-item:first-child { border-left: 1px solid rgba(255,255,255,0.08); }
+    .stat-val {
+      font-family: 'Space Grotesk', sans-serif; font-weight: 800;
+      font-size: 22px; color: #E2FF3B; line-height: 1;
+    }
+    .stat-label {
+      font-family: 'Manrope', sans-serif; font-weight: 700;
+      font-size: 9px; color: rgba(255,255,255,0.4);
+      letter-spacing: 1.5px; text-transform: uppercase; margin-top: 4px;
+    }
+
+    /* CTA buttons */
+    .cta-area {
+      padding-bottom: 48px;
+      animation: statIn 0.6s ease 0.85s both;
+    }
+    .btn-primary {
+      display: block; width: 100%;
+      background: #E2FF3B; color: #000;
+      border: none; border-radius: 14px; padding: 18px;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 800;
+      font-size: 16px; letter-spacing: 0.06em; text-transform: uppercase;
+      cursor: pointer; text-align: center; text-decoration: none;
+      animation: btnGlow 2.5s ease infinite;
+      transition: opacity 0.15s, transform 0.1s;
+      margin-bottom: 14px;
+    }
+    .btn-primary:active { transform: scale(0.97); }
+    .btn-secondary {
+      display: block; width: 100%; background: transparent;
+      border: 1px solid rgba(255,255,255,0.18); border-radius: 14px; padding: 16px;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+      font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.7); cursor: pointer; text-align: center;
+      text-decoration: none; transition: border-color 0.15s, color 0.15s;
+      margin-bottom: 20px;
+    }
+    .btn-secondary:hover { border-color: rgba(226,255,59,0.4); color: #E2FF3B; }
+
+    .terms-text {
+      text-align: center; font-family: 'Manrope', sans-serif;
+      font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.6;
+    }
+    .terms-text a { color: rgba(226,255,59,0.6); text-decoration: none; }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute; bottom: 160px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      animation: statIn 1s ease 1.2s both;
+      pointer-events: none;
+    }
+    .scroll-hint-text {
+      font-family: 'Manrope', sans-serif; font-size: 9px; color: rgba(255,255,255,0.25);
+      letter-spacing: 2px; text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+<div class="splash-wrap">
+  <div class="bg-image">
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&auto=format&fit=crop&q=85" alt="" loading="lazy" />
+    <div class="bg-image-secondary"></div>
+  </div>
+  <div class="bg-gradient"></div>
+  <div class="glow-blob"></div>
+
+  <div class="splash-content page-body">
+
+    <!-- Logo -->
+    <div class="logo-area">
+      <img src="comride.svg" alt="Comride" style="height:28px;width:auto;filter:brightness(0) invert(1)" />
+    </div>
+
+    <!-- Hero -->
+    <div style="margin-top:auto;padding-bottom:12px">
+      <div class="live-pill">
+        <div class="live-dot"></div>
+        128 RIDERS LIVE NOW
+      </div>
+
+      <div class="hero-heading">
+        <span class="hero-word-1">RIDE</span>
+        <span class="hero-word-2">TOGETHER</span>
+        <span class="hero-word-3">GO FURTHER</span>
+      </div>
+
+      <p class="hero-sub">
+        Find your tribe, plan epic routes, and experience the road like never before. Join India's fastest-growing riding community.
+      </p>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="stat-val">50K+</div>
+          <div class="stat-label">RIDERS</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val">2.4K</div>
+          <div class="stat-label">RIDES</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val">128</div>
+          <div class="stat-label">LIVE NOW</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTAs -->
+    <div class="cta-area">
+      <a class="btn-primary" onclick="location.href='login.html'">GET STARTED →</a>
+      <a class="btn-secondary" onclick="location.href='login.html'">SIGN IN TO YOUR ACCOUNT</a>
+      <p class="terms-text">
+        By continuing you agree to our <a href="#" onclick="showToast('Terms coming soon')">Terms of Service</a>
+        and <a href="#" onclick="showToast('Privacy policy coming soon')">Privacy Policy</a>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('a,button,[onclick]').forEach(function(el){
+    el.addEventListener('mousedown',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+    el.addEventListener('mouseup',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    el.addEventListener('mouseleave',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    el.addEventListener('touchstart',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+    el.addEventListener('touchend',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    el.addEventListener('touchcancel',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+  });
+  window.showToast=function(msg,isError){
+    document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
+    const t=document.createElement('div');
+    t.className='toast-msg';t.textContent=msg;
+    t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),2200);
+  };
+</script>
+<script src="journey-mode.js"></script>
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Comride — Trip Day</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23000'/><circle cx='16' cy='16' r='8' fill='%23E2FF3B'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    a, button, [onclick] { cursor: pointer; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes likeBlip { 0%,100%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(0.88)} }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,12px)} to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .page-body { animation: slideUp 0.35s ease both; }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: #000;
+      color: #fff;
+      font-family: 'Manrope', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior: none;
+    }
+    ::selection { background: #E2FF3B; color: #2A3000; }
+    a { text-decoration: none; color: inherit; }
+    button { border: none; cursor: pointer; background: none; }
+
+    body { overflow-x: hidden; }
+    ::-webkit-scrollbar { display: none; }
+    * { scrollbar-width: none; }
+
+    .toggle-switch {
+      position: relative; width: 44px; height: 24px; border-radius: 9999px;
+      cursor: pointer; transition: background 0.2s ease; flex-shrink: 0;
+    }
+    .toggle-switch.on { background: #E2FF3B; }
+    .toggle-switch.off { background: rgba(255,255,255,0.15); }
+    .toggle-knob {
+      position: absolute; top: 3px; width: 18px; height: 18px;
+      border-radius: 50%; background: #000; transition: left 0.2s ease;
+    }
+    .toggle-switch.on .toggle-knob { left: calc(100% - 21px); background: #000; }
+    .toggle-switch.off .toggle-knob { left: 3px; background: rgba(255,255,255,0.6); }
+
+    .feature-row { transition: background 0.15s ease; }
+    .feature-row:active { background: #1a1a1a !important; }
+    .rider-mini-row:active { background: rgba(255,255,255,0.04); }
+
+    @keyframes pulse-lime {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.85); }
+    }
+    .lime-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #E2FF3B;
+      animation: pulse-lime 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes glow-pulse {
+      0%, 100% { box-shadow: 0 0 24px rgba(226,255,59,0.4); }
+      50% { box-shadow: 0 0 40px rgba(226,255,59,0.7); }
+    }
+    #slide-btn-container { animation: glow-pulse 2.5s ease-in-out infinite; }
+    #slide-btn-container.activated { animation: none; }
+
+    /* SOS Sheet */
+    #sos-backdrop { position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:490;display:none;animation:fadeIn 0.2s ease; }
+    #sos-sheet { position:fixed;bottom:0;left:0;right:0;background:#111;border-radius:20px 20px 0 0;z-index:500;padding:24px 16px 48px;animation:sheetUp 0.3s ease; }
+  </style>
+</head>
+<body class="page-body" style="background:#000;color:#fff;padding-bottom:100px;">
+
+  <!-- OVERLAY HEADER -->
+  <div style="position:absolute;top:0;left:0;right:0;z-index:10;padding:16px 16px;display:flex;align-items:center;justify-content:space-between;width:100%;">
+    <a href="ride-tab.html" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);border-radius:50%;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);" aria-label="Go back">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </a>
+    <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#E2FF3B;letter-spacing:2px;">TRIP DAY</span>
+    <span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:rgba(255,255,255,0.6);">Asphalt Fix</span>
+  </div>
+
+  <!-- HERO SECTION -->
+  <div style="position:relative;height:280px;overflow:hidden;" onclick="location.href='tracking.html'">
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop&q=80" alt="Ride Hero" loading="lazy" style="width:100%;height:280px;object-fit:cover;display:block;" />
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.9) 80%, #000 100%);"></div>
+    <div style="position:absolute;bottom:20px;left:16px;right:16px;">
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;color:#E2FF3B;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;">TODAY IS THE DAY</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:32px;color:#fff;line-height:1.1;margin-bottom:6px;">Asphalt Fix</div>
+      <div style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:4px;">Bangalore → Baga Beach, Goa</div>
+      <div style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.45);display:flex;align-items:center;gap:6px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:0.6"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        15 Feb 2021 · 5:30 AM Start
+      </div>
+    </div>
+    <!-- Map tap hint -->
+    <div style="position:absolute;top:60px;right:12px;background:rgba(226,255,59,0.15);border:1px solid rgba(226,255,59,0.3);border-radius:8px;padding:5px 10px;pointer-events:none;">
+      <span style="font-family:'Manrope',sans-serif;font-size:10px;color:#E2FF3B;font-weight:700;">TAP TO TRACK</span>
+    </div>
+  </div>
+
+  <!-- COMRADES READY ROW -->
+  <div style="background:#000;padding:16px;">
+    <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:rgba(255,255,255,0.45);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;">12 RIDERS READY</div>
+    <div style="display:flex;align-items:center;">
+      <div onclick="location.href='comrade-profile.html'" style="width:44px;height:44px;border-radius:50%;border:2px solid #000;overflow:hidden;flex-shrink:0;z-index:6;cursor:pointer;"><img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=400&auto=format&fit=crop&q=80" alt="Rider 1" loading="lazy" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div onclick="location.href='comrade-profile.html'" style="width:44px;height:44px;border-radius:50%;border:2px solid #000;overflow:hidden;flex-shrink:0;margin-left:-12px;z-index:5;cursor:pointer;"><img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80" alt="Rider 2" loading="lazy" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div onclick="location.href='comrade-profile.html'" style="width:44px;height:44px;border-radius:50%;border:2px solid #000;overflow:hidden;flex-shrink:0;margin-left:-12px;z-index:4;cursor:pointer;"><img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=400&auto=format&fit=crop&q=80" alt="Rider 3" loading="lazy" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div onclick="location.href='comrade-profile.html'" style="width:44px;height:44px;border-radius:50%;border:2px solid #000;overflow:hidden;flex-shrink:0;margin-left:-12px;z-index:3;cursor:pointer;"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=80" alt="Rider 4" loading="lazy" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div onclick="location.href='comrade-profile.html'" style="width:44px;height:44px;border-radius:50%;border:2px solid #000;overflow:hidden;flex-shrink:0;margin-left:-12px;z-index:2;cursor:pointer;"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80" alt="Rider 5" loading="lazy" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div style="width:44px;height:44px;border-radius:50%;border:2px solid #000;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:-12px;z-index:1;">
+        <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:rgba(255,255,255,0.7);">+7</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE TO START -->
+  <div style="margin:4px 16px 20px;">
+    <div id="slide-btn-container" style="height:70px;background:#111;border-radius:9999px;position:relative;overflow:hidden;cursor:pointer;user-select:none;-webkit-user-select:none;">
+      <span style="position:absolute;width:100%;text-align:center;line-height:70px;font-family:'Manrope',sans-serif;font-weight:600;font-size:14px;color:rgba(255,255,255,0.3);pointer-events:none;z-index:1;letter-spacing:0.02em;">SLIDE TO START RIDE →</span>
+      <div id="slide-thumb" style="position:absolute;left:4px;top:4px;width:62px;height:62px;border-radius:50%;background:#E2FF3B;display:flex;align-items:center;justify-content:center;z-index:2;">
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;color:#000;line-height:1;">→</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK INFO GRID -->
+  <div style="background:#111;border-radius:16px;margin:0 16px 16px;overflow:hidden;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;">
+      <div style="padding:16px 16px 14px;border-bottom:1px solid rgba(255,255,255,0.07);border-right:1px solid rgba(255,255,255,0.07);">
+        <div style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);font-weight:500;margin-bottom:6px;">ETA to first stop</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:#fff;">2h 15min</div>
+      </div>
+      <div style="padding:16px 16px 14px;border-bottom:1px solid rgba(255,255,255,0.07);">
+        <div style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);font-weight:500;margin-bottom:6px;">Distance today</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:#fff;">180 KM</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;">
+      <div style="padding:14px 16px 16px;border-right:1px solid rgba(255,255,255,0.07);">
+        <div style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);font-weight:500;margin-bottom:6px;">Weather</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#fff;line-height:1.2;">&#9729; 24°C<br/><span style="font-size:12px;font-weight:500;color:rgba(255,255,255,0.6);font-family:'Manrope',sans-serif;">Partly Cloudy</span></div>
+      </div>
+      <div style="padding:14px 16px 16px;">
+        <div style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);font-weight:500;margin-bottom:6px;">Fuel stops</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:#fff;">2 <span style="font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);font-family:'Manrope',sans-serif;">planned</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ON-ROAD FEATURES -->
+  <div style="padding:0 16px;margin-bottom:8px;">
+    <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">RIDE FEATURES</div>
+
+    <!-- SOS Button -->
+    <div class="feature-row" onclick="showSOS()" style="background:#111;border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;">
+      <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
+        <div style="width:38px;height:38px;border-radius:10px;background:rgba(255,77,77,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff4d4d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div style="min-width:0;">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin-bottom:2px;">SOS Button</div>
+          <div style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);">One tap emergency alert</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,77,77,0.15);color:#ff4d4d;border:1px solid rgba(255,77,77,0.3);border-radius:9999px;padding:4px 10px;font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;letter-spacing:0.5px;flex-shrink:0;">ACTIVE</div>
+    </div>
+
+    <!-- Live Location -->
+    <div class="feature-row" style="background:#111;border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
+        <div style="width:38px;height:38px;border-radius:10px;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
+        </div>
+        <div style="min-width:0;">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin-bottom:2px;">Live Location</div>
+          <div style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);">Share with comrades</div>
+        </div>
+      </div>
+      <div class="toggle-switch on" id="toggle-1" onclick="toggleSwitch('toggle-1')" role="switch" aria-checked="true"><div class="toggle-knob"></div></div>
+    </div>
+
+    <!-- MR Catchup -->
+    <div class="feature-row" style="background:#111;border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
+        <div style="width:38px;height:38px;border-radius:10px;background:rgba(226,255,59,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="#E2FF3B" stroke="none"/></svg>
+        </div>
+        <div style="min-width:0;">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin-bottom:2px;">MR Catchup</div>
+          <div style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);">Group location sync</div>
+        </div>
+      </div>
+      <div class="toggle-switch on" id="toggle-2" onclick="toggleSwitch('toggle-2')" role="switch" aria-checked="true"><div class="toggle-knob"></div></div>
+    </div>
+
+    <!-- Breakdown SOS -->
+    <div class="feature-row" style="background:#111;border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
+        <div style="width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <div style="min-width:0;">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:rgba(255,255,255,0.55);margin-bottom:2px;">Breakdown SOS</div>
+          <div style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.3);">Alert nearby riders</div>
+        </div>
+      </div>
+      <div class="toggle-switch off" id="toggle-3" onclick="toggleSwitch('toggle-3')" role="switch" aria-checked="false"><div class="toggle-knob"></div></div>
+    </div>
+  </div>
+
+  <!-- NEARBY RIDERS CARD -->
+  <div style="margin:0 16px 20px;background:#191919;border-radius:14px;padding:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;">NEARBY RIDERS</span>
+      <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;color:#E2FF3B;">3 within 5km</span>
+    </div>
+
+    <div class="rider-mini-row" onclick="location.href='comrade-profile.html'" style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;">
+      <div style="width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;"><img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80" alt="Rider" loading="lazy" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:#fff;">Rahul Menon</div>
+        <div style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin-top:1px;">2.1 km away</div>
+      </div>
+      <div class="lime-dot"></div>
+    </div>
+
+    <div class="rider-mini-row" onclick="location.href='comrade-profile.html'" style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;">
+      <div style="width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=80" alt="Rider" loading="lazy" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:#fff;">Priya Sharma</div>
+        <div style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin-top:1px;">3.5 km away</div>
+      </div>
+      <div class="lime-dot" style="animation-delay:0.4s;"></div>
+    </div>
+
+    <div class="rider-mini-row" onclick="location.href='comrade-profile.html'" style="display:flex;align-items:center;gap:10px;padding:8px 0;cursor:pointer;">
+      <div style="width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80" alt="Rider" loading="lazy" style="width:100%;height:100%;object-fit:cover;" /></div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:#fff;">Arjun Nair</div>
+        <div style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin-top:1px;">4.8 km away</div>
+      </div>
+      <div class="lime-dot" style="animation-delay:0.8s;"></div>
+    </div>
+  </div>
+
+  <!-- END RIDE BUTTON -->
+  <div style="padding:0 16px 20px;">
+    <button onclick="location.href='end-ride.html'" style="width:100%;height:48px;background:transparent;border:1px solid rgba(255,77,77,0.4);border-radius:12px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#ff4d4d;letter-spacing:0.05em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+      END RIDE
+    </button>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav style="position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-around;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);height:80px;z-index:100;padding:0 8px;">
+    <a href="home.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45);">Explore</span></div></a>
+    <a href="ride-tab.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(226,255,59,0.1);border-radius:9999px;padding:6px 16px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><circle cx="7" cy="17" r="1.5" fill="currentColor" stroke="none"/><circle cx="17" cy="17" r="1.5" fill="currentColor" stroke="none"/><line x1="2" y1="11" x2="22" y2="11"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B;letter-spacing:0.02em;">Ride</span></div></a>
+    <a href="marketplace.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45);">Shop</span></div></a>
+    <a href="profile-setup.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45);">Profile</span></div></a>
+  </nav>
+
+  <!-- SOS SHEET -->
+  <div id="sos-backdrop" onclick="closeSOS()"></div>
+  <div id="sos-sheet" style="display:none;">
+    <div style="width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 20px;"></div>
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,77,77,0.15);border:2px solid rgba(255,77,77,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff4d4d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;color:#fff;margin-bottom:6px;">EMERGENCY SOS</div>
+      <div style="font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);">This will alert all nearby riders and emergency contacts.</div>
+    </div>
+    <button onclick="triggerSOS()" style="width:100%;height:56px;background:#ff4d4d;color:#fff;border:none;border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;letter-spacing:0.05em;cursor:pointer;margin-bottom:10px;">SEND EMERGENCY ALERT</button>
+    <button onclick="closeSOS()" style="width:100%;height:48px;background:#191919;border:none;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:rgba(255,255,255,0.6);cursor:pointer;">Cancel</button>
+  </div>
+
+  <script>
+    // Slide to Start
+    var slideActivated = false;
+    (function() {
+      var thumb = document.getElementById('slide-thumb');
+      var container = document.getElementById('slide-btn-container');
+      var isDragging = false;
+      var startX = 0;
+
+      function onDragStart(e) {
+        if (slideActivated) return;
+        isDragging = true;
+        startX = (e.touches ? e.touches[0].clientX : e.clientX);
+        thumb.style.transition = 'none';
+        e.preventDefault && e.preventDefault();
+      }
+
+      function onDragMove(e) {
+        if (!isDragging || slideActivated) return;
+        var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        var delta = clientX - startX;
+        var maxX = container.offsetWidth - 62 - 8;
+        var clampedX = Math.max(0, Math.min(delta, maxX));
+        thumb.style.transform = 'translateX(' + clampedX + 'px)';
+        container.style.opacity = 1 - clampedX / maxX * 0.5;
+        if (clampedX >= maxX * 0.85) {
+          isDragging = false;
+          onComplete(maxX);
+        }
+      }
+
+      function onDragEnd(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        thumb.style.transition = 'transform 0.35s cubic-bezier(0.4,0,0.2,1)';
+        thumb.style.transform = 'translateX(0)';
+        container.style.opacity = '';
+      }
+
+      function onComplete(maxX) {
+        slideActivated = true;
+        thumb.style.transition = 'transform 0.3s ease';
+        thumb.style.transform = 'translateX(' + maxX + 'px)';
+        container.style.background = '#E2FF3B';
+        container.classList.add('activated');
+        showToast('Ride started! 🏍️');
+        setTimeout(function() { location.href = 'tracking.html'; }, 700);
+      }
+
+      // Also handle simple click/tap on container
+      container.addEventListener('click', function(e) {
+        if (slideActivated) return;
+        if (e.target === container) {
+          var maxX = container.offsetWidth - 62 - 8;
+          onComplete(maxX);
+        }
+      });
+
+      thumb.addEventListener('mousedown', onDragStart);
+      thumb.addEventListener('touchstart', onDragStart, { passive: false });
+      document.addEventListener('mousemove', onDragMove);
+      document.addEventListener('touchmove', onDragMove, { passive: false });
+      document.addEventListener('mouseup', onDragEnd);
+      document.addEventListener('touchend', onDragEnd);
+    })();
+
+    // Toggle Switches
+    function toggleSwitch(id) {
+      var el = document.getElementById(id);
+      var isOn = el.classList.contains('on');
+      el.classList.toggle('on', !isOn);
+      el.classList.toggle('off', isOn);
+      el.setAttribute('aria-checked', String(!isOn));
+      showToast(isOn ? 'Feature disabled' : 'Feature enabled');
+    }
+
+    // SOS
+    function showSOS() {
+      document.getElementById('sos-backdrop').style.display = 'block';
+      document.getElementById('sos-sheet').style.display = 'block';
+    }
+    function closeSOS() {
+      document.getElementById('sos-backdrop').style.display = 'none';
+      document.getElementById('sos-sheet').style.display = 'none';
+    }
+    function triggerSOS() {
+      closeSOS();
+      showToast('Emergency alert sent!', true);
+    }
+  </script>
+
+  <script>
+    document.querySelectorAll('a,button,[onclick]').forEach(function(el){
+      el.addEventListener('mousedown',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+      el.addEventListener('mouseup',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('mouseleave',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('touchstart',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+      el.addEventListener('touchend',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('touchcancel',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    });
+    window.showToast=function(msg,isError){
+      document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
+      const t=document.createElement('div');
+      t.className='toast-msg';t.textContent=msg;
+      t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(),2200);
+    };
+  </script>
+
+<script src="journey-mode.js"></script>
+</body>
+</html>

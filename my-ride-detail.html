@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comride — My Ride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    a, button, [onclick] { cursor: pointer; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes likeBlip { 0%,100%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(0.88)} }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,12px)} to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .page-body { animation: slideUp 0.35s ease both; }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { background: #000; color: #fff; font-family: 'Manrope', sans-serif; min-height: 100vh; }
+
+    .hero { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; }
+    .hero img.hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .hero-gradient { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.1) 100%); }
+    .overlay-header { position: absolute; top: 0; left: 0; right: 0; z-index: 10; padding: 16px; display: flex; align-items: center; justify-content: space-between; }
+    .back-btn { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.12); text-decoration: none; cursor: pointer; }
+    .edit-ride-link { font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 14px; color: #E2FF3B; text-decoration: none; letter-spacing: 0.1px; }
+    .hero-icons { position: absolute; top: 64px; right: 16px; z-index: 10; display: flex; flex-direction: column; gap: 10px; }
+    .hero-icon-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .hero-bottom { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 18px 20px; }
+    .hero-title { font-family: 'Space Grotesk', sans-serif; font-weight: 800; font-size: 28px; color: #fff; line-height: 1.1; letter-spacing: -0.5px; margin: 0; }
+    .main { max-width: 390px; margin: 0 auto; padding: 0 0 200px; }
+    .section-label { display: flex; align-items: center; gap: 12px; padding: 24px 16px 14px; }
+    .section-label-line { height: 1px; width: 24px; background: rgba(255,255,255,0.15); flex-shrink: 0; }
+    .section-label-text { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.5); white-space: nowrap; }
+    .details-card { background: #111; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; margin: 0 16px; overflow: hidden; }
+    .detail-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 1.8px; text-transform: uppercase; color: rgba(255,255,255,0.5); flex-shrink: 0; }
+    .detail-value { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px; color: #fff; text-align: right; }
+    .detail-value-accent { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px; color: #E2FF3B; text-align: right; }
+    .stats-row { display: flex; align-items: center; justify-content: center; gap: 0; background: #111; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; margin: 16px 16px 0; padding: 16px 0; }
+    .stat-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .stat-divider { width: 1px; height: 32px; background: rgba(255,255,255,0.1); flex-shrink: 0; }
+    .stat-value { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; color: #fff; letter-spacing: -0.3px; }
+    .stat-label { font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+    .map-placeholder { background: #191919; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; margin: 16px 16px 0; height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; position: relative; overflow: hidden; cursor: pointer; transition: background 0.15s; }
+    .map-placeholder:hover { background: #222; }
+    .map-grid-line { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 32px 32px; }
+    .map-icon-wrap { position: relative; z-index: 1; width: 48px; height: 48px; border-radius: 50%; background: rgba(226,255,59,0.08); border: 1px solid rgba(226,255,59,0.2); display: flex; align-items: center; justify-content: center; }
+    .map-detail-btn { position: relative; z-index: 1; background: transparent; border: 1px solid rgba(226,255,59,0.35); border-radius: 20px; padding: 8px 20px; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.5px; color: #E2FF3B; cursor: pointer; }
+    .comrades-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 0 16px; }
+    .comrade-card { background: #111; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 12px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: border-color 0.2s; }
+    .comrade-card:hover { border-color: rgba(226,255,59,0.35); }
+    .comrade-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.1); }
+    .comrade-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 11px; color: #fff; text-align: center; letter-spacing: 0.2px; }
+    .comrade-stars { display: flex; gap: 3px; align-items: center; }
+    .star-dot { width: 5px; height: 5px; border-radius: 50%; background: #E2FF3B; }
+    .star-dot-empty { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.15); }
+    .admin-post-card { background: #111; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; margin: 0 16px; padding: 18px; }
+    .admin-post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .admin-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #E2FF3B; flex-shrink: 0; cursor: pointer; }
+    .admin-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 13px; color: #fff; letter-spacing: -0.2px; }
+    .admin-role-badge { display: inline-block; background: rgba(226,255,59,0.1); border: 1px solid rgba(226,255,59,0.25); border-radius: 20px; padding: 2px 8px; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #E2FF3B; margin-top: 2px; }
+    .admin-post-body { font-family: 'Manrope', sans-serif; font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.7); margin-bottom: 16px; }
+    .ride-rules-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+    .rule-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+    .rule-dot { width: 6px; height: 6px; border-radius: 50%; background: #E2FF3B; margin-top: 6px; flex-shrink: 0; }
+    .rule-text { font-family: 'Manrope', sans-serif; font-size: 12px; line-height: 1.6; color: rgba(255,255,255,0.6); }
+    .photos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 0 16px; }
+    .photo-cell { aspect-ratio: 1 / 1; border-radius: 10px; overflow: hidden; background: #191919; }
+    .photo-cell img { width: 100%; height: 100%; object-fit: cover; }
+    .owner-actions { position: fixed; bottom: 80px; left: 0; right: 0; padding: 12px 16px; background: #000; border-top: 1px solid rgba(255,255,255,0.08); z-index: 90; max-width: 390px; margin: 0 auto; }
+    .btn-share { width: 100%; background: #E2FF3B; color: #000; border: none; border-radius: 12px; height: 52px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 0.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-delete { width: 100%; background: transparent; border: none; color: #ff4444; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; text-align: center; padding: 12px; margin-top: 4px; cursor: pointer; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-around; background: rgba(14,14,14,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.08); padding: 12px 0 24px; z-index: 100; }
+    .nav-label-inactive { color: rgba(255,255,255,0.35); }
+    .nav-label-active { color: #E2FF3B; }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.75); } }
+
+    /* Quick action buttons */
+    .quick-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 0 16px; }
+    .quick-btn { background: #111; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 8px; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: border-color 0.2s, background 0.15s; }
+    .quick-btn:hover { border-color: rgba(226,255,59,0.35); background: rgba(226,255,59,0.04); }
+    .quick-btn-label { font-family: 'Manrope', sans-serif; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.7); text-align: center; }
+
+    /* Share sheet */
+    #share-backdrop { position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:490;display:none;animation:fadeIn 0.2s ease; }
+    #share-sheet { position:fixed;bottom:0;left:0;right:0;background:#111;border-radius:20px 20px 0 0;z-index:500;padding:20px 16px 40px;animation:sheetUp 0.3s ease; }
+  </style>
+</head>
+<body>
+
+  <div class="main page-body">
+
+    <!-- HERO IMAGE SECTION -->
+    <div class="hero">
+      <img class="hero-img" src="https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&auto=format&fit=crop&q=80" loading="lazy" alt="Asphalt Fix hero" />
+      <div class="hero-gradient"></div>
+
+      <div class="overlay-header">
+        <a href="ride-tab.html" class="back-btn" aria-label="Back">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </a>
+        <a href="create-ride-modes.html" class="edit-ride-link">Edit Ride</a>
+      </div>
+
+      <!-- Action icons top-right -->
+      <div class="hero-icons">
+        <div class="hero-icon-btn" onclick="toggleRideLike()" title="Like">
+          <svg id="like-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <div class="hero-icon-btn" onclick="openShareSheet()" title="Share">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </div>
+      </div>
+
+      <div class="hero-bottom">
+        <h1 class="hero-title">Asphalt Fix</h1>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="section-label">
+      <div class="section-label-line"></div>
+      <span class="section-label-text">Manage Ride</span>
+    </div>
+    <div class="quick-actions">
+      <div class="quick-btn" onclick="location.href='tracking.html'">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
+        <span class="quick-btn-label">Track</span>
+      </div>
+      <div class="quick-btn" onclick="location.href='chat.html'">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span class="quick-btn-label">Chat</span>
+      </div>
+      <div class="quick-btn" onclick="location.href='admin-ride.html'">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="quick-btn-label">Admin</span>
+      </div>
+    </div>
+
+    <!-- START RIDE BUTTON -->
+    <div style="margin:16px 16px 0;">
+      <button onclick="location.href='trip-start.html'" style="width:100%;height:48px;background:rgba(226,255,59,0.12);border:1px solid rgba(226,255,59,0.4);border-radius:12px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B;letter-spacing:0.05em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#E2FF3B"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        START RIDE
+      </button>
+    </div>
+
+    <!-- SECTION: Details -->
+    <div class="section-label">
+      <div class="section-label-line"></div>
+      <span class="section-label-text">Ride Details</span>
+    </div>
+
+    <div class="details-card">
+      <div class="detail-row"><span class="detail-label">Ride To</span><span class="detail-value">Baga Beach, Goa</span></div>
+      <div class="detail-row"><span class="detail-label">Ride From</span><span class="detail-value">Indiranagar, Bangalore</span></div>
+      <div class="detail-row"><span class="detail-label">Date</span><span class="detail-value">15 – 21 Feb 2021</span></div>
+      <div class="detail-row"><span class="detail-label">Starting Time</span><span class="detail-value">5:30 AM</span></div>
+      <div class="detail-row"><span class="detail-label">No. of Riders</span><span class="detail-value">20</span></div>
+      <div class="detail-row"><span class="detail-label">Cost</span><span class="detail-value-accent">₹2750/–</span></div>
+    </div>
+
+    <!-- STATS ROW -->
+    <div class="stats-row">
+      <div class="stat-item"><span class="stat-value">350 KM</span><span class="stat-label">Distance</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-value">2 Stops</span><span class="stat-label">Waypoints</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-value">6 hr/day</span><span class="stat-label">Riding</span></div>
+    </div>
+
+    <!-- SECTION: Map -->
+    <div class="section-label">
+      <div class="section-label-line"></div>
+      <span class="section-label-text">Route Map</span>
+    </div>
+
+    <div class="map-placeholder" onclick="location.href='route-builder.html'" style="position:relative;overflow:hidden;">
+      <img src="https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=600&auto=format&fit=crop&q=80" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" alt="Route map" />
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,0.55);"></div>
+      <div class="map-grid-line"></div>
+      <div class="map-icon-wrap" style="position:relative;z-index:1;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+      </div>
+      <button class="map-detail-btn" style="position:relative;z-index:1;">View Detailed Map →</button>
+    </div>
+
+    <!-- SECTION: Comrades -->
+    <div class="section-label">
+      <div class="section-label-line"></div>
+      <span class="section-label-text">Comrades (20)</span>
+    </div>
+
+    <div class="comrades-grid">
+      <div class="comrade-card" onclick="location.href='comrade-profile.html'">
+        <img class="comrade-avatar" src="images/profile/1.avif" alt="Rider" />
+        <span class="comrade-name">MOTO_ARUN</span>
+        <div class="comrade-stars"><div class="star-dot"></div><div class="star-dot"></div><div class="star-dot"></div><div class="star-dot"></div><div class="star-dot-empty"></div></div>
+      </div>
+      <div class="comrade-card" onclick="location.href='comrade-profile.html'">
+        <img class="comrade-avatar" src="images/profile/2.avif" alt="Rider" />
+        <span class="comrade-name">BLADE_RIYA</span>
+        <div class="comrade-stars"><div class="star-dot"></div><div class="star-dot"></div><div class="star-dot"></div><div class="star-dot-empty"></div><div class="star-dot-empty"></div></div>
+      </div>
+      <div class="comrade-card" onclick="location.href='comrade-profile.html'">
+        <img class="comrade-avatar" src="images/profile/3.avif" alt="Rider" />
+        <span class="comrade-name">VOLT_KARIM</span>
+        <div class="comrade-stars"><div class="star-dot"></div><div class="star-dot"></div><div class="star-dot"></div><div class="star-dot"></div><div class="star-dot"></div></div>
+      </div>
+      <div class="comrade-card" onclick="location.href='comrade-profile.html'">
+        <img class="comrade-avatar" src="images/profile/4.avif" alt="Rider" />
+        <span class="comrade-name">GHOST_PRIYA</span>
+        <div class="comrade-stars"><div class="star-dot"></div><div class="star-dot"></div><div class="star-dot"></div><div class="star-dot"></div><div class="star-dot-empty"></div></div>
+      </div>
+      <div class="comrade-card" onclick="location.href='comrade-profile.html'">
+        <img class="comrade-avatar" src="images/profile/5.avif" alt="Rider" />
+        <span class="comrade-name">APEX_RAJAN</span>
+        <div class="comrade-stars"><div class="star-dot"></div><div class="star-dot"></div><div class="star-dot"></div><div class="star-dot"></div><div class="star-dot"></div></div>
+      </div>
+      <div class="comrade-card" onclick="location.href='comrade-profile.html'">
+        <img class="comrade-avatar" src="images/profile/photo-1549958909-db7599598400.avif" alt="Rider" />
+        <span class="comrade-name">+15 More</span>
+        <div class="comrade-stars"><div class="star-dot-empty"></div><div class="star-dot-empty"></div><div class="star-dot-empty"></div><div class="star-dot-empty"></div><div class="star-dot-empty"></div></div>
+      </div>
+    </div>
+
+    <!-- SECTION: Admin Post -->
+    <div class="section-label">
+      <div class="section-label-line"></div>
+      <span class="section-label-text">Organiser Post</span>
+    </div>
+
+    <div class="admin-post-card">
+      <div class="admin-post-header">
+        <img class="admin-avatar" src="images/profile/1.avif" alt="Admin" onclick="location.href='comrade-profile.html'" />
+        <div>
+          <div class="admin-name">MOTO_ARUN</div>
+          <div class="admin-role-badge">Ride Organiser</div>
+        </div>
+      </div>
+      <p class="admin-post-body">Hey comrades! Super stoked to announce this coast-to-coast sprint from Bangalore to Baga. We'll be covering 350 km over 7 days with two scenic stops in between. Expect early starts, clean roads, and epic sunsets along the way. Pack light, ride tight.</p>
+      <div class="ride-rules-title">Ride Rules</div>
+      <div class="rule-item"><div class="rule-dot"></div><span class="rule-text">Helmet + riding gear mandatory at all times</span></div>
+      <div class="rule-item"><div class="rule-dot"></div><span class="rule-text">No overtaking within the group pack</span></div>
+      <div class="rule-item"><div class="rule-dot"></div><span class="rule-text">Full tank before every departure checkpoint</span></div>
+      <div class="rule-item"><div class="rule-dot"></div><span class="rule-text">WhatsApp group is mandatory for all riders</span></div>
+      <div class="rule-item"><div class="rule-dot"></div><span class="rule-text">Zero alcohol before or during the ride</span></div>
+    </div>
+
+    <!-- SECTION: Photos -->
+    <div class="section-label">
+      <div class="section-label-line"></div>
+      <span class="section-label-text">Ride Photos</span>
+    </div>
+
+    <div class="photos-grid">
+      <div class="photo-cell"><img src="images/places/2.avif" alt="" /></div>
+      <div class="photo-cell"><img src="images/bikes/1.avif" alt="" /></div>
+      <div class="photo-cell"><img src="images/places/3.avif" alt="" /></div>
+      <div class="photo-cell"><img src="images/bikes/2.avif" alt="" /></div>
+      <div class="photo-cell"><img src="images/places/4.avif" alt="" /></div>
+      <div class="photo-cell"><img src="images/bikes/3.avif" alt="" /></div>
+    </div>
+
+  </div><!-- /main -->
+
+  <!-- OWNER ACTION BUTTONS -->
+  <div class="owner-actions">
+    <button class="btn-share" onclick="openShareSheet()">
+      SHARE RIDE
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+    <button class="btn-delete" onclick="confirmDelete()">DELETE RIDE</button>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav style="position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-around;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);height:80px;z-index:100;box-sizing:border-box;padding:0 8px">
+    <a href="home.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Explore</span></div></a>
+    <a href="ride-tab.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(226,255,59,0.1);border-radius:9999px;padding:6px 16px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><circle cx="7" cy="17" r="1.5" fill="currentColor" stroke="none"/><circle cx="17" cy="17" r="1.5" fill="currentColor" stroke="none"/><line x1="2" y1="11" x2="22" y2="11"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:10px;color:#E2FF3B">Ride</span></div></a>
+    <a href="marketplace.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Shop</span></div></a>
+    <a href="profile-setup.html" style="text-decoration:none"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span style="font-family:'Manrope',sans-serif;font-weight:500;font-size:10px;color:rgba(255,255,255,0.45)">Profile</span></div></a>
+  </nav>
+
+  <!-- SHARE SHEET -->
+  <div id="share-backdrop" onclick="closeShareSheet()"></div>
+  <div id="share-sheet" style="display:none;">
+    <div style="width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 20px;"></div>
+    <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;margin-bottom:20px;">Share Ride</p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;">
+      <div onclick="closeShareSheet();showToast('Link copied!')" style="display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;">
+        <div style="width:52px;height:52px;background:#191919;border-radius:14px;display:flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+        <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">Copy Link</span>
+      </div>
+      <div onclick="closeShareSheet();showToast('Shared to WhatsApp!')" style="display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;">
+        <div style="width:52px;height:52px;background:#191919;border-radius:14px;display:flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+        <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">WhatsApp</span>
+      </div>
+      <div onclick="closeShareSheet();showToast('Shared to Instagram!')" style="display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;">
+        <div style="width:52px;height:52px;background:#191919;border-radius:14px;display:flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="#e1306c"/></svg></div>
+        <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">Instagram</span>
+      </div>
+      <div onclick="closeShareSheet();showToast('More options!')" style="display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;">
+        <div style="width:52px;height:52px;background:#191919;border-radius:14px;display:flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></div>
+        <span style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);">More</span>
+      </div>
+    </div>
+    <button onclick="closeShareSheet()" style="width:100%;height:48px;background:#191919;border:none;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:rgba(255,255,255,0.6);cursor:pointer;">Cancel</button>
+  </div>
+
+  <script>
+    function confirmDelete() {
+      if (confirm('Delete this ride? This cannot be undone.')) {
+        showToast('Ride deleted', true);
+        setTimeout(()=>location.href='ride-tab.html',1500);
+      }
+    }
+
+    var isLiked = false;
+    function toggleRideLike() {
+      isLiked = !isLiked;
+      var svg = document.getElementById('like-svg');
+      if (isLiked) {
+        svg.style.fill = '#E2FF3B';
+        svg.style.stroke = '#E2FF3B';
+        svg.style.animation = 'likeBlip 0.4s ease';
+        showToast('Added to favourites!');
+      } else {
+        svg.style.fill = 'none';
+        svg.style.stroke = '#fff';
+        svg.style.animation = '';
+      }
+    }
+
+    function openShareSheet() {
+      document.getElementById('share-backdrop').style.display = 'block';
+      document.getElementById('share-sheet').style.display = 'block';
+    }
+    function closeShareSheet() {
+      document.getElementById('share-backdrop').style.display = 'none';
+      document.getElementById('share-sheet').style.display = 'none';
+    }
+  </script>
+
+  <script>
+    document.querySelectorAll('a,button,[onclick]').forEach(function(el){
+      el.addEventListener('mousedown',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+      el.addEventListener('mouseup',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('mouseleave',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('touchstart',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+      el.addEventListener('touchend',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('touchcancel',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    });
+    window.showToast=function(msg,isError){
+      document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
+      const t=document.createElement('div');
+      t.className='toast-msg';t.textContent=msg;
+      t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(),2200);
+    };
+  </script>
+
+<script src="journey-mode.js"></script>
+</body>
+</html>

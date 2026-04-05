@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Route Builder — Comride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; margin: 0; padding: 0; }
+    a, button, [onclick] { cursor: pointer; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes likeBlip { 0%,100%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(0.88)} }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,12px)} to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .page-body { animation: slideUp 0.35s ease both; }
+
+    body { background: #000; color: #fff; font-family: 'Manrope', sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 56px; background: rgba(0,0,0,0.95);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 16px;
+    }
+    .header-back {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 10px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+      text-decoration: none; color: #fff; font-size: 18px;
+    }
+    .header-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; color: #fff; letter-spacing: 0.02em; }
+
+    .page-body { padding-top: 72px; padding-bottom: 100px; padding-left: 16px; padding-right: 16px; }
+
+    .section-label {
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 11px;
+      color: rgba(255,255,255,0.35); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
+    }
+
+    .card { background: #111; border-radius: 14px; padding: 16px; margin-bottom: 14px; }
+
+    .route-endpoint {
+      display: flex; align-items: center; gap: 12px; padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .route-endpoint:last-child { border-bottom: none; padding-bottom: 0; }
+    .endpoint-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .endpoint-input {
+      flex: 1; background: transparent; border: none; outline: none;
+      font-family: 'Manrope', sans-serif; font-size: 14px; color: #fff;
+    }
+    .endpoint-input::placeholder { color: rgba(255,255,255,0.3); }
+    .endpoint-input:focus { color: #E2FF3B; }
+
+    .add-waypoint-btn {
+      display: flex; align-items: center; gap: 8px; margin-top: 12px;
+      background: rgba(226,255,59,0.08); border: 1px dashed rgba(226,255,59,0.3);
+      border-radius: 10px; padding: 10px 14px; cursor: pointer; width: 100%;
+      font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 13px; color: #E2FF3B;
+      transition: background 0.15s;
+    }
+    .add-waypoint-btn:hover { background: rgba(226,255,59,0.12); }
+
+    /* Map */
+    #route-map {
+      width: 100%; height: 240px; border-radius: 14px; overflow: hidden;
+      position: relative; background: #0d1a00; margin-bottom: 14px;
+      border: 1px solid rgba(226,255,59,0.15); cursor: crosshair;
+    }
+    .map-bg-img {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.5;
+    }
+    .map-dark-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.45);
+    }
+    .map-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(226,255,59,0.06) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(226,255,59,0.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .map-road-h {
+      position: absolute; height: 2px; background: rgba(226,255,59,0.2);
+      left: 0; right: 0;
+    }
+    .map-road-v {
+      position: absolute; width: 2px; background: rgba(226,255,59,0.2);
+      top: 0; bottom: 0;
+    }
+    .map-label {
+      position: absolute; bottom: 12px; left: 12px;
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 10px;
+      letter-spacing: 1.5px; text-transform: uppercase; color: rgba(226,255,59,0.6);
+    }
+    .map-tap-hint {
+      position: absolute; top: 12px; right: 12px;
+      background: rgba(0,0,0,0.6); border-radius: 8px; padding: 5px 10px;
+      font-family: 'Manrope', sans-serif; font-size: 10px; color: rgba(255,255,255,0.5);
+    }
+
+    /* Stats row */
+    .stats-strip {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      background: #111; border-radius: 14px; margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .stat-cell {
+      padding: 16px; border-right: 1px solid rgba(255,255,255,0.06);
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-val { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; color: #E2FF3B; }
+    .stat-unit { font-family: 'Manrope', sans-serif; font-size: 10px; color: #ababab; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+
+    /* Ride type */
+    .type-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      border-radius: 9999px; padding: 7px 14px;
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 11px;
+      letter-spacing: 0.5px; cursor: pointer; transition: all 0.15s;
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: #ababab;
+    }
+    .type-chip[data-on="1"] { background: #E2FF3B; border-color: #E2FF3B; color: #000; }
+
+    /* Save btn */
+    .save-btn {
+      width: 100%; height: 52px; background: #E2FF3B; color: #000;
+      border-radius: 12px; border: none;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px;
+      letter-spacing: 0.06em; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(226,255,59,0.35);
+      margin-bottom: 12px; transition: opacity 0.15s, transform 0.1s;
+    }
+    .save-btn:active { transform: scale(0.98); }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; height: 80px;
+      background: rgba(0,0,0,0.95); border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: space-around; padding: 0 8px;
+    }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; flex: 1; }
+    .nav-icon-wrap { width: 40px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 10px; }
+    .nav-icon-wrap.active { background: rgba(226,255,59,0.12); }
+    .nav-label { font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 10px; color: rgba(255,255,255,0.35); }
+    .nav-label.active { color: #E2FF3B; }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="ai-suggestions.html" class="header-back">←</a>
+    <span class="header-title">ROUTE BUILDER</span>
+    <div style="width:36px"></div>
+  </header>
+
+  <main class="page-body">
+
+    <!-- MAP -->
+    <div id="route-map">
+      <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&auto=format&fit=crop&q=80" alt="" loading="lazy" class="map-bg-img" />
+      <div class="map-dark-overlay"></div>
+      <div class="map-grid"></div>
+      <div class="map-road-h" style="top:35%"></div>
+      <div class="map-road-h" style="top:65%"></div>
+      <div class="map-road-v" style="left:30%"></div>
+      <div class="map-road-v" style="left:70%"></div>
+      <!-- Start marker -->
+      <div style="position:absolute;left:28%;top:33%;transform:translate(-50%,-100%)">
+        <div style="width:12px;height:12px;border-radius:50%;background:#E2FF3B;border:2px solid #000;box-shadow:0 0 8px #E2FF3B"></div>
+      </div>
+      <!-- End marker -->
+      <div style="position:absolute;left:68%;top:63%;transform:translate(-50%,-100%)">
+        <div style="width:12px;height:12px;border-radius:50%;background:#ff4444;border:2px solid #000;box-shadow:0 0 8px #ff4444"></div>
+      </div>
+      <!-- Route line mock -->
+      <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">
+        <path d="M 110,83 Q 180,83 200,155 Q 230,170 272,151" stroke="#E2FF3B" stroke-width="2" fill="none" stroke-dasharray="6 4" opacity="0.6"/>
+      </svg>
+      <div class="map-label">TAP TO ADD WAYPOINTS</div>
+      <div class="map-tap-hint">Interactive Map</div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-strip" id="route-stats">
+      <div class="stat-cell">
+        <div class="stat-val" id="stat-dist">--</div>
+        <div class="stat-unit">KM</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-val" id="stat-elev">--</div>
+        <div class="stat-unit">ELEV M</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-val" id="stat-time">--</div>
+        <div class="stat-unit">HRS EST</div>
+      </div>
+    </div>
+
+    <!-- WAYPOINTS -->
+    <div class="section-label">ROUTE WAYPOINTS</div>
+    <div class="card">
+      <div id="waypoint-list">
+        <!-- Start -->
+        <div class="route-endpoint">
+          <div class="endpoint-dot" style="background:#E2FF3B"></div>
+          <input class="endpoint-input" placeholder="Starting point..." value="Bangalore, KR Puram"
+            onfocus="this.parentElement.style.borderColor='rgba(226,255,59,0.4)'"
+            onblur="this.parentElement.style.borderColor='rgba(255,255,255,0.06)';updateStats()" />
+        </div>
+        <!-- End -->
+        <div class="route-endpoint">
+          <div class="endpoint-dot" style="background:#ff4444"></div>
+          <input class="endpoint-input" placeholder="Destination..."
+            onfocus="this.parentElement.style.borderColor='rgba(226,255,59,0.4)'"
+            onblur="this.parentElement.style.borderColor='rgba(255,255,255,0.06)';updateStats()" />
+        </div>
+      </div>
+      <button class="add-waypoint-btn" onclick="addWaypoint()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="#E2FF3B" stroke-width="2" stroke-linecap="round"/></svg>
+        Add Stop
+      </button>
+    </div>
+
+    <!-- RIDE TYPE -->
+    <div class="section-label">RIDE TYPE</div>
+    <div class="card" style="display:flex;flex-wrap:wrap;gap:8px">
+      <span class="type-chip" data-on="1" onclick="toggleTypeChip(this)">🏔 MOUNTAIN</span>
+      <span class="type-chip" data-on="0" onclick="toggleTypeChip(this)">🌊 COASTAL</span>
+      <span class="type-chip" data-on="0" onclick="toggleTypeChip(this)">🛣 HIGHWAY</span>
+      <span class="type-chip" data-on="0" onclick="toggleTypeChip(this)">🌿 OFF-ROAD</span>
+    </div>
+
+    <!-- DIFFICULTY -->
+    <div class="section-label">DIFFICULTY</div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span style="font-family:'Manrope',sans-serif;font-size:13px;color:#fff;font-weight:600">Difficulty Level</span>
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#E2FF3B" id="diff-val">Moderate</span>
+      </div>
+      <input type="range" min="1" max="5" value="3" id="diff-slider"
+        oninput="updateDifficulty(this)"
+        style="width:100%;height:4px;border-radius:2px;background:linear-gradient(to right,#E2FF3B 50%,rgba(255,255,255,0.12) 50%);-webkit-appearance:none;appearance:none;outline:none;cursor:pointer"/>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.3)">
+        <span>Easy</span><span>Expert</span>
+      </div>
+    </div>
+
+    <button class="save-btn" onclick="saveRoute(this)">SAVE ROUTE →</button>
+    <button style="width:100%;background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#ababab;cursor:pointer;margin-bottom:12px"
+      onclick="location.href='ai-suggestions.html'">← BACK TO SUGGESTIONS</button>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="nav-item"><div class="nav-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"><path d="M3 9.5L12 3L21 9.5V19a1 1 0 01-1 1H15v-5H9v5H4a1 1 0 01-1-1V9.5z"/></svg></div><span class="nav-label">Explore</span></a>
+    <a href="ride-tab.html" class="nav-item"><div class="nav-icon-wrap active"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="6" width="18" height="10" rx="3" stroke="#E2FF3B" stroke-width="1.5" fill="none"/><circle cx="6" cy="16" r="2.5" fill="#E2FF3B"/><circle cx="16" cy="16" r="2.5" fill="#E2FF3B"/></svg></div><span class="nav-label active">Ride</span></a>
+    <a href="marketplace.html" class="nav-item"><div class="nav-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><span class="nav-label">Shop</span></a>
+    <a href="profile.html" class="nav-item"><div class="nav-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"><circle cx="12" cy="7" r="4"/><path d="M3 21c0-4 4-7 9-7s9 3 9 7"/></svg></div><span class="nav-label">Profile</span></a>
+  </nav>
+
+  <script>
+    /* ── waypoint add ── */
+    function addWaypoint() {
+      const list = document.getElementById('waypoint-list');
+      // insert before last child (the destination)
+      const destination = list.lastElementChild;
+      const idx = list.children.length; // index for stop number
+      const item = document.createElement('div');
+      item.className = 'route-endpoint';
+      item.style.animation = 'slideUp 0.2s ease';
+      item.innerHTML = `
+        <div style="width:10px;height:10px;border-radius:50%;background:rgba(226,255,59,0.5);border:1px solid #E2FF3B;flex-shrink:0"></div>
+        <input placeholder="Stop ${idx}..." style="flex:1;background:transparent;border:none;outline:none;font-family:'Manrope',sans-serif;font-size:14px;color:#fff;"
+          onfocus="this.style.color='#E2FF3B'"
+          onblur="this.style.color='#fff';updateStats()" />
+        <div onclick="this.parentElement.remove();updateStats()" style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#484848;font-size:14px">✕</div>`;
+      list.insertBefore(item, destination);
+      item.querySelector('input').focus();
+      updateStats();
+      showToast('Stop added!');
+    }
+
+    /* ── map click markers ── */
+    document.getElementById('route-map').addEventListener('click', function(e){
+      const rect = this.getBoundingClientRect();
+      const x = e.clientX - rect.left, y = e.clientY - rect.top;
+      const marker = document.createElement('div');
+      marker.style.cssText = `position:absolute;left:${x-8}px;top:${y-8}px;width:16px;height:16px;background:#E2FF3B;border-radius:50%;border:2px solid #000;animation:likeBlip 0.4s ease;pointer-events:none;z-index:10;box-shadow:0 0 8px rgba(226,255,59,0.6)`;
+      this.appendChild(marker);
+      updateStats();
+      showToast('Waypoint added!');
+    });
+
+    /* ── type chip toggle ── */
+    function toggleTypeChip(el) {
+      document.querySelectorAll('.type-chip').forEach(c=>{ c.setAttribute('data-on','0'); c.style.background='rgba(255,255,255,0.04)'; c.style.color='#ababab'; c.style.borderColor='rgba(255,255,255,0.1)'; });
+      el.setAttribute('data-on','1');
+      el.style.background='#E2FF3B'; el.style.color='#000'; el.style.borderColor='#E2FF3B';
+    }
+
+    /* ── difficulty slider ── */
+    const diffLabels = ['','Easy','Moderate','Moderate','Challenging','Expert'];
+    function updateDifficulty(input) {
+      document.getElementById('diff-val').textContent = diffLabels[input.value];
+      const pct = (input.value-1)/4*100;
+      input.style.background = `linear-gradient(to right,#E2FF3B ${pct}%,rgba(255,255,255,0.12) ${pct}%)`;
+    }
+
+    /* ── mock stats update ── */
+    function updateStats() {
+      const markers = document.getElementById('route-map').querySelectorAll('[style*="position:absolute"]').length;
+      const stops = document.getElementById('waypoint-list').children.length;
+      const baseDist = 120 + stops * 35 + markers * 12;
+      document.getElementById('stat-dist').textContent = baseDist;
+      document.getElementById('stat-elev').textContent = Math.round(baseDist * 2.4);
+      document.getElementById('stat-time').textContent = (baseDist / 60).toFixed(1);
+    }
+    updateStats();
+
+    /* ── init type chip styles ── */
+    document.querySelectorAll('.type-chip[data-on="1"]').forEach(c=>{
+      c.style.background='#E2FF3B'; c.style.color='#000'; c.style.borderColor='#E2FF3B';
+    });
+
+    /* ── save route ── */
+    function saveRoute(btn) {
+      btn.textContent = 'SAVING...'; btn.style.opacity = '0.7';
+      setTimeout(()=>{
+        showToast('Route saved!');
+        setTimeout(()=>location.href='create-ride-modes.html', 800);
+      }, 1200);
+    }
+  </script>
+
+  <script>
+    document.querySelectorAll('a,button,[onclick]').forEach(function(el){
+      el.addEventListener('mousedown',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+      el.addEventListener('mouseup',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('mouseleave',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('touchstart',function(){this.style.transform='scale(0.94)';this.style.opacity='0.78';},{passive:true});
+      el.addEventListener('touchend',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+      el.addEventListener('touchcancel',function(){this.style.transform='';this.style.opacity='';},{passive:true});
+    });
+    window.showToast=function(msg,isError){
+      document.querySelectorAll('.toast-msg').forEach(t=>t.remove());
+      const t=document.createElement('div');
+      t.className='toast-msg';t.textContent=msg;
+      t.style.cssText=`position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:${isError?'#ff4444':'#E2FF3B'};color:${isError?'#fff':'#000'};font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:24px;z-index:9999;pointer-events:none;animation:toastIn 0.3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)`;
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(),2200);
+    };
+  </script>
+<script src="journey-mode.js"></script>
+</body>
+</html>
