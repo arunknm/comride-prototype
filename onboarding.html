@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Comride — Set up your account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+    html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased}
+    a,button,[onclick]{cursor:pointer}
+    button{border:none;background:none;color:inherit;font:inherit}
+    input,select{font:inherit;color:inherit;background:transparent;border:none;outline:none;width:100%}
+    input[type=range]{-webkit-appearance:none;appearance:none;width:100%}
+    input[type=range]::-webkit-slider-runnable-track{height:4px;background:rgba(255,255,255,0.15);border-radius:2px}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:26px;height:26px;border-radius:50%;background:#E2FF3B;margin-top:-11px;box-shadow:0 0 0 5px rgba(226,255,59,0.18)}
+    .mono{font-variant-numeric:tabular-nums}
+
+    #journey{position:fixed;inset:0;background:#000;z-index:100;overflow:hidden}
+    .stop{position:absolute;inset:0;height:100dvh;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .35s ease,transform .5s cubic-bezier(.34,1.3,.64,1);transform:translateX(36px) scale(0.985);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+    .stop.active{opacity:1;visibility:visible;transform:translateX(0) scale(1)}
+
+    .topbar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:14px 20px 6px;flex-shrink:0}
+    .topbar > .dots{justify-self:center}
+    .topbar-left{display:flex;align-items:center;gap:8px}
+    .dots{display:flex;gap:5px}
+    .dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.18);transition:all .3s ease}
+    .dot.done{background:#E2FF3B;width:14px;border-radius:3px}
+    .dot.now{background:#E2FF3B}
+    .skip{font-family:'Manrope',sans-serif;font-weight:600;font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px}
+    .close-btn,.back-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .15s ease}
+    .close-btn:active,.back-btn:active{transform:scale(0.92);background:rgba(255,255,255,0.12)}
+
+    .body{flex:1;min-height:0;display:flex;flex-direction:column;padding:8px 24px 18px;overflow:hidden}
+    .body.center{justify-content:center;align-items:center;text-align:center}
+    .body-content{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:14px}
+    .body-cta{flex-shrink:0;padding-top:14px;text-align:center}
+
+    .question{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;line-height:1.2;margin-bottom:4px;letter-spacing:-0.5px}
+    .sub{font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.5);line-height:1.5;margin-bottom:16px}
+
+    .cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:#E2FF3B;color:#000;padding:14px 30px;border-radius:9999px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.5px;text-transform:uppercase;box-shadow:0 8px 24px rgba(226,255,59,0.22);transition:transform .15s ease}
+    .cta:active{transform:scale(0.96)}
+    .cta:disabled{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.4);box-shadow:none;cursor:not-allowed}
+    .cta-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.15);box-shadow:none}
+
+    /* Field */
+    .field{background:#0d0d0d;border:1.5px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;transition:border-color .15s ease}
+    .field:focus-within{border-color:#E2FF3B}
+    .field-label{font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:2px;margin-bottom:5px}
+    .field input,.field select{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;color:#fff;width:100%}
+    .field input::placeholder{color:rgba(255,255,255,0.25);font-weight:500}
+
+    /* OTP grid */
+    .otp-grid{display:flex;gap:8px;justify-content:center;margin:24px 0 8px}
+    .otp-box{width:46px;height:56px;background:#0d0d0d;border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#fff;transition:all .15s ease;font-variant-numeric:tabular-nums}
+    .otp-box:focus{border-color:#E2FF3B;background:#161608;box-shadow:0 0 0 4px rgba(226,255,59,0.12)}
+    .otp-box.filled{border-color:rgba(226,255,59,0.4);color:#E2FF3B}
+    .resend{font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.5);text-align:center;margin-top:18px}
+    .resend a{color:#E2FF3B;font-weight:700;text-decoration:none}
+
+    /* Photo upload */
+    .photo-up{width:100px;height:100px;margin:0 auto 18px;border-radius:50%;background:#0d0d0d;border:1.5px dashed rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.4);position:relative;overflow:hidden;cursor:pointer}
+    .photo-up.has-img{border-style:solid;border-color:#E2FF3B}
+    .photo-up img{width:100%;height:100%;object-fit:cover}
+    .photo-up-edit{position:absolute;bottom:-2px;right:-2px;width:30px;height:30px;border-radius:50%;background:#E2FF3B;color:#000;display:flex;align-items:center;justify-content:center;border:3px solid #000}
+
+    /* Chip selector (blood group) */
+    .chip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+    .chip{padding:11px 0;background:#0d0d0d;border:1.5px solid rgba(255,255,255,0.08);border-radius:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;text-align:center;cursor:pointer;transition:all .15s ease}
+    .chip:active{transform:scale(0.96)}
+    .chip.selected{background:#E2FF3B;color:#000;border-color:#E2FF3B}
+
+    /* Bike list (reused style from bike-finder) */
+    .bike-list{display:flex;flex-direction:column;gap:6px;max-height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch}
+    .bike-item{display:flex;align-items:center;gap:12px;background:#0d0d0d;border:1.5px solid rgba(255,255,255,0.08);border-radius:12px;padding:10px 12px;cursor:pointer;transition:all .15s ease}
+    .bike-item:active{transform:scale(0.99)}
+    .bike-item.selected{border-color:#E2FF3B;background:rgba(226,255,59,0.05)}
+    .bike-item-ico{width:42px;height:42px;border-radius:9px;background:rgba(226,255,59,0.08);border:1px solid rgba(226,255,59,0.2);color:#E2FF3B;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s ease}
+    .bike-item.selected .bike-item-ico{background:#E2FF3B;color:#000;border-color:#E2FF3B}
+    .bike-item-meta{flex:1;min-width:0}
+    .bike-item-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff}
+    .bike-item-sub{font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.5)}
+
+    /* Permission card */
+    .perm{display:flex;align-items:center;gap:14px;background:#0d0d0d;border:1.5px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px}
+    .perm-ico{width:42px;height:42px;border-radius:11px;background:rgba(226,255,59,0.08);border:1px solid rgba(226,255,59,0.2);color:#E2FF3B;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .perm-meta{flex:1}
+    .perm-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin-bottom:1px}
+    .perm-desc{font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.5);line-height:1.4}
+    .toggle{width:42px;height:24px;border-radius:9999px;background:rgba(255,255,255,0.1);position:relative;flex-shrink:0;transition:all .15s ease;cursor:pointer}
+    .toggle.on{background:#E2FF3B}
+    .toggle::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:all .2s ease}
+    .toggle.on::after{left:20px;background:#000}
+
+    /* Hero / Welcome */
+    .hero-bg{position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,rgba(226,255,59,0.18) 0%,transparent 60%);pointer-events:none}
+    .hero-eyebrow{font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#E2FF3B;text-transform:uppercase;letter-spacing:3px;margin-bottom:14px}
+    .hero-title{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:36px;line-height:1;letter-spacing:-1px;color:#fff;margin-bottom:14px}
+    .hero-title em{font-style:normal;color:#E2FF3B}
+    .hero-sub{font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;max-width:280px;margin-bottom:28px}
+
+    /* Toast */
+    #toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 18px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;z-index:600;opacity:0;pointer-events:none;transition:opacity .25s ease;border:1px solid rgba(255,255,255,0.1)}
+    #toast.on{opacity:1}
+  </style>
+</head>
+<body>
+
+<div id="journey">
+  <div class="hero-bg"></div>
+
+  <!-- 1: OTP -->
+  <section class="stop active" data-stop="1">
+    <div class="topbar">
+      <a href="login.html" class="close-btn" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></a>
+      <div class="dots" id="dots-1"></div>
+      <div></div>
+    </div>
+    <div class="body">
+      <h2 class="question">Enter the OTP.</h2>
+      <p class="sub">We sent a 6-digit code to <span style="color:#E2FF3B">+91 98XXX XX234</span></p>
+
+      <div class="otp-grid">
+        <input class="otp-box" maxlength="1" inputmode="numeric" oninput="otpFlow(this,0)"/>
+        <input class="otp-box" maxlength="1" inputmode="numeric" oninput="otpFlow(this,1)"/>
+        <input class="otp-box" maxlength="1" inputmode="numeric" oninput="otpFlow(this,2)"/>
+        <input class="otp-box" maxlength="1" inputmode="numeric" oninput="otpFlow(this,3)"/>
+        <input class="otp-box" maxlength="1" inputmode="numeric" oninput="otpFlow(this,4)"/>
+        <input class="otp-box" maxlength="1" inputmode="numeric" oninput="otpFlow(this,5)"/>
+      </div>
+
+      <div class="resend">Didn't get it? <a href="#" onclick="event.preventDefault();toast('OTP resent')">Resend in 0:24</a></div>
+
+      <div class="body-cta" style="margin-top:auto">
+        <button class="cta" id="otpCta" onclick="next()" disabled>Verify <span>→</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2: NAME + DOB -->
+  <section class="stop" data-stop="2">
+    <div class="topbar">
+      <div class="topbar-left">
+        <a href="login.html" class="close-btn" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></a>
+        <button class="back-btn" onclick="back()" aria-label="Back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      </div>
+      <div class="dots" id="dots-2"></div>
+      <button class="skip" onclick="next()">Skip</button>
+    </div>
+    <div class="body">
+      <h2 class="question">What's your name?</h2>
+      <p class="sub">This is how you'll appear on Comride.</p>
+      <div class="body-content">
+        <div class="field"><div class="field-label">Full name</div><input type="text" placeholder="e.g. Arun Menon"/></div>
+        <div class="field"><div class="field-label">Date of birth</div><input type="date" max="2010-01-01" value="1995-06-15"/></div>
+      </div>
+      <div class="body-cta"><button class="cta" onclick="next()">Continue →</button></div>
+    </div>
+  </section>
+
+  <!-- 3: PHOTO + USERNAME -->
+  <section class="stop" data-stop="3">
+    <div class="topbar">
+      <div class="topbar-left">
+        <a href="login.html" class="close-btn" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></a>
+        <button class="back-btn" onclick="back()" aria-label="Back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      </div>
+      <div class="dots" id="dots-3"></div>
+      <button class="skip" onclick="next()">Skip</button>
+    </div>
+    <div class="body">
+      <h2 class="question">Add a profile photo.</h2>
+      <p class="sub">Helps fellow riders recognize you.</p>
+      <div class="body-content" style="align-items:center">
+        <label class="photo-up" id="photoBox">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="4"/><path d="M5 7h2l2-2h6l2 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"/></svg>
+          <div class="photo-up-edit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
+          <input type="file" accept="image/*" style="display:none" onchange="onPhoto(this)"/>
+        </label>
+        <div class="field" style="width:100%;margin-top:6px"><div class="field-label">Username</div><input type="text" placeholder="@yourhandle" value="@arun_rider"/></div>
+      </div>
+      <div class="body-cta"><button class="cta" onclick="next()">Continue →</button></div>
+    </div>
+  </section>
+
+  <!-- 4: CITY -->
+  <section class="stop" data-stop="4">
+    <div class="topbar">
+      <div class="topbar-left">
+        <a href="login.html" class="close-btn" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></a>
+        <button class="back-btn" onclick="back()" aria-label="Back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      </div>
+      <div class="dots" id="dots-4"></div>
+      <button class="skip" onclick="next()">Skip</button>
+    </div>
+    <div class="body">
+      <h2 class="question">Where do you ride from?</h2>
+      <p class="sub">We'll show rides &amp; events near you.</p>
+      <div class="body-content">
+        <div class="field"><div class="field-label">Home city</div>
+          <select>
+            <option>Bangalore</option><option>Mumbai</option><option>Delhi NCR</option><option>Pune</option>
+            <option>Hyderabad</option><option>Chennai</option><option>Kolkata</option><option>Ahmedabad</option>
+            <option>Jaipur</option><option>Kochi</option><option>Coimbatore</option><option>Other</option>
+          </select>
+        </div>
+        <button onclick="toast('Detecting location…')" style="display:inline-flex;align-items:center;gap:8px;color:#E2FF3B;font-family:Manrope,sans-serif;font-size:12px;font-weight:600;align-self:flex-start;padding:6px 0">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Use my current location
+        </button>
+      </div>
+      <div class="body-cta"><button class="cta" onclick="next()">Continue →</button></div>
+    </div>
+  </section>
+
+  <!-- 5: PRIMARY BIKE -->
+  <section class="stop" data-stop="5">
+    <div class="topbar">
+      <div class="topbar-left">
+        <a href="login.html" class="close-btn" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></a>
+        <button class="back-btn" onclick="back()" aria-label="Back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      </div>
+      <div class="dots" id="dots-5"></div>
+      <button class="skip" onclick="next()">Skip</button>
+    </div>
+    <div class="body">
+      <h2 class="question">Your main ride?</h2>
+      <p class="sub">Pick from the list — or take the Bike Finder quiz.</p>
+      <div class="body-content">
+        <div class="bike-list">
+          <div class="bike-item" onclick="pickBike(this)">
+            <div class="bike-item-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="M5 17h14l-3-7h-7Z"/><path d="M11 7h4"/></svg></div>
+            <div class="bike-item-meta"><div class="bike-item-name">Royal Enfield Classic 350</div><div class="bike-item-sub">349cc · 20.2 bhp · ₹2,15,000</div></div>
+          </div>
+          <div class="bike-item" onclick="pickBike(this)">
+            <div class="bike-item-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="M5 17h14l-3-7h-7Z"/></svg></div>
+            <div class="bike-item-meta"><div class="bike-item-name">KTM Duke 390</div><div class="bike-item-sub">399cc · 45 bhp · ₹3,20,000</div></div>
+          </div>
+          <div class="bike-item" onclick="pickBike(this)">
+            <div class="bike-item-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="M5 17h14l-4-8h-5Z"/></svg></div>
+            <div class="bike-item-meta"><div class="bike-item-name">Yamaha MT-15</div><div class="bike-item-sub">155cc · 18.4 bhp · ₹1,75,000</div></div>
+          </div>
+          <div class="bike-item" onclick="pickBike(this)">
+            <div class="bike-item-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17" r="3.5"/><circle cx="19" cy="17" r="3.5"/><path d="M5 17h14l-3-9h-5Z"/></svg></div>
+            <div class="bike-item-meta"><div class="bike-item-name">RE Himalayan 450</div><div class="bike-item-sub">452cc · 39.5 bhp · ₹2,85,000</div></div>
+          </div>
+          <div class="bike-item" onclick="pickBike(this)">
+            <div class="bike-item-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="M5 17h14l-3-7h-7Z"/></svg></div>
+            <div class="bike-item-meta"><div class="bike-item-name">Triumph Speed 400</div><div class="bike-item-sub">398cc · 39.5 bhp · ₹2,40,000</div></div>
+          </div>
+          <a href="bike-finder.html" class="bike-item" style="text-decoration:none;border-color:rgba(226,255,59,0.25);background:rgba(226,255,59,0.04)">
+            <div class="bike-item-ico" style="background:#E2FF3B;color:#000;border-color:#E2FF3B"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+            <div class="bike-item-meta"><div class="bike-item-name" style="color:#E2FF3B">No bike yet — find mine</div><div class="bike-item-sub">5-min Bike Finder quiz</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="body-cta"><button class="cta" onclick="next()">Continue →</button></div>
+    </div>
+  </section>
+
+  <!-- 6: SAFETY -->
+  <section class="stop" data-stop="6">
+    <div class="topbar">
+      <div class="topbar-left">
+        <a href="login.html" class="close-btn" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></a>
+        <button class="back-btn" onclick="back()" aria-label="Back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      </div>
+      <div class="dots" id="dots-6"></div>
+      <button class="skip" onclick="next()">Skip</button>
+    </div>
+    <div class="body">
+      <h2 class="question">Safety first.</h2>
+      <p class="sub">Visible to ride leaders during emergencies. Never public.</p>
+      <div class="body-content">
+        <div>
+          <div class="field-label" style="margin-bottom:8px">Blood group</div>
+          <div class="chip-grid">
+            <div class="chip" onclick="pickChip(this)">A+</div>
+            <div class="chip" onclick="pickChip(this)">A−</div>
+            <div class="chip" onclick="pickChip(this)">B+</div>
+            <div class="chip" onclick="pickChip(this)">B−</div>
+            <div class="chip" onclick="pickChip(this)">AB+</div>
+            <div class="chip" onclick="pickChip(this)">AB−</div>
+            <div class="chip" onclick="pickChip(this)">O+</div>
+            <div class="chip" onclick="pickChip(this)">O−</div>
+          </div>
+        </div>
+        <div class="field"><div class="field-label">Emergency contact name</div><input type="text" placeholder="e.g. Dad / Spouse"/></div>
+        <div class="field"><div class="field-label">Emergency contact number</div><input type="tel" placeholder="+91 9XXXX XXXXX"/></div>
+      </div>
+      <div class="body-cta"><button class="cta" onclick="next()">Continue →</button></div>
+    </div>
+  </section>
+
+  <!-- 7: PERMISSIONS -->
+  <section class="stop" data-stop="7">
+    <div class="topbar">
+      <div class="topbar-left">
+        <a href="login.html" class="close-btn" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></a>
+        <button class="back-btn" onclick="back()" aria-label="Back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      </div>
+      <div class="dots" id="dots-7"></div>
+      <button class="skip" onclick="next()">Skip</button>
+    </div>
+    <div class="body">
+      <h2 class="question">A few permissions.</h2>
+      <p class="sub">You're in control. Change anytime in Settings.</p>
+      <div class="body-content">
+        <div class="perm">
+          <div class="perm-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div class="perm-meta"><div class="perm-name">Location</div><div class="perm-desc">Track rides, find riders nearby</div></div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="perm">
+          <div class="perm-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+          <div class="perm-meta"><div class="perm-name">Notifications</div><div class="perm-desc">Ride invites, messages, friend activity</div></div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="perm">
+          <div class="perm-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+          <div class="perm-meta"><div class="perm-name">Contacts</div><div class="perm-desc">Find friends already on Comride</div></div>
+          <div class="toggle" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="perm">
+          <div class="perm-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="4"/><path d="M5 7h2l2-2h6l2 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"/></svg></div>
+          <div class="perm-meta"><div class="perm-name">Camera</div><div class="perm-desc">Post photos to your feed</div></div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+      <div class="body-cta"><button class="cta" onclick="next()">Continue →</button></div>
+    </div>
+  </section>
+
+  <!-- 8: WELCOME -->
+  <section class="stop" data-stop="8">
+    <div class="body center">
+      <div style="width:96px;height:96px;border-radius:24px;background:#E2FF3B;display:flex;align-items:center;justify-content:center;margin-bottom:26px;box-shadow:0 18px 50px rgba(226,255,59,0.35)">
+        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <p class="hero-eyebrow">You're In</p>
+      <h1 class="hero-title">Welcome to <em>Comride.</em></h1>
+      <p class="hero-sub">Your tribe is waiting. Let's ride.</p>
+      <a href="home.html" class="cta">Enter Comride <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+    </div>
+  </section>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+const state = { current:1, total:7 };
+
+function go(n){
+  document.querySelectorAll('.stop').forEach(s => s.classList.remove('active'));
+  const t = document.querySelector(`[data-stop="${n}"]`);
+  if(!t) return;
+  t.classList.add('active');
+  state.current = n;
+  drawDots(n);
+}
+function next(){ go(state.current + 1); }
+function back(){ if(state.current > 1) go(state.current - 1); }
+function drawDots(n){
+  const wrap = document.getElementById('dots-' + n);
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  for(let i=1;i<=state.total;i++){
+    const d = document.createElement('div');
+    d.className = 'dot';
+    if(i < n) d.classList.add('done');
+    if(i === n) d.classList.add('now');
+    wrap.appendChild(d);
+  }
+}
+
+/* OTP — auto-advance focus + enable button */
+function otpFlow(box, idx){
+  const v = box.value.replace(/\D/g,'').slice(0,1);
+  box.value = v;
+  if(v) box.classList.add('filled'); else box.classList.remove('filled');
+  const all = document.querySelectorAll('.otp-box');
+  if(v && idx < 5) all[idx + 1].focus();
+  const filled = Array.from(all).every(b => b.value);
+  document.getElementById('otpCta').disabled = !filled;
+  if(filled) setTimeout(() => next(), 350);
+}
+
+/* Photo */
+function onPhoto(input){
+  const f = input.files && input.files[0];
+  if(!f) return;
+  const r = new FileReader();
+  r.onload = e => {
+    const box = document.getElementById('photoBox');
+    box.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = e.target.result;
+    box.appendChild(img);
+    const btn = document.createElement('div');
+    btn.className = 'photo-up-edit';
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+    box.appendChild(btn);
+    const reInput = document.createElement('input');
+    reInput.type = 'file'; reInput.accept = 'image/*';
+    reInput.style.display = 'none';
+    reInput.onchange = function(){ onPhoto(this); };
+    box.appendChild(reInput);
+    box.classList.add('has-img');
+  };
+  r.readAsDataURL(f);
+}
+
+/* Bike pick */
+function pickBike(el){
+  el.parentElement.querySelectorAll('.bike-item').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+/* Chip pick (single-select for blood group) */
+function pickChip(el){
+  el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+/* Toast */
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(t._h);
+  t._h = setTimeout(() => t.classList.remove('on'), 2200);
+}
+
+/* Init: focus first OTP box */
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => document.querySelector('.otp-box')?.focus(), 250);
+});
+</script>
+
+</body>
+</html>
