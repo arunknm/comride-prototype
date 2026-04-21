@@ -1,157 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="skeleton-module.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Comride — Find Your Bike</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
-    html,body{background:#000;color:#fff;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased}
     a,button,[onclick]{cursor:pointer}
-    .h{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-0.5px}
-    .mono{font-variant-numeric:tabular-nums}
     button{border:none;background:none;color:inherit;font:inherit}
     input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;width:100%}
     input[type=range]::-webkit-slider-runnable-track{height:4px;background:rgba(255,255,255,0.15);border-radius:2px}
-    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;border-radius:50%;background:#E2FF3B;margin-top:-12px;box-shadow:0 0 0 6px rgba(226,255,59,0.18),0 4px 14px rgba(226,255,59,0.4);cursor:pointer}
-    .no-scrollbar::-webkit-scrollbar{display:none}
-    .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:26px;height:26px;border-radius:50%;background:#E2FF3B;margin-top:-11px;box-shadow:0 0 0 5px rgba(226,255,59,0.18),0 4px 14px rgba(226,255,59,0.4);cursor:pointer}
+    .mono{font-variant-numeric:tabular-nums}
 
     /* ============ JOURNEY ============ */
     #journey{position:fixed;inset:0;background:#000;z-index:100;overflow:hidden}
-    .stop{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .35s ease,transform .45s cubic-bezier(.2,.8,.2,1);transform:translateX(40px);padding-top:env(safe-area-inset-top,0px)}
+    .stop{position:absolute;inset:0;height:100dvh;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .3s ease,transform .35s cubic-bezier(.2,.8,.2,1);transform:translateX(30px);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
     .stop.active{opacity:1;visibility:visible;transform:translateX(0)}
 
-    /* Top bar with progress dots + skip */
-    .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 10px;flex-shrink:0}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 6px;flex-shrink:0}
     .dots{display:flex;gap:5px}
     .dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.18);transition:all .3s ease}
     .dot.done{background:#E2FF3B;width:14px;border-radius:3px}
     .dot.now{background:#E2FF3B}
-    .skip{font-family:'Manrope',sans-serif;font-weight:600;font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px;background:none;cursor:pointer}
-    .country-pill{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:9999px;padding:5px 10px;font-size:11px;color:rgba(255,255,255,0.6);font-weight:600;cursor:pointer}
+    .skip{font-family:'Manrope',sans-serif;font-weight:600;font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px}
+    .country-pill{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:9999px;padding:5px 10px;font-size:11px;color:rgba(255,255,255,0.6);font-weight:600}
 
-    .body{flex:1;display:flex;flex-direction:column;padding:20px 24px 40px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+    .body{flex:1;min-height:0;display:flex;flex-direction:column;padding:8px 24px 18px;overflow:hidden}
+    .body.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:30px}
     .body.center{justify-content:center;align-items:center;text-align:center}
-    .question{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:28px;line-height:1.15;color:#fff;margin-bottom:8px;letter-spacing:-0.6px}
-    .sub{font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.5);line-height:1.5;margin-bottom:28px}
+    .body-content{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+    .body-cta{flex-shrink:0;padding-top:14px;text-align:center}
 
-    /* CTA buttons */
-    .cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:#E2FF3B;color:#000;padding:18px 32px;border-radius:9999px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;letter-spacing:0.5px;text-transform:uppercase;box-shadow:0 8px 30px rgba(226,255,59,0.25);cursor:pointer;transition:transform .15s ease}
+    .question{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;line-height:1.2;color:#fff;margin-bottom:4px;letter-spacing:-0.5px}
+    .sub{font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.5);line-height:1.5;margin-bottom:14px}
+
+    .cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:#E2FF3B;color:#000;padding:14px 30px;border-radius:9999px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.5px;text-transform:uppercase;box-shadow:0 8px 24px rgba(226,255,59,0.22);transition:transform .15s ease}
     .cta:active{transform:scale(0.96)}
-    .cta-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.15)}
+    .cta-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.15);box-shadow:none}
 
-    /* Image-card option */
-    .opt{position:relative;border-radius:18px;overflow:hidden;border:1.5px solid rgba(255,255,255,0.08);background:#0d0d0d;cursor:pointer;transition:all .25s ease;margin-bottom:12px}
+    /* Image card option */
+    .opt{position:relative;border-radius:14px;overflow:hidden;border:1.5px solid rgba(255,255,255,0.08);background:#0d0d0d;transition:all .25s ease;margin-bottom:10px;flex-shrink:0}
     .opt:active{transform:scale(0.98)}
-    .opt.selected{border-color:#E2FF3B;box-shadow:0 0 0 4px rgba(226,255,59,0.12),0 8px 24px rgba(226,255,59,0.18)}
-    .opt-img{width:100%;height:120px;object-fit:cover;display:block;opacity:0.85}
-    .opt-body{padding:14px 16px}
-    .opt-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;margin-bottom:2px}
-    .opt-sub{font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.5)}
-    .opt-check{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;background:#E2FF3B;display:none;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:14px}
+    .opt.selected{border-color:#E2FF3B;box-shadow:0 0 0 3px rgba(226,255,59,0.12),0 6px 18px rgba(226,255,59,0.16)}
+    .opt-img{width:100%;height:78px;object-fit:cover;display:block;opacity:0.85}
+    .opt-body{padding:10px 14px}
+    .opt-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#fff;margin-bottom:1px}
+    .opt-sub{font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.5)}
+    .opt-check{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;background:#E2FF3B;display:none;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:12px}
     .opt.selected .opt-check{display:flex}
 
-    /* Grid options (2-col) */
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    /* Compact rider cards (vertical, smaller) */
+    .opt-compact .opt-img{height:62px}
+    .opt-compact .opt-body{padding:8px 12px}
+    .opt-compact .opt-title{font-size:14px}
+    .opt-compact .opt-sub{font-size:10px}
+
+    /* Grid 2-col */
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
     .grid .opt{margin-bottom:0}
-    .grid .opt-img{height:90px}
-    .grid .opt-body{padding:10px 12px}
+    .grid .opt-img{height:74px}
+    .grid .opt-body{padding:8px 11px}
     .grid .opt-title{font-size:13px}
     .grid .opt-sub{font-size:10px}
 
-    /* Slider stop */
-    .slider-wrap{margin-top:20px}
-    .slider-display{text-align:center;margin-bottom:30px}
-    .slider-num{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:64px;color:#E2FF3B;letter-spacing:-2px;line-height:1;display:inline-block;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
-    .slider-unit{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:rgba(255,255,255,0.4);margin-left:6px}
-    .slider-label{font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:2px;margin-top:8px}
+    /* Big number display */
+    .big-num{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:44px;color:#E2FF3B;letter-spacing:-1.5px;line-height:1}
+    .big-unit{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;color:rgba(255,255,255,0.4);margin-left:4px}
+    .big-label{font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:2px;margin-top:5px}
 
-    /* Silhouette canvas */
-    .sil-wrap{height:200px;display:flex;align-items:flex-end;justify-content:center;margin:14px 0 18px;position:relative}
-    .sil{transition:transform .3s ease}
+    /* Body sliders */
+    .body-row{display:flex;gap:14px;align-items:center;margin-top:10px}
+    .body-cell{flex:1;text-align:center}
+    .sil-wrap{flex-shrink:0;height:130px;display:flex;align-items:flex-end;justify-content:center;width:60px}
+    .sil{transition:transform .25s ease}
 
-    /* Tinder swiper */
-    .swiper{flex:1;position:relative;display:flex;align-items:center;justify-content:center}
-    .swipe-card{position:absolute;width:88%;max-width:340px;aspect-ratio:0.78;border-radius:24px;overflow:hidden;background:#0d0d0d;border:1px solid rgba(255,255,255,0.08);box-shadow:0 20px 60px rgba(0,0,0,0.6);transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .3s ease;will-change:transform}
-    .swipe-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-    .swipe-card .scrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,rgba(0,0,0,0.1) 50%)}
-    .swipe-card .lbl{position:absolute;bottom:24px;left:24px;right:24px}
-    .swipe-card .lbl h3{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:#fff;margin-bottom:4px}
-    .swipe-card .lbl p{font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.7)}
-    .swipe-actions{display:flex;gap:24px;justify-content:center;padding:24px 20px 30px;flex-shrink:0}
-    .swipe-btn{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:26px;transition:transform .15s ease}
-    .swipe-btn:active{transform:scale(0.9)}
-    .swipe-no{background:rgba(255,107,107,0.12);border:1.5px solid rgba(255,107,107,0.4);color:#FF6B6B}
-    .swipe-yes{background:rgba(226,255,59,0.15);border:1.5px solid rgba(226,255,59,0.6);color:#E2FF3B}
-    .swipe-card.gone-right{transform:translateX(120%) rotate(20deg);opacity:0}
-    .swipe-card.gone-left{transform:translateX(-120%) rotate(-20deg);opacity:0}
-    .swipe-stamp{position:absolute;top:30px;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:38px;padding:8px 16px;border:4px solid;border-radius:12px;opacity:0;transition:opacity .15s ease;pointer-events:none}
-    .swipe-stamp.like{right:24px;color:#E2FF3B;border-color:#E2FF3B;transform:rotate(15deg)}
-    .swipe-stamp.nope{left:24px;color:#FF6B6B;border-color:#FF6B6B;transform:rotate(-15deg)}
+    /* Budget bike icon morph */
+    .bike-vis{height:80px;display:flex;align-items:center;justify-content:center;font-size:54px;transition:transform .25s ease;margin-bottom:4px}
+    .bike-class{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#E2FF3B;text-align:center;margin-bottom:14px}
+    .scale{display:flex;justify-content:space-between;margin-top:6px;font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.3)}
 
-    /* Either/Or rapid */
-    .either{display:flex;flex-direction:column;gap:14px;margin-top:30px}
-    .either-row{display:flex;gap:10px}
-    .either-btn{flex:1;background:#0d0d0d;border:1.5px solid rgba(255,255,255,0.08);border-radius:18px;padding:24px 16px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#fff;cursor:pointer;transition:all .2s ease;text-align:center}
-    .either-btn:active{transform:scale(0.96)}
-    .either-btn.flash{background:#E2FF3B;color:#000;border-color:#E2FF3B;box-shadow:0 0 0 6px rgba(226,255,59,0.18)}
-    .either-prog{font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:2px;text-align:center;margin-top:18px}
+    /* Style list (vertical scroll) */
+    .style-list{display:flex;flex-direction:column;gap:8px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:2px;flex:1;min-height:0}
+    .style-item{display:flex;align-items:center;gap:12px;background:#0d0d0d;border:1.5px solid rgba(255,255,255,0.08);border-radius:14px;padding:8px;cursor:pointer;transition:all .2s ease;flex-shrink:0;position:relative}
+    .style-item:active{transform:scale(0.98)}
+    .style-item.selected{border-color:#E2FF3B;background:rgba(226,255,59,0.05)}
+    .style-img{width:64px;height:64px;border-radius:10px;object-fit:cover;flex-shrink:0}
+    .style-meta{flex:1;min-width:0}
+    .style-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin-bottom:2px}
+    .style-desc{font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.5);line-height:1.4}
+    .style-tick{width:24px;height:24px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:transparent;font-weight:900;font-size:12px;transition:all .2s ease}
+    .style-item.selected .style-tick{background:#E2FF3B;border-color:#E2FF3B;color:#000}
 
-    /* Loading screen */
-    .calc-rings{position:relative;width:120px;height:120px;margin:0 auto 28px}
+    /* Calc loader */
+    .calc-rings{position:relative;width:90px;height:90px;margin:0 auto 18px}
     .calc-ring{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;border-top-color:#E2FF3B;animation:spin 1.4s linear infinite}
-    .calc-ring:nth-child(2){inset:14px;border-top-color:rgba(226,255,59,0.4);animation-duration:1.8s;animation-direction:reverse}
-    .calc-ring:nth-child(3){inset:28px;border-top-color:rgba(226,255,59,0.7);animation-duration:1.1s}
+    .calc-ring:nth-child(2){inset:11px;border-top-color:rgba(226,255,59,0.4);animation-duration:1.8s;animation-direction:reverse}
+    .calc-ring:nth-child(3){inset:22px;border-top-color:rgba(226,255,59,0.7);animation-duration:1.1s}
     @keyframes spin{to{transform:rotate(360deg)}}
-    .calc-text{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;color:rgba(255,255,255,0.5);height:20px;transition:opacity .2s ease}
+    .calc-text{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:rgba(255,255,255,0.5)}
 
-    /* Result reveal */
-    .result-hero{position:relative;width:100%;aspect-ratio:1.4;border-radius:20px;overflow:hidden;background:#0d0d0d;border:1px solid rgba(255,255,255,0.08);margin-bottom:18px}
-    .result-hero img{width:100%;height:100%;object-fit:cover}
-    .match-circle{position:absolute;top:14px;right:14px;width:74px;height:74px;border-radius:50%;background:#E2FF3B;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#000;box-shadow:0 8px 24px rgba(226,255,59,0.4)}
-    .match-num{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:24px;line-height:1}
-    .match-lbl{font-family:'Manrope',sans-serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
-    .reasons{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
-    .reason{background:rgba(226,255,59,0.1);border:1px solid rgba(226,255,59,0.25);color:#E2FF3B;font-family:'Manrope',sans-serif;font-weight:600;font-size:11px;padding:6px 11px;border-radius:9999px}
-    .specs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-    .spec{background:#0d0d0d;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 14px}
-    .spec-l{font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
-    .spec-v{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff}
-    .alt-card{display:flex;gap:12px;background:#0d0d0d;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:10px;margin-bottom:8px;align-items:center;cursor:pointer}
-    .alt-img{width:64px;height:64px;border-radius:10px;background:#1a1a1a;flex-shrink:0;object-fit:cover}
-    .alt-body{flex:1;min-width:0}
-    .alt-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin-bottom:2px}
-    .alt-meta{font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.5)}
-    .alt-pct{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:18px;color:#E2FF3B}
-
-    /* Hero stop */
+    /* Hero */
     .hero-bg{position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,rgba(226,255,59,0.18) 0%,transparent 60%);pointer-events:none}
     .hero-eyebrow{font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#E2FF3B;text-transform:uppercase;letter-spacing:3px;margin-bottom:14px}
-    .hero-title{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:44px;line-height:1;letter-spacing:-1.5px;color:#fff;margin-bottom:18px}
+    .hero-title{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:36px;line-height:1;letter-spacing:-1px;color:#fff;margin-bottom:14px}
     .hero-title em{font-style:normal;color:#E2FF3B}
-    .hero-sub{font-family:'Manrope',sans-serif;font-size:14px;color:rgba(255,255,255,0.55);line-height:1.6;max-width:280px;margin-bottom:36px}
+    .hero-sub{font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;max-width:280px;margin-bottom:30px}
 
-    /* Pulse ring */
-    .pulse{position:relative;display:inline-flex;align-items:center;justify-content:center;width:74px;height:74px;border-radius:50%;background:#E2FF3B;color:#000;margin-top:36px;box-shadow:0 0 0 0 rgba(226,255,59,0.6);animation:pulseRing 2s ease-out infinite}
-    @keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(226,255,59,0.6)}80%,100%{box-shadow:0 0 0 24px rgba(226,255,59,0)}}
-
-    /* Odometer gauge */
-    .gauge{position:relative;width:200px;height:200px;margin:0 auto 18px}
-    .gauge svg{transform:rotate(-90deg)}
-    .gauge-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-    .gauge-val{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:42px;color:#fff;line-height:1}
-    .gauge-unit{font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:2px;margin-top:4px}
-    .gauge-ctrl{display:flex;justify-content:center;gap:14px;margin-top:8px}
-    .gauge-btn{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);font-size:24px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
-    .gauge-btn:active{background:#E2FF3B;color:#000}
+    /* Result */
+    .result-hero{position:relative;width:100%;aspect-ratio:1.5;border-radius:18px;overflow:hidden;background:#0d0d0d;border:1px solid rgba(255,255,255,0.08);margin-bottom:14px}
+    .result-hero img{width:100%;height:100%;object-fit:cover}
+    .match-circle{position:absolute;top:12px;right:12px;width:62px;height:62px;border-radius:50%;background:#E2FF3B;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#000;box-shadow:0 8px 20px rgba(226,255,59,0.4)}
+    .match-num{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:20px;line-height:1}
+    .match-lbl{font-family:'Manrope',sans-serif;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+    .reasons{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+    .reason{background:rgba(226,255,59,0.1);border:1px solid rgba(226,255,59,0.25);color:#E2FF3B;font-family:'Manrope',sans-serif;font-weight:600;font-size:10px;padding:5px 10px;border-radius:9999px}
+    .specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+    .spec{background:#0d0d0d;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px 12px}
+    .spec-l{font-family:'Manrope',sans-serif;font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px}
+    .spec-v{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff}
+    .alt-card{display:flex;gap:10px;background:#0d0d0d;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:8px;margin-bottom:7px;align-items:center}
+    .alt-img{width:54px;height:54px;border-radius:8px;background:#1a1a1a;flex-shrink:0;object-fit:cover}
+    .alt-body{flex:1;min-width:0}
+    .alt-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#fff;margin-bottom:2px}
+    .alt-meta{font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.5)}
+    .alt-pct{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:16px;color:#E2FF3B}
 
     /* Toast */
-    #toast{position:fixed;bottom:38px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:11px 20px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;z-index:600;opacity:0;pointer-events:none;transition:opacity .25s ease;border:1px solid rgba(255,255,255,0.1)}
+    #toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 18px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;z-index:600;opacity:0;pointer-events:none;transition:opacity .25s ease;border:1px solid rgba(255,255,255,0.1)}
     #toast.on{opacity:1}
   </style>
 </head>
@@ -160,7 +140,7 @@
 <div id="journey">
   <div class="hero-bg"></div>
 
-  <!-- ────── STOP 1: HOOK ────── -->
+  <!-- ────── 1: HOOK ────── -->
   <section class="stop active" data-stop="1">
     <div class="topbar">
       <div></div>
@@ -170,291 +150,209 @@
     </div>
     <div class="body center">
       <p class="hero-eyebrow">Bike Finder</p>
-      <h1 class="hero-title">Let's find the bike that's <em>actually you.</em></h1>
-      <p class="hero-sub">5 minutes. No specs, no jargon. Just questions you can answer in your sleep — we'll do the matching.</p>
+      <h1 class="hero-title">Find the bike that's <em>actually you.</em></h1>
+      <p class="hero-sub">90 seconds. 5 quick questions. We pick from 50 India bikes.</p>
       <button class="cta" onclick="next()">Begin <span>→</span></button>
-      <div class="pulse" style="display:none"></div>
     </div>
   </section>
 
-  <!-- ────── STOP 2: WHO ────── -->
+  <!-- ────── 2: RIDER TYPE ────── -->
   <section class="stop" data-stop="2">
     <div class="topbar">
       <div class="dots" id="dots-2"></div>
-      <button class="skip" onclick="next()">Skip</button>
+      <button class="skip" onclick="state.rider='upgrade';next()">Skip</button>
     </div>
     <div class="body">
-      <h2 class="question">First, who's riding?</h2>
+      <h2 class="question">Who's riding?</h2>
       <p class="sub">Pick the one that fits today.</p>
-      <div class="opt" onclick="pick(this,'rider','first')">
-        <img class="opt-img" src="https://images.unsplash.com/photo-1558981852-426c6c22a060?w=600&auto=format&fit=crop&q=80" alt=""/>
-        <div class="opt-body">
-          <div class="opt-title">First-timer</div>
-          <div class="opt-sub">Never owned a bike before</div>
+      <div class="body-content">
+        <div class="opt opt-compact" onclick="pick(this,'rider','first')">
+          <img class="opt-img" src="https://images.unsplash.com/photo-1558981852-426c6c22a060?w=600&auto=format&fit=crop&q=80" alt=""/>
+          <div class="opt-body">
+            <div class="opt-title">First-timer</div>
+            <div class="opt-sub">Never owned a bike before</div>
+          </div>
+          <div class="opt-check">✓</div>
         </div>
-        <div class="opt-check">✓</div>
-      </div>
-      <div class="opt" onclick="pick(this,'rider','upgrade')">
-        <img class="opt-img" src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=600&auto=format&fit=crop&q=80" alt=""/>
-        <div class="opt-body">
-          <div class="opt-title">Upgrading</div>
-          <div class="opt-sub">Ready for the next level</div>
+        <div class="opt opt-compact" onclick="pick(this,'rider','upgrade')">
+          <img class="opt-img" src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=600&auto=format&fit=crop&q=80" alt=""/>
+          <div class="opt-body">
+            <div class="opt-title">Upgrading</div>
+            <div class="opt-sub">Ready for the next level</div>
+          </div>
+          <div class="opt-check">✓</div>
         </div>
-        <div class="opt-check">✓</div>
-      </div>
-      <div class="opt" onclick="pick(this,'rider','return')">
-        <img class="opt-img" src="https://images.unsplash.com/photo-1502877338535-766e1452684a?w=600&auto=format&fit=crop&q=80" alt=""/>
-        <div class="opt-body">
-          <div class="opt-title">Returning</div>
-          <div class="opt-sub">Coming back after a break</div>
+        <div class="opt opt-compact" onclick="pick(this,'rider','return')">
+          <img class="opt-img" src="https://images.unsplash.com/photo-1502877338535-766e1452684a?w=600&auto=format&fit=crop&q=80" alt=""/>
+          <div class="opt-body">
+            <div class="opt-title">Returning</div>
+            <div class="opt-sub">Coming back after a break</div>
+          </div>
+          <div class="opt-check">✓</div>
         </div>
-        <div class="opt-check">✓</div>
       </div>
     </div>
   </section>
 
-  <!-- ────── STOP 3: BODY ────── -->
+  <!-- ────── 3: BODY ────── -->
   <section class="stop" data-stop="3">
     <div class="topbar">
       <div class="dots" id="dots-3"></div>
       <button class="skip" onclick="state.height=170;state.weight=70;next()">Skip</button>
     </div>
     <div class="body">
-      <h2 class="question">Let's measure you up.</h2>
-      <p class="sub">We'll match seat height &amp; bike weight to your build.</p>
+      <h2 class="question">Your build?</h2>
+      <p class="sub">For seat height &amp; bike weight match.</p>
 
-      <div class="sil-wrap">
-        <svg id="sil" class="sil" width="60" height="180" viewBox="0 0 60 180">
-          <circle cx="30" cy="22" r="14" fill="#E2FF3B"/>
-          <rect x="20" y="38" width="20" height="60" rx="6" fill="#E2FF3B"/>
-          <rect x="22" y="98" width="7" height="60" rx="3" fill="#E2FF3B"/>
-          <rect x="31" y="98" width="7" height="60" rx="3" fill="#E2FF3B"/>
-          <rect x="9" y="44" width="6" height="40" rx="3" fill="#E2FF3B"/>
-          <rect x="45" y="44" width="6" height="40" rx="3" fill="#E2FF3B"/>
-        </svg>
+      <div class="body-content">
+        <div class="body-row">
+          <div class="sil-wrap">
+            <svg id="sil" class="sil" width="50" height="130" viewBox="0 0 60 180">
+              <circle cx="30" cy="22" r="14" fill="#E2FF3B"/>
+              <rect x="20" y="38" width="20" height="60" rx="6" fill="#E2FF3B"/>
+              <rect x="22" y="98" width="7" height="60" rx="3" fill="#E2FF3B"/>
+              <rect x="31" y="98" width="7" height="60" rx="3" fill="#E2FF3B"/>
+              <rect x="9" y="44" width="6" height="40" rx="3" fill="#E2FF3B"/>
+              <rect x="45" y="44" width="6" height="40" rx="3" fill="#E2FF3B"/>
+            </svg>
+          </div>
+          <div style="flex:1">
+            <div class="body-cell" style="text-align:left;margin-bottom:14px">
+              <span class="big-num mono" id="hVal">170</span><span class="big-unit">cm</span>
+              <div class="big-label">Height</div>
+              <input type="range" min="140" max="200" value="170" id="hSld" oninput="onH(this.value)" style="margin-top:8px"/>
+            </div>
+            <div class="body-cell" style="text-align:left">
+              <span class="big-num mono" id="wVal">70</span><span class="big-unit">kg</span>
+              <div class="big-label">Weight</div>
+              <input type="range" min="40" max="150" value="70" id="wSld" oninput="onW(this.value)" style="margin-top:8px"/>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="slider-display">
-        <span class="slider-num mono" id="hVal">170</span><span class="slider-unit">cm</span>
-        <div class="slider-label">Your height</div>
-      </div>
-      <input type="range" min="140" max="200" value="170" id="hSld" oninput="onH(this.value)"/>
-
-      <div class="slider-display" style="margin-top:24px">
-        <span class="slider-num mono" id="wVal">70</span><span class="slider-unit">kg</span>
-        <div class="slider-label">Your weight</div>
-      </div>
-      <input type="range" min="40" max="150" value="70" id="wSld" oninput="onW(this.value)"/>
-
-      <div style="margin-top:36px;text-align:center">
+      <div class="body-cta">
         <button class="cta" onclick="next()">Continue →</button>
       </div>
     </div>
   </section>
 
-  <!-- ────── STOP 4: BUDGET ────── -->
+  <!-- ────── 4: BUDGET ────── -->
   <section class="stop" data-stop="4">
     <div class="topbar">
       <div class="dots" id="dots-4"></div>
       <button class="skip" onclick="state.budget=200000;next()">Skip</button>
     </div>
     <div class="body">
-      <h2 class="question">What's your budget?</h2>
-      <p class="sub">Drag — see what you can ride.</p>
+      <h2 class="question">Your budget?</h2>
+      <p class="sub">Drag to see what you can ride.</p>
 
-      <div style="text-align:center;margin:30px 0 8px">
-        <span class="slider-num mono" id="bVal">2,00,000</span>
+      <div class="body-content" style="justify-content:center;align-items:center;text-align:center">
+        <div class="bike-vis" id="bIcon">🏍️</div>
+        <div class="bike-class" id="bClass">Naked Sport</div>
+
+        <div style="margin-bottom:6px">
+          <span class="big-num mono" id="bVal">2,00,000</span>
+        </div>
+        <div style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:18px">
+          ₹ · <span id="bEMI">~₹4,200/mo EMI</span>
+        </div>
+
+        <div style="width:100%">
+          <input type="range" min="60000" max="1500000" step="10000" value="200000" id="bSld" oninput="onB(this.value)"/>
+          <div class="scale">
+            <span>₹60k</span><span>₹15L</span>
+          </div>
+        </div>
       </div>
-      <div style="text-align:center;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:2px;margin-bottom:20px">
-        ₹ <span id="bEMI">~ ₹4,200/mo on EMI</span>
-      </div>
 
-      <div style="height:90px;display:flex;align-items:center;justify-content:center">
-        <div id="bIcon" style="font-size:80px;transition:all .3s ease">🛵</div>
-      </div>
-      <div style="text-align:center;margin:8px 0 24px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#E2FF3B" id="bClass">Naked Sport</div>
-
-      <input type="range" min="60000" max="1500000" step="10000" value="200000" id="bSld" oninput="onB(this.value)"/>
-
-      <div style="display:flex;justify-content:space-between;margin-top:8px;font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.3)">
-        <span>₹60k</span><span>₹15L</span>
-      </div>
-
-      <div style="margin-top:36px;text-align:center">
+      <div class="body-cta">
         <button class="cta" onclick="next()">Lock it in →</button>
       </div>
     </div>
   </section>
 
-  <!-- ────── STOP 5: USE CASE ────── -->
+  <!-- ────── 5: USE CASE + PILLION ────── -->
   <section class="stop" data-stop="5">
     <div class="topbar">
       <div class="dots" id="dots-5"></div>
       <button class="skip" onclick="state.useCases=['city','highway'];next()">Skip</button>
     </div>
     <div class="body">
-      <h2 class="question">Where will you ride most?</h2>
+      <h2 class="question">Where will you ride?</h2>
       <p class="sub">Pick up to 2.</p>
 
-      <div class="grid">
-        <div class="opt" onclick="multi(this,'useCases','city',2)">
-          <img class="opt-img" src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&auto=format&fit=crop&q=80" alt=""/>
-          <div class="opt-body">
-            <div class="opt-title">City</div>
-            <div class="opt-sub">Daily commute</div>
+      <div class="body-content">
+        <div class="grid">
+          <div class="opt" onclick="multi(this,'useCases','city',2)">
+            <img class="opt-img" src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&auto=format&fit=crop&q=80" alt=""/>
+            <div class="opt-body"><div class="opt-title">City</div><div class="opt-sub">Daily commute</div></div>
+            <div class="opt-check">✓</div>
           </div>
-          <div class="opt-check">✓</div>
-        </div>
-        <div class="opt" onclick="multi(this,'useCases','highway',2)">
-          <img class="opt-img" src="https://images.unsplash.com/photo-1519640760746-95d6e8e9b62b?w=400&auto=format&fit=crop&q=80" alt=""/>
-          <div class="opt-body">
-            <div class="opt-title">Highway</div>
-            <div class="opt-sub">Long tours</div>
+          <div class="opt" onclick="multi(this,'useCases','highway',2)">
+            <img class="opt-img" src="https://images.unsplash.com/photo-1519640760746-95d6e8e9b62b?w=400&auto=format&fit=crop&q=80" alt=""/>
+            <div class="opt-body"><div class="opt-title">Highway</div><div class="opt-sub">Long tours</div></div>
+            <div class="opt-check">✓</div>
           </div>
-          <div class="opt-check">✓</div>
-        </div>
-        <div class="opt" onclick="multi(this,'useCases','offroad',2)">
-          <img class="opt-img" src="https://images.unsplash.com/photo-1533002832-c5b4e69ce9b2?w=400&auto=format&fit=crop&q=80" alt=""/>
-          <div class="opt-body">
-            <div class="opt-title">Mountains</div>
-            <div class="opt-sub">Off-road, gravel</div>
+          <div class="opt" onclick="multi(this,'useCases','offroad',2)">
+            <img class="opt-img" src="https://images.unsplash.com/photo-1533002832-c5b4e69ce9b2?w=400&auto=format&fit=crop&q=80" alt=""/>
+            <div class="opt-body"><div class="opt-title">Mountains</div><div class="opt-sub">Off-road, gravel</div></div>
+            <div class="opt-check">✓</div>
           </div>
-          <div class="opt-check">✓</div>
-        </div>
-        <div class="opt" onclick="multi(this,'useCases','track',2)">
-          <img class="opt-img" src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=400&auto=format&fit=crop&q=80" alt=""/>
-          <div class="opt-body">
-            <div class="opt-title">Track</div>
-            <div class="opt-sub">Speed days</div>
+          <div class="opt" onclick="multi(this,'useCases','track',2)">
+            <img class="opt-img" src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=400&auto=format&fit=crop&q=80" alt=""/>
+            <div class="opt-body"><div class="opt-title">Track</div><div class="opt-sub">Speed days</div></div>
+            <div class="opt-check">✓</div>
           </div>
-          <div class="opt-check">✓</div>
         </div>
+
       </div>
 
-      <div style="margin-top:30px;text-align:center">
+      <div class="body-cta">
         <button class="cta" onclick="next()">Continue →</button>
       </div>
     </div>
   </section>
 
-  <!-- ────── STOP 6: STYLE SWIPE ────── -->
+  <!-- ────── 6: STYLE CAROUSEL ────── -->
   <section class="stop" data-stop="6">
     <div class="topbar">
       <div class="dots" id="dots-6"></div>
-      <button class="skip" onclick="state.styles=['naked','sport'];next()">Skip</button>
+      <button class="skip" onclick="state.styles=['naked','retro'];next()">Skip</button>
     </div>
-    <div class="body" style="padding-bottom:0">
-      <h2 class="question">Swipe what you love.</h2>
-      <p class="sub" id="swipeProg">1 of 8 — instinct only.</p>
-    </div>
-    <div class="swiper" id="swiper"></div>
-    <div class="swipe-actions">
-      <div class="swipe-btn swipe-no" onclick="swipe(false)">✕</div>
-      <div class="swipe-btn swipe-yes" onclick="swipe(true)">♥</div>
+    <div class="body">
+      <h2 class="question">Pick your style.</h2>
+      <p class="sub">Tap up to 3 you'd ride.</p>
+
+      <div class="body-content">
+        <div class="style-list" id="styleList"></div>
+      </div>
+
+      <div class="body-cta">
+        <button class="cta" onclick="next()">See my match →</button>
+      </div>
     </div>
   </section>
 
-  <!-- ────── STOP 7: DAILY DISTANCE ────── -->
+  <!-- ────── 7: CALC + REVEAL ────── -->
   <section class="stop" data-stop="7">
-    <div class="topbar">
-      <div class="dots" id="dots-7"></div>
-      <button class="skip" onclick="state.dailyKm=30;next()">Skip</button>
-    </div>
-    <div class="body">
-      <h2 class="question">How far daily?</h2>
-      <p class="sub">Mileage matters. We'll factor it.</p>
-
-      <div class="gauge">
-        <svg width="200" height="200" viewBox="0 0 200 200">
-          <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8"/>
-          <circle cx="100" cy="100" r="88" fill="none" stroke="#E2FF3B" stroke-width="8" stroke-linecap="round" stroke-dasharray="552.9" stroke-dashoffset="442" id="gArc" style="transition:stroke-dashoffset .3s ease"/>
-        </svg>
-        <div class="gauge-num">
-          <div class="gauge-val mono" id="dVal">30</div>
-          <div class="gauge-unit">km / day</div>
-        </div>
-      </div>
-
-      <div class="gauge-ctrl">
-        <button class="gauge-btn" onclick="dD(-5)">−</button>
-        <button class="gauge-btn" onclick="dD(5)">+</button>
-      </div>
-
-      <div style="margin-top:36px;text-align:center">
-        <button class="cta" onclick="next()">Continue →</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ────── STOP 8: PILLION ────── -->
-  <section class="stop" data-stop="8">
-    <div class="topbar">
-      <div class="dots" id="dots-8"></div>
-      <button class="skip" onclick="state.pillion='solo';next()">Skip</button>
-    </div>
-    <div class="body">
-      <h2 class="question">Solo or two-up?</h2>
-      <p class="sub">Pillion comfort changes the bike a lot.</p>
-
-      <div class="grid">
-        <div class="opt" onclick="pick(this,'pillion','solo')">
-          <div style="height:120px;display:flex;align-items:center;justify-content:center;font-size:64px">🏍️</div>
-          <div class="opt-body">
-            <div class="opt-title">Solo</div>
-            <div class="opt-sub">Just me</div>
-          </div>
-          <div class="opt-check">✓</div>
-        </div>
-        <div class="opt" onclick="pick(this,'pillion','two')">
-          <div style="height:120px;display:flex;align-items:center;justify-content:center;font-size:64px">🛵</div>
-          <div class="opt-body">
-            <div class="opt-title">Two-up</div>
-            <div class="opt-sub">Often with a pillion</div>
-          </div>
-          <div class="opt-check">✓</div>
-        </div>
-      </div>
-
-      <div style="margin-top:30px;text-align:center">
-        <button class="cta" onclick="next()">Continue →</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ────── STOP 9: PERSONALITY (rapid-fire) ────── -->
-  <section class="stop" data-stop="9">
-    <div class="topbar">
-      <div class="dots" id="dots-9"></div>
-      <button class="skip" onclick="next()">Skip</button>
-    </div>
-    <div class="body">
-      <h2 class="question">Quick — instinct only.</h2>
-      <p class="sub" id="eitherSub">Tap fast. 5 questions.</p>
-
-      <div id="eitherWrap" class="either"></div>
-      <div class="either-prog" id="eitherProg">1 / 5</div>
-    </div>
-  </section>
-
-  <!-- ────── STOP 10: CALCULATING ────── -->
-  <section class="stop" data-stop="10">
-    <div class="body center" style="padding:60px 24px">
+    <div class="body center" id="calcView">
       <div class="calc-rings">
         <div class="calc-ring"></div>
         <div class="calc-ring"></div>
         <div class="calc-ring"></div>
       </div>
-      <div class="calc-text" id="calcMsg">Analyzing your profile…</div>
+      <div class="calc-text">Finding your perfect match…</div>
     </div>
   </section>
 
-  <!-- ────── STOP 11: REVEAL ────── -->
-  <section class="stop" data-stop="11">
+  <!-- ────── 8: RESULT (full-scroll) ────── -->
+  <section class="stop" data-stop="8">
     <div class="topbar">
-      <div class="dots" id="dots-11"></div>
+      <div></div>
       <button class="skip" onclick="restart()" style="color:#E2FF3B">Retake</button>
     </div>
-    <div class="body" id="resultBody"></div>
+    <div class="body scroll" id="resultBody"></div>
   </section>
 
 </div>
@@ -463,217 +361,149 @@
 
 <script>
 /* ═══════════════════════════════════════════════
-   BIKE DATABASE — INDIA (50 popular bikes)
+   BIKE DATABASE — INDIA (50 bikes)
    ═══════════════════════════════════════════════ */
 const BIKES = [
-  // ── COMMUTERS ──
   {id:1,name:"Splendor Plus",brand:"Hero",price:80000,type:"commuter",cc:97,bhp:7.9,wt:112,seat:785,mpg:80,
-    s:{p:8,b:10,c:10,h:3,o:1,t:1,cf:8,st:3},tags:["practical","reliable","mileage"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/45929/splendor-plus-right-side-view.jpeg"},
+    s:{p:8,b:10,c:10,h:3,o:1,t:1,cf:8,st:3},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/45929/splendor-plus-right-side-view.jpeg"},
   {id:2,name:"HF Deluxe",brand:"Hero",price:62000,type:"commuter",cc:97,bhp:7.9,wt:111,seat:785,mpg:83,
-    s:{p:7,b:10,c:10,h:3,o:1,t:1,cf:7,st:3},tags:["practical","mileage","budget"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/167565/hf-deluxe-right-side-view.jpeg"},
+    s:{p:7,b:10,c:10,h:3,o:1,t:1,cf:7,st:3},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/167565/hf-deluxe-right-side-view.jpeg"},
   {id:3,name:"Shine 125",brand:"Honda",price:88000,type:"commuter",cc:124,bhp:10.7,wt:114,seat:790,mpg:65,
-    s:{p:8,b:10,c:10,h:4,o:1,t:1,cf:8,st:4},tags:["smooth","reliable","family"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/124773/shine-right-side-view.jpeg"},
+    s:{p:8,b:10,c:10,h:4,o:1,t:1,cf:8,st:4},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/124773/shine-right-side-view.jpeg"},
   {id:4,name:"Pulsar 125",brand:"Bajaj",price:84000,type:"commuter",cc:124,bhp:11.6,wt:140,seat:790,mpg:55,
-    s:{p:7,b:9,c:9,h:5,o:1,t:2,cf:7,st:5},tags:["sporty","commute"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/120197/pulsar-125-right-side-view.jpeg"},
+    s:{p:7,b:9,c:9,h:5,o:1,t:2,cf:7,st:5},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/120197/pulsar-125-right-side-view.jpeg"},
   {id:5,name:"Raider 125",brand:"TVS",price:91000,type:"commuter",cc:124,bhp:11.4,wt:123,seat:780,mpg:60,
-    s:{p:7,b:9,c:9,h:5,o:1,t:2,cf:7,st:6},tags:["modern","tech","sporty"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/120195/raider-right-side-view.jpeg"},
-  // ── 150-200 NAKEDS ──
+    s:{p:7,b:9,c:9,h:5,o:1,t:2,cf:7,st:6},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/120195/raider-right-side-view.jpeg"},
   {id:6,name:"Pulsar N150",brand:"Bajaj",price:121000,type:"naked",cc:149,bhp:14.5,wt:144,seat:790,mpg:50,
-    s:{p:7,b:8,c:8,h:6,o:2,t:3,cf:7,st:7},tags:["sporty","aggressive"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/151329/pulsar-n150-right-side-view.jpeg"},
+    s:{p:7,b:8,c:8,h:6,o:2,t:3,cf:7,st:7},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/151329/pulsar-n150-right-side-view.jpeg"},
   {id:7,name:"Apache RTR 160 4V",brand:"TVS",price:130000,type:"naked",cc:160,bhp:17.6,wt:147,seat:800,mpg:45,
-    s:{p:6,b:7,c:8,h:7,o:2,t:5,cf:7,st:8},tags:["aggressive","race-bred"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106011/apache-rtr-160-4v-right-side-view.jpeg"},
+    s:{p:6,b:7,c:8,h:7,o:2,t:5,cf:7,st:8},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106011/apache-rtr-160-4v-right-side-view.jpeg"},
   {id:8,name:"Xtreme 160R 4V",brand:"Hero",price:140000,type:"naked",cc:163,bhp:16.6,wt:144,seat:790,mpg:45,
-    s:{p:7,b:8,c:8,h:7,o:2,t:4,cf:7,st:7},tags:["sporty","value"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/124771/xtreme-160r-4v-right-side-view.jpeg"},
+    s:{p:7,b:8,c:8,h:7,o:2,t:4,cf:7,st:7},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/124771/xtreme-160r-4v-right-side-view.jpeg"},
   {id:9,name:"FZ-S V4",brand:"Yamaha",price:135000,type:"naked",cc:149,bhp:12.4,wt:137,seat:790,mpg:48,
-    s:{p:7,b:9,c:8,h:6,o:2,t:3,cf:8,st:8},tags:["muscular","style","reliable"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106041/fz-s-fi-version-4-0-right-side-view.jpeg"},
+    s:{p:7,b:9,c:8,h:6,o:2,t:3,cf:8,st:8},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106041/fz-s-fi-version-4-0-right-side-view.jpeg"},
   {id:10,name:"MT-15 V2",brand:"Yamaha",price:175000,type:"naked",cc:155,bhp:18.4,wt:139,seat:810,mpg:45,
-    s:{p:5,b:7,c:7,h:7,o:2,t:6,cf:6,st:9},tags:["aggressive","tech","street-fighter"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106013/mt-15-v2-right-side-view.jpeg"},
+    s:{p:5,b:7,c:7,h:7,o:2,t:6,cf:6,st:9},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106013/mt-15-v2-right-side-view.jpeg"},
   {id:11,name:"Gixxer 250",brand:"Suzuki",price:215000,type:"naked",cc:249,bhp:26.5,wt:156,seat:800,mpg:35,
-    s:{p:7,b:7,c:7,h:8,o:2,t:6,cf:8,st:8},tags:["refined","torquey"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/126459/gixxer-sf-250-right-side-view.jpeg"},
+    s:{p:7,b:7,c:7,h:8,o:2,t:6,cf:8,st:8},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/126459/gixxer-sf-250-right-side-view.jpeg"},
   {id:12,name:"Apache RTR 200 4V",brand:"TVS",price:165000,type:"naked",cc:197,bhp:20.5,wt:153,seat:800,mpg:40,
-    s:{p:6,b:7,c:7,h:7,o:2,t:7,cf:7,st:8},tags:["aggressive","race-bred"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106003/apache-rtr-200-4v-right-side-view.jpeg"},
+    s:{p:6,b:7,c:7,h:7,o:2,t:7,cf:7,st:8},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106003/apache-rtr-200-4v-right-side-view.jpeg"},
   {id:13,name:"Pulsar NS200",brand:"Bajaj",price:170000,type:"naked",cc:199,bhp:24.1,wt:156,seat:805,mpg:38,
-    s:{p:6,b:7,c:7,h:8,o:2,t:7,cf:7,st:8},tags:["aggressive","power"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106005/pulsar-ns200-right-side-view.jpeg"},
+    s:{p:6,b:7,c:7,h:8,o:2,t:7,cf:7,st:8},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106005/pulsar-ns200-right-side-view.jpeg"},
   {id:14,name:"Duke 200",brand:"KTM",price:200000,type:"naked",cc:199,bhp:25,wt:159,seat:822,mpg:35,
-    s:{p:5,b:6,c:7,h:8,o:3,t:8,cf:6,st:10},tags:["aggressive","race","european"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106009/duke-200-right-side-view.jpeg"},
+    s:{p:5,b:6,c:7,h:8,o:3,t:8,cf:6,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106009/duke-200-right-side-view.jpeg"},
   {id:15,name:"Duke 390",brand:"KTM",price:320000,type:"naked",cc:399,bhp:45,wt:170,seat:830,mpg:30,
-    s:{p:5,b:5,c:6,h:9,o:3,t:10,cf:6,st:10},tags:["track","aggressive","race"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/154213/2024-ktm-duke-390-right-side-view.jpeg"},
-  // ── ROYAL ENFIELDS ──
+    s:{p:5,b:5,c:6,h:9,o:3,t:10,cf:6,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/154213/2024-ktm-duke-390-right-side-view.jpeg"},
   {id:16,name:"Hunter 350",brand:"Royal Enfield",price:180000,type:"retro",cc:349,bhp:20.2,wt:181,seat:800,mpg:36,
-    s:{p:8,b:8,c:8,h:7,o:3,t:3,cf:8,st:9},tags:["retro","torquey","city-cruiser"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/124379/hunter-350-right-side-view.jpeg"},
+    s:{p:8,b:8,c:8,h:7,o:3,t:3,cf:8,st:9},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/124379/hunter-350-right-side-view.jpeg"},
   {id:17,name:"Classic 350",brand:"Royal Enfield",price:215000,type:"retro",cc:349,bhp:20.2,wt:195,seat:805,mpg:35,
-    s:{p:9,b:8,c:7,h:8,o:3,t:2,cf:9,st:10},tags:["retro","iconic","heritage"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106001/classic-350-right-side-view.jpeg"},
+    s:{p:9,b:8,c:7,h:8,o:3,t:2,cf:9,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106001/classic-350-right-side-view.jpeg"},
   {id:18,name:"Meteor 350",brand:"Royal Enfield",price:212000,type:"cruiser",cc:349,bhp:20.2,wt:191,seat:765,mpg:36,
-    s:{p:10,b:9,c:7,h:9,o:2,t:2,cf:10,st:9},tags:["cruiser","comfort","tourer"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106047/meteor-350-right-side-view.jpeg"},
+    s:{p:10,b:9,c:7,h:9,o:2,t:2,cf:10,st:9},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106047/meteor-350-right-side-view.jpeg"},
   {id:19,name:"Bullet 350",brand:"Royal Enfield",price:175000,type:"retro",cc:349,bhp:20.2,wt:195,seat:805,mpg:35,
-    s:{p:9,b:7,c:7,h:7,o:3,t:1,cf:9,st:10},tags:["retro","iconic","thump"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/137527/2023-bullet-350-right-side-view.jpeg"},
+    s:{p:9,b:7,c:7,h:7,o:3,t:1,cf:9,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/137527/2023-bullet-350-right-side-view.jpeg"},
   {id:20,name:"Himalayan 450",brand:"Royal Enfield",price:285000,type:"adventure",cc:452,bhp:39.5,wt:196,seat:825,mpg:30,
-    s:{p:8,b:7,c:6,h:9,o:10,t:3,cf:9,st:9},tags:["adventure","off-road","tourer"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/154553/himalayan-450-right-side-view.jpeg"},
+    s:{p:8,b:7,c:6,h:9,o:10,t:3,cf:9,st:9},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/154553/himalayan-450-right-side-view.jpeg"},
   {id:21,name:"Continental GT 650",brand:"Royal Enfield",price:325000,type:"cafe-racer",cc:648,bhp:47,wt:211,seat:800,mpg:25,
-    s:{p:5,b:6,c:5,h:9,o:2,t:6,cf:6,st:10},tags:["cafe-racer","retro","power"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106017/continental-gt-650-right-side-view.jpeg"},
+    s:{p:5,b:6,c:5,h:9,o:2,t:6,cf:6,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106017/continental-gt-650-right-side-view.jpeg"},
   {id:22,name:"Interceptor 650",brand:"Royal Enfield",price:310000,type:"retro",cc:648,bhp:47,wt:202,seat:804,mpg:25,
-    s:{p:8,b:7,c:6,h:9,o:3,t:5,cf:8,st:10},tags:["retro","torquey","tourer"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106019/interceptor-650-right-side-view.jpeg"},
+    s:{p:8,b:7,c:6,h:9,o:3,t:5,cf:8,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106019/interceptor-650-right-side-view.jpeg"},
   {id:23,name:"Super Meteor 650",brand:"Royal Enfield",price:365000,type:"cruiser",cc:648,bhp:47,wt:241,seat:740,mpg:24,
-    s:{p:10,b:7,c:6,h:10,o:2,t:3,cf:10,st:10},tags:["cruiser","tourer","comfort"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/137523/super-meteor-650-right-side-view.jpeg"},
-  // ── PREMIUM ──
+    s:{p:10,b:7,c:6,h:10,o:2,t:3,cf:10,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/137523/super-meteor-650-right-side-view.jpeg"},
   {id:24,name:"RC 390",brand:"KTM",price:340000,type:"sport",cc:373,bhp:43,wt:172,seat:835,mpg:25,
-    s:{p:3,b:5,c:5,h:8,o:1,t:10,cf:4,st:10},tags:["track","supersport","race"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/124357/rc-390-right-side-view.jpeg"},
+    s:{p:3,b:5,c:5,h:8,o:1,t:10,cf:4,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/124357/rc-390-right-side-view.jpeg"},
   {id:25,name:"390 Adventure",brand:"KTM",price:360000,type:"adventure",cc:373,bhp:43,wt:177,seat:855,mpg:28,
-    s:{p:7,b:6,c:6,h:10,o:9,t:6,cf:8,st:9},tags:["adventure","tourer","off-road"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106045/390-adventure-right-side-view.jpeg"},
+    s:{p:7,b:6,c:6,h:10,o:9,t:6,cf:8,st:9},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106045/390-adventure-right-side-view.jpeg"},
   {id:26,name:"Speed 400",brand:"Triumph",price:240000,type:"naked",cc:398,bhp:39.5,wt:170,seat:790,mpg:30,
-    s:{p:7,b:8,c:7,h:8,o:3,t:7,cf:8,st:10},tags:["modern-classic","british","value"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/146803/speed-400-right-side-view.jpeg"},
+    s:{p:7,b:8,c:7,h:8,o:3,t:7,cf:8,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/146803/speed-400-right-side-view.jpeg"},
   {id:27,name:"Scrambler 400X",brand:"Triumph",price:265000,type:"adventure",cc:398,bhp:39.5,wt:179,seat:835,mpg:30,
-    s:{p:7,b:7,c:7,h:8,o:7,t:5,cf:8,st:10},tags:["scrambler","versatile","british"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/146801/scrambler-400-x-right-side-view.jpeg"},
+    s:{p:7,b:7,c:7,h:8,o:7,t:5,cf:8,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/146801/scrambler-400-x-right-side-view.jpeg"},
   {id:28,name:"Dominar 400",brand:"Bajaj",price:240000,type:"naked",cc:373,bhp:39.4,wt:187,seat:800,mpg:25,
-    s:{p:8,b:7,c:7,h:10,o:3,t:5,cf:9,st:8},tags:["tourer","value","muscular"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106027/dominar-400-right-side-view.jpeg"},
+    s:{p:8,b:7,c:7,h:10,o:3,t:5,cf:9,st:8},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106027/dominar-400-right-side-view.jpeg"},
   {id:29,name:"X440",brand:"Harley-Davidson",price:240000,type:"cruiser",cc:440,bhp:27,wt:190,seat:805,mpg:35,
-    s:{p:9,b:8,c:7,h:9,o:2,t:2,cf:9,st:10},tags:["cruiser","american","heritage"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/151105/x440-right-side-view.jpeg"},
+    s:{p:9,b:8,c:7,h:9,o:2,t:2,cf:9,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/151105/x440-right-side-view.jpeg"},
   {id:30,name:"G 310 R",brand:"BMW",price:295000,type:"naked",cc:313,bhp:34,wt:164,seat:785,mpg:30,
-    s:{p:7,b:8,c:7,h:8,o:3,t:6,cf:8,st:9},tags:["european","refined","premium"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106029/g-310-r-right-side-view.jpeg"},
+    s:{p:7,b:8,c:7,h:8,o:3,t:6,cf:8,st:9},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106029/g-310-r-right-side-view.jpeg"},
   {id:31,name:"G 310 GS",brand:"BMW",price:325000,type:"adventure",cc:313,bhp:34,wt:175,seat:835,mpg:30,
-    s:{p:8,b:7,c:7,h:9,o:8,t:5,cf:9,st:9},tags:["adventure","tourer","european"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106031/g-310-gs-right-side-view.jpeg"},
+    s:{p:8,b:7,c:7,h:9,o:8,t:5,cf:9,st:9},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106031/g-310-gs-right-side-view.jpeg"},
   {id:32,name:"Ninja 300",brand:"Kawasaki",price:340000,type:"sport",cc:296,bhp:39,wt:179,seat:785,mpg:26,
-    s:{p:5,b:7,c:6,h:9,o:1,t:9,cf:6,st:10},tags:["sport","track","japanese"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106057/ninja-300-right-side-view.jpeg"},
-  // ── HIGH END ──
+    s:{p:5,b:7,c:6,h:9,o:1,t:9,cf:6,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106057/ninja-300-right-side-view.jpeg"},
   {id:33,name:"Z650",brand:"Kawasaki",price:710000,type:"naked",cc:649,bhp:67,wt:187,seat:790,mpg:22,
-    s:{p:7,b:6,c:6,h:10,o:2,t:8,cf:8,st:10},tags:["naked","power","japanese"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106051/z650-right-side-view.jpeg"},
+    s:{p:7,b:6,c:6,h:10,o:2,t:8,cf:8,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106051/z650-right-side-view.jpeg"},
   {id:34,name:"Ninja 650",brand:"Kawasaki",price:735000,type:"sport",cc:649,bhp:67,wt:196,seat:790,mpg:22,
-    s:{p:7,b:6,c:6,h:10,o:1,t:9,cf:7,st:10},tags:["sport-tourer","power"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106053/ninja-650-right-side-view.jpeg"},
+    s:{p:7,b:6,c:6,h:10,o:1,t:9,cf:7,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106053/ninja-650-right-side-view.jpeg"},
   {id:35,name:"Trident 660",brand:"Triumph",price:825000,type:"naked",cc:660,bhp:80,wt:189,seat:805,mpg:22,
-    s:{p:7,b:6,c:6,h:10,o:2,t:9,cf:8,st:10},tags:["naked","british","triple"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106093/trident-660-right-side-view.jpeg"},
+    s:{p:7,b:6,c:6,h:10,o:2,t:9,cf:8,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106093/trident-660-right-side-view.jpeg"},
   {id:36,name:"CB650R",brand:"Honda",price:920000,type:"naked",cc:649,bhp:86,wt:202,seat:810,mpg:21,
-    s:{p:6,b:6,c:6,h:10,o:1,t:9,cf:7,st:10},tags:["naked","four-cylinder","refined"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/124743/cb650r-right-side-view.jpeg"},
+    s:{p:6,b:6,c:6,h:10,o:1,t:9,cf:7,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/124743/cb650r-right-side-view.jpeg"},
   {id:37,name:"Versys 650",brand:"Kawasaki",price:790000,type:"adventure",cc:649,bhp:67,wt:218,seat:840,mpg:22,
-    s:{p:9,b:6,c:6,h:10,o:6,t:5,cf:10,st:9},tags:["adventure-tourer","comfort"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106071/versys-650-right-side-view.jpeg"},
-  // ── SCOOTERS ──
+    s:{p:9,b:6,c:6,h:10,o:6,t:5,cf:10,st:9},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106071/versys-650-right-side-view.jpeg"},
   {id:38,name:"Activa 6G",brand:"Honda",price:84000,type:"scooter",cc:110,bhp:7.7,wt:107,seat:765,mpg:50,
-    s:{p:9,b:10,c:10,h:3,o:1,t:1,cf:9,st:5},tags:["practical","reliable","family"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106033/activa-6g-right-side-view.jpeg"},
+    s:{p:9,b:10,c:10,h:3,o:1,t:1,cf:9,st:5},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106033/activa-6g-right-side-view.jpeg"},
   {id:39,name:"Jupiter",brand:"TVS",price:78000,type:"scooter",cc:110,bhp:7.5,wt:108,seat:765,mpg:55,
-    s:{p:9,b:10,c:10,h:3,o:1,t:1,cf:9,st:6},tags:["practical","family","value"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106085/jupiter-right-side-view.jpeg"},
+    s:{p:9,b:10,c:10,h:3,o:1,t:1,cf:9,st:6},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106085/jupiter-right-side-view.jpeg"},
   {id:40,name:"Access 125",brand:"Suzuki",price:90000,type:"scooter",cc:124,bhp:8.6,wt:104,seat:773,mpg:54,
-    s:{p:9,b:10,c:10,h:4,o:1,t:1,cf:9,st:6},tags:["practical","peppy","family"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106081/access-125-right-side-view.jpeg"},
+    s:{p:9,b:10,c:10,h:4,o:1,t:1,cf:9,st:6},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106081/access-125-right-side-view.jpeg"},
   {id:41,name:"NTorq 125",brand:"TVS",price:95000,type:"scooter",cc:124,bhp:9.4,wt:118,seat:770,mpg:50,
-    s:{p:8,b:9,c:9,h:4,o:1,t:2,cf:8,st:9},tags:["sporty","tech","modern"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106087/ntorq-125-right-side-view.jpeg"},
+    s:{p:8,b:9,c:9,h:4,o:1,t:2,cf:8,st:9},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106087/ntorq-125-right-side-view.jpeg"},
   {id:42,name:"Aerox 155",brand:"Yamaha",price:150000,type:"scooter",cc:155,bhp:14.7,wt:126,seat:790,mpg:42,
-    s:{p:6,b:8,c:9,h:6,o:1,t:5,cf:7,st:10},tags:["sporty","maxi-scooter","aggressive"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106045/aerox-155-right-side-view.jpeg"},
+    s:{p:6,b:8,c:9,h:6,o:1,t:5,cf:7,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106045/aerox-155-right-side-view.jpeg"},
   {id:43,name:"Vespa SXL 150",brand:"Vespa",price:160000,type:"scooter",cc:149,bhp:10.5,wt:118,seat:780,mpg:40,
-    s:{p:8,b:9,c:9,h:5,o:1,t:1,cf:8,st:10},tags:["retro","italian","style"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106097/sxl-150-right-side-view.jpeg"},
-  // ── EXTRAS ──
+    s:{p:8,b:9,c:9,h:5,o:1,t:1,cf:8,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106097/sxl-150-right-side-view.jpeg"},
   {id:44,name:"FZ25",brand:"Yamaha",price:208000,type:"naked",cc:249,bhp:20.8,wt:153,seat:795,mpg:35,
-    s:{p:7,b:8,c:7,h:8,o:2,t:5,cf:8,st:8},tags:["muscular","reliable","commute"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106043/fz25-right-side-view.jpeg"},
+    s:{p:7,b:8,c:7,h:8,o:2,t:5,cf:8,st:8},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106043/fz25-right-side-view.jpeg"},
   {id:45,name:"Pulsar RS200",brand:"Bajaj",price:185000,type:"sport",cc:199,bhp:24.1,wt:165,seat:810,mpg:35,
-    s:{p:5,b:7,c:6,h:8,o:1,t:8,cf:6,st:9},tags:["sport","aggressive","fairing"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106007/pulsar-rs200-right-side-view.jpeg"},
+    s:{p:5,b:7,c:6,h:8,o:1,t:8,cf:6,st:9},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106007/pulsar-rs200-right-side-view.jpeg"},
   {id:46,name:"Apache RR 310",brand:"TVS",price:285000,type:"sport",cc:312,bhp:34,wt:174,seat:810,mpg:30,
-    s:{p:5,b:6,c:6,h:9,o:1,t:9,cf:6,st:10},tags:["supersport","track","race"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106063/apache-rr-310-right-side-view.jpeg"},
+    s:{p:5,b:6,c:6,h:9,o:1,t:9,cf:6,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106063/apache-rr-310-right-side-view.jpeg"},
   {id:47,name:"Ninja 400",brand:"Kawasaki",price:540000,type:"sport",cc:399,bhp:48,wt:168,seat:785,mpg:25,
-    s:{p:5,b:6,c:6,h:9,o:1,t:10,cf:6,st:10},tags:["sport","track","japanese"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106055/ninja-400-right-side-view.jpeg"},
+    s:{p:5,b:6,c:6,h:9,o:1,t:10,cf:6,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106055/ninja-400-right-side-view.jpeg"},
   {id:48,name:"CBR650R",brand:"Honda",price:990000,type:"sport",cc:649,bhp:86,wt:208,seat:810,mpg:21,
-    s:{p:6,b:6,c:6,h:10,o:1,t:10,cf:7,st:10},tags:["supersport","four-cylinder"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/124745/cbr650r-right-side-view.jpeg"},
-  {id:49,name:"Hunter 350 Retro",brand:"Royal Enfield",price:175000,type:"retro",cc:349,bhp:20.2,wt:181,seat:800,mpg:36,
-    s:{p:8,b:8,c:8,h:7,o:3,t:3,cf:8,st:9},tags:["retro","city-cruiser","value"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/124379/hunter-350-right-side-view.jpeg"},
-  {id:50,name:"Aprilia SR 160",brand:"Aprilia",price:135000,type:"scooter",cc:160,bhp:11,wt:122,seat:780,mpg:38,
-    s:{p:6,b:8,c:9,h:5,o:1,t:4,cf:7,st:10},tags:["sporty","italian","aggressive"],
-    img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106083/sr-160-right-side-view.jpeg"}
+    s:{p:6,b:6,c:6,h:10,o:1,t:10,cf:7,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/124745/cbr650r-right-side-view.jpeg"},
+  {id:49,name:"Aprilia SR 160",brand:"Aprilia",price:135000,type:"scooter",cc:160,bhp:11,wt:122,seat:780,mpg:38,
+    s:{p:6,b:8,c:9,h:5,o:1,t:4,cf:7,st:10},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/106083/sr-160-right-side-view.jpeg"},
+  {id:50,name:"Pulsar N250",brand:"Bajaj",price:155000,type:"naked",cc:249,bhp:24.5,wt:162,seat:795,mpg:38,
+    s:{p:7,b:7,c:7,h:8,o:2,t:6,cf:8,st:8},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/154427/pulsar-n250-right-side-view.jpeg"}
+];
+
+const STYLES = [
+  {key:'naked',label:'Naked Sport',sub:'Aggressive stance, no fairing',img:'https://images.unsplash.com/photo-1580310614729-ccd69652491d?w=200&auto=format&fit=crop&q=80'},
+  {key:'cruiser',label:'Cruiser',sub:'Laid back, low seat, big torque',img:'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=200&auto=format&fit=crop&q=80'},
+  {key:'adventure',label:'Adventure',sub:'Tall, off-road capable',img:'https://images.unsplash.com/photo-1517027587904-d9a508c87bbe?w=200&auto=format&fit=crop&q=80'},
+  {key:'sport',label:'Sport / Supersport',sub:'Full fairing, track focus',img:'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=200&auto=format&fit=crop&q=80'},
+  {key:'retro',label:'Retro / Classic',sub:'Old-school looks, modern guts',img:'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=200&auto=format&fit=crop&q=80'},
+  {key:'cafe-racer',label:'Cafe Racer',sub:'Retro race styling',img:'https://images.unsplash.com/photo-1600375226761-86afea11d2c1?w=200&auto=format&fit=crop&q=80'},
+  {key:'scooter',label:'Scooter',sub:'Convenient, automatic',img:'https://images.unsplash.com/photo-1591726472537-fde9e5dba9b9?w=200&auto=format&fit=crop&q=80'},
+  {key:'commuter',label:'Practical Commuter',sub:'Mileage king, low maintenance',img:'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=200&auto=format&fit=crop&q=80'}
 ];
 
 /* ═══════════════════════════════════════════════
    STATE
    ═══════════════════════════════════════════════ */
 const state = {
-  current:1, total:11,
+  current:1, total:5,
   rider:null, height:170, weight:70, budget:200000,
-  useCases:[], styles:[], dailyKm:30, pillion:'solo', personality:{}
+  useCases:[], styles:[]
 };
 
-const STYLE_SWIPES = [
-  {key:'cruiser',label:'Cruiser',sub:'Laid back, low seat, big torque',img:'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600&auto=format&fit=crop&q=80'},
-  {key:'naked',label:'Naked Sport',sub:'Aggressive stance, no fairing',img:'https://images.unsplash.com/photo-1580310614729-ccd69652491d?w=600&auto=format&fit=crop&q=80'},
-  {key:'sport',label:'Sport / Supersport',sub:'Full fairing, track-focused',img:'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=600&auto=format&fit=crop&q=80'},
-  {key:'adventure',label:'Adventure',sub:'Tall, off-road capable',img:'https://images.unsplash.com/photo-1517027587904-d9a508c87bbe?w=600&auto=format&fit=crop&q=80'},
-  {key:'cafe-racer',label:'Cafe Racer',sub:'Retro race styling',img:'https://images.unsplash.com/photo-1600375226761-86afea11d2c1?w=600&auto=format&fit=crop&q=80'},
-  {key:'scooter',label:'Scooter',sub:'Convenient, automatic',img:'https://images.unsplash.com/photo-1591726472537-fde9e5dba9b9?w=600&auto=format&fit=crop&q=80'},
-  {key:'retro',label:'Retro / Modern Classic',sub:'Old-school looks, modern guts',img:'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=600&auto=format&fit=crop&q=80'},
-  {key:'commuter',label:'Practical Commuter',sub:'Mileage king, low maintenance',img:'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&auto=format&fit=crop&q=80'}
-];
-
-const EITHER_QS = [
-  {l:'Loud exhaust',r:'Quiet ride',k:'sound'},
-  {l:'Stand out',r:'Blend in',k:'visibility'},
-  {l:'Speed',r:'Comfort',k:'priority'},
-  {l:'Modern tech',r:'Pure mechanical',k:'tech'},
-  {l:'Solo rides',r:'Group rides',k:'social'}
-];
-
-/* ═══════════════════════════════════════════════
-   NAVIGATION
-   ═══════════════════════════════════════════════ */
+/* NAV */
 function go(n){
   document.querySelectorAll('.stop').forEach(s => s.classList.remove('active'));
-  const target = document.querySelector(`[data-stop="${n}"]`);
-  if(target){
-    target.classList.add('active');
-    state.current = n;
-    drawDots(n);
-    if(n === 6) initSwiper();
-    if(n === 9) initEither();
-    if(n === 10) runCalc();
-  }
+  const t = document.querySelector(`[data-stop="${n}"]`);
+  if(!t) return;
+  t.classList.add('active');
+  state.current = n;
+  drawDots(n);
+  if(n === 6) initStyleList();
+  if(n === 7) runCalc();
 }
 function next(){ go(state.current + 1); }
 function drawDots(n){
   const wrap = document.getElementById('dots-' + n);
   if(!wrap) return;
   wrap.innerHTML = '';
-  for(let i=1;i<=state.total;i++){
+  // Show 5 interactive stops (2..6) as dots
+  for(let i=2;i<=6;i++){
     const d = document.createElement('div');
     d.className = 'dot';
     if(i < n) d.classList.add('done');
@@ -682,15 +512,13 @@ function drawDots(n){
   }
 }
 
-/* ═══════════════════════════════════════════════
-   PICKERS
-   ═══════════════════════════════════════════════ */
+/* PICKERS */
 function pick(el, key, val){
   const parent = el.parentElement;
   parent.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   state[key] = val;
-  setTimeout(next, 320);
+  setTimeout(next, 300);
 }
 function multi(el, key, val, max){
   if(!Array.isArray(state[key])) state[key] = [];
@@ -699,20 +527,16 @@ function multi(el, key, val, max){
     state[key] = state[key].filter(v => v !== val);
   } else {
     if(state[key].length >= max){
-      const first = state[key][0];
-      state[key].shift();
-      el.parentElement.querySelectorAll('.opt').forEach(o => {
-        if(o.querySelector('.opt-title')?.textContent.toLowerCase().includes(first)) o.classList.remove('selected');
+      const old = state[key].shift();
+      el.parentElement.querySelectorAll('.opt.selected').forEach(o => {
+        if(o !== el && state[key].indexOf(old) === -1) o.classList.remove('selected');
       });
     }
     el.classList.add('selected');
     state[key].push(val);
   }
 }
-
-/* ═══════════════════════════════════════════════
-   STOP 3 — BODY SLIDERS + SILHOUETTE
-   ═══════════════════════════════════════════════ */
+/* BODY */
 function onH(v){
   state.height = +v;
   document.getElementById('hVal').textContent = v;
@@ -724,21 +548,14 @@ function onH(v){
 function onW(v){
   state.weight = +v;
   document.getElementById('wVal').textContent = v;
-  const sil = document.getElementById('sil');
-  const xs = 0.85 + ((+v - 40) / 110) * 0.4;
-  const cur = sil.style.transform || 'scaleY(1)';
-  const sy = cur.match(/scaleY\(([^)]+)\)/);
-  sil.style.transform = `scaleX(${xs}) scaleY(${sy ? sy[1] : 1})`;
 }
 
-/* ═══════════════════════════════════════════════
-   STOP 4 — BUDGET
-   ═══════════════════════════════════════════════ */
+/* BUDGET */
 function onB(v){
   state.budget = +v;
   document.getElementById('bVal').textContent = formatINR(v);
   const emi = Math.round((+v / 36) * 1.05);
-  document.getElementById('bEMI').textContent = `~ ₹${formatINR(emi)}/mo on EMI`;
+  document.getElementById('bEMI').textContent = `~₹${formatINR(emi)}/mo EMI`;
   const icon = document.getElementById('bIcon');
   const cls = document.getElementById('bClass');
   if(+v < 100000){ icon.textContent='🛵'; cls.textContent='Commuter / Scooter'; }
@@ -747,7 +564,7 @@ function onB(v){
   else if(+v < 600000){ icon.textContent='🏎️'; cls.textContent='Sport / Adventure'; }
   else if(+v < 1000000){ icon.textContent='🏎️'; cls.textContent='Big Twin / Sport-Tourer'; }
   else { icon.textContent='🚀'; cls.textContent='Superbike Territory'; }
-  icon.style.transform = `scale(${0.8 + (+v / 1500000) * 0.6})`;
+  icon.style.transform = `scale(${0.85 + (+v / 1500000) * 0.45})`;
 }
 function formatINR(n){
   n = Math.round(+n);
@@ -758,263 +575,103 @@ function formatINR(n){
   return rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + last3;
 }
 
-/* ═══════════════════════════════════════════════
-   STOP 6 — TINDER SWIPER
-   ═══════════════════════════════════════════════ */
-let swipeIdx = 0;
-function initSwiper(){
-  swipeIdx = 0;
-  state.styles = [];
-  renderSwiper();
-}
-function renderSwiper(){
-  const wrap = document.getElementById('swiper');
+/* STYLE LIST (multi-select up to 3) */
+function initStyleList(){
+  const wrap = document.getElementById('styleList');
   wrap.innerHTML = '';
-  if(swipeIdx >= STYLE_SWIPES.length){
-    setTimeout(next, 200);
-    return;
-  }
-  document.getElementById('swipeProg').textContent = `${swipeIdx + 1} of ${STYLE_SWIPES.length} — instinct only.`;
-  // build top 2 cards (current + next)
-  for(let i = Math.min(swipeIdx + 1, STYLE_SWIPES.length - 1); i >= swipeIdx; i--){
-    const s = STYLE_SWIPES[i];
-    const card = document.createElement('div');
-    card.className = 'swipe-card';
-    card.style.zIndex = 100 - i;
-    if(i > swipeIdx){
-      card.style.transform = 'scale(0.94) translateY(10px)';
-      card.style.opacity = '0.6';
-    }
-    card.innerHTML = `
-      <img src="${s.img}" alt=""/>
-      <div class="scrim"></div>
-      <div class="swipe-stamp like">YES</div>
-      <div class="swipe-stamp nope">NOPE</div>
-      <div class="lbl"><h3>${s.label}</h3><p>${s.sub}</p></div>
+  STYLES.forEach(s => {
+    const item = document.createElement('div');
+    item.className = 'style-item' + (state.styles.includes(s.key) ? ' selected' : '');
+    item.innerHTML = `
+      <img class="style-img" src="${s.img}" alt="" onerror="this.style.background='#1a1a1a'"/>
+      <div class="style-meta">
+        <div class="style-name">${s.label}</div>
+        <div class="style-desc">${s.sub}</div>
+      </div>
+      <div class="style-tick">✓</div>
     `;
-    wrap.appendChild(card);
-  }
-  attachDrag();
+    item.onclick = () => toggleStyle(item, s.key);
+    wrap.appendChild(item);
+  });
 }
-function attachDrag(){
-  const card = document.querySelector('.swipe-card[style*="z-index: 100"]') || document.querySelector('.swipe-card');
-  if(!card) return;
-  let sx = 0, dx = 0, dragging = false;
-  const onStart = (e) => {
-    dragging = true;
-    sx = (e.touches ? e.touches[0].clientX : e.clientX);
-    card.style.transition = 'none';
-  };
-  const onMove = (e) => {
-    if(!dragging) return;
-    dx = (e.touches ? e.touches[0].clientX : e.clientX) - sx;
-    card.style.transform = `translateX(${dx}px) rotate(${dx * 0.06}deg)`;
-    const like = card.querySelector('.swipe-stamp.like');
-    const nope = card.querySelector('.swipe-stamp.nope');
-    if(dx > 30){ like.style.opacity = Math.min(1, dx / 100); nope.style.opacity = 0; }
-    else if(dx < -30){ nope.style.opacity = Math.min(1, -dx / 100); like.style.opacity = 0; }
-    else { like.style.opacity = 0; nope.style.opacity = 0; }
-  };
-  const onEnd = () => {
-    if(!dragging) return;
-    dragging = false;
-    card.style.transition = 'transform .35s ease, opacity .3s ease';
-    if(dx > 90) swipe(true);
-    else if(dx < -90) swipe(false);
-    else card.style.transform = '';
-    dx = 0;
-  };
-  card.addEventListener('touchstart', onStart, {passive:true});
-  card.addEventListener('touchmove', onMove, {passive:true});
-  card.addEventListener('touchend', onEnd);
-  card.addEventListener('mousedown', onStart);
-  document.addEventListener('mousemove', onMove);
-  document.addEventListener('mouseup', onEnd);
-}
-function swipe(yes){
-  const card = document.querySelector('.swipe-card[style*="z-index: 100"]') || document.querySelector('.swipe-card');
-  if(!card) return;
-  card.classList.add(yes ? 'gone-right' : 'gone-left');
-  if(yes) state.styles.push(STYLE_SWIPES[swipeIdx].key);
-  swipeIdx++;
-  setTimeout(renderSwiper, 320);
-}
-
-/* ═══════════════════════════════════════════════
-   STOP 7 — DAILY DISTANCE GAUGE
-   ═══════════════════════════════════════════════ */
-function dD(delta){
-  state.dailyKm = Math.max(5, Math.min(200, state.dailyKm + delta));
-  document.getElementById('dVal').textContent = state.dailyKm;
-  const arc = document.getElementById('gArc');
-  const max = 552.9;
-  const off = max - (state.dailyKm / 200) * max;
-  arc.setAttribute('stroke-dashoffset', off);
-}
-
-/* ═══════════════════════════════════════════════
-   STOP 9 — EITHER/OR RAPID FIRE
-   ═══════════════════════════════════════════════ */
-let eitherIdx = 0;
-function initEither(){
-  eitherIdx = 0;
-  state.personality = {};
-  renderEither();
-}
-function renderEither(){
-  const wrap = document.getElementById('eitherWrap');
-  wrap.innerHTML = '';
-  if(eitherIdx >= EITHER_QS.length){
-    setTimeout(next, 250);
-    return;
-  }
-  const q = EITHER_QS[eitherIdx];
-  document.getElementById('eitherProg').textContent = `${eitherIdx + 1} / ${EITHER_QS.length}`;
-  const row = document.createElement('div');
-  row.className = 'either-row';
-  row.innerHTML = `
-    <button class="either-btn" onclick="pickEither('${q.k}','L',this)">${q.l}</button>
-    <button class="either-btn" onclick="pickEither('${q.k}','R',this)">${q.r}</button>
-  `;
-  wrap.appendChild(row);
-}
-function pickEither(k, side, btn){
-  state.personality[k] = side;
-  btn.classList.add('flash');
-  eitherIdx++;
-  setTimeout(renderEither, 280);
-}
-
-/* ═══════════════════════════════════════════════
-   STOP 10 — DRAMA + CALCULATE
-   ═══════════════════════════════════════════════ */
-const CALC_MSGS = [
-  'Analyzing 50 bikes…',
-  'Matching your physique…',
-  'Cross-checking owner reviews…',
-  'Filtering for India market…',
-  'Almost there…'
-];
-function runCalc(){
-  let i = 0;
-  const m = document.getElementById('calcMsg');
-  const tick = () => {
-    if(i >= CALC_MSGS.length){
-      const results = matchBikes();
-      renderResults(results);
-      go(11);
-      return;
+function toggleStyle(item, key){
+  const i = state.styles.indexOf(key);
+  if(i >= 0){
+    state.styles.splice(i, 1);
+    item.classList.remove('selected');
+  } else {
+    if(state.styles.length >= 3){
+      const dropped = state.styles.shift();
+      const all = document.querySelectorAll('.style-item');
+      all.forEach(el => {
+        if(el.querySelector('.style-name').textContent === STYLES.find(s => s.key === dropped)?.label){
+          el.classList.remove('selected');
+        }
+      });
     }
-    m.style.opacity = 0;
-    setTimeout(() => {
-      m.textContent = CALC_MSGS[i];
-      m.style.opacity = 1;
-      i++;
-      setTimeout(tick, 700);
-    }, 200);
-  };
-  tick();
+    state.styles.push(key);
+    item.classList.add('selected');
+  }
 }
 
-/* ═══════════════════════════════════════════════
-   SCORING ALGORITHM
-   ═══════════════════════════════════════════════ */
+/* CALC */
+function runCalc(){
+  setTimeout(() => {
+    const r = matchBikes();
+    renderResults(r);
+    go(8);
+  }, 900);
+}
+
+/* SCORING */
 function matchBikes(){
   const scored = BIKES.map(b => {
-    let score = 0;
-    let reasons = [];
-    let penalty = 0;
-
-    // ── BUDGET (huge factor) ──
-    const budgetDiff = Math.abs(b.price - state.budget) / state.budget;
+    let score = 0, reasons = [], penalty = 0;
+    // BUDGET
+    const bd = Math.abs(b.price - state.budget) / state.budget;
     if(b.price <= state.budget * 1.05){
-      score += 30 - (budgetDiff * 30);
-      if(b.price <= state.budget && b.price >= state.budget * 0.85) reasons.push(`Within your ₹${formatINR(state.budget)} budget`);
+      score += 30 - (bd * 30);
+      if(b.price <= state.budget && b.price >= state.budget * 0.85) reasons.push(`Within ₹${formatINR(state.budget)} budget`);
     } else if(b.price <= state.budget * 1.2){
       score += 15 - ((b.price - state.budget) / state.budget * 30);
-    } else {
-      penalty += 50; // big budget overshoot
-    }
-
-    // ── BODY FIT (seat height / weight) ──
-    const ideal = state.height * 4.7; // rough seat-height ideal
-    const seatDiff = Math.abs(b.seat - ideal);
-    if(seatDiff < 30) { score += 12; reasons.push(`Perfect for your ${state.height}cm height`); }
-    else if(seatDiff < 60) score += 6;
-    else if(seatDiff > 90) penalty += 8;
-
-    // bike weight vs rider — heavy bike + light rider = harder
-    const wtRatio = b.wt / state.weight;
-    if(wtRatio > 3.0) penalty += 6;
-
-    // ── USE CASE ──
+    } else penalty += 50;
+    // BODY
+    const ideal = state.height * 4.7;
+    const sd = Math.abs(b.seat - ideal);
+    if(sd < 30){ score += 12; reasons.push(`Fits your ${state.height}cm height`); }
+    else if(sd < 60) score += 6;
+    else if(sd > 90) penalty += 8;
+    if(b.wt / state.weight > 3.0) penalty += 6;
+    // USE
     if(state.useCases.includes('city')) score += b.s.c * 1.2;
     if(state.useCases.includes('highway')) score += b.s.h * 1.2;
     if(state.useCases.includes('offroad')) score += b.s.o * 1.5;
     if(state.useCases.includes('track')) score += b.s.t * 1.5;
-
     if(state.useCases.includes('offroad') && b.s.o >= 7) reasons.push('Built for off-road');
     if(state.useCases.includes('highway') && b.s.h >= 9) reasons.push('Highway-ready');
     if(state.useCases.includes('track') && b.s.t >= 8) reasons.push('Track-bred');
     if(state.useCases.includes('city') && b.s.c >= 9) reasons.push('Easy city ride');
-
-    // ── STYLE MATCH ──
-    if(state.styles.includes(b.type)) { score += 18; reasons.push(`Matches your ${b.type} preference`); }
-    // partial style match (cruiser ↔ retro, naked ↔ sport)
-    const styleAlias = {
-      'cruiser':['retro','cafe-racer'], 'retro':['cruiser','cafe-racer'],
-      'naked':['sport'], 'sport':['naked','supersport'],
-      'commuter':['scooter'], 'scooter':['commuter']
-    };
-    if(styleAlias[b.type] && state.styles.some(s => styleAlias[b.type].includes(s))) score += 8;
-
-    // ── RIDER EXPERIENCE ──
+    // STYLE
+    if(state.styles.includes(b.type)){ score += 18; reasons.push(`Matches your ${b.type} taste`); }
+    const alias = {cruiser:['retro','cafe-racer'],retro:['cruiser','cafe-racer'],naked:['sport'],sport:['naked','supersport']};
+    if(alias[b.type] && state.styles.some(s => alias[b.type].includes(s))) score += 8;
+    // RIDER
     if(state.rider === 'first'){
       score += b.s.b * 1.5;
-      if(b.bhp > 30) penalty += 10; // first-timer shouldn't have high power
+      if(b.bhp > 30) penalty += 10;
       if(b.s.b >= 9) reasons.push('Beginner-friendly');
     } else if(state.rider === 'upgrade'){
       if(b.bhp >= 20 && b.bhp <= 50) score += 8;
-      if(b.s.b <= 7) score += 4; // wants more capability
     } else if(state.rider === 'return'){
-      score += b.s.cf; // comfort matters when returning
+      score += b.s.cf;
     }
-
-    // ── DAILY DISTANCE / MILEAGE ──
-    if(state.dailyKm > 50){
-      score += b.mpg * 0.15; // long daily = mileage matters
-      if(b.mpg >= 45) reasons.push(`${b.mpg}+ kmpl saves daily fuel`);
-    }
-    if(state.dailyKm > 80 && b.s.cf >= 8) score += 6;
-
-    // ── PILLION ──
-    if(state.pillion === 'two'){
-      score += b.s.p * 1.3;
-      if(b.s.p >= 9) reasons.push('Pillion-comfortable');
-      if(b.s.p <= 5) penalty += 8;
-    } else {
-      score += b.s.p * 0.3; // less weight when solo
-    }
-
-    // ── PERSONALITY ──
-    const p = state.personality;
-    if(p.priority === 'L') score += b.s.t * 0.5; // speed-leaning
-    if(p.priority === 'R') score += b.s.cf * 0.5; // comfort-leaning
-    if(p.visibility === 'L' && b.s.st >= 9) score += 4; // stand out
-    if(p.tech === 'L' && (b.brand === 'KTM' || b.brand === 'BMW' || b.brand === 'Triumph' || b.brand === 'Yamaha')) score += 3;
-    if(p.tech === 'R' && (b.brand === 'Royal Enfield' || b.brand === 'Harley-Davidson' || b.type === 'retro')) score += 4;
-
-    // ── RAW SCORE → MATCH % (0-100) ──
-    const final = Math.max(0, score - penalty);
-    return { bike: b, score: final, reasons: reasons.slice(0, 3) };
+    // small comfort bonus (general)
+    score += b.s.cf * 0.4;
+    return { bike:b, score:Math.max(0, score - penalty), reasons:reasons.slice(0,3) };
   });
-
-  scored.sort((a, b) => b.score - a.score);
-
-  // normalize match %
+  scored.sort((a,b) => b.score - a.score);
   const top = scored[0].score;
   scored.forEach(s => { s.matchPct = Math.min(99, Math.max(40, Math.round(70 + (s.score / top) * 28))); });
-
   return {
     primary: scored[0],
     alts: scored.slice(1, 3),
@@ -1022,42 +679,30 @@ function matchBikes(){
   };
 }
 
-/* ═══════════════════════════════════════════════
-   STOP 11 — RESULT REVEAL
-   ═══════════════════════════════════════════════ */
+/* RESULTS */
 function renderResults(r){
   const body = document.getElementById('resultBody');
   const main = r.primary;
   const b = main.bike;
   let html = `
-    <div style="margin-bottom:8px;font-family:'Manrope',sans-serif;font-size:11px;color:#E2FF3B;text-transform:uppercase;letter-spacing:3px;font-weight:700">YOUR MATCH</div>
-    <h2 class="question" style="margin-bottom:20px">${b.brand}<br/>${b.name}</h2>
-
+    <div style="margin-bottom:6px;font-family:'Manrope',sans-serif;font-size:10px;color:#E2FF3B;text-transform:uppercase;letter-spacing:3px;font-weight:700">YOUR MATCH</div>
+    <h2 class="question" style="margin-bottom:14px">${b.brand} ${b.name}</h2>
     <div class="result-hero">
-      <img src="${b.img}" alt="${b.name}" onerror="this.style.background='#1a1a1a';this.style.padding='40px';this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 50%22%3E%3Ctext x=%2250%22 y=%2230%22 text-anchor=%22middle%22 fill=%22%23E2FF3B%22 font-family=%22sans-serif%22 font-size=%229%22 font-weight=%22700%22%3E${encodeURIComponent(b.brand+' '+b.name)}%3C/text%3E%3C/svg%3E'"/>
-      <div class="match-circle">
-        <div class="match-num">${main.matchPct}%</div>
-        <div class="match-lbl">Match</div>
-      </div>
+      <img src="${b.img}" alt="${b.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 60%22%3E%3Crect width=%22100%22 height=%2260%22 fill=%22%231a1a1a%22/%3E%3Ctext x=%2250%22 y=%2235%22 text-anchor=%22middle%22 fill=%22%23E2FF3B%22 font-family=%22sans-serif%22 font-size=%227%22 font-weight=%22700%22%3E${encodeURIComponent(b.brand+' '+b.name)}%3C/text%3E%3C/svg%3E'"/>
+      <div class="match-circle"><div class="match-num">${main.matchPct}%</div><div class="match-lbl">Match</div></div>
     </div>
-
-    <div class="reasons">
-      ${main.reasons.map(r => `<div class="reason">✓ ${r}</div>`).join('')}
-    </div>
-
+    <div class="reasons">${main.reasons.map(r => `<div class="reason">✓ ${r}</div>`).join('')}</div>
     <div class="specs">
       <div class="spec"><div class="spec-l">Price</div><div class="spec-v">₹${formatINR(b.price)}</div></div>
-      <div class="spec"><div class="spec-l">Engine</div><div class="spec-v">${b.cc} cc · ${b.bhp} bhp</div></div>
+      <div class="spec"><div class="spec-l">Engine</div><div class="spec-v">${b.cc}cc · ${b.bhp}bhp</div></div>
       <div class="spec"><div class="spec-l">Mileage</div><div class="spec-v">${b.mpg} kmpl</div></div>
-      <div class="spec"><div class="spec-l">Seat Height</div><div class="spec-v">${b.seat} mm</div></div>
+      <div class="spec"><div class="spec-l">Seat</div><div class="spec-v">${b.seat} mm</div></div>
     </div>
-
-    <div style="display:flex;gap:8px;margin-bottom:28px">
-      <button class="cta" style="flex:1" onclick="toast('Test ride request sent to ${b.brand} dealer near you')">Book Test Ride</button>
-      <button class="cta cta-ghost" onclick="toast('Opening ${b.brand} ${b.name} owners on Comride…')">Talk to Owners</button>
+    <div style="display:flex;gap:8px;margin-bottom:22px">
+      <button class="cta" style="flex:1" onclick="toast('Test ride request sent to ${b.brand} dealer')">Test Ride</button>
+      <button class="cta cta-ghost" onclick="toast('Opening ${b.brand} owners on Comride…')">Owners</button>
     </div>
-
-    <div style="margin-bottom:14px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1.5px">Other strong matches</div>
+    <div style="margin-bottom:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1.5px">Other strong matches</div>
   `;
   r.alts.forEach(a => {
     html += `
@@ -1068,51 +713,42 @@ function renderResults(r){
           <div class="alt-meta">₹${formatINR(a.bike.price)} · ${a.bike.cc}cc · ${a.bike.mpg}kmpl</div>
         </div>
         <div class="alt-pct">${a.matchPct}%</div>
-      </div>
-    `;
+      </div>`;
   });
-
   if(r.wildcard && r.wildcard.bike.id !== main.bike.id){
     const w = r.wildcard.bike;
     html += `
-      <div style="margin:18px 0 10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#E2FF3B;text-transform:uppercase;letter-spacing:1.5px">Wild card — stretch pick</div>
+      <div style="margin:14px 0 8px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:#E2FF3B;text-transform:uppercase;letter-spacing:1.5px">Wild card · stretch pick</div>
       <div class="alt-card" style="border-color:rgba(226,255,59,0.25)" onclick="toast('Opening ${w.brand} ${w.name}')">
         <img class="alt-img" src="${w.img}" alt="" onerror="this.style.background='#1a1a1a'"/>
         <div class="alt-body">
           <div class="alt-name">${w.brand} ${w.name}</div>
-          <div class="alt-meta">₹${formatINR(w.price)} · over budget but worth a look</div>
+          <div class="alt-meta">₹${formatINR(w.price)} · over budget</div>
         </div>
         <div class="alt-pct">${r.wildcard.matchPct}%</div>
-      </div>
-    `;
+      </div>`;
   }
-
   html += `
-    <div style="display:flex;gap:8px;margin-top:30px">
-      <button class="cta cta-ghost" style="flex:1" onclick="toast('Saved to your wishlist')">♥ Save</button>
-      <button class="cta cta-ghost" style="flex:1" onclick="toast('Result image generated — share!')">↗ Share</button>
+    <div style="display:flex;gap:8px;margin-top:24px">
+      <button class="cta cta-ghost" style="flex:1" onclick="toast('Saved to wishlist')">♥ Save</button>
+      <button class="cta cta-ghost" style="flex:1" onclick="toast('Shareable card generated')">↗ Share</button>
     </div>
-    <div style="text-align:center;margin-top:20px">
+    <div style="text-align:center;margin-top:18px;padding-bottom:10px">
       <a href="home.html" style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none">← Back to Comride</a>
-    </div>
-  `;
+    </div>`;
   body.innerHTML = html;
 }
 
-function restart(){ go(1); state.rider=null; state.useCases=[]; state.styles=[]; state.personality={}; }
+function restart(){ state.rider=null; state.useCases=[]; state.styles=[]; go(1); }
 
-/* ═══════════════════════════════════════════════
-   TOAST
-   ═══════════════════════════════════════════════ */
 function toast(msg){
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('on');
   clearTimeout(t._h);
-  t._h = setTimeout(() => t.classList.remove('on'), 2400);
+  t._h = setTimeout(() => t.classList.remove('on'), 2200);
 }
 
-// init dots on first stop (no dots) and seed body slider
 window.addEventListener('DOMContentLoaded', () => {
   onH(170); onW(70); onB(200000);
 });
