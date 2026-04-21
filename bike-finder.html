@@ -60,13 +60,32 @@
     .opt-compact .opt-title{font-size:14px}
     .opt-compact .opt-sub{font-size:10px}
 
+    /* Icon-led option (no image) */
+    .opt-icon{display:flex;align-items:center;padding:14px 16px;gap:14px}
+    .opt-icon-box{width:48px;height:48px;border-radius:12px;background:rgba(226,255,59,0.08);border:1px solid rgba(226,255,59,0.2);color:#E2FF3B;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s ease}
+    .opt-icon.selected .opt-icon-box{background:#E2FF3B;color:#000;border-color:#E2FF3B}
+    .opt-icon .opt-body{flex:1;padding:0}
+    .opt-icon .opt-check{position:static;margin-left:auto}
+
     /* Grid 2-col */
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .grid .opt{margin-bottom:0}
+    .grid .opt{margin-bottom:0;position:relative}
     .grid .opt-img{height:74px}
     .grid .opt-body{padding:8px 11px}
     .grid .opt-title{font-size:13px}
     .grid .opt-sub{font-size:10px}
+    .opt-img-icon{position:absolute;top:8px;left:8px;width:32px;height:32px;border-radius:9px;background:rgba(0,0,0,0.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#E2FF3B;display:flex;align-items:center;justify-content:center;z-index:1}
+    .opt-grid-icon.selected .opt-img-icon{background:#E2FF3B;color:#000}
+
+    /* ICONS */
+    .ico{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+    .ico svg{display:block}
+    .ico-lime{color:#E2FF3B}
+    .ico-mute{color:rgba(255,255,255,0.45)}
+    .ico-circle{width:38px;height:38px;border-radius:10px;background:rgba(226,255,59,0.1);border:1px solid rgba(226,255,59,0.2);color:#E2FF3B}
+    .ico-circle-mute{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.5)}
+    .ico-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;background:rgba(226,255,59,0.1);border-radius:9999px;color:#E2FF3B;font-family:'Manrope',sans-serif;font-size:10px;font-weight:700}
+    .stat-row{display:flex;align-items:center;gap:8px}
 
     /* Big number display */
     .big-num{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:44px;color:#E2FF3B;letter-spacing:-1.5px;line-height:1}
@@ -89,7 +108,8 @@
     .style-item{display:flex;align-items:center;gap:12px;background:#0d0d0d;border:1.5px solid rgba(255,255,255,0.08);border-radius:14px;padding:8px;cursor:pointer;transition:all .2s ease;flex-shrink:0;position:relative}
     .style-item:active{transform:scale(0.98)}
     .style-item.selected{border-color:#E2FF3B;background:rgba(226,255,59,0.05)}
-    .style-img{width:64px;height:64px;border-radius:10px;object-fit:cover;flex-shrink:0}
+    .style-ico{width:54px;height:54px;border-radius:11px;background:rgba(226,255,59,0.08);border:1px solid rgba(226,255,59,0.2);color:#E2FF3B;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s ease}
+    .style-item.selected .style-ico{background:#E2FF3B;color:#000;border-color:#E2FF3B}
     .style-meta{flex:1;min-width:0}
     .style-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff;margin-bottom:2px}
     .style-desc{font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.5);line-height:1.4}
@@ -121,7 +141,8 @@
     .reason{background:rgba(226,255,59,0.1);border:1px solid rgba(226,255,59,0.25);color:#E2FF3B;font-family:'Manrope',sans-serif;font-weight:600;font-size:10px;padding:5px 10px;border-radius:9999px}
     .specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
     .spec{background:#0d0d0d;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px 12px}
-    .spec-l{font-family:'Manrope',sans-serif;font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px}
+    .spec-l{font-family:'Manrope',sans-serif;font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px;display:inline-flex;align-items:center;gap:5px}
+    .spec-l svg{color:#E2FF3B}
     .spec-v{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#fff}
     .alt-card{display:flex;gap:10px;background:#0d0d0d;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:8px;margin-bottom:7px;align-items:center}
     .alt-img{width:54px;height:54px;border-radius:8px;background:#1a1a1a;flex-shrink:0;object-fit:cover}
@@ -149,10 +170,16 @@
       </div>
     </div>
     <div class="body center">
-      <p class="hero-eyebrow">Bike Finder</p>
+      <div style="width:78px;height:78px;border-radius:20px;background:#E2FF3B;display:flex;align-items:center;justify-content:center;margin-bottom:22px;box-shadow:0 14px 40px rgba(226,255,59,0.3)">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2h-1a1 1 0 0 0 0 2"/><path d="M5.5 17.5h13l-3-7h-7Z"/><path d="M11 7l3 0"/></svg>
+      </div>
+      <p class="hero-eyebrow">Bike Finder · India 🇮🇳</p>
       <h1 class="hero-title">Find the bike that's <em>actually you.</em></h1>
-      <p class="hero-sub">90 seconds. 5 quick questions. We pick from 50 India bikes.</p>
-      <button class="cta" onclick="next()">Begin <span>→</span></button>
+      <p class="hero-sub">90 seconds · 5 quick questions · 50 India bikes</p>
+      <button class="cta" onclick="next()">
+        Begin
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </button>
     </div>
   </section>
 
@@ -166,24 +193,30 @@
       <h2 class="question">Who's riding?</h2>
       <p class="sub">Pick the one that fits today.</p>
       <div class="body-content">
-        <div class="opt opt-compact" onclick="pick(this,'rider','first')">
-          <img class="opt-img" src="https://images.unsplash.com/photo-1558981852-426c6c22a060?w=600&auto=format&fit=crop&q=80" alt=""/>
+        <div class="opt opt-icon" onclick="pick(this,'rider','first')">
+          <div class="opt-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.7 5.3h5.6l-4.5 3.3 1.7 5.3-4.5-3.3-4.5 3.3 1.7-5.3-4.5-3.3h5.6z"/></svg>
+          </div>
           <div class="opt-body">
             <div class="opt-title">First-timer</div>
             <div class="opt-sub">Never owned a bike before</div>
           </div>
           <div class="opt-check">✓</div>
         </div>
-        <div class="opt opt-compact" onclick="pick(this,'rider','upgrade')">
-          <img class="opt-img" src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=600&auto=format&fit=crop&q=80" alt=""/>
+        <div class="opt opt-icon" onclick="pick(this,'rider','upgrade')">
+          <div class="opt-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          </div>
           <div class="opt-body">
             <div class="opt-title">Upgrading</div>
             <div class="opt-sub">Ready for the next level</div>
           </div>
           <div class="opt-check">✓</div>
         </div>
-        <div class="opt opt-compact" onclick="pick(this,'rider','return')">
-          <img class="opt-img" src="https://images.unsplash.com/photo-1502877338535-766e1452684a?w=600&auto=format&fit=crop&q=80" alt=""/>
+        <div class="opt opt-icon" onclick="pick(this,'rider','return')">
+          <div class="opt-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+          </div>
           <div class="opt-body">
             <div class="opt-title">Returning</div>
             <div class="opt-sub">Coming back after a break</div>
@@ -218,13 +251,19 @@
           </div>
           <div style="flex:1">
             <div class="body-cell" style="text-align:left;margin-bottom:14px">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+                <span class="ico ico-circle-mute"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V5M5 7h3M5 11h3M5 15h3M5 19h3"/></svg></span>
+                <div class="big-label" style="margin:0">Height</div>
+              </div>
               <span class="big-num mono" id="hVal">170</span><span class="big-unit">cm</span>
-              <div class="big-label">Height</div>
               <input type="range" min="140" max="200" value="170" id="hSld" oninput="onH(this.value)" style="margin-top:8px"/>
             </div>
             <div class="body-cell" style="text-align:left">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+                <span class="ico ico-circle-mute"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12a6 6 0 0 1 12 0M3 21h18M6 17h12"/><circle cx="12" cy="12" r="2.5"/></svg></span>
+                <div class="big-label" style="margin:0">Weight</div>
+              </div>
               <span class="big-num mono" id="wVal">70</span><span class="big-unit">kg</span>
-              <div class="big-label">Weight</div>
               <input type="range" min="40" max="150" value="70" id="wSld" oninput="onW(this.value)" style="margin-top:8px"/>
             </div>
           </div>
@@ -248,14 +287,18 @@
       <p class="sub">Drag to see what you can ride.</p>
 
       <div class="body-content" style="justify-content:center;align-items:center;text-align:center">
-        <div class="bike-vis" id="bIcon">🏍️</div>
+        <div class="bike-vis" id="bIcon">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2h-1a1 1 0 0 0 0 2"/><path d="M5.5 17.5h13l-3-7h-7Z"/><path d="M11 7l3 0"/></svg>
+        </div>
         <div class="bike-class" id="bClass">Naked Sport</div>
 
-        <div style="margin-bottom:6px">
+        <div style="display:flex;align-items:baseline;justify-content:center;gap:6px;margin-bottom:6px">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;color:#E2FF3B">₹</span>
           <span class="big-num mono" id="bVal">2,00,000</span>
         </div>
-        <div style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:18px">
-          ₹ · <span id="bEMI">~₹4,200/mo EMI</span>
+        <div style="display:inline-flex;align-items:center;gap:6px;font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:18px;background:rgba(255,255,255,0.04);padding:5px 12px;border-radius:9999px">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+          <span id="bEMI">~₹4,200/mo EMI</span>
         </div>
 
         <div style="width:100%">
@@ -284,23 +327,27 @@
 
       <div class="body-content">
         <div class="grid">
-          <div class="opt" onclick="multi(this,'useCases','city',2)">
+          <div class="opt opt-grid-icon" onclick="multi(this,'useCases','city',2)">
             <img class="opt-img" src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&auto=format&fit=crop&q=80" alt=""/>
+            <div class="opt-img-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l4-3v16M14 21V12l5-2v11"/></svg></div>
             <div class="opt-body"><div class="opt-title">City</div><div class="opt-sub">Daily commute</div></div>
             <div class="opt-check">✓</div>
           </div>
-          <div class="opt" onclick="multi(this,'useCases','highway',2)">
+          <div class="opt opt-grid-icon" onclick="multi(this,'useCases','highway',2)">
             <img class="opt-img" src="https://images.unsplash.com/photo-1519640760746-95d6e8e9b62b?w=400&auto=format&fit=crop&q=80" alt=""/>
+            <div class="opt-img-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3l-4 18M15 3l4 18M11 6h2M11 12h2M11 18h2"/></svg></div>
             <div class="opt-body"><div class="opt-title">Highway</div><div class="opt-sub">Long tours</div></div>
             <div class="opt-check">✓</div>
           </div>
-          <div class="opt" onclick="multi(this,'useCases','offroad',2)">
+          <div class="opt opt-grid-icon" onclick="multi(this,'useCases','offroad',2)">
             <img class="opt-img" src="https://images.unsplash.com/photo-1533002832-c5b4e69ce9b2?w=400&auto=format&fit=crop&q=80" alt=""/>
+            <div class="opt-img-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l5-9 4 6 3-4 6 7H3z"/><circle cx="17" cy="6" r="2"/></svg></div>
             <div class="opt-body"><div class="opt-title">Mountains</div><div class="opt-sub">Off-road, gravel</div></div>
             <div class="opt-check">✓</div>
           </div>
-          <div class="opt" onclick="multi(this,'useCases','track',2)">
+          <div class="opt opt-grid-icon" onclick="multi(this,'useCases','track',2)">
             <img class="opt-img" src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=400&auto=format&fit=crop&q=80" alt=""/>
+            <div class="opt-img-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4l8-1v9l8-2v9"/><path d="M5 11h8M13 9l8-2"/></svg></div>
             <div class="opt-body"><div class="opt-title">Track</div><div class="opt-sub">Speed days</div></div>
             <div class="opt-check">✓</div>
           </div>
@@ -466,15 +513,25 @@ const BIKES = [
     s:{p:7,b:7,c:7,h:8,o:2,t:6,cf:8,st:8},img:"https://imgd.aeplcdn.com/664x415/n/cw/ec/154427/pulsar-n250-right-side-view.jpeg"}
 ];
 
+const ICO = {
+  naked:`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="M5 17h14l-3-7h-7Z"/><path d="M11 7h4"/></svg>`,
+  cruiser:`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="18" r="3"/><circle cx="19" cy="18" r="3"/><path d="M5 18h14M7 18l1-4h10l-2-3H10Z"/><path d="M14 6l-2 3"/></svg>`,
+  adventure:`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17" r="3.5"/><circle cx="19" cy="17" r="3.5"/><path d="M5 17h14l-3-9h-5Z"/><path d="M9 5l3 3M16 4v3"/></svg>`,
+  sport:`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="18" r="3"/><circle cx="19" cy="18" r="3"/><path d="M5 18h14l-4-9h-5Z"/><path d="M16 5l3 4"/></svg>`,
+  retro:`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><circle cx="12" cy="12" r="3"/><path d="M5 17h14M9 12h-4M15 12h4"/></svg>`,
+  'cafe-racer':`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="18" r="3"/><circle cx="19" cy="18" r="3"/><path d="M5 18h14l-5-9H8Z"/><path d="M16 6l1 3"/></svg>`,
+  scooter:`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18" r="3"/><circle cx="18" cy="18" r="3"/><path d="M6 18h12M8 18l2-7h4l2 4M10 11V7a2 2 0 0 1 2-2h2"/></svg>`,
+  commuter:`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="18" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M5 18h14M7 18l2-6h6l2 4"/><path d="M11 6h2"/></svg>`
+};
 const STYLES = [
-  {key:'naked',label:'Naked Sport',sub:'Aggressive stance, no fairing',img:'https://images.unsplash.com/photo-1580310614729-ccd69652491d?w=200&auto=format&fit=crop&q=80'},
-  {key:'cruiser',label:'Cruiser',sub:'Laid back, low seat, big torque',img:'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=200&auto=format&fit=crop&q=80'},
-  {key:'adventure',label:'Adventure',sub:'Tall, off-road capable',img:'https://images.unsplash.com/photo-1517027587904-d9a508c87bbe?w=200&auto=format&fit=crop&q=80'},
-  {key:'sport',label:'Sport / Supersport',sub:'Full fairing, track focus',img:'https://images.unsplash.com/photo-1558981852-426c6c22a060?w=200&auto=format&fit=crop&q=80'},
-  {key:'retro',label:'Retro / Classic',sub:'Old-school looks, modern guts',img:'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=200&auto=format&fit=crop&q=80'},
-  {key:'cafe-racer',label:'Cafe Racer',sub:'Retro race styling',img:'https://images.unsplash.com/photo-1600375226761-86afea11d2c1?w=200&auto=format&fit=crop&q=80'},
-  {key:'scooter',label:'Scooter',sub:'Convenient, automatic',img:'https://images.unsplash.com/photo-1591726472537-fde9e5dba9b9?w=200&auto=format&fit=crop&q=80'},
-  {key:'commuter',label:'Practical Commuter',sub:'Mileage king, low maintenance',img:'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=200&auto=format&fit=crop&q=80'}
+  {key:'naked',label:'Naked Sport',sub:'Aggressive stance, no fairing'},
+  {key:'cruiser',label:'Cruiser',sub:'Laid back, low seat, big torque'},
+  {key:'adventure',label:'Adventure',sub:'Tall, off-road capable'},
+  {key:'sport',label:'Sport / Supersport',sub:'Full fairing, track focus'},
+  {key:'retro',label:'Retro / Classic',sub:'Old-school looks, modern guts'},
+  {key:'cafe-racer',label:'Cafe Racer',sub:'Retro race styling'},
+  {key:'scooter',label:'Scooter',sub:'Convenient, automatic'},
+  {key:'commuter',label:'Practical Commuter',sub:'Mileage king, low maintenance'}
 ];
 
 /* ═══════════════════════════════════════════════
@@ -551,6 +608,12 @@ function onW(v){
 }
 
 /* BUDGET */
+const BIKE_ICONS = {
+  scoot: `<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18" r="3"/><circle cx="18" cy="18" r="3"/><path d="M6 18h12M8 18l2-7h4l2 4M10 11V7a2 2 0 0 1 2-2h2"/></svg>`,
+  bike:  `<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2h-1a1 1 0 0 0 0 2"/><path d="M5.5 17.5h13l-3-7h-7Z"/><path d="M11 7l3 0"/></svg>`,
+  sport: `<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M5.5 17.5h13l-4-8h-5Z"/><path d="M15 4h3l1 3M9 10l-2-4"/></svg>`,
+  super: `<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#E2FF3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="18" r="3"/><circle cx="19" cy="18" r="3"/><path d="M5 18h14l-5-9H9Z"/><path d="M16 3l2 5M9 9l-3-5"/><path d="M9 18l2-4"/></svg>`
+};
 function onB(v){
   state.budget = +v;
   document.getElementById('bVal').textContent = formatINR(v);
@@ -558,12 +621,14 @@ function onB(v){
   document.getElementById('bEMI').textContent = `~₹${formatINR(emi)}/mo EMI`;
   const icon = document.getElementById('bIcon');
   const cls = document.getElementById('bClass');
-  if(+v < 100000){ icon.textContent='🛵'; cls.textContent='Commuter / Scooter'; }
-  else if(+v < 200000){ icon.textContent='🏍️'; cls.textContent='Naked Sport'; }
-  else if(+v < 350000){ icon.textContent='🏍️'; cls.textContent='Premium Naked / Retro'; }
-  else if(+v < 600000){ icon.textContent='🏎️'; cls.textContent='Sport / Adventure'; }
-  else if(+v < 1000000){ icon.textContent='🏎️'; cls.textContent='Big Twin / Sport-Tourer'; }
-  else { icon.textContent='🚀'; cls.textContent='Superbike Territory'; }
+  let which = 'bike';
+  if(+v < 100000){ which='scoot'; cls.textContent='Commuter / Scooter'; }
+  else if(+v < 200000){ which='bike'; cls.textContent='Naked Sport'; }
+  else if(+v < 350000){ which='bike'; cls.textContent='Premium Naked / Retro'; }
+  else if(+v < 600000){ which='sport'; cls.textContent='Sport / Adventure'; }
+  else if(+v < 1000000){ which='sport'; cls.textContent='Big Twin / Sport-Tourer'; }
+  else { which='super'; cls.textContent='Superbike Territory'; }
+  icon.innerHTML = BIKE_ICONS[which];
   icon.style.transform = `scale(${0.85 + (+v / 1500000) * 0.45})`;
 }
 function formatINR(n){
@@ -583,7 +648,7 @@ function initStyleList(){
     const item = document.createElement('div');
     item.className = 'style-item' + (state.styles.includes(s.key) ? ' selected' : '');
     item.innerHTML = `
-      <img class="style-img" src="${s.img}" alt="" onerror="this.style.background='#1a1a1a'"/>
+      <div class="style-ico">${ICO[s.key] || ''}</div>
       <div class="style-meta">
         <div class="style-name">${s.label}</div>
         <div class="style-desc">${s.sub}</div>
@@ -693,14 +758,32 @@ function renderResults(r){
     </div>
     <div class="reasons">${main.reasons.map(r => `<div class="reason">✓ ${r}</div>`).join('')}</div>
     <div class="specs">
-      <div class="spec"><div class="spec-l">Price</div><div class="spec-v">₹${formatINR(b.price)}</div></div>
-      <div class="spec"><div class="spec-l">Engine</div><div class="spec-v">${b.cc}cc · ${b.bhp}bhp</div></div>
-      <div class="spec"><div class="spec-l">Mileage</div><div class="spec-v">${b.mpg} kmpl</div></div>
-      <div class="spec"><div class="spec-l">Seat</div><div class="spec-v">${b.seat} mm</div></div>
+      <div class="spec">
+        <div class="spec-l"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 3h12M9 3v6a3 3 0 0 0 6 0V3M8 21h8M12 12v9"/></svg> Price</div>
+        <div class="spec-v">₹${formatINR(b.price)}</div>
+      </div>
+      <div class="spec">
+        <div class="spec-l"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2 2M16.4 16.4l2 2M5.6 18.4l2-2M16.4 7.6l2-2"/></svg> Engine</div>
+        <div class="spec-v">${b.cc}cc · ${b.bhp}bhp</div>
+      </div>
+      <div class="spec">
+        <div class="spec-l"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V6a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v15"/><path d="M3 21h11M14 11h3a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2"/><path d="M16 7l3-2"/></svg> Mileage</div>
+        <div class="spec-v">${b.mpg} kmpl</div>
+      </div>
+      <div class="spec">
+        <div class="spec-l"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13h6l3-4 3 4h6"/><path d="M3 13v4M21 13v4"/></svg> Seat</div>
+        <div class="spec-v">${b.seat} mm</div>
+      </div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:22px">
-      <button class="cta" style="flex:1" onclick="toast('Test ride request sent to ${b.brand} dealer')">Test Ride</button>
-      <button class="cta cta-ghost" onclick="toast('Opening ${b.brand} owners on Comride…')">Owners</button>
+      <button class="cta" style="flex:1" onclick="toast('Test ride request sent to ${b.brand} dealer')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4"/></svg>
+        Test Ride
+      </button>
+      <button class="cta cta-ghost" onclick="toast('Opening ${b.brand} owners on Comride…')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Owners
+      </button>
     </div>
     <div style="margin-bottom:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1.5px">Other strong matches</div>
   `;
@@ -730,11 +813,20 @@ function renderResults(r){
   }
   html += `
     <div style="display:flex;gap:8px;margin-top:24px">
-      <button class="cta cta-ghost" style="flex:1" onclick="toast('Saved to wishlist')">♥ Save</button>
-      <button class="cta cta-ghost" style="flex:1" onclick="toast('Shareable card generated')">↗ Share</button>
+      <button class="cta cta-ghost" style="flex:1" onclick="toast('Saved to wishlist')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Save
+      </button>
+      <button class="cta cta-ghost" style="flex:1" onclick="toast('Shareable card generated')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
+        Share
+      </button>
     </div>
     <div style="text-align:center;margin-top:18px;padding-bottom:10px">
-      <a href="home.html" style="font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none">← Back to Comride</a>
+      <a href="home.html" style="display:inline-flex;align-items:center;gap:6px;font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back to Comride
+      </a>
     </div>`;
   body.innerHTML = html;
 }
