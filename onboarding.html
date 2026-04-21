@@ -228,34 +228,55 @@
     </div>
     <div class="body">
       <h2 class="question">Your main ride?</h2>
-      <p class="sub">Pick from the list — or take the Bike Finder quiz.</p>
+      <p class="sub">Pick brand &amp; model — or skip if you're just here for the rides.</p>
       <div class="body-content">
-        <div class="bike-list">
-          <div class="bike-item" onclick="pickBike(this)">
-            <div class="bike-item-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="M5 17h14l-3-7h-7Z"/><path d="M11 7h4"/></svg></div>
-            <div class="bike-item-meta"><div class="bike-item-name">Royal Enfield Classic 350</div><div class="bike-item-sub">349cc · 20.2 bhp · ₹2,15,000</div></div>
-          </div>
-          <div class="bike-item" onclick="pickBike(this)">
-            <div class="bike-item-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="M5 17h14l-3-7h-7Z"/></svg></div>
-            <div class="bike-item-meta"><div class="bike-item-name">KTM Duke 390</div><div class="bike-item-sub">399cc · 45 bhp · ₹3,20,000</div></div>
-          </div>
-          <div class="bike-item" onclick="pickBike(this)">
-            <div class="bike-item-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="M5 17h14l-4-8h-5Z"/></svg></div>
-            <div class="bike-item-meta"><div class="bike-item-name">Yamaha MT-15</div><div class="bike-item-sub">155cc · 18.4 bhp · ₹1,75,000</div></div>
-          </div>
-          <div class="bike-item" onclick="pickBike(this)">
-            <div class="bike-item-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17" r="3.5"/><circle cx="19" cy="17" r="3.5"/><path d="M5 17h14l-3-9h-5Z"/></svg></div>
-            <div class="bike-item-meta"><div class="bike-item-name">RE Himalayan 450</div><div class="bike-item-sub">452cc · 39.5 bhp · ₹2,85,000</div></div>
-          </div>
-          <div class="bike-item" onclick="pickBike(this)">
-            <div class="bike-item-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="M5 17h14l-3-7h-7Z"/></svg></div>
-            <div class="bike-item-meta"><div class="bike-item-name">Triumph Speed 400</div><div class="bike-item-sub">398cc · 39.5 bhp · ₹2,40,000</div></div>
-          </div>
-          <a href="bike-finder.html" class="bike-item" style="text-decoration:none;border-color:rgba(226,255,59,0.25);background:rgba(226,255,59,0.04)">
-            <div class="bike-item-ico" style="background:#E2FF3B;color:#000;border-color:#E2FF3B"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
-            <div class="bike-item-meta"><div class="bike-item-name" style="color:#E2FF3B">No bike yet — find mine</div><div class="bike-item-sub">5-min Bike Finder quiz</div></div>
-          </a>
+
+        <!-- Quick options -->
+        <div class="bike-item" id="enthusiastOpt" onclick="setEnthusiast(true)">
+          <div class="bike-item-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <div class="bike-item-meta"><div class="bike-item-name">I'm just an enthusiast</div><div class="bike-item-sub">No bike yet — here for the community</div></div>
         </div>
+
+        <a href="bike-finder.html" class="bike-item" style="text-decoration:none;border-color:rgba(226,255,59,0.25);background:rgba(226,255,59,0.04)">
+          <div class="bike-item-ico" style="background:#E2FF3B;color:#000;border-color:#E2FF3B"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+          <div class="bike-item-meta"><div class="bike-item-name" style="color:#E2FF3B">Help me find one</div><div class="bike-item-sub">5-min Bike Finder quiz</div></div>
+        </a>
+
+        <!-- Divider -->
+        <div style="display:flex;align-items:center;gap:10px;margin:6px 0">
+          <div style="flex:1;height:1px;background:rgba(255,255,255,0.06)"></div>
+          <span style="font-family:Manrope,sans-serif;font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:2px">Or pick yours</span>
+          <div style="flex:1;height:1px;background:rgba(255,255,255,0.06)"></div>
+        </div>
+
+        <!-- Brand + Model dropdowns -->
+        <div id="bikeDropdowns">
+          <div class="field"><div class="field-label">Brand</div>
+            <select id="brandSel" onchange="onBrandChange(this.value)">
+              <option value="">Select brand</option>
+              <option>Royal Enfield</option>
+              <option>KTM</option>
+              <option>Yamaha</option>
+              <option>Bajaj</option>
+              <option>TVS</option>
+              <option>Honda</option>
+              <option>Hero</option>
+              <option>Suzuki</option>
+              <option>Triumph</option>
+              <option>BMW</option>
+              <option>Kawasaki</option>
+              <option>Harley-Davidson</option>
+              <option>Vespa</option>
+              <option>Aprilia</option>
+            </select>
+          </div>
+          <div class="field" style="margin-top:10px;opacity:0.5" id="modelField"><div class="field-label">Model</div>
+            <select id="modelSel" disabled>
+              <option>Pick a brand first</option>
+            </select>
+          </div>
+        </div>
+
       </div>
       <div class="body-cta"><button class="cta" onclick="next()">Continue →</button></div>
     </div>
@@ -414,10 +435,50 @@ function onPhoto(input){
   r.readAsDataURL(f);
 }
 
-/* Bike pick */
-function pickBike(el){
-  el.parentElement.querySelectorAll('.bike-item').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected');
+/* Bike — enthusiast toggle */
+function setEnthusiast(on){
+  const card = document.getElementById('enthusiastOpt');
+  const drop = document.getElementById('bikeDropdowns');
+  card.classList.toggle('selected', on);
+  drop.style.opacity = on ? '0.4' : '1';
+  drop.style.pointerEvents = on ? 'none' : 'auto';
+  if(on){ document.getElementById('brandSel').value = ''; onBrandChange(''); }
+}
+
+/* Brand → Model cascade */
+const MODELS = {
+  'Royal Enfield':['Hunter 350','Classic 350','Bullet 350','Meteor 350','Himalayan 450','Continental GT 650','Interceptor 650','Super Meteor 650'],
+  'KTM':['Duke 200','Duke 390','RC 390','390 Adventure'],
+  'Yamaha':['FZ-S V4','MT-15 V2','FZ25','Aerox 155','R15 V4'],
+  'Bajaj':['Pulsar 125','Pulsar N150','Pulsar NS200','Pulsar RS200','Pulsar N250','Dominar 400'],
+  'TVS':['Raider 125','Apache RTR 160 4V','Apache RTR 200 4V','Apache RR 310','Jupiter','NTorq 125'],
+  'Honda':['Shine 125','Activa 6G','SP 125','Unicorn 160','Hornet 2.0','CB650R','CBR650R'],
+  'Hero':['Splendor Plus','HF Deluxe','Glamour','Xtreme 160R 4V','Xpulse 200','Karizma XMR'],
+  'Suzuki':['Gixxer 150','Gixxer SF 250','Gixxer 250','Access 125','Avenis 125','Burgman Street'],
+  'Triumph':['Speed 400','Scrambler 400X','Trident 660','Speed Twin 900','Tiger Sport 660'],
+  'BMW':['G 310 R','G 310 GS','F 900 R','R 1250 GS'],
+  'Kawasaki':['Ninja 300','Ninja 400','Ninja 650','Z650','Versys 650','Z900'],
+  'Harley-Davidson':['X440','Iron 883','Street Glide'],
+  'Vespa':['SXL 125','SXL 150','VXL 150','Elegante'],
+  'Aprilia':['SR 160','SR 175','RS 457','Tuono 457']
+};
+function onBrandChange(brand){
+  const sel = document.getElementById('modelSel');
+  const wrap = document.getElementById('modelField');
+  sel.innerHTML = '';
+  if(!brand || !MODELS[brand]){
+    sel.innerHTML = '<option>Pick a brand first</option>';
+    sel.disabled = true;
+    wrap.style.opacity = '0.5';
+    return;
+  }
+  sel.disabled = false;
+  wrap.style.opacity = '1';
+  sel.innerHTML = '<option value="">Select model</option>' + MODELS[brand].map(m => `<option>${m}</option>`).join('');
+  // Picking a brand un-selects enthusiast
+  document.getElementById('enthusiastOpt').classList.remove('selected');
+  document.getElementById('bikeDropdowns').style.opacity = '1';
+  document.getElementById('bikeDropdowns').style.pointerEvents = 'auto';
 }
 
 /* Chip pick (single-select for blood group) */
