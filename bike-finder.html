@@ -22,13 +22,16 @@
     .stop{position:absolute;inset:0;height:100dvh;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .3s ease,transform .35s cubic-bezier(.2,.8,.2,1);transform:translateX(30px);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
     .stop.active{opacity:1;visibility:visible;transform:translateX(0)}
 
-    .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 6px;flex-shrink:0}
+    .topbar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:14px 20px 6px;flex-shrink:0}
+    .topbar > .dots{justify-self:center}
     .dots{display:flex;gap:5px}
     .dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.18);transition:all .3s ease}
     .dot.done{background:#E2FF3B;width:14px;border-radius:3px}
     .dot.now{background:#E2FF3B}
     .skip{font-family:'Manrope',sans-serif;font-weight:600;font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px}
     .country-pill{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:9999px;padding:5px 10px;font-size:11px;color:rgba(255,255,255,0.6);font-weight:600}
+    .close-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s ease;text-decoration:none}
+    .close-btn:active{transform:scale(0.92);background:rgba(255,255,255,0.12)}
 
     .body{flex:1;min-height:0;display:flex;flex-direction:column;padding:8px 24px 18px;overflow:hidden}
     .body.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:30px}
@@ -171,6 +174,9 @@
   <!-- ────── 1: HOOK ────── -->
   <section class="stop active" data-stop="1">
     <div class="topbar">
+      <a href="home.html" class="close-btn" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </a>
       <div></div>
       <div class="country-pill" onclick="toast('India only — global launching soon')">
         <span>🇮🇳</span><span>India</span>
@@ -193,6 +199,9 @@
   <!-- ────── 2: RIDER TYPE ────── -->
   <section class="stop" data-stop="2">
     <div class="topbar">
+      <a href="home.html" class="close-btn" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </a>
       <div class="dots" id="dots-2"></div>
       <button class="skip" onclick="state.rider='upgrade';next()">Skip</button>
     </div>
@@ -237,6 +246,9 @@
   <!-- ────── 3: BODY ────── -->
   <section class="stop" data-stop="3">
     <div class="topbar">
+      <a href="home.html" class="close-btn" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </a>
       <div class="dots" id="dots-3"></div>
       <button class="skip" onclick="state.height=170;state.weight=70;next()">Skip</button>
     </div>
@@ -286,6 +298,9 @@
   <!-- ────── 4: BUDGET ────── -->
   <section class="stop" data-stop="4">
     <div class="topbar">
+      <a href="home.html" class="close-btn" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </a>
       <div class="dots" id="dots-4"></div>
       <button class="skip" onclick="state.budget=200000;next()">Skip</button>
     </div>
@@ -325,6 +340,9 @@
   <!-- ────── 5: USE CASE + PILLION ────── -->
   <section class="stop" data-stop="5">
     <div class="topbar">
+      <a href="home.html" class="close-btn" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </a>
       <div class="dots" id="dots-5"></div>
       <button class="skip" onclick="state.useCases=['city','highway'];next()">Skip</button>
     </div>
@@ -367,6 +385,9 @@
   <!-- ────── 6: STYLE CAROUSEL ────── -->
   <section class="stop" data-stop="6">
     <div class="topbar">
+      <a href="home.html" class="close-btn" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </a>
       <div class="dots" id="dots-6"></div>
       <button class="skip" onclick="state.styles=['naked','retro'];next()">Skip</button>
     </div>
@@ -386,6 +407,13 @@
 
   <!-- ────── 7: CALC + REVEAL ────── -->
   <section class="stop" data-stop="7">
+    <div class="topbar">
+      <a href="home.html" class="close-btn" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </a>
+      <div></div>
+      <div></div>
+    </div>
     <div class="body center" id="calcView">
       <div class="calc-rings">
         <div class="calc-ring"></div>
@@ -399,6 +427,9 @@
   <!-- ────── 8: RESULT (full-scroll) ────── -->
   <section class="stop" data-stop="8">
     <div class="topbar">
+      <a href="home.html" class="close-btn" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </a>
       <div></div>
       <button class="skip" onclick="restart()" style="color:#E2FF3B">Retake</button>
     </div>
