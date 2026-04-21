@@ -77,6 +77,13 @@
     .opt-img-icon{position:absolute;top:8px;left:8px;width:32px;height:32px;border-radius:9px;background:rgba(0,0,0,0.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#E2FF3B;display:flex;align-items:center;justify-content:center;z-index:1}
     .opt-grid-icon.selected .opt-img-icon{background:#E2FF3B;color:#000}
 
+    /* Icon-led grid card (no photo) */
+    .opt-gridico{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 12px 14px;text-align:center}
+    .opt-gridico-box{width:54px;height:54px;border-radius:14px;background:rgba(226,255,59,0.08);border:1px solid rgba(226,255,59,0.22);color:#E2FF3B;display:flex;align-items:center;justify-content:center;transition:all .2s ease}
+    .opt-gridico.selected .opt-gridico-box{background:#E2FF3B;color:#000;border-color:#E2FF3B}
+    .opt-gridico .opt-body{padding:0}
+    .opt-gridico .opt-check{position:absolute;top:8px;right:8px}
+
     /* ICONS */
     .ico{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
     .ico svg{display:block}
@@ -327,27 +334,23 @@
 
       <div class="body-content">
         <div class="grid">
-          <div class="opt opt-grid-icon" onclick="multi(this,'useCases','city',2)">
-            <img class="opt-img" src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&auto=format&fit=crop&q=80" alt=""/>
-            <div class="opt-img-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l4-3v16M14 21V12l5-2v11"/></svg></div>
+          <div class="opt opt-gridico" onclick="multi(this,'useCases','city',2)">
+            <div class="opt-gridico-box"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l4-3v16M14 21V12l5-2v11M8 9h1M8 13h1M8 17h1M16 14h1M16 17h1"/></svg></div>
             <div class="opt-body"><div class="opt-title">City</div><div class="opt-sub">Daily commute</div></div>
             <div class="opt-check">✓</div>
           </div>
-          <div class="opt opt-grid-icon" onclick="multi(this,'useCases','highway',2)">
-            <img class="opt-img" src="https://images.unsplash.com/photo-1519640760746-95d6e8e9b62b?w=400&auto=format&fit=crop&q=80" alt=""/>
-            <div class="opt-img-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3l-4 18M15 3l4 18M11 6h2M11 12h2M11 18h2"/></svg></div>
+          <div class="opt opt-gridico" onclick="multi(this,'useCases','highway',2)">
+            <div class="opt-gridico-box"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3l-4 18M15 3l4 18M11 6h2M11 12h2M11 18h2"/></svg></div>
             <div class="opt-body"><div class="opt-title">Highway</div><div class="opt-sub">Long tours</div></div>
             <div class="opt-check">✓</div>
           </div>
-          <div class="opt opt-grid-icon" onclick="multi(this,'useCases','offroad',2)">
-            <img class="opt-img" src="https://images.unsplash.com/photo-1533002832-c5b4e69ce9b2?w=400&auto=format&fit=crop&q=80" alt=""/>
-            <div class="opt-img-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l5-9 4 6 3-4 6 7H3z"/><circle cx="17" cy="6" r="2"/></svg></div>
+          <div class="opt opt-gridico" onclick="multi(this,'useCases','offroad',2)">
+            <div class="opt-gridico-box"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l5-9 4 6 3-4 6 7H3z"/><circle cx="17" cy="6" r="2"/></svg></div>
             <div class="opt-body"><div class="opt-title">Mountains</div><div class="opt-sub">Off-road, gravel</div></div>
             <div class="opt-check">✓</div>
           </div>
-          <div class="opt opt-grid-icon" onclick="multi(this,'useCases','track',2)">
-            <img class="opt-img" src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=400&auto=format&fit=crop&q=80" alt=""/>
-            <div class="opt-img-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4l8-1v9l8-2v9"/><path d="M5 11h8M13 9l8-2"/></svg></div>
+          <div class="opt opt-gridico" onclick="multi(this,'useCases','track',2)">
+            <div class="opt-gridico-box"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4l8-1v9l8-2v9"/><path d="M5 11h8M13 9l8-2"/></svg></div>
             <div class="opt-body"><div class="opt-title">Track</div><div class="opt-sub">Speed days</div></div>
             <div class="opt-check">✓</div>
           </div>
