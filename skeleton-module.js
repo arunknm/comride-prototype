@@ -56,7 +56,7 @@
     '}',
     '@keyframes cr-ring-pulse{0%,100%{transform:scale(0.8);opacity:0.4}50%{transform:scale(1.6);opacity:0}}',
 
-    /* ── Shimmer skeleton ── */
+    /* ── Shimmer skeleton (per-module independent shimmer) ── */
     '@keyframes cr-shimmer{0%{background-position:-600px 0}100%{background-position:600px 0}}',
     '.cr-sk{',
     '  background:linear-gradient(90deg,',
@@ -65,8 +65,17 @@
     '    rgba(255,255,255,0.055) 65%,rgba(255,255,255,0.055) 100%);',
     '  background-size:1200px 100%;',
     '  animation:cr-shimmer 1.5s linear infinite;',
-    '  border-radius:6px;flex-shrink:0',
+    '  border-radius:10px;flex-shrink:0',
     '}',
+    /* per-position phase offsets so each shimmer block sweeps independently */
+    '.cr-sk:nth-child(1n){animation-delay:0s}',
+    '.cr-sk:nth-child(2n){animation-delay:-0.35s}',
+    '.cr-sk:nth-child(3n){animation-delay:-0.7s}',
+    '.cr-sk:nth-child(4n){animation-delay:-1.05s}',
+    '.cr-sk:nth-child(5n){animation-delay:-1.4s}',
+    '.cr-sk:nth-child(6n){animation-delay:-0.18s}',
+    '.cr-sk:nth-child(7n){animation-delay:-0.55s}',
+    '.cr-sk:nth-child(11n){animation-delay:-0.9s}',
     '.cr-sk-r{border-radius:999px}',
     '.cr-sk-overlay{',
     '  position:fixed;inset:0;z-index:9999;',
