@@ -330,26 +330,26 @@
     </div>
     <div class="body">
       <h2 class="question">Where will you ride?</h2>
-      <p class="sub">Pick up to 2.</p>
+      <p class="sub">Tap all that apply.</p>
 
       <div class="body-content">
         <div class="grid">
-          <div class="opt opt-gridico" onclick="multi(this,'useCases','city',2)">
+          <div class="opt opt-gridico" onclick="multi(this,'useCases','city',4)">
             <div class="opt-gridico-box"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l4-3v16M14 21V12l5-2v11M8 9h1M8 13h1M8 17h1M16 14h1M16 17h1"/></svg></div>
             <div class="opt-body"><div class="opt-title">City</div><div class="opt-sub">Daily commute</div></div>
             <div class="opt-check">✓</div>
           </div>
-          <div class="opt opt-gridico" onclick="multi(this,'useCases','highway',2)">
+          <div class="opt opt-gridico" onclick="multi(this,'useCases','highway',4)">
             <div class="opt-gridico-box"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3l-4 18M15 3l4 18M11 6h2M11 12h2M11 18h2"/></svg></div>
             <div class="opt-body"><div class="opt-title">Highway</div><div class="opt-sub">Long tours</div></div>
             <div class="opt-check">✓</div>
           </div>
-          <div class="opt opt-gridico" onclick="multi(this,'useCases','offroad',2)">
+          <div class="opt opt-gridico" onclick="multi(this,'useCases','offroad',4)">
             <div class="opt-gridico-box"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l5-9 4 6 3-4 6 7H3z"/><circle cx="17" cy="6" r="2"/></svg></div>
             <div class="opt-body"><div class="opt-title">Mountains</div><div class="opt-sub">Off-road, gravel</div></div>
             <div class="opt-check">✓</div>
           </div>
-          <div class="opt opt-gridico" onclick="multi(this,'useCases','track',2)">
+          <div class="opt opt-gridico" onclick="multi(this,'useCases','track',4)">
             <div class="opt-gridico-box"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4l8-1v9l8-2v9"/><path d="M5 11h8M13 9l8-2"/></svg></div>
             <div class="opt-body"><div class="opt-title">Track</div><div class="opt-sub">Speed days</div></div>
             <div class="opt-check">✓</div>
@@ -586,12 +586,7 @@ function multi(el, key, val, max){
     el.classList.remove('selected');
     state[key] = state[key].filter(v => v !== val);
   } else {
-    if(state[key].length >= max){
-      const old = state[key].shift();
-      el.parentElement.querySelectorAll('.opt.selected').forEach(o => {
-        if(o !== el && state[key].indexOf(old) === -1) o.classList.remove('selected');
-      });
-    }
+    if(state[key].length >= max) return; // cap reached, ignore
     el.classList.add('selected');
     state[key].push(val);
   }
