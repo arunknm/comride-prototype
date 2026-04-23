@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-    html,body{height:100%;background:#000;color:#fff;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+    html,body{height:100%;height:100dvh;width:100%;background:#000;color:#fff;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
     a,button,[onclick]{cursor:pointer}
     button{border:none;background:none;color:inherit;font:inherit}
     @keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,68,68,0.55)}50%{transform:scale(1.04);box-shadow:0 0 0 14px rgba(255,68,68,0)}}
@@ -17,7 +17,7 @@
     @keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
     @keyframes sosCount{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
 
-    .stage{position:fixed;inset:0;background:#000}
+    .stage{position:fixed;inset:0;height:100dvh;width:100vw;background:#000}
     .map-bg{position:absolute;inset:0;background:url('images/live_tracking.jpg') center/cover no-repeat;filter:contrast(1.05) saturate(1.1)}
     .map-vig{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.1) 35%,rgba(0,0,0,0.1) 55%,rgba(0,0,0,0.85) 100%)}
     .top-bar{position:absolute;top:0;left:0;right:0;padding:env(safe-area-inset-top,0px) 16px 0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:calc(env(safe-area-inset-top,0px) + 14px);z-index:10}
