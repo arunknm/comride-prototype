@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Comride — Live Navigation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+    html,body{height:100%;background:#000;color:#fff;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+    a,button,[onclick]{cursor:pointer}
+    button{border:none;background:none;color:inherit;font:inherit}
+    @keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,68,68,0.55)}50%{transform:scale(1.04);box-shadow:0 0 0 14px rgba(255,68,68,0)}}
+    @keyframes pulseDot{0%,100%{opacity:0.6}50%{opacity:1}}
+    @keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes sosCount{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+
+    .stage{position:fixed;inset:0;background:#000}
+    .map-bg{position:absolute;inset:0;background:url('images/live_tracking.jpg') center/cover no-repeat;filter:contrast(1.05) saturate(1.1)}
+    .map-vig{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.1) 35%,rgba(0,0,0,0.1) 55%,rgba(0,0,0,0.85) 100%)}
+    .top-bar{position:absolute;top:0;left:0;right:0;padding:env(safe-area-inset-top,0px) 16px 0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:calc(env(safe-area-inset-top,0px) + 14px);z-index:10}
+    .glass-btn{width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,0.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;transition:transform .15s ease}
+    .glass-btn:active{transform:scale(0.92)}
+
+    .ride-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(0,0,0,0.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(226,255,59,0.25);border-radius:9999px;padding:8px 14px;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#fff;letter-spacing:1.5px;text-transform:uppercase}
+    .ride-pill .live-dot{width:7px;height:7px;border-radius:50%;background:#E2FF3B;animation:pulseDot 1.4s ease-in-out infinite}
+
+    /* Turn instruction card */
+    .turn-card{position:absolute;top:calc(env(safe-area-inset-top,0px) + 70px);left:16px;right:16px;background:rgba(8,8,8,0.78);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:16px;display:flex;align-items:center;gap:14px;animation:slideUp .4s ease both;z-index:9}
+    .turn-icon{width:54px;height:54px;border-radius:14px;background:#E2FF3B;color:#000;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .turn-meta{flex:1;min-width:0}
+    .turn-dist{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;color:#fff;letter-spacing:-0.5px;line-height:1}
+    .turn-instr{font-family:'Manrope',sans-serif;font-size:12px;color:rgba(255,255,255,0.65);margin-top:3px;line-height:1.35}
+    .turn-then{display:flex;align-items:center;gap:5px;margin-top:7px;font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1.5px}
+
+    /* SOS — center floating */
+    .sos-wrap{position:absolute;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 240px);z-index:10}
+    .sos-btn{width:64px;height:64px;border-radius:50%;background:#FF4444;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:13px;letter-spacing:1px;animation:pulse 2s ease-in-out infinite;cursor:pointer;border:3px solid rgba(255,255,255,0.15)}
+    .sos-btn:active{transform:scale(0.92)}
+
+    /* Riders side floating */
+    .riders-wrap{position:absolute;left:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 240px);z-index:10;display:flex;flex-direction:column;gap:8px}
+    .rider-pill{display:flex;align-items:center;gap:8px;background:rgba(8,8,8,0.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:9999px;padding:5px 12px 5px 5px}
+    .rider-pill img{width:24px;height:24px;border-radius:50%;object-fit:cover;border:1.5px solid #E2FF3B}
+    .rider-pill .name{font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;color:#fff}
+    .rider-pill .dist{font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.5)}
+
+    /* Bottom panel */
+    .bottom{position:absolute;left:0;right:0;bottom:0;padding:18px 16px calc(env(safe-area-inset-bottom,0px) + 16px);background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.6) 30%,#000 100%);z-index:8}
+    .stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+    .stat-cell{background:rgba(20,20,20,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:12px;text-align:center}
+    .stat-l{font-family:'Manrope',sans-serif;font-size:9px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
+    .stat-v{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;color:#fff;line-height:1;letter-spacing:-0.5px}
+    .stat-u{font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);margin-left:2px;font-weight:600}
+
+    .actions-row{display:flex;gap:8px}
+    .action-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:9999px;padding:13px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;color:#fff;text-transform:uppercase;letter-spacing:1px;text-decoration:none;transition:transform .15s ease}
+    .action-btn:active{transform:scale(0.97)}
+    .action-end{background:#E2FF3B;color:#000;border-color:#E2FF3B}
+
+    /* SOS confirm overlay */
+    #sosOverlay{position:fixed;inset:0;background:rgba(0,0,0,0.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:999;padding:20px}
+    #sosOverlay.on{display:flex}
+    .sos-card{background:#0d0d0d;border:1px solid rgba(255,68,68,0.3);border-radius:20px;padding:28px 22px;max-width:340px;width:100%;text-align:center}
+    .sos-big{width:80px;height:80px;border-radius:50%;background:#FF4444;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:18px;margin:0 auto 16px;animation:sosCount 1s ease-in-out infinite}
+    .sos-title{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:22px;color:#fff;margin-bottom:8px;letter-spacing:-0.5px}
+    .sos-sub{font-family:'Manrope',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);line-height:1.5;margin-bottom:22px}
+    .sos-actions{display:flex;flex-direction:column;gap:8px}
+    .sos-cta{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;cursor:pointer}
+    .sos-cta-red{background:#FF4444;color:#fff}
+    .sos-cta-ghost{background:transparent;color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.1)}
+
+    /* Toast */
+    #toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 18px;border-radius:9999px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;z-index:1000;opacity:0;pointer-events:none;transition:opacity .25s ease;border:1px solid rgba(255,255,255,0.1)}
+    #toast.on{opacity:1}
+  </style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="map-bg"></div>
+  <div class="map-vig"></div>
+
+  <!-- Top bar -->
+  <div class="top-bar">
+    <a href="tracking.html" class="glass-btn" aria-label="Back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </a>
+    <div class="ride-pill"><span class="live-dot"></span><span>Coastal Highway</span></div>
+    <div class="glass-btn" onclick="showToast('Voice nav: ON')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+    </div>
+  </div>
+
+  <!-- Turn instruction -->
+  <div class="turn-card">
+    <div class="turn-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19V8M9 8L4 13M9 8l5 5"/></svg>
+    </div>
+    <div class="turn-meta">
+      <div class="turn-dist">In 800m <span style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.55)">turn right</span></div>
+      <div class="turn-instr">onto NH-66 toward Gokarna · 2 lanes ahead</div>
+      <div class="turn-then">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        Then 4.2 km straight
+      </div>
+    </div>
+  </div>
+
+  <!-- Riders nearby -->
+  <div class="riders-wrap">
+    <div class="rider-pill">
+      <img src="images/profile/2.avif" alt=""/>
+      <div><div class="name">Siddharth</div><div class="dist">120m ahead</div></div>
+    </div>
+    <div class="rider-pill">
+      <img src="images/profile/4.avif" alt=""/>
+      <div><div class="name">Aryan</div><div class="dist">300m behind</div></div>
+    </div>
+  </div>
+
+  <!-- SOS button -->
+  <div class="sos-wrap">
+    <button class="sos-btn" onclick="openSOS()">
+      <span style="font-size:18px;line-height:1">⚠</span>
+      <span style="margin-top:2px">SOS</span>
+    </button>
+  </div>
+
+  <!-- Bottom -->
+  <div class="bottom">
+    <div class="stats-row">
+      <div class="stat-cell">
+        <div class="stat-l">Speed</div>
+        <div><span class="stat-v" id="speedVal">56</span><span class="stat-u">km/h</span></div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-l">ETA</div>
+        <div><span class="stat-v">42</span><span class="stat-u">min</span></div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-l">Remaining</div>
+        <div><span class="stat-v">41.7</span><span class="stat-u">km</span></div>
+      </div>
+    </div>
+
+    <div class="actions-row">
+      <a href="chat.html" class="action-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chat
+      </a>
+      <button class="action-btn" onclick="showToast('Refueling stops added to route')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V6a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v15M3 21h11M14 11h3a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2"/></svg>
+        Detour
+      </button>
+      <a href="end-ride.html" class="action-btn action-end">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+        End
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- SOS overlay -->
+<div id="sosOverlay">
+  <div class="sos-card">
+    <div class="sos-big" id="sosCount">3</div>
+    <div class="sos-title">Sending SOS in <span id="sosCountLabel">3</span>s</div>
+    <div class="sos-sub">Live location, ride details, and emergency contact will be alerted instantly.</div>
+    <div class="sos-actions">
+      <button class="sos-cta sos-cta-red" onclick="sendSOS()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>
+        Send Now
+      </button>
+      <button class="sos-cta sos-cta-ghost" onclick="cancelSOS()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),2200);
+}
+
+let sosTimer = null;
+let sosCount = 3;
+function openSOS(){
+  document.getElementById('sosOverlay').classList.add('on');
+  sosCount = 3;
+  updateCount();
+  sosTimer = setInterval(()=>{
+    sosCount--;
+    updateCount();
+    if(sosCount <= 0){ sendSOS(); }
+  }, 1000);
+}
+function updateCount(){
+  document.getElementById('sosCount').textContent = sosCount;
+  document.getElementById('sosCountLabel').textContent = sosCount;
+}
+function cancelSOS(){
+  clearInterval(sosTimer);
+  document.getElementById('sosOverlay').classList.remove('on');
+  showToast('SOS cancelled');
+}
+function sendSOS(){
+  clearInterval(sosTimer);
+  document.getElementById('sosOverlay').classList.remove('on');
+  showToast('🚨 SOS sent — emergency contact + ride leader notified');
+}
+
+// Live speed flicker
+let s = 56;
+setInterval(()=>{
+  s = Math.max(40, Math.min(78, s + (Math.random()*6-3)));
+  document.getElementById('speedVal').textContent = Math.round(s);
+}, 2000);
+</script>
+
+</body>
+</html>
