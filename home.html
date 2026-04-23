@@ -139,22 +139,30 @@
       </div>
     </div>
 
-    <!-- ── BIKE FINDER ENTRY ── -->
-    <a href="bike-finder.html" style="display:block;text-decoration:none;position:relative;background:linear-gradient(135deg,#0a0a0a 0%,#1a1a0a 100%);border:1px solid rgba(226,255,59,0.18);border-radius:14px;padding:18px 18px;margin-bottom:20px;overflow:hidden">
-      <div style="position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(226,255,59,0.18) 0%,transparent 70%)"></div>
-      <div style="position:relative;display:flex;align-items:center;gap:14px">
-        <div style="flex-shrink:0;width:48px;height:48px;border-radius:12px;background:#E2FF3B;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 8px 20px rgba(226,255,59,0.25)">🏍️</div>
-        <div style="flex:1;min-width:0">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
-            <p style="font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#E2FF3B;text-transform:uppercase;letter-spacing:2px;margin:0">NEW</p>
-            <span style="background:rgba(226,255,59,0.12);border-radius:9999px;padding:1px 7px;font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;color:#E2FF3B">5 MIN</span>
-          </div>
-          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#fff;margin:0 0 2px">Find your perfect bike</p>
-          <p style="font-family:'Manrope',sans-serif;font-size:11px;color:rgba(255,255,255,0.5);margin:0">Quick journey · 50 India bikes</p>
+    <!-- ── QUICK ACTIONS: PLAN RIDE + BIKE FINDER ── -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+      <a href="create-ride-modes.html" style="text-decoration:none;position:relative;background:linear-gradient(135deg,#E2FF3B 0%,#c5db1f 100%);border-radius:14px;padding:16px;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;min-height:118px">
+        <div style="display:flex;align-items:center;gap:6px;color:#000">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:1.5px">Plan a Ride</span>
         </div>
-        <div style="flex-shrink:0;color:#E2FF3B;font-size:20px">→</div>
-      </div>
-    </a>
+        <div>
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:18px;color:#000;margin:0;line-height:1.05;letter-spacing:-0.5px">Hit the<br/>road →</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(0,0,0,0.55);margin:6px 0 0;font-weight:600">Solo, friends, public</p>
+        </div>
+      </a>
+      <a href="bike-finder.html" style="text-decoration:none;position:relative;background:linear-gradient(135deg,#0a0a0a 0%,#1a1a0a 100%);border:1px solid rgba(226,255,59,0.18);border-radius:14px;padding:16px;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;min-height:118px">
+        <div style="position:absolute;top:-20px;right:-20px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,rgba(226,255,59,0.18) 0%,transparent 70%)"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:6px;color:#E2FF3B">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:1.5px">Bike Finder</span>
+        </div>
+        <div style="position:relative">
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:18px;color:#fff;margin:0;line-height:1.05;letter-spacing:-0.5px">Find your<br/>match →</p>
+          <p style="font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,0.5);margin:6px 0 0;font-weight:600">5 min · 50 bikes</p>
+        </div>
+      </a>
+    </div>
 
     <!-- ── PINNED STORIES ── -->
     <div style="display:flex;gap:16px;overflow-x:auto;padding-bottom:8px;margin-bottom:32px;scrollbar-width:none;-ms-overflow-style:none">
